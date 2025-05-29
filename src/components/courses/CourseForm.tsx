@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
+import { toast } from 'sonner';
 
 type CourseFormProps = {
   courseId?: string;
@@ -90,9 +91,15 @@ const CourseForm: React.FC<CourseFormProps> = ({
     reader.readAsDataURL(file);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+    setError(null); // Clear previous errors
+
+    if (!courseId) {
+      setError('Course ID is missing. Cannot upload materials.');
+      return;
+    }
+
     // Create a FormData object to handle file uploads
     const formData = new FormData();
     formData.append('title', title);
@@ -100,15 +107,63 @@ const CourseForm: React.FC<CourseFormProps> = ({
     formData.append('technologies', technologies);
     formData.append('teacher_id', teacherId);
     
-    if (image) {
-      formData.append('image', image);
-    }
-    
     if (courseId) {
       formData.append('id', courseId);
     }
-    
-    onSubmit(formData);
+
+    // If no image is selected, just update the course info
+    if (!image) {
+      onSubmit(formData);
+      return;
+    }
+
+    try {
+      console.log('Uploading file to Supabase Storage...');
+      console.log('Course ID:', courseId);
+      console.log('File name:', image.name);
+      
+      const fileExtension = image.name.split('.').pop();
+      const fileName = `${Date.now()}_${image.name}`; // Ensure unique file name
+      // Change filePath to upload directly to the bucket root, as per user's current setup
+      const filePath = fileName; // Path format: timestamp_filename.ext
+      
+      console.log('File path for upload:', filePath);
+
+      const { data, error: uploadError } = await supabase.storage
+        .from('cursomasteradicciones') // Change bucket name
+        .upload(filePath, image, {
+          cacheControl: '3600',
+          upsert: true, // Overwrite if file exists
+        });
+
+      if (uploadError) {
+        console.error('Error uploading file:', uploadError);
+        setError(`Error al subir el archivo: ${uploadError.message}`);
+        return;
+      }
+
+      console.log('Upload successful:', data);
+      
+      // Get the public URL for the uploaded file
+      const { data: { publicUrl } } = supabase.storage
+        .from('cursomasteradicciones') // Corrected bucket name
+        .getPublicUrl(filePath);
+      
+      console.log('Public URL:', publicUrl);
+      
+      // Add the file info to formData
+      formData.append('material_url', publicUrl);
+      formData.append('material_name', fileName);
+      
+      // Now call onSubmit with the complete formData
+      onSubmit(formData);
+      
+      toast.success('Material subido exitosamente!');
+
+    } catch (err: any) {
+      console.error('Error during file upload process:', err);
+      setError(`Error inesperado: ${err.message}`);
+    }
   };
 
   return (
@@ -152,15 +207,15 @@ const CourseForm: React.FC<CourseFormProps> = ({
         </div>
         
         <div className="mb-4">
-          <label htmlFor="course-image" className="block text-sm font-medium text-gray-700 mb-1">
-            Course Image
+          <label htmlFor="course-material" className="block text-sm font-medium text-gray-700 mb-1">
+            Material del Curso
           </label>
           <input
             type="file"
-            id="course-image"
+            id="course-material"
             onChange={handleImageChange}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            accept="image/*"
+            accept="image/*,application/pdf,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation"
           />
           {previewUrl && (
             <div className="mt-2">

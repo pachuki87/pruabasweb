@@ -1,16 +1,26 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
 import { BookOpen, Users, Award, BookMarked } from 'lucide-react';
-import { getUsers } from '../lib/supabase';
+import { supabase, getUsers } from '../lib/supabase';
+import CourseCard from '../components/courses/CourseCard';
 
 type HomePageProps = {
   currentRole: string;
   onRoleChange: (role: string) => void;
 };
 
+type Curso = {
+  id: string;
+  titulo: string;
+  imagen: string;
+  inscripcion: number;
+};
+
 const HomePage: React.FC<HomePageProps> = ({ currentRole, onRoleChange }) => {
+  const [cursos, setCursos] = useState<Curso[]>([]);
+
   useEffect(() => {
     const fetchUsers = async () => {
       const users = await getUsers();
@@ -19,7 +29,33 @@ const HomePage: React.FC<HomePageProps> = ({ currentRole, onRoleChange }) => {
       }
     };
     fetchUsers();
+    obtenerCursos();
   }, []);
+
+  const obtenerCursos = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('cursos')
+        .select('id, titulo, imagen_url');
+
+      if (error) {
+        console.error('Error al obtener cursos de Supabase:', error);
+        throw error;
+      }
+
+      const cursosFormateados = data.map(curso => ({
+        id: curso.id,
+        titulo: curso.titulo,
+        imagen: curso.imagen_url || '',
+        inscripcion: Math.floor(Math.random() * 100) + 1,
+      }));
+
+      setCursos(cursosFormateados);
+    } catch (error) {
+      console.error('Error al obtener cursos:', error);
+      setCursos([]);
+    }
+  };
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -119,8 +155,16 @@ const HomePage: React.FC<HomePageProps> = ({ currentRole, onRoleChange }) => {
             <h2 className="text-3xl font-bold text-center mb-12">Cursos Populares</h2>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {/* Keep only the "Master en Adicciones" course if it were here. Since it's not, remove the others. */}
-              {/* The courses to remove are: PHP Course Laravel, PHP for Beginners, Flask Web Development */}
+              {cursos.map(curso => (
+                <CourseCard
+                  key={curso.id}
+                  id={curso.id}
+                  title={curso.titulo}
+                  image={curso.imagen}
+                  enrollment={curso.inscripcion}
+                  role={currentRole}
+                />
+              ))}
             </div>
             
             <div className="text-center mt-12">
@@ -152,7 +196,7 @@ const HomePage: React.FC<HomePageProps> = ({ currentRole, onRoleChange }) => {
                 to="/register/teacher"
                 className="bg-yellow-500 hover:bg-yellow-600 text-gray-900 px-6 py-3 rounded-lg transition-colors"
               >
-                Convertirse en Instructor
+                Regístrate como profesor
               </Link>
             </div>
           </div>

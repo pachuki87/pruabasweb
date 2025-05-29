@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Facebook, Mail } from 'lucide-react';
+import { Facebook } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 
 type LoginFormProps = {
@@ -66,23 +66,30 @@ const LoginForm: React.FC<LoginFormProps> = ({ role, onLogin }) => {
     }
   };
 
-  const handleSocialLogin = (provider: string) => {
+  const handleSocialLogin = async (provider: string) => {
     // For demo purposes only
-    console.log(`Login with ${provider}`);
-    
+    // console.log(`Login with ${provider}`);
+
     // In a real implementation, we would use Supabase auth
-    // if (provider === 'google') {
-    //   supabase.auth.signInWithOAuth({ provider: 'google' });
-    // }
-    
-    const user = {
-      id: '123',
-      email: 'user@example.com',
-      role
-    };
-    
-    onLogin(user);
-    navigate(`/${role}/dashboard`);
+    if (provider === 'google') {
+      const { error } = await supabase.auth.signInWithOAuth({ provider: 'google' });
+      if (error) {
+        console.error('Error al iniciar sesión con Google:', error);
+        setError(error.message);
+      }
+    } else {
+       // For other providers or demo fallback
+       console.log(`Login with ${provider}`);
+       // You might want to add logic for other providers or remove this fallback
+       const user = {
+         id: '123',
+         email: 'user@example.com',
+         role
+       };
+
+       onLogin(user);
+       navigate(`/${role}/dashboard`);
+    }
   };
 
   return (
@@ -111,7 +118,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ role, onLogin }) => {
             onClick={() => handleSocialLogin('google')}
             className="flex items-center justify-center w-10 h-10 text-white bg-red-600 rounded-full hover:bg-red-700 transition-colors"
           >
-            <Mail size={20} />
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-google"><path d="M12 10.9c1.846 0 3.413 0.73 4.588 1.963l3.481-3.481C19.245 6.007 16.86 4 12 4c-3.248 0-6.286 1.64-8.065 4.334L8.095 12.44A7.96 7.96 0 0 1 12 10.9z" fill="#4285F4"></path><path d="M22 12c0-1.58-0.13-3.1-0.45-4.5L18.02 9.02C18.59 10.09 19 11.04 19 12c0 1.04-0.41 2.09-1.02 3.02l3.48 3.48C21.87 18.1 22 16.58 22 15z" fill="#34A853"></path><path d="M4 12c0 1.04 0.41 2.09 1.02 3.02l-3.48 3.48C2.13 18.1 2 16.58 2 15c0-1.58 0.13-3.1 0.45-4.5L5.98 9.02C5.41 10.09 5 11.04 5 12z" fill="#FBBC05"></path><path d="M12 13.9c-1.846 0-3.413-0.73-4.588-1.963L3.93 15.413C6.007 19.245 8.993 20 12 20c3.248 0 6.286-1.64 8.065-4.334L15.905 11.56A7.96 7.96 0 0 1 12 13.9z" fill="#EA4335"></path></svg>
           </button>
           <button
             onClick={() => handleSocialLogin('linkedin')}

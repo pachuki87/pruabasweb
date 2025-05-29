@@ -27,18 +27,31 @@ type Chapter = {
   video_url: string | null;
 };
 
+type Material = {
+  name: string;
+  url: string;
+};
+
 const CourseDetailsPage: React.FC<CourseDetailsProps> = ({ role }) => {
   const { id: courseId } = useParams<{ id: string }>();
   const [course, setCourse] = useState<Course | null>(null);
   const [chapters, setChapters] = useState<Chapter[]>([]);
+  const [materials, setMaterials] = useState<Material[]>([]);
   const [activeTab, setActiveTab] = useState('resumen');
   const [isLoading, setIsLoading] = useState(true);
+  const [isMaterialsLoading, setIsMaterialsLoading] = useState(false);
 
   useEffect(() => {
     if (courseId) {
       fetchCourseDetails();
     }
   }, [courseId]);
+
+  useEffect(() => {
+    if (activeTab === 'materials' && courseId) {
+      fetchMaterials();
+    }
+  }, [activeTab, courseId]);
 
   const fetchCourseDetails = async () => {
     setIsLoading(true);
@@ -56,7 +69,7 @@ const CourseDetailsPage: React.FC<CourseDetailsProps> = ({ role }) => {
           created_at: '2023-06-15',
           tecnologias: ['Psicología', 'Neurociencia', 'Terapia', 'Rehabilitación'],
           capitulos_count: 12,
-          materiales_count: 5,
+          materiales_count: 5, // This count should reflect actual materials
           estudiantes_count: 24,
         };
         
@@ -88,6 +101,49 @@ const CourseDetailsPage: React.FC<CourseDetailsProps> = ({ role }) => {
     } catch (error) {
       console.error('Error fetching course details:', error);
       setIsLoading(false);
+    }
+  };
+
+  const fetchMaterials = async () => {
+    if (!courseId) return;
+    setIsMaterialsLoading(true);
+    try {
+      // Usar el bucket 'cursomasteradicciones' que existe en Supabase
+      const { data, error } = await supabase.storage
+        .from('cursomasteradicciones')
+        .list('', { // List from the root of the bucket
+          limit: 100,
+          offset: 0,
+          sortBy: { column: 'name', order: 'asc' },
+        });
+
+      console.log('Supabase Storage list response:', { data, error });
+
+      if (error) {
+        console.error('Error al obtener materiales de Supabase Storage:', error);
+        setMaterials([]);
+        return;
+      }
+
+      // Filter files by courseId if necessary, or assume all files in this bucket are for this course
+      // Based on the user's screenshot, the file is directly in the bucket.
+      // We'll assume for now all files in 'cursomasteradicciones' are relevant,
+      // but a more robust solution would involve metadata or a different storage structure.
+      
+      const fetchedMaterials: Material[] = data.map((file) => ({
+        name: file.name,
+        // Construct public URL directly, assuming the bucket is public
+        // Format: https://[project_ref].supabase.co/storage/v1/object/public/[bucket_name]/[file_path]
+        url: `https://lyojcqiiixkqqtpoejdo.supabase.co/storage/v1/object/public/cursomasteradicciones/${file.name}`,
+      }));
+      setMaterials(fetchedMaterials);
+      // Update materials_count in course state
+      setCourse(prevCourse => prevCourse ? { ...prevCourse, materiales_count: fetchedMaterials.length } : null);
+    } catch (error) {
+      console.error('Error al obtener materiales:', error);
+      setMaterials([]);
+    } finally {
+      setIsMaterialsLoading(false);
     }
   };
 
@@ -205,6 +261,17 @@ const CourseDetailsPage: React.FC<CourseDetailsProps> = ({ role }) => {
                   <FileQuestion className="w-4 h-4 inline mr-1" />
                   Cuestionarios
                 </button>
+                <button
+                  onClick={() => setActiveTab('materials')}
+                  className={`px-4 py-3 text-sm font-medium ${
+                    activeTab === 'materials'
+                      ? 'border-b-2 border-blue-600 text-blue-600'
+                      : 'text-gray-700 hover:text-blue-600'
+                  }`}
+                >
+                  <FileText className="w-4 h-4 inline mr-1" />
+                  Materiales
+                </button>
               </nav>
             </div>
             
@@ -318,6 +385,50 @@ const CourseDetailsPage: React.FC<CourseDetailsProps> = ({ role }) => {
                   <p className="text-gray-500 text-center py-4">
                     No hay cuestionarios disponibles para este curso todavía.
                   </p>
+                </div>
+              )}
+
+              {activeTab === 'materials' && (
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-lg font-semibold">Materiales del Curso</h2>
+                    
+                    {role === 'teacher' && (
+                      <Link
+                        to={`/teacher/courses/edit/${courseId}`} // Link to edit page to upload materials
+                        className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors text-sm"
+                      >
+                        Añadir Material
+                      </Link>
+                    )}
+                  </div>
+                  
+                  {isMaterialsLoading ? (
+                    <p className="text-gray-500 text-center py-4">
+                      Cargando materiales...
+                    </p>
+                  ) : materials.length === 0 ? (
+                    <p className="text-gray-500 text-center py-4">
+                      No hay materiales disponibles para este curso todavía.
+                    </p>
+                  ) : (
+                    <div className="space-y-4">
+                      {materials.map((material, index) => (
+                        <div key={index} className="border rounded-md p-4 hover:bg-gray-50 flex items-center justify-between">
+                          <a 
+                            href={material.url} 
+                            target="_blank" 
+                            rel="noopener noreferrer" 
+                            className="text-blue-600 hover:underline flex items-center"
+                          >
+                            <FileText className="w-5 h-5 mr-2" />
+                            {material.name}
+                          </a>
+                          {/* Add download/delete options if needed for teacher role */}
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               )}
             </div>

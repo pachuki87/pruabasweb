@@ -24,67 +24,88 @@ const UserCoursesPage: React.FC<UserCoursesPageProps> = ({ role }) => {
 
   const fetchCourses = async () => {
     setIsLoading(true);
-    
     try {
-      // Fetch courses from Supabase
-      const { data, error } = await supabase
-        .from('cursos')
-        .select('id, titulo, profesor_id');
-      
-      if (error) {
-        throw error;
+      const { data: { user } } = await supabase.auth.getUser(); // Obtener el usuario autenticado
+
+      if (!user) {
+        console.warn('No user authenticated. Cannot fetch assigned courses.');
+        setCourses([]);
+        setIsLoading(false);
+        return;
       }
-      
-      // Convertir los datos al formato esperado por el componente
-      const formattedCourses = data.map(course => ({
+
+      let coursesData;
+      let coursesError;
+
+      if (role === 'student') {
+        // Lógica existente para estudiantes
+        const { data: inscriptionsData, error: inscriptionsError } = await supabase
+          .from('inscripciones')
+          .select('curso_id')
+          .eq('usuario_id', user.id);
+
+        if (inscriptionsError) {
+          throw inscriptionsError;
+        }
+
+        const assignedCourseIds = inscriptionsData.map(inscription => inscription.curso_id);
+
+        ({ data: coursesData, error: coursesError } = await supabase
+          .from('cursos')
+          .select('id, titulo, profesor_id')
+          .in('id', assignedCourseIds));
+      } else if (role === 'teacher') {
+        // Lógica para profesores: obtener todos los cursos disponibles
+        ({ data: coursesData, error: coursesError } = await supabase
+          .from('cursos')
+          .select('id, titulo, profesor_id'));
+      } else {
+        // Rol desconocido, no cargar cursos
+        setCourses([]);
+        setIsLoading(false);
+        return;
+      }
+
+      if (coursesError) {
+        throw coursesError;
+      }
+
+      // Obtener los nombres de los profesores (asumiendo que profesor_id se relaciona con la tabla usuarios)
+      const teacherIds = coursesData.map(course => course.profesor_id).filter(Boolean);
+      let teachersMap = new Map();
+      if (teacherIds.length > 0) {
+        const { data: teachersData, error: teachersError } = await supabase
+          .from('usuarios')
+          .select('id, nombre') // Asumiendo que 'nombre' es el campo del nombre del profesor
+          .in('id', teacherIds);
+
+        if (teachersError) {
+          console.error('Error fetching teachers:', teachersError);
+        } else {
+          teachersData.forEach(teacher => {
+            teachersMap.set(teacher.id, teacher.nombre);
+          });
+        }
+      }
+
+      const formattedCourses = coursesData.map(course => ({
         id: course.id,
         title: course.titulo,
-        teacher_name: 'pablocardonafeliu' // Nombre del profesor extraído del email
+        teacher_name: teachersMap.get(course.profesor_id) || 'Desconocido' // Usar el nombre del profesor
       }));
-      
-      // Agregar manualmente el curso "Master en Adicciones" si no está en los resultados
-      const masterCourseExists = formattedCourses.some(
-        course => course.title === 'Master en Adicciones'
-      );
-      
-      if (!masterCourseExists) {
-        formattedCourses.push({
-          id: 'c563c497-5583-451a-a625-a3c07d6cb6b4',
-          title: 'Master en Adicciones',
-          teacher_name: 'pablocardonafeliu'
-        });
-      }
-      
-      // Agregar los cursos de prueba existentes para mantener la funcionalidad
-      const mockCourses = [
-        // Keep only the "Master en Adicciones" course if it were here. Since it's not, remove the others.
-        // The courses to remove are: PHP Course Laravel, PHP Course for Beginners, Flask, Python Course
-      ];
-      
-      // Combinar los cursos de Supabase con los cursos de prueba
-      setCourses([...formattedCourses, ...mockCourses]);
+
+      setCourses(formattedCourses);
       setIsLoading(false);
     } catch (error) {
       console.error('Error fetching courses:', error);
-      
-      // En caso de error, mostrar al menos el curso "Master en Adicciones"
-      const fallbackCourses = [
-        {
-          id: 'c563c497-5583-451a-a625-a3c07d6cb6b4',
-          title: 'Master en Adicciones',
-          teacher_name: 'pablocardonafeliu'
-        },
-        // The courses to remove are: PHP Course Laravel, PHP Course for Beginners, Flask, Python Course
-      ];
-      
-      setCourses(fallbackCourses);
+      setCourses([]); // En caso de error, no mostrar cursos
       setIsLoading(false);
     }
   };
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-6">My Courses</h1>
+      <h1 className="text-2xl font-bold mb-6">Mis Cursos</h1>
       
       {isLoading ? (
         <div className="animate-pulse">
@@ -97,12 +118,12 @@ const UserCoursesPage: React.FC<UserCoursesPageProps> = ({ role }) => {
         </div>
       ) : courses.length === 0 ? (
         <div className="bg-white rounded-lg shadow-md p-6 text-center">
-          <p className="text-gray-500 mb-4">You don't have any courses yet.</p>
+          <p className="text-gray-500 mb-4">Aún no tienes cursos.</p>
           <Link
             to="/courses"
             className="inline-flex items-center bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
           >
-            Browse Courses
+            Explorar Cursos
           </Link>
         </div>
       ) : (
@@ -111,17 +132,22 @@ const UserCoursesPage: React.FC<UserCoursesPageProps> = ({ role }) => {
             <thead className="bg-gray-50">
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Course
+                  Curso
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Create By
+                  Creado Por
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Quiz
+                  Cuestionario
                 </th>
                 <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Message to teacher
+                  Mensaje al Profesor
                 </th>
+                {role === 'teacher' && (
+                  <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Acciones
+                  </th>
+                )}
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
@@ -143,7 +169,7 @@ const UserCoursesPage: React.FC<UserCoursesPageProps> = ({ role }) => {
                       to={`/${role}/courses/${course.id}/quiz`}
                       className="bg-yellow-500 text-white px-3 py-1 rounded-md hover:bg-yellow-600 transition-colors"
                     >
-                      Quiz List
+                      Lista de Cuestionarios
                     </Link>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-center">
@@ -156,6 +182,16 @@ const UserCoursesPage: React.FC<UserCoursesPageProps> = ({ role }) => {
                       </svg>
                     </button>
                   </td>
+                  {role === 'teacher' && (
+                    <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
+                      <Link
+                        to={`/${role}/courses/edit/${course.id}`}
+                        className="text-indigo-600 hover:text-indigo-900"
+                      >
+                        Editar
+                      </Link>
+                    </td>
+                  )}
                 </tr>
               ))}
             </tbody>

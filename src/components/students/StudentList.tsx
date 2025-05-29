@@ -39,7 +39,7 @@ const StudentList: React.FC<StudentListProps> = ({
     try {
       const { data, error } = await supabase
         .from('usuarios') // Corrected table name to 'usuarios'
-        .select('id, email, creado_en'); // Selecting relevant columns from 'usuarios' table
+        .select('id, email, creado_en, nombre'); // Selecting relevant columns from 'usuarios' table
 
       if (error) {
         throw error;
@@ -47,7 +47,7 @@ const StudentList: React.FC<StudentListProps> = ({
 
       const formattedStudents = data.map(usuario => ({
         id: usuario.id,
-        name: usuario.email, // Using email as name for now, as 'name' column is not present
+        name: usuario.nombre, // Using 'nombre' as name
         email: usuario.email,
         joinDate: usuario.creado_en, // Corrected to use 'creado_en'
       }));

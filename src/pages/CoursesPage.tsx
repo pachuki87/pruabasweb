@@ -1,38 +1,54 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import Navbar from '../components/layout/Navbar';
+import CourseCard from '../components/courses/CourseCard';
 
 interface CoursesPageProps {
   currentRole: string;
   onRoleChange: (role: string) => void;
 }
 
-type Course = {
+type Curso = {
   id: string;
-  title: string;
-  teacher_name: string;
+  titulo: string;
+  imagen: string;
+  inscripcion: number;
 };
 
 function CoursesPage({ currentRole, onRoleChange }: CoursesPageProps) {
-  const [courses, setCourses] = useState<Course[]>([]);
+  const [cursos, setCursos] = useState<Curso[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    fetchCourses();
+    obtenerCursos();
   }, []);
 
-  const fetchCourses = async () => {
+  const obtenerCursos = async () => {
     setIsLoading(true);
-    // Datos de ejemplo para simular cursos sobre adicciones
-    const exampleCourses: Course[] = [
-      { id: '1', title: 'Máster en Prevención y Tratamiento de Adicciones', teacher_name: 'Dr. Elena Gómez' },
-      { id: '2', title: 'Intervención en Adicciones Tecnológicas', teacher_name: 'Lic. Carlos Fernández' },
-      { id: '3', title: 'Adicciones Comportamentales: Juego y Compras', teacher_name: 'Psic. Ana Torres' },
-      { id: '4', title: 'Neurociencia de las Adicciones', teacher_name: 'Dr. Javier Ruíz' },
-    ];
+    try {
+      const { data, error } = await supabase
+        .from('cursos')
+        .select('id, titulo, imagen_url');
 
-    setCourses(exampleCourses);
-    setIsLoading(false);
+      if (error) {
+        console.error('Error al obtener cursos de Supabase:', error);
+        throw error;
+      }
+
+      const cursosFormateados = data.map(curso => ({
+        id: curso.id,
+        titulo: curso.titulo,
+        imagen: curso.imagen_url || '',
+        inscripcion: Math.floor(Math.random() * 100) + 1,
+      }));
+
+      setCursos(cursosFormateados);
+    } catch (error) {
+      console.error('Error al obtener cursos:', error);
+      setCursos([]);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -51,16 +67,20 @@ function CoursesPage({ currentRole, onRoleChange }: CoursesPageProps) {
             <p className="col-span-full text-center text-gray-600">
               Cargando cursos...
             </p>
-          ) : courses.length === 0 ? (
+          ) : cursos.length === 0 ? (
             <p className="col-span-full text-center text-gray-600">
               No hay cursos disponibles.
             </p>
           ) : (
-            courses.map((course) => (
-              <div key={course.id} className="bg-white rounded-lg shadow-md p-6">
-                <h2 className="text-xl font-semibold mb-2">{course.title}</h2>
-                <p className="text-gray-500">Profesor: {course.teacher_name}</p>
-              </div>
+            cursos.map(curso => (
+              <CourseCard
+                key={curso.id}
+                id={curso.id}
+                title={curso.titulo}
+                image={curso.imagen}
+                enrollment={curso.inscripcion}
+                role={currentRole}
+              />
             ))
           )}
         </div>

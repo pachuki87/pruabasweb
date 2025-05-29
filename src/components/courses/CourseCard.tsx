@@ -32,26 +32,27 @@ const CourseCard: React.FC<CourseCardProps> = ({
   };
 
   const getImageUrl = () => {
-    // Common programming language logos
+    if (image) {
+      return image;
+    }
+
+    // Imágenes por defecto para los cursos de adicciones
     const imageMap: Record<string, string> = {
-      'php': 'https://www.php.net/images/logos/new-php-logo.svg',
-      'python': 'https://www.python.org/static/community_logos/python-logo-generic.svg',
-      'flask': 'https://flask.palletsprojects.com/en/2.0.x/_images/flask-logo.png',
-      'laravel': 'https://laravel.com/img/logomark.min.svg',
-      'react': 'https://reactjs.org/logo-og.png',
-      'javascript': 'https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png',
+      'master': 'https://images.pexels.com/photos/7176026/pexels-photo-7176026.jpeg',
+      'adicciones': 'https://images.pexels.com/photos/4098277/pexels-photo-4098277.jpeg',
+      'conductas': 'https://images.pexels.com/photos/4101143/pexels-photo-4101143.jpeg',
     };
     
     const lowerTitle = title.toLowerCase();
     
-    // Try to match a technology name in the title
+    // Intentar encontrar una imagen que coincida con el título
     for (const [key, url] of Object.entries(imageMap)) {
       if (lowerTitle.includes(key)) {
         return url;
       }
     }
     
-    // Default course image
+    // Imagen por defecto
     return 'https://images.pexels.com/photos/3769021/pexels-photo-3769021.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1';
   };
 
@@ -75,7 +76,7 @@ const CourseCard: React.FC<CourseCardProps> = ({
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1 text-blue-500" viewBox="0 0 20 20" fill="currentColor">
               <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z" />
             </svg>
-            <span>{enrollment} student(s)</span>
+            <span>{enrollment} estudiante(s)</span>
           </div>
           
           <div className="flex space-x-1">

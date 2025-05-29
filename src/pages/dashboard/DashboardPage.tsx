@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import StatsCard from '../../components/dashboard/StatsCard';
-import { supabase } from '../../lib/supabase';
+import { supabase, getUserById } from '../../lib/supabase'; // Import getUserById
 
 type DashboardProps = {
   role: string;
@@ -26,9 +26,11 @@ const DashboardPage: React.FC<DashboardProps> = ({ role }) => {
   });
   
   const [isLoading, setIsLoading] = useState(true);
+  const [userName, setUserName] = useState<string | null>(null); // State for user name
 
   useEffect(() => {
     fetchStats();
+    fetchUserName(); // Fetch user name on component mount or role change
   }, [role]);
 
   const fetchStats = async () => {
@@ -74,9 +76,22 @@ const DashboardPage: React.FC<DashboardProps> = ({ role }) => {
     }
   };
 
+  const fetchUserName = async () => {
+    const { data: { user } } = await supabase.auth.getUser(); // Get current authenticated user
+    if (user) {
+      const userData = await getUserById(user.id); // Fetch user data from 'usuarios' table
+      if (userData) {
+        setUserName(userData.nombre); // Assuming 'nombre' is the column for the user's name
+      }
+    }
+  };
+
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-6">Dashboard</h1>
+      <h1 className="text-2xl font-bold mb-2">
+        {userName ? `Bienvenido de nuevo, ${userName}` : 'Dashboard'} {/* Display welcome message */}
+      </h1>
+      <p className="text-gray-600 mb-6">Panel de Control</p> {/* Add Panel de Control below welcome */}
       
       {isLoading ? (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -86,37 +101,37 @@ const DashboardPage: React.FC<DashboardProps> = ({ role }) => {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <StatsCard 
-            title="Total Courses" 
-            value={`${stats.courses} course(s)`} 
-            color="blue" 
+          <StatsCard
+            title="Total de Cursos"
+            value={`${stats.courses} curso(s)`}
+            color="blue"
           />
           
           {role === 'teacher' ? (
-            <StatsCard 
-              title="Total Students" 
-              value={`${stats.students} student(s)`} 
-              color="gray" 
+            <StatsCard
+              title="Total de Estudiantes"
+              value={`${stats.students} estudiante(s)`}
+              color="gray"
             />
           ) : (
-            <StatsCard 
-              title="Completed Courses" 
-              value={`${stats.completedCourses} course(s)`} 
-              color="green" 
+            <StatsCard
+              title="Cursos Completados"
+              value={`${stats.completedCourses} curso(s)`}
+              color="green"
             />
           )}
           
-          <StatsCard 
-            title="Total Quizzes" 
-            value={`${stats.quizzes} quiz(zes)`} 
-            color="green" 
+          <StatsCard
+            title="Total de Cuestionarios"
+            value={`${stats.quizzes} cuestionario(s)`}
+            color="green"
           />
         </div>
       )}
       
       <div className="mt-8">
         <h2 className="text-xl font-semibold mb-4">
-          {role === 'teacher' ? 'Recent Activity' : 'Your Learning Progress'}
+          {role === 'teacher' ? 'Actividad Reciente' : 'Tu Progreso de Aprendizaje'}
         </h2>
         
         <div className="bg-white rounded-lg shadow p-6">
@@ -124,38 +139,38 @@ const DashboardPage: React.FC<DashboardProps> = ({ role }) => {
             <ul className="space-y-3">
               <li className="flex items-center text-sm text-gray-600">
                 <span className="w-3 h-3 bg-green-500 rounded-full mr-3"></span>
-                <span>A new student enrolled in <strong>Master en Adicciones</strong></span>
-                <span className="ml-auto text-gray-400">2 hours ago</span>
+                <span>Un nuevo estudiante se inscribió en <strong>Master en Adicciones</strong></span>
+                <span className="ml-auto text-gray-400">hace 2 horas</span>
               </li>
               <li className="flex items-center text-sm text-gray-600">
                 <span className="w-3 h-3 bg-blue-500 rounded-full mr-3"></span>
-                <span>You added a new chapter to <strong>Master en Adicciones</strong></span>
-                <span className="ml-auto text-gray-400">Yesterday</span>
+                <span>Agregaste un nuevo capítulo a <strong>Master en Adicciones</strong></span>
+                <span className="ml-auto text-gray-400">Ayer</span>
               </li>
               <li className="flex items-center text-sm text-gray-600">
                 <span className="w-3 h-3 bg-yellow-500 rounded-full mr-3"></span>
-                <span>Quiz <strong>Master en Adicciones Quiz</strong> was attempted by 2 students</span>
-                <span className="ml-auto text-gray-400">3 days ago</span>
+                <span>El cuestionario <strong>Master en Adicciones Quiz</strong> fue intentado por 2 estudiantes</span>
+                <span className="ml-auto text-gray-400">hace 3 días</span>
               </li>
             </ul>
-          ) : (
-            <div>
-              <div>
-                <h3 className="text-md font-medium mb-2">Master en Adicciones</h3>
-                <div className="w-full bg-gray-200 rounded-full h-2.5">
-                  <div className="bg-blue-600 h-2.5 rounded-full" style={{ width: '45%' }}></div>
-                </div>
-                <div className="flex justify-between text-sm text-gray-500 mt-1">
-                  <span>Progress: 45%</span>
-                  <span>5/12 lessons completed</span>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-};
+           ) : (
+             <div>
+               <div>
+                 <h3 className="text-md font-medium mb-2">Master en Adicciones</h3>
+                 <div className="w-full bg-gray-200 rounded-full h-2.5">
+                   <div className="bg-blue-600 h-2.5 rounded-full" style={{ width: '45%' }}></div>
+                 </div>
+                 <div className="flex justify-between text-sm text-gray-500 mt-1">
+                   <span>Progreso: 45%</span>
+                   <span>5/12 lecciones completadas</span>
+                 </div>
+               </div>
+             </div>
+           )}
+         </div>
+       </div>
+     </div>
+   );
+ };
 
 export default DashboardPage;

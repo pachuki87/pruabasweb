@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Download } from 'lucide-react';
+import { Download, Plus } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
+import MaterialForm from '../../components/materials/MaterialForm';
 
 type Material = {
   id: string;
@@ -18,6 +19,8 @@ const StudyMaterialsPage: React.FC<StudyMaterialsPageProps> = ({ role }) => {
   const { id: courseId } = useParams<{ id: string }>();
   const [materials, setMaterials] = useState<Material[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [showForm, setShowForm] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
 
   useEffect(() => {
     if (courseId) {
@@ -29,38 +32,80 @@ const StudyMaterialsPage: React.FC<StudyMaterialsPageProps> = ({ role }) => {
     setIsLoading(true);
     
     try {
-      // In a real implementation, we would fetch from Supabase
-      // For demo purposes, we'll use mock data
-      setTimeout(() => {
-        const mockMaterials: Material[] = [
-          {
-            id: '1',
-            title: 'Study Material 4',
-            detail: 'add study material 4',
-            remarks: 'Add study material 4',
-          },
-          {
-            id: '2',
-            title: 'Study Material 6',
-            detail: 'study material 6',
-            remarks: 'Study material 6',
-          },
-        ];
-        
-        setMaterials(mockMaterials);
-        setIsLoading(false);
-      }, 800);
+      const { data, error } = await supabase
+        .from('materiales')
+        .select('*')
+        .eq('curso_id', courseId);
+
+      if (error) throw error;
+
+      setMaterials(data || []);
     } catch (error) {
       console.error('Error fetching materials:', error);
+    } finally {
       setIsLoading(false);
     }
   };
 
-  const handleDownload = (materialId: string) => {
-    // In a real implementation, we would:
-    // 1. Generate a download URL from Supabase Storage
-    // 2. Trigger the download
-    console.log('Downloading material:', materialId);
+  const handleUpload = async (formData: FormData) => {
+    setIsUploading(true);
+    try {
+      const file = formData.get('file') as File;
+      const title = formData.get('title') as string;
+      const remarks = formData.get('remarks') as string;
+
+      // 1. Upload file to Supabase Storage
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Math.random().toString(36).substring(2)}.${fileExt}`;
+      const filePath = `${courseId}/${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('materiales')
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      // 2. Create material record in the database
+      const { error: dbError } = await supabase
+        .from('materiales')
+        .insert([
+          {
+            curso_id: courseId,
+            title: title,
+            detail: file.name,
+            remarks: remarks,
+            file_path: filePath
+          }
+        ]);
+
+      if (dbError) throw dbError;
+
+      // 3. Refresh materials list
+      fetchMaterials();
+      setShowForm(false);
+    } catch (error) {
+      console.error('Error uploading material:', error);
+      alert('Error al subir el material. Por favor, inténtalo de nuevo.');
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const handleDownload = async (material: Material) => {
+    try {
+      const { data, error } = await supabase.storage
+        .from('materiales')
+        .createSignedUrl(material.file_path, 60);
+
+      if (error) throw error;
+      if (!data?.signedUrl) throw new Error('No se pudo generar la URL de descarga');
+
+      // Abrir la URL en una nueva pestaña
+      window.open(data.signedUrl, '_blank');
+    } catch (error) {
+      console.error('Error downloading material:', error);
+      alert('Error al descargar el material. Por favor, inténtalo de nuevo.');
+    }
   };
 
   if (!courseId) {
@@ -68,10 +113,29 @@ const StudyMaterialsPage: React.FC<StudyMaterialsPageProps> = ({ role }) => {
   }
 
   return (
-    <div>
-      <h1 className="text-2xl font-bold mb-6">
-        All Study Materials ({materials.length})
-      </h1>
+    <div className="space-y-6">
+      <div className="flex justify-between items-center">
+        <h1 className="text-2xl font-bold">
+          Materiales de Estudio ({materials.length})
+        </h1>
+        {role === 'teacher' && (
+          <button
+            onClick={() => setShowForm(!showForm)}
+            className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
+          >
+            <Plus className="w-4 h-4" />
+            {showForm ? 'Cancelar' : 'Añadir Material'}
+          </button>
+        )}
+      </div>
+
+      {showForm && (
+        <MaterialForm
+          courseId={courseId}
+          onSubmit={handleUpload}
+          isLoading={isUploading}
+        />
+      )}
       
       {isLoading ? (
         <div className="animate-pulse">
@@ -121,7 +185,7 @@ const StudyMaterialsPage: React.FC<StudyMaterialsPageProps> = ({ role }) => {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <button
-                      onClick={() => handleDownload(material.id)}
+                      onClick={() => handleDownload(material)}
                       className="text-blue-600 hover:text-blue-800 bg-blue-50 px-3 py-1 rounded-md"
                     >
                       <Download className="w-4 h-4 inline-block mr-1" />

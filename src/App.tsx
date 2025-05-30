@@ -25,6 +25,7 @@ import AboutPage from './pages/AboutPage';
 import FaqsPage from './pages/FaqsPage';
 import CoursesPage from './pages/CoursesPage';
 import NotFoundPage from './pages/NotFoundPage';
+import MasterAdiccionesPage from './pages/MasterAdiccionesPage'; // Import the new page
 
 // Dashboard Pages
 import DashboardPage from './pages/dashboard/DashboardPage';
@@ -117,6 +118,7 @@ function App() {
         <Route path="/about" element={<AboutPage currentRole={currentRole} onRoleChange={handleRoleChange} />} />
         <Route path="/faqs" element={<FaqsPage currentRole={currentRole} onRoleChange={handleRoleChange} />} />
         <Route path="/courses" element={<CoursesPage currentRole={currentRole} onRoleChange={handleRoleChange} />} />
+        <Route path="/master-adicciones" element={<MasterAdiccionesPage />} />
         
         {/* Auth routes */}
         <Route path="/login/:role" element={<LoginPage onLogin={handleLogin} />} />

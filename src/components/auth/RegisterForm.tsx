@@ -17,10 +17,9 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ role, onRegister }) => {
     skills: '',
     qualification: '',
   });
-  const [otpSent, setOtpSent] = useState(false);
-  const [otp, setOtp] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [registrationSuccess, setRegistrationSuccess] = useState(false);
   
   const navigate = useNavigate();
 
@@ -37,11 +36,6 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ role, onRegister }) => {
     setError(null);
     
     try {
-      // For demo purposes, we'll just simulate OTP being sent
-      // setOtpSent(true);
-      // setIsLoading(false);
-      
-      // In a real implementation, we would register with Supabase
       const { data, error } = await supabase.auth.signUp({
         email: formData.email,
         password: formData.password,
@@ -49,32 +43,16 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ role, onRegister }) => {
       
       if (error) throw error;
       
-      // Then we would store additional user data in our users table
       await supabase.from('usuarios').insert({
-        id: data.user?.id, // Use data.user?.id
+        id: data.user?.id,
         email: formData.email,
-        rol: role, // Use 'rol' column and 'role' prop
-        // mobile: formData.mobile || null, // Add if 'usuarios' table has these columns
-        // skills: formData.skills || null,
-        // qualification: formData.qualification || null,
+        rol: role,
+        mobile: formData.mobile || null,
+        skills: formData.skills || null,
+        qualification: formData.qualification || null,
       });
 
-      // If OTP is required, set otpSent to true
-      if (data.user?.identities?.length === 0) { // Check if user needs email confirmation
-        setOtpSent(true);
-      } else {
-        // If no OTP, directly log in
-        const user = {
-          id: data.user?.id,
-          email: data.user?.email,
-          role,
-          accessToken: data.session?.access_token,
-          refreshToken: data.session?.refresh_token,
-        };
-        onRegister(user);
-        navigate(`/${role}/dashboard`);
-      }
-
+      setRegistrationSuccess(true);
       setIsLoading(false);
       
     } catch (err: any) {
@@ -83,63 +61,16 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ role, onRegister }) => {
     }
   };
 
-  const handleVerifyOtp = async () => { // Made async
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      const { data, error } = await supabase.auth.verifyOtp({
-        email: formData.email,
-        token: otp,
-        type: 'email', // Assuming email OTP verification
-      });
-
-      if (error) throw error;
-
-      const user = {
-        id: data.user?.id,
-        email: data.user?.email,
-        role,
-        accessToken: data.session?.access_token,
-        refreshToken: data.session?.refresh_token,
-      };
-      
-      onRegister(user);
-      navigate(`/${role}/dashboard`);
-      
-      setIsLoading(false);
-    } catch (err: any) {
-      setError(err.message || 'Failed to verify OTP');
-      setIsLoading(false);
-    }
-  };
-
-  if (otpSent) {
+  if (registrationSuccess) {
     return (
-      <div className="max-w-md mx-auto bg-white p-8 rounded-lg shadow-md">
-        <h2 className="text-2xl font-bold text-center text-gray-700 mb-6">Verificar OTP</h2>
-        <p className="text-gray-600 mb-6 text-center">
-          Ingrese el código de verificación enviado a su móvil
+      <div className="max-w-md mx-auto bg-white p-8 rounded-lg shadow-md text-center">
+        <h2 className="text-2xl font-bold text-gray-700 mb-4">¡Registro Exitoso!</h2>
+        <p className="text-gray-600 mb-6">
+          Por favor, verifica tu correo electrónico para completar el registro.
         </p>
-        
-        <div className="mb-6">
-          <input
-            type="text"
-            value={otp}
-            onChange={(e) => setOtp(e.target.value)}
-            placeholder="Ingrese OTP de 6 dígitos"
-            className="w-full px-4 py-2 text-gray-700 bg-gray-50 border border-gray-300 rounded-md focus:border-blue-500 focus:outline-none focus:ring"
-            maxLength={6}
-          />
-        </div>
-        
-        <button
-          onClick={handleVerifyOtp}
-          className="w-full px-4 py-2 text-white bg-green-600 rounded-md hover:bg-green-700 focus:outline-none focus:bg-green-700 transition-colors"
-          disabled={isLoading || otp.length !== 6}
-        >
-          {isLoading ? 'Verificando...' : 'Verificar'}
-        </button>
+        <Link to="/login/student" className="text-blue-500 hover:underline">
+          Ir a Iniciar Sesión
+        </Link>
       </div>
     );
   }
@@ -166,7 +97,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ role, onRegister }) => {
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
-                className="w-full pl-10 pr-4 py-2 text-gray-700 bg-gray-50 border border-gray-300 rounded-md focus:border-blue-500 focus:outline-none focus:ring"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Su Nombre"
                 required
               />
@@ -179,7 +110,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ role, onRegister }) => {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                className="w-full pl-10 pr-4 py-2 text-gray-700 bg-gray-50 border border-gray-300 rounded-md focus:border-blue-500 focus:outline-none focus:ring"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Su Correo Electrónico"
                 required
               />

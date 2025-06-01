@@ -16,7 +16,7 @@ function ChangePasswordPage({ role }: ChangePasswordPageProps) {
     e.preventDefault();
     
     if (newPassword !== confirmPassword) {
-      toast.error('New passwords do not match');
+      toast.error('Las nuevas contraseñas no coinciden');
       return;
     }
 
@@ -29,13 +29,13 @@ function ChangePasswordPage({ role }: ChangePasswordPageProps) {
 
       if (error) throw error;
 
-      toast.success('Password updated successfully');
+      toast.success('Contraseña actualizada correctamente');
       setCurrentPassword('');
       setNewPassword('');
       setConfirmPassword('');
     } catch (error) {
       console.error('Error updating password:', error);
-      toast.error('Failed to update password');
+      toast.error('Error al actualizar la contraseña');
     } finally {
       setIsLoading(false);
     }
@@ -44,12 +44,12 @@ function ChangePasswordPage({ role }: ChangePasswordPageProps) {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-md mx-auto bg-white rounded-lg shadow-md p-6">
-        <h1 className="text-2xl font-bold mb-6">Change Password</h1>
+        <h1 className="text-2xl font-bold mb-6">Cambiar Contraseña</h1>
         
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label htmlFor="current-password" className="block text-sm font-medium text-gray-700">
-              Current Password
+              Contraseña Actual
             </label>
             <input
               type="password"
@@ -63,7 +63,7 @@ function ChangePasswordPage({ role }: ChangePasswordPageProps) {
           
           <div>
             <label htmlFor="new-password" className="block text-sm font-medium text-gray-700">
-              New Password
+              Nueva Contraseña
             </label>
             <input
               type="password"
@@ -77,7 +77,7 @@ function ChangePasswordPage({ role }: ChangePasswordPageProps) {
           
           <div>
             <label htmlFor="confirm-password" className="block text-sm font-medium text-gray-700">
-              Confirm New Password
+              Confirmar Nueva Contraseña
             </label>
             <input
               type="password"
@@ -94,7 +94,7 @@ function ChangePasswordPage({ role }: ChangePasswordPageProps) {
             className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50"
             disabled={isLoading}
           >
-            {isLoading ? 'Updating...' : 'Update Password'}
+            {isLoading ? 'Actualizando...' : 'Actualizar Contraseña'}
           </button>
         </form>
       </div>

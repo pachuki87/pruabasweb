@@ -15,8 +15,9 @@ const Navbar: React.FC<NavbarProps> = ({ onRoleChange, currentRole = 'student' }
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Implement search functionality
-    console.log('Buscando:', searchQuery);
+    // Redirigir a la página de cursos con el parámetro de búsqueda
+    // Incluir la ruta base '/pruabasweb/' en la URL
+    window.location.href = `/pruabasweb/courses?search=${encodeURIComponent(searchQuery)}`;
   };
 
   const toggleMobileMenu = () => {

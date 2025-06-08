@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import Navbar from '../components/layout/Navbar';
 import CourseCard from '../components/courses/CourseCard';
+import { useLocation } from 'react-router-dom';
 
 interface CoursesPageProps {
   currentRole: string;
@@ -17,11 +18,29 @@ type Curso = {
 
 function CoursesPage({ currentRole, onRoleChange }: CoursesPageProps) {
   const [cursos, setCursos] = useState<Curso[]>([]);
+  const [cursosFiltrados, setCursosFiltrados] = useState<Curso[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const location = useLocation();
 
   useEffect(() => {
     obtenerCursos();
   }, []);
+  
+  useEffect(() => {
+    // Obtener el parámetro de búsqueda de la URL
+    const searchParams = new URLSearchParams(location.search);
+    const searchQuery = searchParams.get('search');
+    
+    if (searchQuery && cursos.length > 0) {
+      // Filtrar cursos según el término de búsqueda
+      const resultados = cursos.filter(curso =>
+        curso.titulo.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+      setCursosFiltrados(resultados);
+    } else {
+      setCursosFiltrados(cursos);
+    }
+  }, [location.search, cursos]);
 
   const obtenerCursos = async () => {
     setIsLoading(true);
@@ -43,9 +62,23 @@ function CoursesPage({ currentRole, onRoleChange }: CoursesPageProps) {
       }));
 
       setCursos(cursosFormateados);
+      
+      // Inicializar cursos filtrados con todos los cursos
+      const searchParams = new URLSearchParams(location.search);
+      const searchQuery = searchParams.get('search');
+      
+      if (searchQuery) {
+        const resultados = cursosFormateados.filter(curso =>
+          curso.titulo.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+        setCursosFiltrados(resultados);
+      } else {
+        setCursosFiltrados(cursosFormateados);
+      }
     } catch (error) {
       console.error('Error al obtener cursos:', error);
       setCursos([]);
+      setCursosFiltrados([]);
     } finally {
       setIsLoading(false);
     }
@@ -60,6 +93,15 @@ function CoursesPage({ currentRole, onRoleChange }: CoursesPageProps) {
           <p className="text-xl text-gray-600 mb-12">
             Explora nuestra amplia gama de cursos diseñados para ayudarte a tener éxito
           </p>
+          {location.search && (
+            <div className="mb-8 p-4 bg-blue-50 rounded-lg">
+              <p className="text-lg text-blue-800">
+                Resultados de búsqueda para: <span className="font-semibold">"{new URLSearchParams(location.search).get('search')}"</span>
+                {cursosFiltrados.length === 0 && " - No se encontraron cursos"}
+                {cursosFiltrados.length > 0 && ` - ${cursosFiltrados.length} curso(s) encontrado(s)`}
+              </p>
+            </div>
+          )}
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -67,12 +109,12 @@ function CoursesPage({ currentRole, onRoleChange }: CoursesPageProps) {
             <p className="col-span-full text-center text-gray-600">
               Cargando cursos...
             </p>
-          ) : cursos.length === 0 ? (
+          ) : cursosFiltrados.length === 0 ? (
             <p className="col-span-full text-center text-gray-600">
               No hay cursos disponibles.
             </p>
           ) : (
-            cursos.map(curso => (
+            cursosFiltrados.map(curso => (
               <CourseCard
                 key={curso.id}
                 id={curso.id}

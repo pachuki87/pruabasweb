@@ -2,11 +2,24 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Facebook } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
+import { FaFacebook, FaLinkedin } from 'react-icons/fa';
 
 type LoginFormProps = {
   role: string;
   onLogin: (user: any) => void;
 };
+
+// Define GoogleIcon component here
+const GoogleIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+    <g fill="none" fillRule="evenodd">
+      <path d="M17.64 9.2045c0-.6381-.0573-1.2518-.1636-1.8409H9v3.4818h4.8436c-.2086 1.125-.8427 2.0782-1.7772 2.7218v2.2582h2.9086c1.7018-1.5664 2.6836-3.8745 2.6836-6.621Z" fill="#4285F4"/>
+      <path d="M9 18c2.43 0 4.4673-.8064 5.9564-2.1818l-2.9086-2.2582c-.8064.5436-1.8364.8618-3.0477.8618-2.3455 0-4.3273-1.5818-5.0364-3.7109H.9573v2.3318C2.4382 16.1455 5.4818 18 9 18Z" fill="#34A853"/>
+      <path d="M3.9636 10.71c-.18-.5436-.2836-1.1164-.2836-1.71s.1036-1.1664.2836-1.71V4.9582H.9573C.3477 6.1732 0 7.5477 0 9s.3477 2.8268.9573 4.0418L3.9636 10.71Z" fill="#FBBC05"/>
+      <path d="M9 3.5782c1.3227 0 2.5077.4545 3.4409 1.3455l2.5818-2.5818C13.4636.8918 11.4273 0 9 0 5.4818 0 2.4382 1.8545.9573 4.9582L3.9636 7.29C4.6727 5.16 6.6545 3.5782 9 3.5782Z" fill="#EA4335"/>
+    </g>
+  </svg>
+);
 
 const LoginForm: React.FC<LoginFormProps> = ({ role, onLogin }) => {
   const [email, setEmail] = useState('');
@@ -116,9 +129,10 @@ const LoginForm: React.FC<LoginFormProps> = ({ role, onLogin }) => {
           </button>
           <button
             onClick={() => handleSocialLogin('google')}
-            className="flex items-center justify-center w-10 h-10 text-white bg-red-600 rounded-full hover:bg-red-700 transition-colors"
+            className="flex items-center justify-center w-full py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-google"><path d="M12 10.9c1.846 0 3.413 0.73 4.588 1.963l3.481-3.481C19.245 6.007 16.86 4 12 4c-3.248 0-6.286 1.64-8.065 4.334L8.095 12.44A7.96 7.96 0 0 1 12 10.9z" fill="#4285F4"></path><path d="M22 12c0-1.58-0.13-3.1-0.45-4.5L18.02 9.02C18.59 10.09 19 11.04 19 12c0 1.04-0.41 2.09-1.02 3.02l3.48 3.48C21.87 18.1 22 16.58 22 15z" fill="#34A853"></path><path d="M4 12c0 1.04 0.41 2.09 1.02 3.02l-3.48 3.48C2.13 18.1 2 16.58 2 15c0-1.58 0.13-3.1 0.45-4.5L5.98 9.02C5.41 10.09 5 11.04 5 12z" fill="#FBBC05"></path><path d="M12 13.9c-1.846 0-3.413-0.73-4.588-1.963L3.93 15.413C6.007 19.245 8.993 20 12 20c3.248 0 6.286-1.64 8.065-4.334L15.905 11.56A7.96 7.96 0 0 1 12 13.9z" fill="#EA4335"></path></svg>
+            <GoogleIcon />
+            <span className="ml-2">Continuar con Google</span>
           </button>
           <button
             onClick={() => handleSocialLogin('linkedin')}

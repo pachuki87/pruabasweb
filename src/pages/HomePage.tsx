@@ -63,14 +63,14 @@ const HomePage: React.FC<HomePageProps> = ({ currentRole, onRoleChange }) => {
       
       <main className="flex-grow">
         {/* Hero Section */}
-        <section className="bg-gradient-to-r from-blue-800 to-blue-950 text-white py-20 h-[57.5vh] flex items-center">
+        <section className="bg-gradient-to-r from-blue-800 to-blue-950 text-white py-12 md:py-20 h-auto md:h-[57.5vh] flex items-center">
           <div className="container mx-auto px-4">
             <div className="flex flex-col md:flex-row items-center justify-between">
-              <div className="md:w-1/2 mb-10 md:mb-0 text-center md:text-left">
-                <h1 className="text-4xl md:text-5xl font-bold mb-4">
+              <div className="md:w-1/2 mb-10 md:mb-0 text-center md:text-left px-4">
+                <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4">
                   Aprende Sin Límites
                 </h1>
-                <p className="text-xl mb-8 text-blue-100">
+                <p className="text-lg sm:text-xl mb-8 text-blue-100">
                   Descubre cursos impartidos por instructores expertos. Únete a miles de estudiantes que ya están aprendiendo en Instituto Lidera.
                 </p>
                 <div className="flex justify-center md:justify-start space-x-4">
@@ -88,12 +88,12 @@ const HomePage: React.FC<HomePageProps> = ({ currentRole, onRoleChange }) => {
                   </Link>
                 </div>
               </div>
-              <div className="md:w-1/2 flex items-center justify-center">
+              <div className="md:w-1/2 flex items-center justify-center px-4">
                 <img
                   key="hero-image"
                   src="https://images.pexels.com/photos/4144294/pexels-photo-4144294.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
                   alt="Estudiantes aprendiendo"
-                  className="rounded-lg shadow-lg max-w-full h-auto object-cover"
+                  className="rounded-lg shadow-lg max-w-full h-auto object-contain md:object-cover max-h-[30vh] md:max-h-full"
                 />
               </div>
             </div>

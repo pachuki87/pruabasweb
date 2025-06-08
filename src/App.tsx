@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'; // Import useEffect
-import { Routes, Route, Navigate, useNavigate } from 'react-router-dom'; // Import useNavigate
+import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom'; // Import useNavigate
 import { Toaster } from 'sonner';
 import { ErrorBoundary } from 'react-error-boundary';
-import { supabase, getUserById } from './lib/supabase'; // Import supabase
+import { supabase, getUserById, getUsers } from './lib/supabase'; // Import supabase, getUsers
 
 // Layouts
 import DashboardLayout from './components/layout/DashboardLayout';
@@ -112,58 +112,60 @@ function App() {
     <>
       <Toaster position="top-right" />
       
-      <Routes>
-        {/* Public routes */}
-        <Route path="/" element={<HomePage currentRole={currentRole} onRoleChange={handleRoleChange} />} />
-        <Route path="/about" element={<AboutPage currentRole={currentRole} onRoleChange={handleRoleChange} />} />
-        <Route path="/faqs" element={<FaqsPage currentRole={currentRole} onRoleChange={handleRoleChange} />} />
-        <Route path="/courses" element={<CoursesPage currentRole={currentRole} onRoleChange={handleRoleChange} />} />
-        <Route path="/master-adicciones" element={<MasterAdiccionesPage />} />
-        
-        {/* Auth routes */}
-        <Route path="/login/:role" element={<LoginPage onLogin={handleLogin} />} />
-        <Route path="/register/:role" element={<RegisterPage onRegister={handleLogin} />} />
-        
-        {/* Dashboard routes */}
-        <Route path="/student" element={<DashboardLayout role="student" onRoleChange={handleRoleChange} />}>
-          <Route path="dashboard" element={<DashboardPage role="student" />} />
-          <Route path="courses" element={<UserCoursesPage role="student" />} />
-          <Route path="courses/:id" element={<CourseDetailsPage role="student" />} />
-          <Route path="quizzes" element={<QuizzesPage role="student" />} />
-          <Route path="profile" element={<UserProfilePage role="student" />} />
-          <Route path="change-password" element={<ChangePasswordPage role="student" />} />
-        </Route>
-        
-        <Route path="/teacher" element={<DashboardLayout role="teacher" onRoleChange={handleRoleChange} />}>
-          <Route path="dashboard" element={<DashboardPage role="teacher" />} />
-          <Route path="courses" element={<UserCoursesPage role="teacher" />} />
-          <Route path="courses/add" element={<AddCoursePage />} />
-          <Route path="courses/edit/:id" element={<EditCoursePage />} />
-          <Route path="courses/:id" element={<CourseDetailsPage role="teacher" />} />
-          <Route path="courses/:id/materials" element={<StudyMaterialsPage role="teacher" />} />
-          <Route path="quizzes" element={<QuizzesPage role="teacher" />} />
-          <Route path="quizzes/add" element={<AddQuizPage />} />
-          <Route path="quizzes/assign/:id" element={<AssignQuizPage />} />
-          <Route path="users" element={<StudentList students={[]} />} /> {/* Added route for StudentList */}
-          <Route path="users/add" element={<AddStudentForm />} /> {/* Added route for AddStudentForm */}
-          <Route path="users/:id/assign-courses" element={<AssignCoursesToStudent />} /> {/* Added route for AssignCoursesToStudent */}
-          <Route path="profile" element={<UserProfilePage role="teacher" />} />
-          <Route path="change-password" element={<ChangePasswordPage role="teacher" />} />
-        </Route>
-        
-        {/* Redirect /login to the appropriate role login page */}
-        <Route path="/login" element={<Navigate to={`/login/${currentRole}`} replace />} />
-        <Route path="/register" element={<Navigate to={`/register/${currentRole}`} replace />} />
-        
-        {/* Logout route */}
-        <Route 
-          path="/logout" 
-          element={<LogoutPage onLogout={handleLogout} />} // Create a LogoutPage component
-        />
-        
-        {/* 404 route */}
-        <Route path="*" element={<NotFoundPage />} />
-      </Routes>
+      <BrowserRouter basename="/pruabasweb/">
+        <Routes>
+          {/* Public routes */}
+          <Route path="/" element={<HomePage currentRole={currentRole} onRoleChange={handleRoleChange} />} />
+          <Route path="/about" element={<AboutPage currentRole={currentRole} onRoleChange={handleRoleChange} />} />
+          <Route path="/faqs" element={<FaqsPage currentRole={currentRole} onRoleChange={handleRoleChange} />} />
+          <Route path="/courses" element={<CoursesPage currentRole={currentRole} onRoleChange={handleRoleChange} />} />
+          <Route path="/master-adicciones" element={<MasterAdiccionesPage />} />
+          
+          {/* Auth routes */}
+          <Route path="/login/:role" element={<LoginPage onLogin={handleLogin} />} />
+          <Route path="/register/:role" element={<RegisterPage onRegister={handleLogin} />} />
+          
+          {/* Dashboard routes */}
+          <Route path="/student" element={<DashboardLayout role="student" onRoleChange={handleRoleChange} />}>
+            <Route path="dashboard" element={<DashboardPage role="student" />} />
+            <Route path="courses" element={<UserCoursesPage role="student" />} />
+            <Route path="courses/:id" element={<CourseDetailsPage role="student" />} />
+            <Route path="quizzes" element={<QuizzesPage role="student" />} />
+            <Route path="profile" element={<UserProfilePage role="student" />} />
+            <Route path="change-password" element={<ChangePasswordPage role="student" />} />
+          </Route>
+          
+          <Route path="/teacher" element={<DashboardLayout role="teacher" onRoleChange={handleRoleChange} />}>
+            <Route path="dashboard" element={<DashboardPage role="teacher" />} />
+            <Route path="courses" element={<UserCoursesPage role="teacher" />} />
+            <Route path="courses/add" element={<AddCoursePage />} />
+            <Route path="courses/edit/:id" element={<EditCoursePage />} />
+            <Route path="courses/:id" element={<CourseDetailsPage role="teacher" />} />
+            <Route path="courses/:id/materials" element={<StudyMaterialsPage role="teacher" />} />
+            <Route path="quizzes" element={<QuizzesPage role="teacher" />} />
+            <Route path="quizzes/add" element={<AddQuizPage />} />
+            <Route path="quizzes/assign/:id" element={<AssignQuizPage />} />
+            <Route path="users" element={<StudentList />} /> {/* Added route for StudentList */}
+            <Route path="users/add" element={<AddStudentForm />} /> {/* Added route for AddStudentForm */}
+            <Route path="users/:id/assign-courses" element={<AssignCoursesToStudent />} /> {/* Added route for AssignCoursesToStudent */}
+            <Route path="profile" element={<UserProfilePage role="teacher" />} />
+            <Route path="change-password" element={<ChangePasswordPage role="teacher" />} />
+          </Route>
+          
+          {/* Redirect /login to the appropriate role login page */}
+          <Route path="/login" element={<Navigate to={`/login/${currentRole}`} replace />} />
+          <Route path="/register" element={<Navigate to={`/register/${currentRole}`} replace />} />
+          
+          {/* Logout route */}
+          <Route 
+            path="/logout" 
+            element={<LogoutPage onLogout={handleLogout} />} // Create a LogoutPage component
+          />
+          
+          {/* 404 route */}
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+      </BrowserRouter>
     </>
   );
 }

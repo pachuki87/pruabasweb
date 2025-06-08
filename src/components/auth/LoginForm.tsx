@@ -85,7 +85,12 @@ const LoginForm: React.FC<LoginFormProps> = ({ role, onLogin }) => {
 
     // In a real implementation, we would use Supabase auth
     if (provider === 'google') {
-      const { error } = await supabase.auth.signInWithOAuth({ provider: 'google' });
+      const { error } = await supabase.auth.signInWithOAuth({ 
+        provider: 'google',
+        options: {
+          redirectTo: window.location.origin
+        }
+      });
       if (error) {
         console.error('Error al iniciar sesión con Google:', error);
         setError(error.message);

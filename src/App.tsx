@@ -112,7 +112,7 @@ function App() {
     <>
       <Toaster position="top-right" />
       
-      <BrowserRouter basename="/pruabasweb/">
+      <BrowserRouter>
         <Routes>
           {/* Public routes */}
           <Route path="/" element={<HomePage currentRole={currentRole} onRoleChange={handleRoleChange} />} />

@@ -25,9 +25,9 @@ const Events = () => {
     },
     {
       date: { day: "10", month: "JUN" },
-      title: "IESE Alumni & Friends Reunion",
+      title: "Instituto Lidera Alumni & Friends Reunion",
       time: "20:00",
-      location: "Munich",
+      location: "Madrid",
       type: "Networking"
     }
   ];

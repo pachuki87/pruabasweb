@@ -34,24 +34,24 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8">
           {/* Logo and Contact */}
           <div className="lg:col-span-2">
-            <div className="text-3xl font-bold text-red-500 mb-6">IESE</div>
+            <div className="text-3xl font-bold text-red-500 mb-6">Instituto Lidera</div>
             <p className="text-gray-300 mb-6 leading-relaxed">
-              Business School de la Universidad de Navarra. Formando líderes empresariales 
-              que impacten positivamente en las personas, las empresas y la sociedad.
+              Instituto especializado en formación en adicciones e intervención psicosocial. 
+              Formando profesionales expertos que impacten positivamente en el tratamiento y prevención de conductas adictivas.
             </p>
             
             <div className="space-y-3 mb-6">
               <div className="flex items-center text-gray-300">
                 <Phone className="h-4 w-4 mr-3" />
-                <span>+34 93 253 42 00</span>
+                <span>+34 91 123 45 67</span>
               </div>
               <div className="flex items-center text-gray-300">
                 <Mail className="h-4 w-4 mr-3" />
-                <span>info@iese.edu</span>
+                <span>info@institutolidera.es</span>
               </div>
               <div className="flex items-center text-gray-300">
                 <MapPin className="h-4 w-4 mr-3" />
-                <span>Av. Pearson, 21, 08034 Barcelona</span>
+                <span>Calle Gran Vía, 45, 28013 Madrid, España</span>
               </div>
             </div>
             
@@ -102,7 +102,7 @@ const Footer = () => {
               </a>
             </div>
             <div className="text-gray-400 text-sm">
-              © 2024 IESE Business School. Todos los derechos reservados.
+              © 2024 Instituto Lidera. Todos los derechos reservados.
             </div>
           </div>
         </div>

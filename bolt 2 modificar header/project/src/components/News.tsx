@@ -1,26 +1,27 @@
+import React from 'react';
 import { Calendar, ArrowRight } from 'lucide-react';
 
 const News = () => {
   const news = [
     {
-      title: "Nuevo protocolo de intervención en adicciones comportamentales",
-      excerpt: "Instituto Lidera presenta un innovador protocolo para el tratamiento de adicciones comportamentales desarrollado por nuestro equipo de investigación.",
-      date: "15 MAY 2024",
-      category: "Instituto Lidera",
+      title: "Instituto Lidera reconocido como centro de excelencia en formación directiva",
+      excerpt: "El Instituto recibe el premio a la mejor metodología de formación empresarial por su enfoque práctico y resultados medibles.",
+      date: "15 NOV 2024",
+      category: "RECONOCIMIENTOS",
       image: "https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop"
     },
     {
-      title: "Estudio sobre eficacia de terapias grupales en adicciones",
-      excerpt: "Un nuevo estudio analiza la efectividad de las terapias grupales en el tratamiento de diferentes tipos de adicciones.",
-      date: "12 MAY 2024",
-      category: "Research",
+      title: "Nuevo programa de transformación digital para directivos",
+      excerpt: "Lanzamos un programa especializado en liderazgo digital y gestión del cambio tecnológico en las organizaciones.",
+      date: "12 NOV 2024",
+      category: "NUEVOS PROGRAMAS",
       image: "https://images.pexels.com/photos/3184339/pexels-photo-3184339.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop"
     },
     {
-      title: "La Alumni Association presenta casos de éxito en centros de tratamiento",
-      excerpt: "Conoce los casos de éxito más destacados de alumni de Instituto Lidera en centros de tratamiento de adicciones.",
-      date: "10 MAY 2024",
-      category: "Alumni",
+      title: "Alumni de Instituto Lidera lideran la transformación empresarial",
+      excerpt: "Más del 80% de nuestros graduados han obtenido promociones o han liderado proyectos de transformación en sus empresas.",
+      date: "10 NOV 2024",
+      category: "ALUMNI",
       image: "https://images.pexels.com/photos/3184360/pexels-photo-3184360.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop"
     }
   ];

@@ -1,3 +1,4 @@
+import React from 'react';
 import { Calendar, MapPin, Clock, Users } from 'lucide-react';
 
 const Events = () => {
@@ -48,20 +49,20 @@ const Events = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {events.map((event, index) => (
             <div key={index} className="bg-white rounded-xl overflow-hidden hover:shadow-lg transition-shadow cursor-pointer group">
-              <div className="relative h-48">
+              <div className="relative h-32 overflow-hidden">
                 <img 
                   src={event.image}
                   alt={event.title}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                <div className="absolute top-4 left-4">
-                  <div className="bg-gray-900 text-white rounded-lg p-3 text-center min-w-[60px]">
-                    <div className="text-2xl font-bold">{event.date.day}</div>
+                <div className="absolute top-3 left-3">
+                  <div className="bg-white text-gray-900 rounded-lg p-2 text-center min-w-[50px]">
+                    <div className="text-lg font-bold">{event.date.day}</div>
                     <div className="text-xs uppercase">{event.date.month}</div>
                   </div>
                 </div>
-                <div className="absolute top-4 right-4">
+                <div className="absolute top-3 right-3">
                   <span className="inline-block bg-red-600 text-white text-xs px-2 py-1 rounded-full">
                     {event.type}
                   </span>
@@ -69,22 +70,22 @@ const Events = () => {
               </div>
               
               <div className="p-6">
-                <h3 className="text-lg font-bold text-gray-900 mb-3 group-hover:text-red-600 transition-colors">
+                <h3 className="font-bold text-gray-900 group-hover:text-red-600 transition-colors line-clamp-2 mb-4">
                   {event.title}
                 </h3>
                 
                 <div className="space-y-2 text-sm text-gray-600">
-                  <div className="flex items-center space-x-2">
-                    <Clock className="h-4 w-4" />
-                    <span>{event.time}</span>
+                  <div className="flex items-center">
+                    <Clock className="h-4 w-4 mr-2" />
+                    {event.time}
                   </div>
-                  <div className="flex items-center space-x-2">
-                    <MapPin className="h-4 w-4" />
-                    <span>{event.location}</span>
+                  <div className="flex items-center">
+                    <MapPin className="h-4 w-4 mr-2" />
+                    {event.location}
                   </div>
-                  <div className="flex items-center space-x-2">
-                    <Users className="h-4 w-4" />
-                    <span>{event.attendees} asistentes</span>
+                  <div className="flex items-center">
+                    <Users className="h-4 w-4 mr-2" />
+                    {event.attendees} asistentes
                   </div>
                 </div>
               </div>

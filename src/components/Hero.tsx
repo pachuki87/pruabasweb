@@ -10,12 +10,12 @@ const Hero = () => {
               Creativas
             </h1>
             <p className="text-xl text-gray-300 mb-8 leading-relaxed">
-              Las empresas que más crean en la era del profesionalismo y la innovación 
-              tecnológica requieren de perfiles más especializados y con mayores 
-              competencias para responder a sus necesidades del mercado. En IESE no sólo 
-              desarrollamos líderes empresariales sino que fundamentamos los resultados con 
-              una sólida formación humanística que permite a nuestros alumnos llegar a ser 
-              líderes íntegros.
+              La sociedad actual requiere de profesionales especializados en el tratamiento 
+              y prevención de adicciones con competencias avanzadas para responder a las 
+              necesidades del sector sanitario y social. En Instituto Lidera no sólo 
+              desarrollamos expertos en adicciones sino que fundamentamos los resultados con 
+              una sólida formación científica y humanística que permite a nuestros alumnos 
+              convertirse en profesionales íntegros.
             </p>
             <div className="flex flex-wrap gap-4">
               <button className="bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors">

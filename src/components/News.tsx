@@ -3,20 +3,20 @@ import { Calendar, ArrowRight } from 'lucide-react';
 const News = () => {
   const news = [
     {
-      title: "Adiós a José Felipe Bertrán, consejero delegado de IESE",
-      excerpt: "El pasado 15 de mayo falleció José Felipe Bertrán, consejero delegado de IESE durante más de dos décadas.",
+      title: "Nuevo protocolo de intervención en adicciones comportamentales",
+      excerpt: "Instituto Lidera presenta un innovador protocolo para el tratamiento de adicciones comportamentales desarrollado por nuestro equipo de investigación.",
       date: "15 MAY 2024",
-      category: "IESE"
+      category: "Instituto Lidera"
     },
     {
-      title: "IESE's Top Foundational Business Model Playbook para Knowledge sobre el futuro del trabajo",
-      excerpt: "Un nuevo estudio analiza los modelos de negocio más exitosos en la era digital.",
+      title: "Estudio sobre eficacia de terapias grupales en adicciones",
+      excerpt: "Un nuevo estudio analiza la efectividad de las terapias grupales en el tratamiento de diferentes tipos de adicciones.",
       date: "12 MAY 2024",
       category: "Research"
     },
     {
-      title: "La Alumni Association presenta las mejores startups del año 2024",
-      excerpt: "Conoce las startups más innovadoras creadas por alumni de IESE este año.",
+      title: "La Alumni Association presenta casos de éxito en centros de tratamiento",
+      excerpt: "Conoce los casos de éxito más destacados de alumni de Instituto Lidera en centros de tratamiento de adicciones.",
       date: "10 MAY 2024",
       category: "Alumni"
     }

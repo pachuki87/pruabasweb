@@ -11,7 +11,7 @@ const Header = () => {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex-shrink-0">
-            <div className="text-2xl font-bold text-red-600">IESE</div>
+            <div className="text-2xl font-bold text-red-600">Instituto Lidera</div>
           </div>
 
           {/* Desktop Navigation */}

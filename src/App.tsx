@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'; // Import useEffect
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom'; // Import useNavigate
 import { Toaster } from 'sonner';
 import { ErrorBoundary } from 'react-error-boundary';

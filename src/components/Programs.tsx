@@ -8,7 +8,8 @@ const Programs = () => {
       subtitle: "82 ESTUDIANTES",
       programs: ["Neurobiología de las Adicciones", "Intervención Psicosocial", "Terapias Especializadas", "Prevención y Rehabilitación"],
       color: "bg-red-600",
-      link: "/master-adicciones-intervencion"
+      link: "/master-adicciones-intervencion",
+      image: "https://images.pexels.com/photos/1438072/pexels-photo-1438072.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop"
     },
     {
       icon: <Briefcase className="h-8 w-8" />,
@@ -16,7 +17,8 @@ const Programs = () => {
       subtitle: "29 ESTUDIANTES",
       programs: ["Fundamentos de Adicciones", "Evaluación y Diagnóstico", "Tratamiento Integral", "Investigación Aplicada"],
       color: "bg-gray-800",
-      link: "/master-adicciones"
+      link: "/master-adicciones",
+      image: "https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop"
     },
     {
       icon: <Users className="h-8 w-8" />,
@@ -24,7 +26,8 @@ const Programs = () => {
       subtitle: "83 ESTUDIANTES",
       programs: ["Psicología de las Adicciones", "Conductas Compulsivas", "Intervención Familiar", "Casos Clínicos"],
       color: "bg-red-600",
-      link: "/experto-conductas-adictivas"
+      link: "/experto-conductas-adictivas",
+      image: "https://images.pexels.com/photos/3184338/pexels-photo-3184338.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop"
     }
   ];
 
@@ -53,20 +56,34 @@ const Programs = () => {
                 <a
                   key={index}
                   href={program.link}
-                  className={`${program.color} text-white p-8 rounded-2xl hover:scale-105 transition-transform cursor-pointer block`}
+                  className={`${program.color} text-white rounded-2xl overflow-hidden hover:scale-105 transition-transform cursor-pointer group block`}
                 >
-                  <div className="mb-4">
-                    {program.icon}
+                  <div className="relative h-32 overflow-hidden">
+                    <img 
+                      src={program.image}
+                      alt={program.title}
+                      className="w-full h-full object-cover opacity-30 group-hover:opacity-50 transition-opacity"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                    <div className="absolute top-4 left-4">
+                      <div className="text-white">
+                        {program.icon}
+                      </div>
+                    </div>
                   </div>
-                  <h3 className="text-xl font-bold mb-2">{program.title}</h3>
-                  <p className="text-sm opacity-80 mb-4">{program.subtitle}</p>
-                  <ul className="space-y-2">
-                    {program.programs.map((prog, idx) => (
-                      <li key={idx} className="text-sm opacity-90">
-                        • {prog}
-                      </li>
-                    ))}
-                  </ul>
+                  
+                  <div className="p-6">
+                    <h3 className="text-xl font-bold mb-2">{program.title}</h3>
+                    <p className="text-sm opacity-80 mb-4">{program.subtitle}</p>
+                    
+                    <div className="space-y-2">
+                      {program.programs.map((item, itemIndex) => (
+                        <div key={itemIndex} className="text-sm opacity-90">
+                          • {item}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 </a>
               ))}
             </div>

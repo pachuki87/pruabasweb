@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Search, Menu, X, ChevronDown } from 'lucide-react';
 
 const Header = () => {
@@ -16,15 +16,27 @@ const Header = () => {
 
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex space-x-8">
-            <a href="#" className="text-gray-700 hover:text-red-600 transition-colors">Cursos</a>
-            <a href="#" className="text-gray-700 hover:text-red-600 transition-colors">Formación</a>
-            <a href="#" className="text-gray-700 hover:text-red-600 transition-colors">Metodología</a>
+            <div className="relative group">
+              <button className="flex items-center text-gray-700 hover:text-red-600 transition-colors">
+                Cursos <ChevronDown className="ml-1 h-4 w-4" />
+              </button>
+            </div>
+            <div className="relative group">
+              <button className="flex items-center text-gray-700 hover:text-red-600 transition-colors">
+                Formación <ChevronDown className="ml-1 h-4 w-4" />
+              </button>
+            </div>
+            <div className="relative group">
+              <button className="flex items-center text-gray-700 hover:text-red-600 transition-colors">
+                Metodología <ChevronDown className="ml-1 h-4 w-4" />
+              </button>
+            </div>
             <a href="#" className="text-gray-700 hover:text-red-600 transition-colors">Empresas</a>
             <a href="#" className="text-gray-700 hover:text-red-600 transition-colors">Testimonios</a>
             <a href="#" className="text-gray-700 hover:text-red-600 transition-colors">Contacto</a>
           </nav>
 
-          {/* Search, Login and Menu */}
+          {/* Search and Menu */}
           <div className="flex items-center space-x-4">
             <button
               onClick={() => setIsSearchOpen(!isSearchOpen)}
@@ -32,23 +44,6 @@ const Header = () => {
             >
               <Search className="h-5 w-5" />
             </button>
-            
-            {/* Login Buttons */}
-            <div className="hidden md:flex items-center space-x-2">
-              <a
-                href="/login/student"
-                className="px-4 py-2 text-sm text-gray-700 hover:text-red-600 transition-colors"
-              >
-                Estudiante
-              </a>
-              <a
-                href="/login/teacher"
-                className="px-4 py-2 text-sm bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
-              >
-                Profesor
-              </a>
-            </div>
-            
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="lg:hidden p-2 text-gray-500 hover:text-red-600 transition-colors"
@@ -64,7 +59,7 @@ const Header = () => {
             <div className="max-w-3xl mx-auto">
               <input
                 type="text"
-                placeholder="Buscar..."
+                placeholder="Buscar cursos, formación..."
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
                 autoFocus
               />
@@ -82,22 +77,6 @@ const Header = () => {
               <a href="#" className="block text-gray-700 hover:text-red-600 transition-colors">Empresas</a>
               <a href="#" className="block text-gray-700 hover:text-red-600 transition-colors">Testimonios</a>
               <a href="#" className="block text-gray-700 hover:text-red-600 transition-colors">Contacto</a>
-              
-              {/* Mobile Login Buttons */}
-              <div className="pt-4 border-t border-gray-200 space-y-2">
-                <a
-                  href="/login/student"
-                  className="block w-full px-4 py-2 text-center text-gray-700 border border-gray-300 rounded-lg hover:text-red-600 hover:border-red-600 transition-colors"
-                >
-                  Acceso Estudiante
-                </a>
-                <a
-                  href="/login/teacher"
-                  className="block w-full px-4 py-2 text-center bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
-                >
-                  Acceso Profesor
-                </a>
-              </div>
             </nav>
           </div>
         )}

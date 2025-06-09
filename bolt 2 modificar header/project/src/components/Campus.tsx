@@ -8,22 +8,22 @@ const Campus = () => {
     { 
       name: 'Madrid', 
       image: 'https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=800&h=400&fit=crop',
-      description: 'Centro principal de formación especializada en adicciones'
+      description: 'Centro principal de formación en Madrid'
     },
     { 
       name: 'Barcelona', 
       image: 'https://images.pexels.com/photos/3184338/pexels-photo-3184338.jpeg?auto=compress&cs=tinysrgb&w=800&h=400&fit=crop',
-      description: 'Sede en Barcelona para intervención psicosocial'
+      description: 'Sede en Barcelona para formación empresarial'
     },
     { 
       name: 'Valencia', 
       image: 'https://images.pexels.com/photos/3184357/pexels-photo-3184357.jpeg?auto=compress&cs=tinysrgb&w=800&h=400&fit=crop',
-      description: 'Centro de formación en prevención de adicciones'
+      description: 'Centro de formación en Valencia'
     },
     { 
       name: 'Online', 
       image: 'https://images.pexels.com/photos/4144923/pexels-photo-4144923.jpeg?auto=compress&cs=tinysrgb&w=800&h=400&fit=crop',
-      description: 'Formación online especializada en adicciones'
+      description: 'Formación online en vivo y a distancia'
     },
   ];
 

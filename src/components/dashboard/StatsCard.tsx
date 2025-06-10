@@ -6,7 +6,7 @@ type StatsCardProps = {
   color?: 'blue' | 'gray' | 'green' | 'red';
 };
 
-const StatsCard: React.FC<StatsCardProps> = ({ title, value, color = 'blue' }) => {
+const StatsCard: React.FC<StatsCardProps> = ({ title, value, color = 'red' }) => {
   const getColorClasses = () => {
     switch (color) {
       case 'blue':
@@ -18,7 +18,7 @@ const StatsCard: React.FC<StatsCardProps> = ({ title, value, color = 'blue' }) =
       case 'red':
         return 'bg-red-600 text-white';
       default:
-        return 'bg-blue-600 text-white';
+        return 'bg-red-600 text-white';
     }
   };
 

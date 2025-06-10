@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Facebook } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
-import { FaFacebook, FaLinkedin } from 'react-icons/fa';
 
 type LoginFormProps = {
   role: string;
@@ -125,25 +123,13 @@ const LoginForm: React.FC<LoginFormProps> = ({ role, onLogin }) => {
           {role === 'teacher' ? 'Inicio de Sesión del Profesor' : 'Inicio de Sesión del Estudiante'}
         </h2>
         
-        <div className="flex items-center justify-center space-x-4 mb-6">
-          <button
-            onClick={() => handleSocialLogin('facebook')}
-            className="flex items-center justify-center w-10 h-10 text-white bg-blue-600 rounded-full hover:bg-blue-700 transition-colors"
-          >
-            <Facebook size={20} />
-          </button>
+        <div className="flex items-center justify-center mb-6">
           <button
             onClick={() => handleSocialLogin('google')}
             className="flex items-center justify-center w-full py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >
             <GoogleIcon />
             <span className="ml-2">Continuar con Google</span>
-          </button>
-          <button
-            onClick={() => handleSocialLogin('linkedin')}
-            className="flex items-center justify-center w-10 h-10 text-white bg-blue-500 rounded-full hover:bg-blue-600 transition-colors"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect width="4" height="12" x="2" y="9"></rect><circle cx="4" cy="4" r="2"></circle></svg>
           </button>
         </div>
         
@@ -193,21 +179,21 @@ const LoginForm: React.FC<LoginFormProps> = ({ role, onLogin }) => {
                 type="checkbox"
                 checked={rememberMe}
                 onChange={(e) => setRememberMe(e.target.checked)}
-                className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                className="w-4 h-4 text-red-600 border-gray-300 rounded focus:ring-red-500"
               />
               <label htmlFor="remember-me" className="block ml-2 text-sm text-gray-600">
                 Recordarme
               </label>
             </div>
             
-            <a href="#" className="text-sm text-blue-500 hover:underline">
+            <a href="#" className="text-sm text-red-500 hover:underline">
               ¿Olvidaste tu contraseña?
             </a>
           </div>
           
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+            className="w-full bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors"
             disabled={isLoading}
           >
             {isLoading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
@@ -216,7 +202,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ role, onLogin }) => {
         
         <p className="mt-6 text-sm text-center text-gray-600">
           ¿No tienes una cuenta?{' '}
-          <Link to={`/register/${role}`} className="text-blue-500 hover:underline">
+          <Link to={`/register/${role}`} className="text-red-500 hover:underline">
             Regístrate
           </Link>
         </p>

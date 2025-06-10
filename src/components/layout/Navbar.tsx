@@ -97,14 +97,14 @@ const Navbar: React.FC<NavbarProps> = ({ onRoleChange, currentRole = 'student' }
             <div className="mt-4 md:mt-0 flex flex-col md:flex-row md:space-x-2 space-y-2 md:space-y-0">
               <Link
                 to="/register"
-                className="py-2 px-3 rounded-md text-sm font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700"
+                className="py-2 px-3 rounded-md text-sm font-medium transition-colors bg-red-600 text-white hover:bg-red-700"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Regístrate
               </Link>
               <Link
                 to="/login"
-                className="py-2 px-3 rounded-md text-sm font-medium transition-colors bg-blue-100 text-blue-800 hover:bg-blue-200"
+                className="py-2 px-3 rounded-md text-sm font-medium transition-colors bg-red-100 text-red-800 hover:bg-red-200"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Iniciar Sesión

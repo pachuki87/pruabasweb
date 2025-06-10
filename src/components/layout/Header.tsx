@@ -11,7 +11,11 @@ const Header = () => {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex-shrink-0">
-            <div className="text-2xl font-bold text-red-600">Instituto Lidera</div>
+            <img 
+              src="https://institutolidera.com/wp-content/uploads/2021/06/cropped-logo-insitituto-lidera_wellness-school-200x121.jpg"
+              alt="Instituto Lidera"
+              className="h-12 w-auto"
+            />
           </div>
 
           {/* Desktop Navigation */}

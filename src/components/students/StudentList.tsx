@@ -155,7 +155,7 @@ const StudentList: React.FC<StudentListProps> = ({
                   {showResults && onShowResult && (
                     <button
                       onClick={() => onShowResult(student.id)}
-                      className="text-blue-600 hover:text-blue-900 bg-blue-50 px-3 py-1 rounded-md"
+                      className="text-red-600 hover:text-red-800 bg-red-50 px-3 py-1 rounded-md"
                     >
                       Ver Resultado
                     </button>

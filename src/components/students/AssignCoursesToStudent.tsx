@@ -163,7 +163,7 @@ const AssignCoursesToStudent: React.FC = () => {
         </button>
         <button
           onClick={handleSave}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition-colors"
           disabled={saving}
         >
           {saving ? 'Guardando...' : 'Guardar Asignaciones'}

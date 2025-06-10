@@ -57,8 +57,8 @@ const CourseCard: React.FC<CourseCardProps> = ({
   };
 
   return (
-    <div className="border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-      <div className="h-40 bg-gray-100 flex items-center justify-center overflow-hidden">
+    <div className="bg-gray-800 border border-gray-700 rounded-lg overflow-hidden shadow-xl hover:border-red-400 transition-all hover:shadow-2xl">
+      <div className="h-40 bg-gray-700 flex items-center justify-center overflow-hidden">
         <img 
           src={getImageUrl()} 
           alt={title} 
@@ -67,13 +67,13 @@ const CourseCard: React.FC<CourseCardProps> = ({
       </div>
       
       <div className="p-4">
-        <h3 className="text-lg font-semibold text-blue-600 mb-2 line-clamp-1">
+        <h3 className="text-lg font-semibold text-white mb-2 line-clamp-1">
           {title}
         </h3>
         
         <div className="flex items-center justify-between mt-4">
-          <div className="flex items-center text-gray-600">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1 text-blue-500" viewBox="0 0 20 20" fill="currentColor">
+          <div className="flex items-center text-gray-300">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1 text-red-400" viewBox="0 0 20 20" fill="currentColor">
               <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z" />
             </svg>
             <span>{enrollment} estudiante(s)</span>
@@ -84,7 +84,7 @@ const CourseCard: React.FC<CourseCardProps> = ({
               <>
                 <button 
                   onClick={handleEdit}
-                  className="p-1 text-blue-600 bg-blue-50 rounded hover:bg-blue-100 transition-colors"
+                  className="p-1 text-red-400 bg-red-900/30 rounded hover:bg-red-900/50 transition-colors"
                   title="Edit course"
                 >
                   <Edit size={18} />
@@ -92,7 +92,7 @@ const CourseCard: React.FC<CourseCardProps> = ({
                 
                 <button 
                   onClick={handleDelete}
-                  className="p-1 text-red-600 bg-red-50 rounded hover:bg-red-100 transition-colors"
+                  className="p-1 text-red-400 bg-red-900/30 rounded hover:bg-red-900/50 transition-colors"
                   title="Delete course"
                 >
                   <Trash size={18} />
@@ -100,7 +100,7 @@ const CourseCard: React.FC<CourseCardProps> = ({
                 
                 <Link 
                   to={`/${role}/courses/${id}/materials`}
-                  className="p-1 text-green-600 bg-green-50 rounded hover:bg-green-100 transition-colors"
+                  className="p-1 text-green-400 bg-green-900/30 rounded hover:bg-green-900/50 transition-colors"
                   title="Study materials"
                 >
                   <FileText size={18} />
@@ -108,7 +108,7 @@ const CourseCard: React.FC<CourseCardProps> = ({
                 
                 <Link 
                   to={`/${role}/courses/${id}/chapters`}
-                  className="p-1 text-purple-600 bg-purple-50 rounded hover:bg-purple-100 transition-colors"
+                  className="p-1 text-purple-400 bg-purple-900/30 rounded hover:bg-purple-900/50 transition-colors"
                   title="Chapters"
                 >
                   <Book size={18} />
@@ -118,7 +118,7 @@ const CourseCard: React.FC<CourseCardProps> = ({
             
             <Link 
               to={`/${role}/courses/${id}`}
-              className="p-1 text-gray-600 bg-gray-50 rounded hover:bg-gray-100 transition-colors"
+              className="p-1 text-gray-300 bg-gray-700 rounded hover:bg-gray-600 transition-colors"
               title="View course"
             >
               <Eye size={18} />

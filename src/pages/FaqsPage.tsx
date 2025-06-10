@@ -63,51 +63,53 @@ const FaqsPage: React.FC<FaqsPageProps> = ({ currentRole, onRoleChange }) => {
     <div className="min-h-screen flex flex-col">
       <Navbar currentRole={currentRole} onRoleChange={onRoleChange} />
       
-      <main className="flex-grow container mx-auto px-4 py-8">
-        <div className="max-w-3xl mx-auto">
-          <h1 className="text-3xl font-bold text-center mb-8">
-            Preguntas Frecuentes
-          </h1>
-          
-          {isLoading ? (
-            <div className="space-y-4">
-              {[1, 2, 3].map((i) => (
-                <div key={i} className="animate-pulse">
-                  <div className="h-12 bg-gray-200 rounded-lg mb-2"></div>
-                  <div className="h-20 bg-gray-100 rounded-lg"></div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="space-y-4">
-              {faqs.map((faq) => (
-                <div
-                  key={faq.id}
-                  className="border border-gray-200 rounded-lg overflow-hidden"
-                >
-                  <button
-                    onClick={() => toggleFaq(faq.id)}
-                    className="w-full flex items-center justify-between p-4 text-left bg-white hover:bg-gray-50 transition-colors"
+      <main className="flex-grow bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+          <div className="max-w-4xl mx-auto">
+            <h1 className="text-4xl lg:text-6xl font-bold text-center mb-16 leading-tight">
+              Preguntas <span className="text-red-400">Frecuentes</span>
+            </h1>
+            
+            {isLoading ? (
+              <div className="space-y-6">
+                {[1, 2, 3].map((i) => (
+                  <div key={i} className="animate-pulse">
+                    <div className="h-12 bg-gray-700 rounded-lg mb-2"></div>
+                    <div className="h-20 bg-gray-800 rounded-lg"></div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="space-y-6">
+                {faqs.map((faq) => (
+                  <div
+                    key={faq.id}
+                    className="bg-gray-800 border border-gray-700 rounded-lg shadow-xl overflow-hidden"
                   >
-                    <span className="font-medium text-gray-900">
-                      {faq.question}
-                    </span>
-                    {openFaq === faq.id ? (
-                      <ChevronUp className="w-5 h-5 text-gray-500" />
-                    ) : (
-                      <ChevronDown className="w-5 h-5 text-gray-500" />
+                    <button
+                      onClick={() => toggleFaq(faq.id)}
+                      className="w-full flex items-center justify-between p-6 text-left hover:bg-gray-750 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500"
+                    >
+                      <span className="font-semibold text-white text-lg">
+                        {faq.question}
+                      </span>
+                      {openFaq === faq.id ? (
+                        <ChevronUp className="w-6 h-6 text-red-400" />
+                      ) : (
+                        <ChevronDown className="w-6 h-6 text-red-400" />
+                      )}
+                    </button>
+                    
+                    {openFaq === faq.id && (
+                      <div className="px-6 pb-6 border-t border-gray-700">
+                        <p className="text-gray-300">{faq.answer}</p>
+                      </div>
                     )}
-                  </button>
-                  
-                  {openFaq === faq.id && (
-                    <div className="p-4 bg-gray-50 border-t border-gray-200">
-                      <p className="text-gray-600">{faq.answer}</p>
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </main>
       

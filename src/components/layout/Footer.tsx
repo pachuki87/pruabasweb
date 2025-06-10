@@ -1,10 +1,8 @@
-import { Facebook, Twitter, Linkedin, Youtube, Instagram, Mail, Phone, MapPin } from 'lucide-react';
+import { Twitter, Youtube, Instagram, Mail, Phone, MapPin } from 'lucide-react';
 
 const Footer = () => {
   const socialLinks = [
-    { icon: <Facebook className="h-5 w-5" />, href: "#" },
     { icon: <Twitter className="h-5 w-5" />, href: "#" },
-    { icon: <Linkedin className="h-5 w-5" />, href: "#" },
     { icon: <Youtube className="h-5 w-5" />, href: "#" },
     { icon: <Instagram className="h-5 w-5" />, href: "#" }
   ];

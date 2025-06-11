@@ -20,10 +20,9 @@ const Header = () => {
 
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex space-x-8">
-            <a href="#" className="text-gray-700 hover:text-red-600 transition-colors">Cursos</a>
+            <a href="/courses" className="text-gray-700 hover:text-red-600 transition-colors">Cursos</a>
             <a href="#" className="text-gray-700 hover:text-red-600 transition-colors">Formación</a>
             <a href="#" className="text-gray-700 hover:text-red-600 transition-colors">Metodología</a>
-            <a href="#" className="text-gray-700 hover:text-red-600 transition-colors">Empresas</a>
             <a href="#" className="text-gray-700 hover:text-red-600 transition-colors">Testimonios</a>
             <a href="#" className="text-gray-700 hover:text-red-600 transition-colors">Contacto</a>
           </nav>
@@ -80,10 +79,9 @@ const Header = () => {
         {isMenuOpen && (
           <div className="lg:hidden absolute top-16 left-0 right-0 bg-white border-t border-gray-200">
             <nav className="px-4 py-6 space-y-4">
-              <a href="#" className="block text-gray-700 hover:text-red-600 transition-colors">Cursos</a>
+              <a href="/courses" className="block text-gray-700 hover:text-red-600 transition-colors">Cursos</a>
               <a href="#" className="block text-gray-700 hover:text-red-600 transition-colors">Formación</a>
               <a href="#" className="block text-gray-700 hover:text-red-600 transition-colors">Metodología</a>
-              <a href="#" className="block text-gray-700 hover:text-red-600 transition-colors">Empresas</a>
               <a href="#" className="block text-gray-700 hover:text-red-600 transition-colors">Testimonios</a>
               <a href="#" className="block text-gray-700 hover:text-red-600 transition-colors">Contacto</a>
               

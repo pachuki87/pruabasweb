@@ -19,7 +19,7 @@ const Hero = () => {
             <h1 className="text-4xl lg:text-6xl font-bold mb-6 leading-tight">
               Especialízate en<br />
               <span className="text-red-400">adicciones</span><br />
-              e intervención
+              e intervención familiar
             </h1>
             <p className="text-xl text-gray-300 mb-8 leading-relaxed">
               En Instituto Lidera formamos profesionales especializados en el tratamiento 

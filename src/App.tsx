@@ -29,6 +29,7 @@ import NotFoundPage from './pages/NotFoundPage';
 import MasterAdiccionesPage from './pages/MasterAdiccionesPage'; // Import the new page
 import PaymentPage from './pages/PaymentPage'; // Import the payment page
 import ContactPage from './pages/ContactPage'; // Import the contact page
+import ViajesYTalleresPage from './pages/ViajesYTalleresPage'; // Import the Viajes y Talleres page
 
 // Dashboard Pages
 import DashboardPage from './pages/dashboard/DashboardPage';
@@ -125,6 +126,7 @@ function App() {
           <Route path="/master-adicciones" element={<MasterAdiccionesPage />} />
           <Route path="/payment" element={<PaymentPage />} />
           <Route path="/contact" element={<ContactPage />} />
+          <Route path="/viajes-y-talleres" element={<ViajesYTalleresPage currentRole={currentRole} onRoleChange={handleRoleChange} />} />
           
           {/* Auth routes */}
           <Route path="/login/:role" element={<LoginPage onLogin={handleLogin} />} />

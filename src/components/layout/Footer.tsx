@@ -1,4 +1,33 @@
 import { Twitter, Youtube, Instagram, Mail, Phone, MapPin } from 'lucide-react';
+import visaLogo from '../../assets/Visa Inc._idDUM8TcN7_1.png';
+import bizumLogo from '../../assets/Bizum_idSDhC8lZu_1.png';
+
+// Payment Method Icons using real logos
+const VisaIcon = () => (
+  <img 
+    src={visaLogo} 
+    alt="Visa" 
+    className="h-6 w-auto object-contain bg-white rounded px-2 py-1"
+  />
+);
+
+const MastercardIcon = () => (
+  <div className="h-6 w-12 bg-white rounded px-2 py-1 flex items-center justify-center">
+    <svg width="32" height="20" viewBox="0 0 32 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="12" cy="10" r="6" fill="#EB001B"/>
+      <circle cx="20" cy="10" r="6" fill="#F79E1B"/>
+      <path d="M16 6c1.2 1.1 2 2.8 2 4s-.8 2.9-2 4c-1.2-1.1-2-2.8-2-4s.8-2.9 2-4z" fill="#FF5F00"/>
+    </svg>
+  </div>
+);
+
+const BizumIcon = () => (
+  <img 
+    src={bizumLogo} 
+    alt="Bizum" 
+    className="h-6 w-auto object-contain bg-white rounded px-2 py-1"
+  />
+);
 
 const Footer = () => {
   const socialLinks = [
@@ -41,15 +70,15 @@ const Footer = () => {
             <div className="space-y-3 mb-6">
               <div className="flex items-center text-gray-300">
                 <Phone className="h-4 w-4 mr-3" />
-                <span>+34 91 123 45 67</span>
+                <span>+34 622 43 39 52</span>
               </div>
               <div className="flex items-center text-gray-300">
                 <Mail className="h-4 w-4 mr-3" />
-                <span>info@institutolidera.es</span>
+                <span>liderainstituto@gmail.com</span>
               </div>
               <div className="flex items-center text-gray-300">
                 <MapPin className="h-4 w-4 mr-3" />
-                <span>Calle Gran Vía, 45, 28013 Madrid, España</span>
+                <span>Poeta Mas y Ros, 41 Valencia</span>
               </div>
             </div>
             
@@ -101,6 +130,25 @@ const Footer = () => {
             </div>
             <div className="text-gray-400 text-sm">
               © 2024 Instituto Lidera. Todos los derechos reservados.
+            </div>
+          </div>
+          
+          {/* Payment Methods */}
+          <div className="flex flex-col items-center mt-8 pt-6 border-t border-gray-800">
+            <p className="text-gray-400 text-sm mb-4">Métodos de pago aceptados</p>
+            <div className="flex items-center space-x-8">
+              <div className="flex flex-col items-center space-y-2">
+                <VisaIcon />
+                <span className="text-xs text-gray-400">Visa</span>
+              </div>
+              <div className="flex flex-col items-center space-y-2">
+                <MastercardIcon />
+                <span className="text-xs text-gray-400">Mastercard</span>
+              </div>
+              <div className="flex flex-col items-center space-y-2">
+                <BizumIcon />
+                <span className="text-xs text-gray-400">Bizum</span>
+              </div>
             </div>
           </div>
         </div>

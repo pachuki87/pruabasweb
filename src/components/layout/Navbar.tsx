@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 // Importamos los iconos necesarios
 import { Menu, X, Search } from 'lucide-react';
+import CartIcon from '../CartIcon';
 
 type NavbarProps = {
   onRoleChange?: (role: string) => void;
@@ -29,11 +30,7 @@ const Navbar: React.FC<NavbarProps> = ({ onRoleChange, currentRole = 'student' }
         {/* Top bar with logo and mobile menu button */}
         <div className="flex items-center justify-between w-full md:w-auto">
           <Link to="/" className="flex items-center">
-            <img 
-              src="https://institutolidera.com/wp-content/uploads/2021/06/cropped-logo-insitituto-lidera_wellness-school-200x121.jpg"
-              alt="Instituto Lidera"
-              className="h-12 w-auto"
-            />
+            <span className="text-xl font-bold">Instituto Lidera</span>
           </Link>
           
           {/* Mobile menu button */}
@@ -94,7 +91,12 @@ const Navbar: React.FC<NavbarProps> = ({ onRoleChange, currentRole = 'student' }
               Preguntas Frecuentes
             </Link>
             
-            <div className="mt-4 md:mt-0 flex flex-col md:flex-row md:space-x-2 space-y-2 md:space-y-0">
+            <div className="mt-4 md:mt-0 flex flex-col md:flex-row md:items-center md:space-x-2 space-y-2 md:space-y-0">
+              {/* Cart Icon */}
+              <div className="flex justify-center md:justify-start">
+                <CartIcon />
+              </div>
+              
               <Link
                 to="/register"
                 className="py-2 px-3 rounded-md text-sm font-medium transition-colors bg-red-600 text-white hover:bg-red-700"

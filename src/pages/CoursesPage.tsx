@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
-import Navbar from '../components/layout/Navbar';
+import Header from '../components/layout/Header';
 import CourseCard from '../components/courses/CourseCard';
 import { useLocation } from 'react-router-dom';
 
@@ -57,7 +57,7 @@ function CoursesPage({ currentRole, onRoleChange }: CoursesPageProps) {
       const cursosFormateados = data.map(curso => ({
         id: curso.id,
         titulo: curso.titulo,
-        imagen: curso.imagen_url || '',
+        imagen: curso.titulo.toLowerCase().includes('experto en conductas adictivas') ? '' : (curso.imagen_url || ''), // Si es "Experto en Conductas Adictivas", forzar imagen vacía para usar lógica de CourseCard
         inscripcion: Math.floor(Math.random() * 100) + 1,
       }));
 
@@ -86,7 +86,7 @@ function CoursesPage({ currentRole, onRoleChange }: CoursesPageProps) {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
-      <Navbar currentRole={currentRole} onRoleChange={onRoleChange} />
+      <Header />
       <div className="max-w-7xl mx-auto py-20 px-4 sm:px-6 lg:px-8">
         <div className="text-center">
           <h1 className="text-4xl lg:text-6xl font-bold text-white mb-8 leading-tight">

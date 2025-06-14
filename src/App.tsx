@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom'; // Import useNavigate
 import { Toaster } from 'sonner';
 import { ErrorBoundary } from 'react-error-boundary';
+import { CartProvider } from 'react-use-cart';
 import { supabase, getUserById, getUsers } from './lib/supabase'; // Import supabase, getUsers
 
 // Layouts
@@ -26,6 +27,8 @@ import FaqsPage from './pages/FaqsPage';
 import CoursesPage from './pages/CoursesPage';
 import NotFoundPage from './pages/NotFoundPage';
 import MasterAdiccionesPage from './pages/MasterAdiccionesPage'; // Import the new page
+import PaymentPage from './pages/PaymentPage'; // Import the payment page
+import ContactPage from './pages/ContactPage'; // Import the contact page
 
 // Dashboard Pages
 import DashboardPage from './pages/dashboard/DashboardPage';
@@ -109,7 +112,7 @@ function App() {
   };
 
   return (
-    <>
+    <CartProvider>
       <Toaster position="top-right" />
       
       <BrowserRouter>
@@ -120,6 +123,8 @@ function App() {
           <Route path="/faqs" element={<FaqsPage currentRole={currentRole} onRoleChange={handleRoleChange} />} />
           <Route path="/courses" element={<CoursesPage currentRole={currentRole} onRoleChange={handleRoleChange} />} />
           <Route path="/master-adicciones" element={<MasterAdiccionesPage />} />
+          <Route path="/payment" element={<PaymentPage />} />
+          <Route path="/contact" element={<ContactPage />} />
           
           {/* Auth routes */}
           <Route path="/login/:role" element={<LoginPage onLogin={handleLogin} />} />
@@ -166,7 +171,7 @@ function App() {
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </BrowserRouter>
-    </>
+    </CartProvider>
   );
 }
 

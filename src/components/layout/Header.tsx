@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Search, Menu, X, ChevronDown } from 'lucide-react';
+import CartIcon from '../CartIcon';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -9,25 +10,20 @@ const Header = () => {
     <header className="bg-white shadow-sm relative z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          {/* Logo */}
-          <div className="flex-shrink-0">
-            <img 
-              src="https://institutolidera.com/wp-content/uploads/2021/06/cropped-logo-insitituto-lidera_wellness-school-200x121.jpg"
-              alt="Instituto Lidera"
-              className="h-12 w-auto"
-            />
-          </div>
+
 
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex space-x-8">
+            <a href="/" className="text-gray-700 hover:text-red-600 transition-colors">Inicio</a>
             <a href="/courses" className="text-gray-700 hover:text-red-600 transition-colors">Cursos</a>
             <a href="#" className="text-gray-700 hover:text-red-600 transition-colors">Formación</a>
             <a href="#" className="text-gray-700 hover:text-red-600 transition-colors">Metodología</a>
-            <a href="#" className="text-gray-700 hover:text-red-600 transition-colors">Testimonios</a>
-            <a href="#" className="text-gray-700 hover:text-red-600 transition-colors">Contacto</a>
+            <a href="/viajes-y-talleres" className="text-gray-700 hover:text-red-600 transition-colors">Viajes y Talleres</a>
+            <a href="/testimonios" className="text-gray-700 hover:text-red-600 transition-colors">Testimonios</a>
+            <a href="/contact" className="text-gray-700 hover:text-red-600 transition-colors">Contacto</a>
           </nav>
 
-          {/* Search, Login and Menu */}
+          {/* Search, Cart, Login and Menu */}
           <div className="flex items-center space-x-4">
             <button
               onClick={() => setIsSearchOpen(!isSearchOpen)}
@@ -35,6 +31,9 @@ const Header = () => {
             >
               <Search className="h-5 w-5" />
             </button>
+            
+            {/* Cart Icon */}
+            <CartIcon />
             
             {/* Login Buttons */}
             <div className="hidden md:flex items-center space-x-2">
@@ -79,11 +78,13 @@ const Header = () => {
         {isMenuOpen && (
           <div className="lg:hidden absolute top-16 left-0 right-0 bg-white border-t border-gray-200">
             <nav className="px-4 py-6 space-y-4">
+              <a href="/" className="block text-gray-700 hover:text-red-600 transition-colors">Inicio</a>
               <a href="/courses" className="block text-gray-700 hover:text-red-600 transition-colors">Cursos</a>
               <a href="#" className="block text-gray-700 hover:text-red-600 transition-colors">Formación</a>
               <a href="#" className="block text-gray-700 hover:text-red-600 transition-colors">Metodología</a>
-              <a href="#" className="block text-gray-700 hover:text-red-600 transition-colors">Testimonios</a>
-              <a href="#" className="block text-gray-700 hover:text-red-600 transition-colors">Contacto</a>
+              <a href="/viajes-y-talleres" className="block text-gray-700 hover:text-red-600 transition-colors">Viajes y Talleres</a>
+              <a href="/testimonios" className="block text-gray-700 hover:text-red-600 transition-colors">Testimonios</a>
+              <a href="/contact" className="block text-gray-700 hover:text-red-600 transition-colors">Contacto</a>
               
               {/* Mobile Login Buttons */}
               <div className="pt-4 border-t border-gray-200 space-y-2">

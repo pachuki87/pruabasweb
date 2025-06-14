@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams, Navigate } from 'react-router-dom';
-import Navbar from '../../components/layout/Navbar';
+import Header from '../../components/layout/Header';
 import Footer from '../../components/layout/Footer';
 import LoginForm from '../../components/auth/LoginForm';
 
@@ -18,7 +18,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Navbar currentRole={role} />
+      <Header />
       
       <main className="flex-grow flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <LoginForm role={role} onLogin={onLogin} />

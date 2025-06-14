@@ -1,9 +1,13 @@
 import React from 'react';
+import Header from '../components/layout/Header'; // Added import
 import MasterAdiccionesContent from '../components/courses/MasterAdiccionesContent';
 
 const MasterAdiccionesPage: React.FC = () => {
     return (
-        <MasterAdiccionesContent />
+        <>
+            <Header /> {/* Added Header */}
+            <MasterAdiccionesContent />
+        </>
     );
 };
 

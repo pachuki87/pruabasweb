@@ -1,5 +1,5 @@
 import React from 'react';
-import Navbar from '../components/layout/Navbar';
+import Header from '../components/layout/Header';
 import Footer from '../components/layout/Footer';
 
 type AboutPageProps = {
@@ -10,7 +10,7 @@ type AboutPageProps = {
 const AboutPage: React.FC<AboutPageProps> = ({ currentRole, onRoleChange }) => {
   return (
     <div className="min-h-screen flex flex-col">
-      <Navbar currentRole={currentRole} onRoleChange={onRoleChange} />
+      <Header />
       
       <main className="flex-grow bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">

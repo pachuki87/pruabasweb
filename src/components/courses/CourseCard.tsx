@@ -1,6 +1,7 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { Edit, Trash, FileText, Eye, Book } from 'lucide-react';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Edit, Trash, FileText, Eye, Book, CreditCard, ShoppingCart, Check } from 'lucide-react';
+import { useCart } from 'react-use-cart';
 
 type CourseCardProps = {
   id: string;
@@ -21,6 +22,11 @@ const CourseCard: React.FC<CourseCardProps> = ({
   onEdit,
   onDelete
 }) => {
+  const navigate = useNavigate();
+  const { addItem, inCart } = useCart();
+  const [isAdding, setIsAdding] = useState(false);
+  const [justAdded, setJustAdded] = useState(false);
+  
   const handleEdit = (e: React.MouseEvent) => {
     e.preventDefault();
     if (onEdit) onEdit(id);
@@ -31,19 +37,56 @@ const CourseCard: React.FC<CourseCardProps> = ({
     if (onDelete) onDelete(id);
   };
 
+  const handleAddToCart = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    
+    if (inCart(id)) {
+      return; // Ya está en el carrito
+    }
+    
+    setIsAdding(true);
+    
+    // Simular un pequeño delay para mejor UX
+    await new Promise(resolve => setTimeout(resolve, 500));
+    
+    // Datos del curso para agregar al carrito
+    const courseItem = {
+      id,
+      name: title,
+      price: 2500, // Precio en centavos (25.00 EUR)
+      quantity: 1,
+      image: getImageUrl(),
+      duration: '12 meses',
+      description: `Curso especializado: ${title}`
+    };
+    
+    addItem(courseItem);
+    setIsAdding(false);
+    setJustAdded(true);
+    
+    // Resetear el estado después de 2 segundos
+    setTimeout(() => setJustAdded(false), 2000);
+  };
+
   const getImageUrl = () => {
+    const lowerTitle = title.toLowerCase();
+
+    // Imagen específica para "Experto en Conductas Adictivas"
+    if (lowerTitle.includes('experto en conductas adictivas')) {
+      return 'https://images.pexels.com/photos/7176026/pexels-photo-7176026.jpeg';
+    }
+    
+    // Si la imagen viene de la base de datos, usarla
     if (image) {
       return image;
     }
 
-    // Imágenes por defecto para los cursos de adicciones
+    // Imágenes por defecto para otros cursos
     const imageMap: Record<string, string> = {
-      'master': 'https://images.pexels.com/photos/7176026/pexels-photo-7176026.jpeg',
-      'adicciones': 'https://images.pexels.com/photos/4098277/pexels-photo-4098277.jpeg',
+      'master': 'https://images.pexels.com/photos/4098277/pexels-photo-4098277.jpeg',
+      'adicciones': 'https://images.pexels.com/photos/4098277/pexels-photo-4098277.jpeg', // Fallback para otros cursos de adicciones
       'conductas': 'https://images.pexels.com/photos/4101143/pexels-photo-4101143.jpeg',
     };
-    
-    const lowerTitle = title.toLowerCase();
     
     // Intentar encontrar una imagen que coincida con el título
     for (const [key, url] of Object.entries(imageMap)) {
@@ -52,7 +95,7 @@ const CourseCard: React.FC<CourseCardProps> = ({
       }
     }
     
-    // Imagen por defecto
+    // Imagen por defecto si no hay coincidencia
     return 'https://images.pexels.com/photos/3769021/pexels-photo-3769021.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1';
   };
 
@@ -78,6 +121,46 @@ const CourseCard: React.FC<CourseCardProps> = ({
             </svg>
             <span>{enrollment} estudiante(s)</span>
           </div>
+          
+          {/* Botón de agregar al carrito para visitantes */}
+          {(role === 'visitor' || !role) && (
+            <button
+              onClick={handleAddToCart}
+              disabled={isAdding || inCart(id)}
+              className={`flex items-center px-3 py-1 text-sm rounded-lg transition-colors ${
+                inCart(id)
+                  ? 'bg-green-600 text-white cursor-default'
+                  : justAdded
+                  ? 'bg-green-600 text-white'
+                  : isAdding
+                  ? 'bg-gray-400 text-white cursor-not-allowed'
+                  : 'bg-red-600 hover:bg-red-700 text-white'
+              }`}
+              title={inCart(id) ? 'Ya está en el carrito' : 'Agregar al carrito'}
+            >
+              {isAdding ? (
+                <>
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-1" />
+                  Agregando...
+                </>
+              ) : inCart(id) ? (
+                <>
+                  <Check size={16} className="mr-1" />
+                  En carrito
+                </>
+              ) : justAdded ? (
+                <>
+                  <Check size={16} className="mr-1" />
+                  ¡Agregado!
+                </>
+              ) : (
+                <>
+                  <ShoppingCart size={16} className="mr-1" />
+                  Agregar
+                </>
+              )}
+            </button>
+          )}
           
           <div className="flex space-x-1">
             {role === 'teacher' && (

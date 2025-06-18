@@ -39,11 +39,11 @@ const Footer = () => {
   const footerSections = [
     {
       title: "Programas",
-      links: ["MBA", "Executive MBA", "Global Executive MBA", "Master in Management", "Formación Ejecutiva"]
+      links: ["Master en Adicciones e Intervención", "Master en Adicciones", "Experto en Conductas Adictivas"]
     },
     {
       title: "Cursos",
-      links: ["MBA", "Executive MBA", "Global Executive MBA", "Master in Management", "Formación Ejecutiva"]
+      links: ["Master en Adicciones e Intervención", "Master en Adicciones", "Experto en Conductas Adictivas"]
     },
     {
       title: "Alumni",

@@ -42,8 +42,8 @@ const Footer = () => {
       links: ["MBA", "Executive MBA", "Global Executive MBA", "Master in Management", "Formación Ejecutiva"]
     },
     {
-      title: "Investigación",
-      links: ["Facultad", "Centros de Investigación", "Publicaciones", "Working Papers", "Casos de Estudio"]
+      title: "Cursos",
+      links: ["MBA", "Executive MBA", "Global Executive MBA", "Master in Management", "Formación Ejecutiva"]
     },
     {
       title: "Alumni",

@@ -69,24 +69,18 @@ const CourseCard: React.FC<CourseCardProps> = ({
   };
 
   const getImageUrl = () => {
-    const lowerTitle = title.toLowerCase();
-
-    // Imagen específica para "Experto en Conductas Adictivas"
-    if (lowerTitle.includes('experto en conductas adictivas')) {
-      return 'https://images.pexels.com/photos/7176026/pexels-photo-7176026.jpeg';
-    }
-    
-    // Si la imagen viene de la base de datos, usarla
     if (image) {
       return image;
     }
 
-    // Imágenes por defecto para otros cursos
+    // Imágenes por defecto para los cursos de adicciones
     const imageMap: Record<string, string> = {
-      'master': 'https://images.pexels.com/photos/4098277/pexels-photo-4098277.jpeg',
-      'adicciones': 'https://images.pexels.com/photos/4098277/pexels-photo-4098277.jpeg', // Fallback para otros cursos de adicciones
+      'master': 'https://images.pexels.com/photos/7176026/pexels-photo-7176026.jpeg',
+      'adicciones': 'https://images.pexels.com/photos/4098277/pexels-photo-4098277.jpeg',
       'conductas': 'https://images.pexels.com/photos/4101143/pexels-photo-4101143.jpeg',
     };
+    
+    const lowerTitle = title.toLowerCase();
     
     // Intentar encontrar una imagen que coincida con el título
     for (const [key, url] of Object.entries(imageMap)) {
@@ -95,7 +89,7 @@ const CourseCard: React.FC<CourseCardProps> = ({
       }
     }
     
-    // Imagen por defecto si no hay coincidencia
+    // Imagen por defecto
     return 'https://images.pexels.com/photos/3769021/pexels-photo-3769021.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1';
   };
 

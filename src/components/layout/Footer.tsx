@@ -51,7 +51,7 @@ const Footer = () => {
     },
     {
       title: "Campus",
-      links: ["Barcelona", "Madrid", "Munich", "Nueva York", "São Paulo"]
+      links: ["Valencia", "Online"]
     }
   ];
 

@@ -6,16 +6,6 @@ const Campus = () => {
   
   const locations = [
     { 
-      name: 'Madrid', 
-      image: 'https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=800&h=400&fit=crop',
-      description: 'Centro principal de formación especializada en adicciones'
-    },
-    { 
-      name: 'Barcelona', 
-      image: 'https://images.pexels.com/photos/3184338/pexels-photo-3184338.jpeg?auto=compress&cs=tinysrgb&w=800&h=400&fit=crop',
-      description: 'Sede en Barcelona para intervención psicosocial'
-    },
-    { 
       name: 'Valencia', 
       image: 'https://images.pexels.com/photos/3184357/pexels-photo-3184357.jpeg?auto=compress&cs=tinysrgb&w=800&h=400&fit=crop',
       description: 'Centro de formación en prevención de adicciones'

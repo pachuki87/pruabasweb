@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { BookOpen, FileText, FileQuestion, Share2, ThumbsUp, User } from 'lucide-react';
+import { BookOpen, FileText, FileQuestion, Share2, ThumbsUp, User, Trash2, Settings } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 
 // Contenido HTML del temario del máster
@@ -417,7 +417,7 @@ const CourseDetailsPage: React.FC<CourseDetailsProps> = ({ role }) => {
   }, [courseId]);
 
   useEffect(() => {
-    if (activeTab === 'materials' && courseId) {
+    if ((activeTab === 'materials' || activeTab === 'manage-materials') && courseId) {
       fetchMaterials();
     }
   }, [activeTab, courseId]);
@@ -437,9 +437,9 @@ const CourseDetailsPage: React.FC<CourseDetailsProps> = ({ role }) => {
           profesor_nombre: 'pablocardonafeliu',
           created_at: '2023-06-15',
           tecnologias: ['Psicología', 'Neurociencia', 'Terapia', 'Rehabilitación'],
-          capitulos_count: 12,
-          materiales_count: 5, // This count should reflect actual materials
-          estudiantes_count: 24,
+          capitulos_count: 0, // Will be updated with real data
+          materiales_count: 0, // Will be updated with real data
+          estudiantes_count: 0, // No real data available yet
         };
         
         const mockChapters: Chapter[] = [
@@ -465,6 +465,13 @@ const CourseDetailsPage: React.FC<CourseDetailsProps> = ({ role }) => {
         
         setCourse(mockCourse);
         setChapters(mockChapters);
+        
+        // Update course with real chapter count
+        setCourse(prevCourse => prevCourse ? { 
+          ...prevCourse, 
+          capitulos_count: mockChapters.length 
+        } : null);
+        
         setIsLoading(false);
       }, 800);
     } catch (error) {
@@ -529,6 +536,31 @@ const CourseDetailsPage: React.FC<CourseDetailsProps> = ({ role }) => {
       setMaterials([]);
     } finally {
       setIsMaterialsLoading(false);
+    }
+  };
+
+  const deleteMaterial = async (materialName: string) => {
+    if (!confirm(`¿Estás seguro de que quieres eliminar el material "${materialName}"?`)) {
+      return;
+    }
+
+    try {
+      const { error } = await supabase.storage
+        .from('cursomasteradicciones')
+        .remove([materialName]);
+
+      if (error) {
+        console.error('Error al eliminar material:', error);
+        alert('Error al eliminar el material. Por favor, inténtalo de nuevo.');
+        return;
+      }
+
+      // Refresh materials list after successful deletion
+      await fetchMaterials();
+      alert('Material eliminado exitosamente.');
+    } catch (error) {
+      console.error('Error al eliminar material:', error);
+      alert('Error al eliminar el material. Por favor, inténtalo de nuevo.');
     }
   };
 
@@ -657,6 +689,19 @@ const CourseDetailsPage: React.FC<CourseDetailsProps> = ({ role }) => {
                   <FileText className="w-4 h-4 inline mr-1" />
                   Materiales
                 </button>
+                {role === 'teacher' && (
+                  <button
+                    onClick={() => setActiveTab('manage-materials')}
+                    className={`px-4 py-3 text-sm font-medium ${
+                      activeTab === 'manage-materials'
+                        ? 'border-b-2 border-red-600 text-red-600'
+                        : 'text-gray-700 hover:text-red-600'
+                    }`}
+                  >
+                    <Settings className="w-4 h-4 inline mr-1" />
+                    Gestionar Materiales
+                  </button>
+                )}
               </nav>
             </div>
             
@@ -773,7 +818,59 @@ const CourseDetailsPage: React.FC<CourseDetailsProps> = ({ role }) => {
                             <FileText className="w-5 h-5 mr-2" />
                             {material.name}
                           </a>
-                          {/* Add download/delete options if needed for teacher role */}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {activeTab === 'manage-materials' && role === 'teacher' && (
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-lg font-semibold">Gestionar Materiales del Curso</h2>
+                    
+                    <Link
+                      to={`/teacher/courses/edit/${courseId}`}
+                      className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition-colors text-sm"
+                    >
+                      Añadir Material
+                    </Link>
+                  </div>
+                  
+                  {isMaterialsLoading ? (
+                    <p className="text-gray-500 text-center py-4">
+                      Cargando materiales...
+                    </p>
+                  ) : materials.length === 0 ? (
+                    <p className="text-gray-500 text-center py-4">
+                      No hay materiales disponibles para este curso todavía.
+                    </p>
+                  ) : (
+                    <div className="space-y-4">
+                      {materials.map((material, index) => (
+                        <div key={index} className="border rounded-md p-4 hover:bg-gray-50 flex items-center justify-between">
+                          <div className="flex items-center">
+                            <FileText className="w-5 h-5 mr-2 text-red-600" />
+                            <span className="font-medium">{material.name}</span>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <a 
+                              href={material.url} 
+                              target="_blank" 
+                              rel="noopener noreferrer" 
+                              className="text-blue-600 hover:text-blue-800 text-sm px-3 py-1 border border-blue-600 rounded-md hover:bg-blue-50 transition-colors"
+                            >
+                              Ver
+                            </a>
+                            <button
+                              onClick={() => deleteMaterial(material.name)}
+                              className="text-red-600 hover:text-red-800 text-sm px-3 py-1 border border-red-600 rounded-md hover:bg-red-50 transition-colors flex items-center"
+                            >
+                              <Trash2 className="w-4 h-4 mr-1" />
+                              Eliminar
+                            </button>
+                          </div>
                         </div>
                       ))}
                     </div>

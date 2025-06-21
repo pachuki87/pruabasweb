@@ -499,12 +499,28 @@ const CourseDetailsPage: React.FC<CourseDetailsProps> = ({ role }) => {
       // We'll assume for now all files in 'cursomasteradicciones' are relevant,
       // but a more robust solution would involve metadata or a different storage structure.
       
-      const fetchedMaterials: Material[] = data.map((file) => ({
-        name: file.name,
-        // Construct public URL directly, assuming the bucket is public
-        // Format: https://[project_ref].supabase.co/storage/v1/object/public/[bucket_name]/[file_path]
-        url: `https://lyojcqiiixkqqtpoejdo.supabase.co/storage/v1/object/public/cursomasteradicciones/${file.name}`,
-      }));
+      // Generate signed URLs for each file to ensure proper access
+      const fetchedMaterials: Material[] = [];
+      
+      for (const file of data) {
+        try {
+          const { data: signedUrlData, error: urlError } = await supabase.storage
+            .from('cursomasteradicciones')
+            .createSignedUrl(file.name, 3600); // 1 hour expiry
+          
+          if (urlError) {
+            console.error('Error creating signed URL for', file.name, ':', urlError);
+            continue;
+          }
+          
+          fetchedMaterials.push({
+            name: file.name,
+            url: signedUrlData.signedUrl,
+          });
+        } catch (error) {
+          console.error('Error processing file', file.name, ':', error);
+        }
+      }
       setMaterials(fetchedMaterials);
       // Update materials_count in course state
       setCourse(prevCourse => prevCourse ? { ...prevCourse, materiales_count: fetchedMaterials.length } : null);

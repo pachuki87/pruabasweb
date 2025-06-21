@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
 
@@ -27,6 +27,42 @@ const LoginForm: React.FC<LoginFormProps> = ({ role, onLogin }) => {
   const [error, setError] = useState<string | null>(null);
   
   const navigate = useNavigate();
+
+  // Handle Google OAuth callback
+  useEffect(() => {
+    const handleAuthStateChange = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.user) {
+        // User is authenticated, create user object and call onLogin
+        const user = {
+          id: session.user.id,
+          email: session.user.email || '',
+          role: role,
+          accessToken: session.access_token,
+          refreshToken: session.refresh_token
+        };
+        onLogin(user);
+      }
+    };
+
+    handleAuthStateChange();
+
+    // Listen for auth state changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (event === 'SIGNED_IN' && session?.user) {
+        const user = {
+          id: session.user.id,
+          email: session.user.email || '',
+          role: role,
+          accessToken: session.access_token,
+          refreshToken: session.refresh_token
+        };
+        onLogin(user);
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [role, onLogin]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -86,7 +122,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ role, onLogin }) => {
       const { error } = await supabase.auth.signInWithOAuth({ 
         provider: 'google',
         options: {
-          redirectTo: window.location.origin
+          redirectTo: `${window.location.origin}/${role}/dashboard`
         }
       });
       if (error) {

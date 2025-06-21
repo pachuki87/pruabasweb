@@ -129,7 +129,7 @@ const Footer = () => {
               </a>
             </div>
             <div className="text-gray-400 text-sm">
-              © 2024 Instituto Lidera. Todos los derechos reservados.
+              © 2025 Instituto Lidera. Todos los derechos reservados.
             </div>
           </div>
           

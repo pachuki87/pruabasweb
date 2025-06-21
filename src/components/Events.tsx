@@ -4,7 +4,7 @@ const Events = () => {
   const events = [
     {
       date: { day: "15", month: "DIC" },
-      title: "Conferencia de Liderazgo Empresarial 2024",
+      title: "Conferencia de Liderazgo Empresarial 2025",
       time: "18:30",
       location: "Madrid",
       type: "Conferencia",

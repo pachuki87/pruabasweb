@@ -38,27 +38,28 @@ const UserCoursesPage: React.FC<UserCoursesPageProps> = ({ role }) => {
       let coursesError;
 
       if (role === 'student') {
-        // Lógica existente para estudiantes
-        const { data: inscriptionsData, error: inscriptionsError } = await supabase
-          .from('inscripciones')
-          .select('curso_id')
-          .eq('usuario_id', user.id);
+        // Fetch enrolled courses for student
+        const { data: enrollmentsData, error: enrollmentsError } = await supabase
+          .from('enrollments')
+          .select('course_id')
+          .eq('student_id', user.id);
 
-        if (inscriptionsError) {
-          throw inscriptionsError;
+        if (enrollmentsError) {
+          throw enrollmentsError;
         }
 
-        const assignedCourseIds = inscriptionsData.map(inscription => inscription.curso_id);
+        const enrolledCourseIds = enrollmentsData.map(enrollment => enrollment.course_id);
 
         ({ data: coursesData, error: coursesError } = await supabase
-          .from('cursos')
-          .select('id, titulo, profesor_id')
-          .in('id', assignedCourseIds));
+          .from('courses')
+          .select('id, title, teacher_id')
+          .in('id', enrolledCourseIds));
       } else if (role === 'teacher') {
-        // Lógica para profesores: obtener todos los cursos disponibles
+        // Fetch courses created by teacher
         ({ data: coursesData, error: coursesError } = await supabase
-          .from('cursos')
-          .select('id, titulo, profesor_id'));
+          .from('courses')
+          .select('id, title, teacher_id')
+          .eq('teacher_id', user.id));
       } else {
         // Rol desconocido, no cargar cursos
         setCourses([]);
@@ -70,28 +71,29 @@ const UserCoursesPage: React.FC<UserCoursesPageProps> = ({ role }) => {
         throw coursesError;
       }
 
-      // Obtener los nombres de los profesores (asumiendo que profesor_id se relaciona con la tabla usuarios)
-      const teacherIds = coursesData.map(course => course.profesor_id).filter(Boolean);
+      // Get teacher names
+      const teacherIds = coursesData.map(course => course.teacher_id).filter(Boolean);
       let teachersMap = new Map();
       if (teacherIds.length > 0) {
         const { data: teachersData, error: teachersError } = await supabase
-          .from('usuarios')
-          .select('id, nombre') // Asumiendo que 'nombre' es el campo del nombre del profesor
+          .from('users')
+          .select('id, name')
           .in('id', teacherIds);
 
         if (teachersError) {
           console.error('Error fetching teachers:', teachersError);
         } else {
           teachersData.forEach(teacher => {
-            teachersMap.set(teacher.id, teacher.nombre);
+            teachersMap.set(teacher.id, teacher.name);
           });
         }
       }
 
       const formattedCourses = coursesData.map(course => ({
         id: course.id,
-        title: course.titulo,
-        teacher_name: teachersMap.get(course.profesor_id) || 'Desconocido' // Usar el nombre del profesor
+        title: course.title,
+        teacher_name: teachersMap.get(course.teacher_id) || 'Desconocido',
+        teacher_id: course.teacher_id
       }));
 
       setCourses(formattedCourses);
@@ -100,6 +102,52 @@ const UserCoursesPage: React.FC<UserCoursesPageProps> = ({ role }) => {
       console.error('Error fetching courses:', error);
       setCourses([]); // En caso de error, no mostrar cursos
       setIsLoading(false);
+    }
+  };
+
+  const handleInscription = async (courseId) => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        alert('Debes estar autenticado para inscribirte en un curso.');
+        return;
+      }
+
+      // Check if already enrolled
+      const { data: existingEnrollment, error: checkError } = await supabase
+        .from('enrollments')
+        .select('id')
+        .eq('student_id', user.id)
+        .eq('course_id', courseId)
+        .single();
+
+      if (checkError && checkError.code !== 'PGRST116') {
+        throw checkError;
+      }
+
+      if (existingEnrollment) {
+        alert('Ya estás inscrito en este curso.');
+        return;
+      }
+
+      // Create enrollment
+      const { error: insertError } = await supabase
+        .from('enrollments')
+        .insert({
+          student_id: user.id,
+          course_id: courseId,
+          enrolled_at: new Date().toISOString()
+        });
+
+      if (insertError) {
+        throw insertError;
+      }
+
+      alert('¡Inscripción exitosa!');
+      fetchCourses(); // Reload courses list
+    } catch (error) {
+      console.error('Error during inscription:', error);
+      alert('Error al inscribirse en el curso.');
     }
   };
 

@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import StatsCard from '../../components/dashboard/StatsCard';
+import StudentProgress from '../../components/dashboard/StudentProgress';
 import { supabase, getUserById } from '../../lib/supabase'; // Import getUserById
 
 type DashboardProps = {
@@ -37,33 +38,105 @@ const DashboardPage: React.FC<DashboardProps> = ({ role }) => {
     setIsLoading(true);
     
     try {
-      // Fetch total courses
-      const { count: coursesCount, error: coursesError } = await supabase
-        .from('cursos')
-        .select('*', { count: 'exact', head: true });
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        setIsLoading(false);
+        return;
+      }
 
-      if (coursesError) throw coursesError;
+      if (role === 'teacher') {
+        // Fetch total courses for teacher
+        const { count: coursesCount, error: coursesError } = await supabase
+          .from('courses')
+          .select('*', { count: 'exact', head: true })
+          .eq('teacher_id', user.id);
 
-      // Fetch total students (assuming all users in 'usuarios' are students for now, or filter by role if needed)
-      const { count: studentsCount, error: studentsError } = await supabase
-        .from('usuarios')
-        .select('*', { count: 'exact', head: true });
+        if (coursesError) throw coursesError;
 
-      if (studentsError) throw studentsError;
+        // Fetch total students enrolled in teacher's courses
+        const { data: teacherCourses } = await supabase
+          .from('courses')
+          .select('id')
+          .eq('teacher_id', user.id);
 
-      // TODO: Fetch total chapters - need to determine how chapters are stored
+        const courseIds = teacherCourses?.map(course => course.id) || [];
+        
+        const { count: studentsCount, error: studentsError } = await supabase
+          .from('enrollments')
+          .select('*', { count: 'exact', head: true })
+          .in('course_id', courseIds);
 
-      setStats(prevStats => ({
-        ...prevStats,
-        courses: coursesCount || 0,
-        students: studentsCount || 0,
-        // chapters: chaptersCount || 0, // Uncomment when chapters are fetched
-      }));
+        if (studentsError) throw studentsError;
+
+        // Fetch total quizzes for teacher's courses
+        const { count: quizzesCount, error: quizzesError } = await supabase
+          .from('quizzes')
+          .select('*', { count: 'exact', head: true })
+          .in('course_id', courseIds);
+
+        if (quizzesError) throw quizzesError;
+
+        setStats({
+          courses: coursesCount || 0,
+          students: studentsCount || 0,
+          chapters: 0,
+          quizzes: quizzesCount || 0,
+          materials: 0,
+          completedCourses: 0,
+        });
+      } else {
+        // Student stats
+        // Fetch enrolled courses
+        const { count: enrolledCoursesCount, error: enrolledError } = await supabase
+          .from('enrollments')
+          .select('*', { count: 'exact', head: true })
+          .eq('student_id', user.id);
+
+        if (enrolledError) throw enrolledError;
+
+        // Fetch completed quizzes
+        const { count: completedQuizzesCount, error: quizzesError } = await supabase
+          .from('quiz_attempts')
+          .select('*', { count: 'exact', head: true })
+          .eq('student_id', user.id);
+
+        if (quizzesError) throw quizzesError;
+
+        // Calculate completed courses (simplified: courses with at least one quiz attempt)
+        const { data: enrollments } = await supabase
+          .from('enrollments')
+          .select('course_id')
+          .eq('student_id', user.id);
+
+        let completedCoursesCount = 0;
+        if (enrollments) {
+          for (const enrollment of enrollments) {
+            const { data: quizAttempts } = await supabase
+              .from('quiz_attempts')
+              .select('quiz_id')
+              .eq('student_id', user.id)
+              .eq('quiz_id', enrollment.course_id);
+            
+            if (quizAttempts && quizAttempts.length > 0) {
+              completedCoursesCount++;
+            }
+          }
+        }
+
+        setStats({
+          courses: enrolledCoursesCount || 0,
+          students: 0,
+          chapters: 0,
+          quizzes: completedQuizzesCount || 0,
+          materials: 0,
+          completedCourses: completedCoursesCount,
+        });
+      }
       
       setIsLoading(false);
     } catch (error: any) {
       console.error('Error fetching stats:', error);
-      // Set stats to 0 or previous values on error
       setStats({
         courses: 0,
         students: 0,
@@ -154,18 +227,7 @@ const DashboardPage: React.FC<DashboardProps> = ({ role }) => {
               </li>
             </ul>
            ) : (
-             <div>
-               <div>
-                 <h3 className="text-md font-medium mb-2">Master en Adicciones</h3>
-                 <div className="w-full bg-gray-200 rounded-full h-2.5">
-                   <div className="bg-red-600 h-2.5 rounded-full" style={{ width: '45%' }}></div>
-                 </div>
-                 <div className="flex justify-between text-sm text-gray-500 mt-1">
-                   <span>Progreso: 45%</span>
-                   <span>5/12 lecciones completadas</span>
-                 </div>
-               </div>
-             </div>
+             <StudentProgress />
            )}
          </div>
        </div>

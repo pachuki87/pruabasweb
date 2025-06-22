@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { CreditCard, Smartphone, Lock, AlertCircle } from 'lucide-react';
+import { CreditCard, Smartphone, Lock, AlertCircle, Building2, Copy, CheckCircle } from 'lucide-react';
 import { usePaymentInputs } from 'react-payment-inputs';
 
 interface PaymentFormProps {
@@ -8,7 +8,7 @@ interface PaymentFormProps {
   courseName: string;
 }
 
-type PaymentMethod = 'card' | 'bizum';
+type PaymentMethod = 'card' | 'bizum' | 'transfer';
 
 const PaymentForm: React.FC<PaymentFormProps> = ({ 
   onPaymentSuccess, 
@@ -24,6 +24,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
     cardholderName: '',
     bizumPhone: ''
   });
+  const [copiedField, setCopiedField] = useState<string | null>(null);
   
   const {
     meta,
@@ -68,6 +69,16 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
     return /^[6-7][0-9]{8}$/.test(cleaned);
   };
 
+  const copyToClipboard = async (text: string, field: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopiedField(field);
+      setTimeout(() => setCopiedField(null), 2000);
+    } catch (err) {
+      console.error('Error copying to clipboard:', err);
+    }
+  };
+
   // Funciones de formateo ahora manejadas por react-payment-inputs
 
   const handleInputChange = (field: string, value: string) => {
@@ -103,6 +114,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
         newErrors.bizumPhone = 'Número de teléfono inválido';
       }
     }
+    // No validation needed for transfer method
     
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -129,8 +141,11 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
         ...(paymentMethod === 'card' ? {
           last4: formData.cardNumber.slice(-4),
           cardholderName: formData.cardholderName
-        } : {
+        } : paymentMethod === 'bizum' ? {
           phone: formData.bizumPhone
+        } : {
+          transferReference: `REF-${Date.now()}`,
+          bankAccount: 'ES0231590078582714496227'
         })
       };
       
@@ -157,30 +172,42 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
         <label className="block text-sm font-medium text-gray-700 mb-3">
           Método de pago
         </label>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-3 gap-2">
           <button
             type="button"
             onClick={() => setPaymentMethod('card')}
-            className={`p-3 border rounded-lg flex items-center justify-center space-x-2 transition-colors ${
+            className={`p-3 border rounded-lg flex flex-col items-center justify-center space-y-1 transition-colors ${
               paymentMethod === 'card'
                 ? 'border-red-500 bg-red-50 text-red-700'
                 : 'border-gray-300 hover:border-gray-400'
             }`}
           >
             <CreditCard size={20} />
-            <span className="text-sm font-medium">Tarjeta</span>
+            <span className="text-xs font-medium">Tarjeta</span>
           </button>
           <button
             type="button"
             onClick={() => setPaymentMethod('bizum')}
-            className={`p-3 border rounded-lg flex items-center justify-center space-x-2 transition-colors ${
+            className={`p-3 border rounded-lg flex flex-col items-center justify-center space-y-1 transition-colors ${
               paymentMethod === 'bizum'
                 ? 'border-red-500 bg-red-50 text-red-700'
                 : 'border-gray-300 hover:border-gray-400'
             }`}
           >
             <Smartphone size={20} />
-            <span className="text-sm font-medium">Bizum</span>
+            <span className="text-xs font-medium">Bizum</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setPaymentMethod('transfer')}
+            className={`p-3 border rounded-lg flex flex-col items-center justify-center space-y-1 transition-colors ${
+              paymentMethod === 'transfer'
+                ? 'border-red-500 bg-red-50 text-red-700'
+                : 'border-gray-300 hover:border-gray-400'
+            }`}
+          >
+            <Building2 size={20} />
+            <span className="text-xs font-medium">Transferencia</span>
           </button>
         </div>
       </div>
@@ -284,6 +311,124 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
             <p className="text-xs text-gray-500 mt-1">
               Recibirás una notificación en tu app de Bizum
             </p>
+          </div>
+        )}
+
+        {paymentMethod === 'transfer' && (
+          <div className="space-y-4">
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <div className="flex items-center space-x-2 mb-3">
+                <Building2 className="text-blue-600" size={20} />
+                <h4 className="font-semibold text-blue-900">Datos para Transferencia Bancaria</h4>
+              </div>
+              
+              <div className="space-y-3">
+                <div className="flex justify-between items-center p-2 bg-white rounded border">
+                  <div>
+                    <p className="text-xs text-gray-500 uppercase tracking-wide">IBAN</p>
+                    <p className="font-mono text-sm font-medium">ES02 3159 0078 5827 1449 6227</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => copyToClipboard('ES0231590078582714496227', 'iban')}
+                    className="p-2 text-gray-500 hover:text-gray-700 transition-colors"
+                  >
+                    {copiedField === 'iban' ? (
+                      <CheckCircle size={16} className="text-green-500" />
+                    ) : (
+                      <Copy size={16} />
+                    )}
+                  </button>
+                </div>
+                
+                <div className="flex justify-between items-center p-2 bg-white rounded border">
+                  <div>
+                    <p className="text-xs text-gray-500 uppercase tracking-wide">Titular</p>
+                    <p className="text-sm font-medium">Kompartia Coworking SL</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => copyToClipboard('Kompartia Coworking SL', 'holder')}
+                    className="p-2 text-gray-500 hover:text-gray-700 transition-colors"
+                  >
+                    {copiedField === 'holder' ? (
+                      <CheckCircle size={16} className="text-green-500" />
+                    ) : (
+                      <Copy size={16} />
+                    )}
+                  </button>
+                </div>
+                
+                <div className="flex justify-between items-center p-2 bg-white rounded border">
+                  <div>
+                    <p className="text-xs text-gray-500 uppercase tracking-wide">Banco</p>
+                    <p className="text-sm font-medium">Caixa Popular</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => copyToClipboard('Caixa Popular', 'bank')}
+                    className="p-2 text-gray-500 hover:text-gray-700 transition-colors"
+                  >
+                    {copiedField === 'bank' ? (
+                      <CheckCircle size={16} className="text-green-500" />
+                    ) : (
+                      <Copy size={16} />
+                    )}
+                  </button>
+                </div>
+                
+                <div className="flex justify-between items-center p-2 bg-white rounded border">
+                  <div>
+                    <p className="text-xs text-gray-500 uppercase tracking-wide">Concepto</p>
+                    <p className="text-sm font-medium font-mono">{courseName} - REF-{Date.now().toString().slice(-6)}</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => copyToClipboard(`${courseName} - REF-${Date.now().toString().slice(-6)}`, 'concept')}
+                    className="p-2 text-gray-500 hover:text-gray-700 transition-colors"
+                  >
+                    {copiedField === 'concept' ? (
+                      <CheckCircle size={16} className="text-green-500" />
+                    ) : (
+                      <Copy size={16} />
+                    )}
+                  </button>
+                </div>
+                
+                <div className="flex justify-between items-center p-2 bg-white rounded border">
+                  <div>
+                    <p className="text-xs text-gray-500 uppercase tracking-wide">Importe</p>
+                    <p className="text-lg font-bold text-red-600">€{amount.toFixed(2)}</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => copyToClipboard(amount.toFixed(2), 'amount')}
+                    className="p-2 text-gray-500 hover:text-gray-700 transition-colors"
+                  >
+                    {copiedField === 'amount' ? (
+                      <CheckCircle size={16} className="text-green-500" />
+                    ) : (
+                      <Copy size={16} />
+                    )}
+                  </button>
+                </div>
+              </div>
+            </div>
+            
+            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+              <div className="flex items-start space-x-2">
+                <AlertCircle className="text-yellow-600 mt-0.5" size={16} />
+                <div className="text-sm text-yellow-800">
+                  <p className="font-medium mb-1">Instrucciones importantes:</p>
+                  <ul className="list-disc list-inside space-y-1 text-xs">
+                    <li>Realiza la transferencia con los datos exactos mostrados arriba</li>
+                    <li>Incluye el concepto completo para identificar tu pago</li>
+                    <li>El acceso al curso se activará tras confirmar el pago (24-48h)</li>
+                    <li>Guarda el comprobante de transferencia</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
           </div>
         )}
 

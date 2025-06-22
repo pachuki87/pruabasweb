@@ -60,7 +60,7 @@ type User = {
 
 function App() {
   const [user, setUser] = useState<User | null>(null);
-  const [currentRole, setCurrentRole] = useState<string>('student');
+  const [currentRole, setCurrentRole] = useState<string>('visitor');
 
   const handleLogin = async (userData: User) => {
     // Set Supabase session after successful login

@@ -16,9 +16,19 @@ interface CourseData {
 const PaymentPage: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { emptyCart } = useCart();
+  const { items, cartTotal, totalItems, emptyCart } = useCart();
   const [paymentCompleted, setPaymentCompleted] = useState(false);
   const [paymentData, setPaymentData] = useState<any>(null);
+
+  // Determinar si es checkout del carrito o curso individual
+  const isCartCheckout = location.state?.fromCart || items.length > 0;
+  
+  // Datos del carrito
+  const cartData = {
+    items: items,
+    total: cartTotal,
+    itemCount: totalItems
+  };
 
   // Datos del curso (normalmente vendrían de la navegación o API)
   const courseData: CourseData = location.state?.courseData || {
@@ -28,6 +38,10 @@ const PaymentPage: React.FC = () => {
     duration: '12 meses',
     description: 'Formación especializada en tratamiento y prevención de adicciones'
   };
+
+  // Datos a mostrar (carrito o curso individual)
+  const displayData = isCartCheckout ? cartData : courseData;
+  const totalAmount = isCartCheckout ? cartTotal : courseData.price;
 
   const handlePaymentSuccess = (data: any) => {
     setPaymentData(data);

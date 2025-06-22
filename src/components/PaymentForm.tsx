@@ -163,7 +163,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
         <h3 className="text-xl font-semibold text-gray-900 mb-2">Finalizar Compra</h3>
         <div className="bg-gray-50 p-3 rounded-lg">
           <p className="text-sm text-gray-600">{courseName}</p>
-          <p className="text-lg font-bold text-gray-900">{amount.toFixed(2)} €</p>
+          <p className="text-lg font-bold text-gray-900">{(amount / 100).toFixed(2)} €</p>
         </div>
       </div>
 
@@ -398,11 +398,11 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
                 <div className="flex justify-between items-center p-2 bg-white rounded border">
                   <div>
                     <p className="text-xs text-gray-500 uppercase tracking-wide">Importe</p>
-                    <p className="text-lg font-bold text-red-600">€{amount.toFixed(2)}</p>
+                    <p className="text-lg font-bold text-red-600">€{(amount / 100).toFixed(2)}</p>
                   </div>
                   <button
                     type="button"
-                    onClick={() => copyToClipboard(amount.toFixed(2), 'amount')}
+                    onClick={() => copyToClipboard((amount / 100).toFixed(2), 'amount')}
                     className="p-2 text-gray-500 hover:text-gray-700 transition-colors"
                   >
                     {copiedField === 'amount' ? (
@@ -446,7 +446,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
             ) : (
               <>
                 <Lock size={20} />
-                <span>Pagar {amount.toFixed(2)} €</span>
+                <span>Pagar {(amount / 100).toFixed(2)} €</span>
               </>
             )}
           </button>

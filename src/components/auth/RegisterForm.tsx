@@ -1,7 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { User, Mail, Lock, Phone, Briefcase, Award } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
+
+// Define GoogleIcon component
+const GoogleIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+    <g fill="none" fillRule="evenodd">
+      <path d="M17.64 9.2045c0-.6381-.0573-1.2518-.1636-1.8409H9v3.4818h4.8436c-.2086 1.125-.8427 2.0782-1.7772 2.7218v2.2582h2.9086c1.7018-1.5664 2.6836-3.8745 2.6836-6.621Z" fill="#4285F4"/>
+      <path d="M9 18c2.43 0 4.4673-.8064 5.9564-2.1818l-2.9086-2.2582c-.8064.5436-1.8364.8618-3.0477.8618-2.3455 0-4.3273-1.5818-5.0364-3.7109H.9573v2.3318C2.4382 16.1455 5.4818 18 9 18Z" fill="#34A853"/>
+      <path d="M3.9636 10.71c-.18-.5436-.2836-1.1164-.2836-1.71s.1036-1.1664.2836-1.71V4.9582H.9573C.3477 6.1732 0 7.5477 0 9s.3477 2.8268.9573 4.0418L3.9636 10.71Z" fill="#FBBC05"/>
+      <path d="M9 3.5782c1.3227 0 2.5077.4545 3.4409 1.3455l2.5818-2.5818C13.4636.8918 11.4273 0 9 0 5.4818 0 2.4382 1.8545.9573 4.9582L3.9636 7.29C4.6727 5.16 6.6545 3.5782 9 3.5782Z" fill="#EA4335"/>
+    </g>
+  </svg>
+);
 
 type RegisterFormProps = {
   role: string;
@@ -22,6 +34,59 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ role, onRegister }) => {
   const [registrationSuccess, setRegistrationSuccess] = useState(false);
   
   const navigate = useNavigate();
+
+  // Handle Google OAuth callback
+  useEffect(() => {
+    const handleAuthStateChange = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.user) {
+        // User is authenticated via Google, create user object and call onRegister
+        const user = {
+          id: session.user.id,
+          email: session.user.email || '',
+          role: role,
+          accessToken: session.access_token,
+          refreshToken: session.refresh_token
+        };
+        onRegister(user);
+      }
+    };
+
+    handleAuthStateChange();
+
+    // Listen for auth state changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (event === 'SIGNED_IN' && session?.user) {
+        // Check if user already exists in database
+        const { data: existingUser } = await supabase
+          .from('usuarios')
+          .select('*')
+          .eq('id', session.user.id)
+          .single();
+
+        if (!existingUser) {
+          // Create user record for Google OAuth users
+          await supabase.from('usuarios').insert({
+            id: session.user.id,
+            email: session.user.email,
+            rol: role,
+            name: session.user.user_metadata?.full_name || session.user.email?.split('@')[0] || '',
+          });
+        }
+
+        const user = {
+          id: session.user.id,
+          email: session.user.email || '',
+          role: role,
+          accessToken: session.access_token,
+          refreshToken: session.refresh_token
+        };
+        onRegister(user);
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [role, onRegister]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -61,6 +126,23 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ role, onRegister }) => {
     }
   };
 
+  const handleGoogleRegister = async () => {
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({ 
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/${role}/dashboard`
+        }
+      });
+      if (error) {
+        console.error('Error al registrarse con Google:', error);
+        setError(error.message);
+      }
+    } catch (err: any) {
+      setError(err.message || 'Error al registrarse con Google');
+    }
+  };
+
   if (registrationSuccess) {
     return (
       <div className="max-w-md mx-auto bg-white p-8 rounded-lg shadow-md text-center">
@@ -79,9 +161,25 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ role, onRegister }) => {
     <div className="max-w-3xl mx-auto bg-white rounded-lg shadow-md overflow-hidden">
       <div className="md:flex">
         <div className="md:w-1/2 p-8">
-          <h2 className="text-2xl font-bold text-center text-gray-700 mb-8">
+          <h2 className="text-2xl font-bold text-center text-gray-700 mb-6">
             {role === 'teacher' ? 'Registro de Profesor' : 'Registro de Estudiante'}
           </h2>
+          
+          <div className="flex items-center justify-center mb-6">
+            <button
+              onClick={handleGoogleRegister}
+              className="flex items-center justify-center w-full py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            >
+              <GoogleIcon />
+              <span className="ml-2">Continuar con Google</span>
+            </button>
+          </div>
+          
+          <div className="flex items-center justify-between mb-6">
+            <span className="w-1/5 border-b border-gray-300 md:w-1/4"></span>
+            <p className="text-xs text-gray-500 uppercase">O</p>
+            <span className="w-1/5 border-b border-gray-300 md:w-1/4"></span>
+          </div>
           
           {error && (
             <div className="mb-4 bg-red-50 text-red-700 p-3 rounded-md text-sm">

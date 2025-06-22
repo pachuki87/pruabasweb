@@ -1,35 +1,15 @@
-// Configuración de precios para testing y producción
+// Configuración de precios - Precio fijo de €1.00 para todos los cursos
 
-export interface PriceConfig {
-  original: number;
-  testing: number;
-}
-
-export const COURSE_PRICES: Record<string, PriceConfig> = {
-  'master-adicciones': {
-    original: 199000, // €1990 en centavos
-    testing: 100      // €1 en centavos
-  },
-  'curso-regular': {
-    original: 2500,   // €25 en centavos
-    testing: 100      // €1 en centavos
-  },
-  'taller': {
-    original: 3000,   // €30 en centavos
-    testing: 100      // €1 en centavos
-  },
-  'certificacion': {
-    original: 5000,   // €50 en centavos
-    testing: 100      // €1 en centavos
-  }
+export const COURSE_PRICES: Record<string, number> = {
+  'master-adicciones': 100, // €1.00 en centavos
+  'curso-regular': 100,     // €1.00 en centavos
+  'taller': 100,            // €1.00 en centavos
+  'certificacion': 100      // €1.00 en centavos
 };
 
-// Función para obtener el precio según el modo (testing o producción)
+// Función para obtener el precio de cualquier curso
 export const getPrice = (courseType: string): number => {
-  const isTestingMode = import.meta.env.VITE_TESTING_MODE === 'true';
-  const priceConfig = COURSE_PRICES[courseType] || COURSE_PRICES['curso-regular'];
-  
-  return isTestingMode ? priceConfig.testing : priceConfig.original;
+  return COURSE_PRICES[courseType] || COURSE_PRICES['curso-regular'];
 };
 
 // Función para formatear precio en euros

@@ -28,6 +28,8 @@ import CoursesPage from './pages/CoursesPage';
 import NotFoundPage from './pages/NotFoundPage';
 import MasterAdiccionesPage from './pages/MasterAdiccionesPage'; // Import the new page
 import PaymentPage from './pages/PaymentPage'; // Import the payment page
+import ViajesYTalleresPage from './pages/ViajesYTalleresPage'; // Import Viajes y Talleres page
+import TestimoniosPage from './pages/TestimoniosPage'; // Import Testimonios page
 
 // Dashboard Pages
 import DashboardPage from './pages/dashboard/DashboardPage';
@@ -122,6 +124,8 @@ function App() {
           <Route path="/faqs" element={<FaqsPage currentRole={currentRole} onRoleChange={handleRoleChange} />} />
           <Route path="/courses" element={<CoursesPage currentRole={currentRole} onRoleChange={handleRoleChange} />} />
           <Route path="/master-adicciones" element={<MasterAdiccionesPage />} />
+          <Route path="/viajes-talleres" element={<ViajesYTalleresPage currentRole={currentRole} onRoleChange={handleRoleChange} />} />
+          <Route path="/testimonios" element={<TestimoniosPage currentRole={currentRole} onRoleChange={handleRoleChange} />} />
           <Route path="/payment" element={<PaymentPage />} />
           
           {/* Auth routes */}

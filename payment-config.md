@@ -1,18 +1,17 @@
 # CONFIGURACIÓN DE PAGOS - INSTITUTO LIDERA
 
-## 📋 DATOS BANCARIOS PARA CONFIGURACIÓN
+## 🏦 DATOS BANCARIOS PARA PAGOS
 
-### Información Pendiente de Recibir:
-- **Nombre del Banco**: [PENDIENTE]
-- **Número de Cuenta (IBAN)**: [PENDIENTE]
-- **Código SWIFT/BIC**: [PENDIENTE]
-- **Titular de la Cuenta**: [PENDIENTE]
-- **Dirección del Banco**: [PENDIENTE]
+### ✅ Información Recibida:
+- [x] **Número de cuenta bancaria**: ES0231590078582714496227
+- [x] **Nombre del titular**: Kompartia Coworking SL
+- [x] **Entidad bancaria**: Caixa Popular
+- [ ] **Código SWIFT/BIC** (para transferencias internacionales)
+- [ ] **Código de comercio** (para TPV virtual)
+- [ ] **Terminal virtual**
+- [ ] **Clave secreta** (para firma de transacciones)
 
 ### Datos Adicionales Necesarios:
-- **Código de Comercio**: [PENDIENTE]
-- **Terminal Virtual**: [PENDIENTE]
-- **Clave Secreta**: [PENDIENTE]
 - **URL de Notificaciones**: [PENDIENTE]
 
 ---

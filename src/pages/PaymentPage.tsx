@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { ArrowLeft, CheckCircle, CreditCard } from 'lucide-react';
 import { useCart } from 'react-use-cart';
 import PaymentForm from '../components/PaymentForm';
+import { getMasterPriceCents } from '../config/pricing';
 
 interface CourseData {
   id: string;
@@ -23,7 +24,7 @@ const PaymentPage: React.FC = () => {
   const courseData: CourseData = location.state?.courseData || {
     id: 'master-adicciones',
     name: 'Máster en Adicciones e Intervención Familiar',
-    price: 2500,
+    price: getMasterPriceCents(),
     duration: '12 meses',
     description: 'Formación especializada en tratamiento y prevención de adicciones'
   };

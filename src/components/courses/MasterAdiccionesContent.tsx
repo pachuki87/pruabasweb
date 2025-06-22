@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { FaGraduationCap, FaUsers, FaCalendarAlt, FaMapMarkerAlt, FaEuroSign, FaPhone, FaEnvelope, FaHome, FaBook, FaChalkboardTeacher, FaLaptop, FaHandsHelping } from 'react-icons/fa';
+import { getMasterPrice } from '../../config/pricing';
 
 const MasterAdiccionesContent: React.FC = () => {
   const [activeTab, setActiveTab] = useState("inicio");
@@ -75,7 +76,7 @@ function HomeSection() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
           <StatCard title="Duración" value="Octubre 2025 - Junio 2026" />
           <StatCard title="Plazas" value="20 - 80 por edición" />
-          <StatCard title="Precio" value="1990 €" />
+          <StatCard title="Precio" value={`${getMasterPrice()} €`} />
         </div>
         <div className="mt-6 text-center">
           <button className="bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700 transition-colors">

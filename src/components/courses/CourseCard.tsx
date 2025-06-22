@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Edit, Trash, FileText, Eye, Book, CreditCard, ShoppingCart, Check } from 'lucide-react';
 import { useCart } from 'react-use-cart';
+import { getMasterPriceCents } from '../../config/pricing';
 
 type CourseCardProps = {
   id: string;
@@ -53,7 +54,7 @@ const CourseCard: React.FC<CourseCardProps> = ({
     const courseItem = {
       id,
       name: title,
-      price: 2500, // Precio en centavos (25.00 EUR)
+      price: getMasterPriceCents(), // Precio dinámico según configuración
       quantity: 1,
       image: getImageUrl(),
       duration: '12 meses',

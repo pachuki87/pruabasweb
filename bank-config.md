@@ -2,11 +2,17 @@
 
 ## ✅ Datos Bancarios Confirmados
 
-### Información de la Cuenta
+### ✅ Información de la Cuenta
 - **IBAN**: ES0231590078582714496227
 - **Titular**: Kompartia Coworking SL
 - **Entidad**: Caixa Popular
 - **País**: España
+
+### 📞 Datos de Contacto (Instituto Lidera)
+- **Teléfono**: +34 622 43 39 52
+- **Email**: liderainstituto@gmail.com
+- **Sitio Web**: https://institutolidera.com/
+- **Razón Social**: Instituto Lidera
 
 ### 📋 Datos Adicionales Necesarios para TPV Virtual
 

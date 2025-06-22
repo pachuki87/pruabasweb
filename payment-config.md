@@ -6,6 +6,9 @@
 - [x] **Número de cuenta bancaria**: ES0231590078582714496227
 - [x] **Nombre del titular**: Kompartia Coworking SL
 - [x] **Entidad bancaria**: Caixa Popular
+- [x] **Teléfono de contacto**: +34 622 43 39 52
+- [x] **Email de contacto**: liderainstituto@gmail.com
+- [x] **Sitio web**: https://institutolidera.com/
 - [ ] **Código SWIFT/BIC** (para transferencias internacionales)
 - [ ] **Código de comercio** (para TPV virtual)
 - [ ] **Terminal virtual**

@@ -62,14 +62,14 @@ const Events = () => {
                   </div>
                 </div>
                 <div className="absolute top-4 right-4">
-                  <span className="inline-block bg-red-600 text-white text-xs px-2 py-1 rounded-full">
+                  <span className="inline-block bg-lidera-light-blue text-white text-xs px-2 py-1 rounded-full">
                     {event.type}
                   </span>
                 </div>
               </div>
               
               <div className="p-6">
-                <h3 className="text-lg font-bold text-gray-900 mb-3 group-hover:text-red-600 transition-colors">
+                <h3 className="text-lg font-bold text-gray-900 mb-3 group-hover:text-lidera-light-blue transition-colors">
                   {event.title}
                 </h3>
                 
@@ -93,7 +93,7 @@ const Events = () => {
         </div>
         
         <div className="text-center mt-12">
-          <button className="bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors">
+          <button className="bg-lidera-light-blue hover:bg-[#6a96c0] text-white px-8 py-3 rounded-lg font-semibold transition-colors">
             VER TODOS LOS EVENTOS
           </button>
         </div>

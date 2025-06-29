@@ -1,20 +1,18 @@
 # CONFIGURACIÓN DE PAGOS - INSTITUTO LIDERA
 
-## 🏦 DATOS BANCARIOS PARA PAGOS
+## 📋 DATOS BANCARIOS PARA CONFIGURACIÓN
 
-### ✅ Información Recibida:
-- [x] **Número de cuenta bancaria**: ES0231590078582714496227
-- [x] **Nombre del titular**: Kompartia Coworking SL
-- [x] **Entidad bancaria**: Caixa Popular
-- [x] **Teléfono de contacto**: +34 622 43 39 52
-- [x] **Email de contacto**: liderainstituto@gmail.com
-- [x] **Sitio web**: https://institutolidera.com/
-- [ ] **Código SWIFT/BIC** (para transferencias internacionales)
-- [ ] **Código de comercio** (para TPV virtual)
-- [ ] **Terminal virtual**
-- [ ] **Clave secreta** (para firma de transacciones)
+### Información Pendiente de Recibir:
+- **Nombre del Banco**: [PENDIENTE]
+- **Número de Cuenta (IBAN)**: [PENDIENTE]
+- **Código SWIFT/BIC**: [PENDIENTE]
+- **Titular de la Cuenta**: [PENDIENTE]
+- **Dirección del Banco**: [PENDIENTE]
 
 ### Datos Adicionales Necesarios:
+- **Código de Comercio**: [PENDIENTE]
+- **Terminal Virtual**: [PENDIENTE]
+- **Clave Secreta**: [PENDIENTE]
 - **URL de Notificaciones**: [PENDIENTE]
 
 ---
@@ -71,10 +69,8 @@ const getPrice = (originalPrice) => {
 ### Fase 1: Configuración Básica
 - [ ] Recibir datos bancarios completos
 - [ ] Crear archivo .env con configuración
-- [x] Implementar lógica de precios condicional
-- [x] Actualizar componentes con precios de testing
-- [x] Crear archivo de configuración de precios (src/config/pricing.ts)
-- [x] Actualizar variables de entorno (.env)
+- [ ] Implementar lógica de precios condicional
+- [ ] Actualizar componentes con precios de testing
 
 ### Fase 2: Integración de Pagos
 - [ ] Configurar Stripe con datos bancarios

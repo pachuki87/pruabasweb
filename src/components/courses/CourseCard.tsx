@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Edit, Trash, FileText, Eye, Book, CreditCard, ShoppingCart, Check } from 'lucide-react';
 import { useCart } from 'react-use-cart';
-import { getMasterPriceCents, formatPrice } from '../../config/pricing';
 
 type CourseCardProps = {
   id: string;
@@ -54,7 +53,7 @@ const CourseCard: React.FC<CourseCardProps> = ({
     const courseItem = {
       id,
       name: title,
-      price: getMasterPriceCents(), // Precio dinámico según configuración
+      price: 2500, // Precio en centavos (25.00 EUR)
       quantity: 1,
       image: getImageUrl(),
       duration: '12 meses',
@@ -109,62 +108,55 @@ const CourseCard: React.FC<CourseCardProps> = ({
           {title}
         </h3>
         
-        <div className="space-y-3 mt-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center text-gray-300">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1 text-red-400" viewBox="0 0 20 20" fill="currentColor">
-                <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z" />
-              </svg>
-              <span>{enrollment} estudiante(s)</span>
-            </div>
-            <div className="text-right">
-              <p className="text-2xl font-bold text-red-400">€{formatPrice(getMasterPriceCents())}</p>
-            </div>
+        <div className="flex items-center justify-between mt-4">
+          <div className="flex items-center text-gray-300">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+              <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z" />
+            </svg>
+            <span>{enrollment} estudiante(s)</span>
           </div>
           
-          <div className="flex items-center justify-between">
+          {/* Botón de agregar al carrito para visitantes */}
+          {(role === 'visitor' || !role) && (
+            <button
+              onClick={handleAddToCart}
+              disabled={isAdding || inCart(id)}
+              className={`flex items-center px-3 py-1 text-sm rounded-lg transition-colors ${
+                inCart(id)
+                  ? 'bg-green-600 text-white cursor-default'
+                  : justAdded
+                  ? 'bg-green-600 text-white'
+                  : isAdding
+                  ? 'bg-gray-400 text-white cursor-not-allowed'
+                  : 'bg-red-600 hover:bg-red-700 text-white'
+              }`}
+              title={inCart(id) ? 'Ya está en el carrito' : 'Agregar al carrito'}
+            >
+              {isAdding ? (
+                <>
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-1" />
+                  Agregando...
+                </>
+              ) : inCart(id) ? (
+                <>
+                  <Check size={16} className="mr-1" />
+                  En carrito
+                </>
+              ) : justAdded ? (
+                <>
+                  <Check size={16} className="mr-1" />
+                  ¡Agregado!
+                </>
+              ) : (
+                <>
+                  <ShoppingCart size={16} className="mr-1" />
+                  Agregar
+                </>
+              )}
+            </button>
+          )}
           
-            {/* Botón de agregar al carrito para visitantes */}
-            {(role === 'visitor' || !role) && (
-              <button
-                onClick={handleAddToCart}
-                disabled={isAdding || inCart(id)}
-                className={`flex items-center px-3 py-1 text-sm rounded-lg transition-colors ${
-                  inCart(id)
-                    ? 'bg-green-600 text-white cursor-default'
-                    : justAdded
-                    ? 'bg-green-600 text-white'
-                    : isAdding
-                    ? 'bg-gray-400 text-white cursor-not-allowed'
-                    : 'bg-red-600 hover:bg-red-700 text-white'
-                }`}
-                title={inCart(id) ? 'Ya está en el carrito' : 'Agregar al carrito'}
-              >
-                {isAdding ? (
-                  <>
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-1" />
-                    Agregando...
-                  </>
-                ) : inCart(id) ? (
-                  <>
-                    <Check size={16} className="mr-1" />
-                    En carrito
-                  </>
-                ) : justAdded ? (
-                  <>
-                    <Check size={16} className="mr-1" />
-                    ¡Agregado!
-                  </>
-                ) : (
-                  <>
-                    <ShoppingCart size={16} className="mr-1" />
-                    Agregar
-                  </>
-                )}
-              </button>
-            )}
-          
-            <div className="flex space-x-1">
+          <div className="flex space-x-1">
             {role === 'teacher' && (
               <>
                 <button 
@@ -208,7 +200,6 @@ const CourseCard: React.FC<CourseCardProps> = ({
             >
               <Eye size={18} />
             </Link>
-            </div>
           </div>
         </div>
       </div>

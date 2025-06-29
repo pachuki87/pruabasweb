@@ -9,6 +9,7 @@
   --warning-color: #ff6600;
   --error-color: #cc0000;
   --success-color: #00cc66;
+  --lidera-light-blue: #7ba7d1;
 }
 
 body {
@@ -21,7 +22,7 @@ body {
 }
 
 .btn-primary {
-  @apply bg-red-600 text-white hover:bg-red-700 focus:ring-red-500;
+  @apply bg-[var(--lidera-light-blue)] text-white hover:bg-[#6a96c0] focus:ring-[var(--lidera-light-blue)];
 }
 
 .btn-secondary {
@@ -33,7 +34,7 @@ body {
 }
 
 .btn-danger {
-  @apply bg-red-600 text-white hover:bg-red-700 focus:ring-red-500;
+  @apply bg-[var(--lidera-light-blue)] text-white hover:bg-[#6a96c0] focus:ring-[var(--lidera-light-blue)];
 }
 
 .card {

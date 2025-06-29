@@ -7,7 +7,7 @@ const Programs = () => {
       title: "MASTER EN ADICCIONES E INTERVENCIÓN",
       subtitle: "82 ESTUDIANTES",
       programs: ["Neurobiología de las Adicciones", "Intervención Psicosocial", "Terapias Especializadas", "Prevención y Rehabilitación"],
-      color: "bg-red-600",
+      color: "bg-lidera-light-blue",
       link: "/master-adicciones-intervencion",
       image: "https://images.pexels.com/photos/1438072/pexels-photo-1438072.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop"
     },
@@ -25,7 +25,7 @@ const Programs = () => {
       title: "EXPERTO EN CONDUCTAS ADICTIVAS",
       subtitle: "83 ESTUDIANTES",
       programs: ["Psicología de las Adicciones", "Conductas Compulsivas", "Intervención Familiar", "Casos Clínicos"],
-      color: "bg-red-600",
+      color: "bg-lidera-light-blue",
       link: "/experto-conductas-adictivas",
       image: "https://images.pexels.com/photos/4101143/pexels-photo-4101143.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop"
     }
@@ -45,7 +45,7 @@ const Programs = () => {
               Programas especializados en adicciones e intervención psicosocial, diseñados 
               para formar profesionales expertos en el tratamiento y prevención de conductas adictivas.
             </p>
-            <a href="/courses" className="bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors inline-block">
+            <a href="/courses" className="bg-lidera-light-blue hover:bg-[#6a96c0] text-white px-8 py-3 rounded-lg font-semibold transition-colors inline-block">
               VER TODOS LOS CURSOS
             </a>
           </div>

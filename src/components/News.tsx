@@ -46,7 +46,7 @@ const News = () => {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                 <div className="absolute bottom-4 left-4 right-4">
-                  <span className="inline-block bg-red-600 text-white text-xs px-3 py-1 rounded-full mb-2">
+                  <span className="inline-block bg-lidera-light-blue text-white text-xs px-3 py-1 rounded-full mb-2">
                     {article.category}
                   </span>
                 </div>
@@ -58,7 +58,7 @@ const News = () => {
                   {article.date}
                 </div>
                 
-                <h3 className="text-xl font-bold text-gray-900 group-hover:text-red-600 transition-colors line-clamp-2">
+                <h3 className="text-xl font-bold text-gray-900 group-hover:text-lidera-light-blue transition-colors line-clamp-2">
                   {article.title}
                 </h3>
                 
@@ -66,7 +66,7 @@ const News = () => {
                   {article.excerpt}
                 </p>
                 
-                <div className="flex items-center text-red-600 group-hover:text-red-700 transition-colors">
+                <div className="flex items-center text-lidera-light-blue group-hover:text-[#6a96c0] transition-colors">
                   <span className="text-sm font-semibold mr-2">Leer más</span>
                   <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
                 </div>
@@ -76,7 +76,7 @@ const News = () => {
         </div>
         
         <div className="text-center mt-12">
-          <button className="bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors">
+          <button className="bg-lidera-light-blue hover:bg-[#6a96c0] text-white px-8 py-3 rounded-lg font-semibold transition-colors">
             TODAS LAS NOTICIAS
           </button>
         </div>

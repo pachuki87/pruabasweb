@@ -32,7 +32,7 @@ const Campus = () => {
                 onClick={() => setActiveLocation(index)}
                 className={`flex items-center space-x-2 px-6 py-3 rounded-lg transition-colors ${
                   activeLocation === index
-                    ? 'bg-red-600 text-white'
+                    ? 'bg-lidera-light-blue text-white'
                     : 'bg-white text-gray-600 hover:bg-gray-100'
                 }`}
               >

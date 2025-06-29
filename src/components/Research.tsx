@@ -50,14 +50,14 @@ const Research = () => {
                   <div className="text-white mb-2">
                     {article.icon}
                   </div>
-                  <span className="inline-block bg-red-600 text-white text-xs px-3 py-1 rounded-full">
+                  <span className="inline-block bg-lidera-light-blue text-white text-xs px-3 py-1 rounded-full">
                     {article.category}
                   </span>
                 </div>
               </div>
               
               <div className="space-y-4">
-                <h3 className="text-xl font-bold text-gray-900 group-hover:text-red-600 transition-colors line-clamp-3">
+                <h3 className="text-xl font-bold text-gray-900 group-hover:text-lidera-light-blue transition-colors line-clamp-3">
                   {article.title}
                 </h3>
                 
@@ -67,7 +67,7 @@ const Research = () => {
                 
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-500">Por {article.author}</span>
-                  <button className="text-red-600 hover:text-red-700 font-semibold text-sm flex items-center space-x-1 group-hover:space-x-2 transition-all">
+                  <button className="text-lidera-light-blue hover:text-[#6a96c0] font-semibold text-sm flex items-center space-x-1 group-hover:space-x-2 transition-all">
                     <span>Leer más</span>
                     <ArrowRight className="h-4 w-4" />
                   </button>
@@ -78,7 +78,7 @@ const Research = () => {
         </div>
         
         <div className="text-center mt-12">
-          <button className="bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors">
+          <button className="bg-lidera-light-blue hover:bg-[#6a96c0] text-white px-8 py-3 rounded-lg font-semibold transition-colors">
             VER TODAS LAS IDEAS
           </button>
         </div>

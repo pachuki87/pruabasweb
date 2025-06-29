@@ -44,7 +44,7 @@ const Header = () => {
               </a>
               <a
                 href="/login/teacher"
-                className="px-4 py-2 text-sm bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                className="px-4 py-2 text-sm bg-lidera-light-blue text-white rounded-lg hover:bg-[#6a96c0] transition-colors"
               >
                 Profesor
               </a>
@@ -52,7 +52,7 @@ const Header = () => {
             
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="lg:hidden p-2 text-gray-500 hover:text-red-600 transition-colors"
+              className="lg:hidden p-2 text-gray-500 hover:text-lidera-light-blue transition-colors"
             >
               {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
@@ -66,7 +66,7 @@ const Header = () => {
               <input
                 type="text"
                 placeholder="Buscar..."
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-lidera-light-blue focus:border-transparent"
                 autoFocus
               />
             </div>
@@ -77,24 +77,24 @@ const Header = () => {
         {isMenuOpen && (
           <div className="lg:hidden absolute top-16 left-0 right-0 bg-white border-t border-gray-200">
             <nav className="px-4 py-6 space-y-4">
-              <a href="/" className="block text-gray-700 hover:text-red-600 transition-colors">Inicio</a>
-              <a href="/courses" className="block text-gray-700 hover:text-red-600 transition-colors">Cursos</a>
-              <a href="#" className="block text-gray-700 hover:text-red-600 transition-colors">Formación</a>
-              <a href="/viajes-talleres" className="block text-gray-700 hover:text-red-600 transition-colors">Viajes y Talleres</a>
-              <a href="/testimonios" className="block text-gray-700 hover:text-red-600 transition-colors">Testimonios</a>
-              <a href="/contact" className="block text-gray-700 hover:text-red-600 transition-colors">Contacto</a>
+              <a href="/" className="block text-gray-700 hover:text-lidera-light-blue transition-colors">Inicio</a>
+              <a href="/courses" className="block text-gray-700 hover:text-lidera-light-blue transition-colors">Cursos</a>
+              <a href="#" className="block text-gray-700 hover:text-lidera-light-blue transition-colors">Formación</a>
+              <a href="/viajes-talleres" className="block text-gray-700 hover:text-lidera-light-blue transition-colors">Viajes y Talleres</a>
+              <a href="/testimonios" className="block text-gray-700 hover:text-lidera-light-blue transition-colors">Testimonios</a>
+              <a href="/contact" className="block text-gray-700 hover:text-lidera-light-blue transition-colors">Contacto</a>
               
               {/* Mobile Login Buttons */}
               <div className="pt-4 border-t border-gray-200 space-y-2">
                 <a
                   href="/login/student"
-                  className="block w-full px-4 py-2 text-center text-gray-700 border border-gray-300 rounded-lg hover:text-red-600 hover:border-red-600 transition-colors"
+                  className="block w-full px-4 py-2 text-center text-gray-700 border border-gray-300 rounded-lg hover:text-lidera-light-blue hover:border-lidera-light-blue transition-colors"
                 >
                   Acceso Estudiante
                 </a>
                 <a
                   href="/login/teacher"
-                  className="block w-full px-4 py-2 text-center bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                  className="block w-full px-4 py-2 text-center bg-lidera-light-blue text-white rounded-lg hover:bg-[#6a96c0] transition-colors"
                 >
                   Acceso Profesor
                 </a>

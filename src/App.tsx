@@ -23,6 +23,7 @@ import HomePage from './pages/HomePage';
 import LoginPage from './pages/auth/LoginPage';
 import RegisterPage from './pages/auth/RegisterPage';
 import AboutPage from './pages/AboutPage';
+import ContactPage from './pages/ContactPage'; // Import contact page
 import FaqsPage from './pages/FaqsPage';
 import CoursesPage from './pages/CoursesPage';
 import NotFoundPage from './pages/NotFoundPage';
@@ -121,6 +122,7 @@ function App() {
           {/* Public routes */}
           <Route path="/" element={<HomePage currentRole={currentRole} onRoleChange={handleRoleChange} />} />
           <Route path="/about" element={<AboutPage currentRole={currentRole} onRoleChange={handleRoleChange} />} />
+          <Route path="/contact" element={<ContactPage currentRole={currentRole} onRoleChange={handleRoleChange} />} />
           <Route path="/faqs" element={<FaqsPage currentRole={currentRole} onRoleChange={handleRoleChange} />} />
           <Route path="/courses" element={<CoursesPage currentRole={currentRole} onRoleChange={handleRoleChange} />} />
           <Route path="/testimonios" element={<TestimoniosPage currentRole={currentRole} onRoleChange={handleRoleChange} />} />

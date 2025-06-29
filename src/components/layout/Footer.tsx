@@ -61,7 +61,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8">
           {/* Logo and Contact */}
           <div className="lg:col-span-2">
-            <div className="text-3xl font-bold text-red-500 mb-6">Instituto Lidera</div>
+            <div className="text-3xl font-bold text-blue-500 mb-6">Instituto Lidera</div>
             <p className="text-gray-300 mb-6 leading-relaxed">
               Instituto especializado en formación en adicciones e intervención psicosocial. 
               Formando profesionales expertos que impacten positivamente en el tratamiento y prevención de conductas adictivas.
@@ -87,7 +87,7 @@ const Footer = () => {
                 <a
                   key={index}
                   href={social.href}
-                  className="bg-gray-800 hover:bg-red-600 p-3 rounded-lg transition-colors"
+                  className="bg-gray-800 hover:bg-blue-600 p-3 rounded-lg transition-colors"
                 >
                   {social.icon}
                 </a>

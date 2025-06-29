@@ -85,7 +85,7 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose }) => {
                 </p>
                 <button
                   onClick={onClose}
-                  className="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg font-medium transition-colors"
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-colors"
                 >
                   Continuar Navegando
                 </button>
@@ -134,10 +134,10 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose }) => {
                     {/* Remove Button */}
                     <button
                       onClick={() => removeItem(item.id)}
-                      className="p-1 hover:bg-red-100 rounded transition-colors"
+                      className="p-1 hover:bg-blue-100 rounded transition-colors"
                       title="Eliminar del carrito"
                     >
-                      <Trash2 size={16} className="text-red-500" />
+                      <Trash2 size={16} className="text-blue-500" />
                     </button>
                   </div>
                 ))}
@@ -146,7 +146,7 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose }) => {
                 <div className="pt-4 border-t border-gray-200">
                   <button
                     onClick={emptyCart}
-                    className="w-full text-sm text-red-600 hover:text-red-700 font-medium transition-colors"
+                    className="w-full text-sm text-blue-600 hover:text-blue-700 font-medium transition-colors"
                   >
                     Vaciar carrito
                   </button>
@@ -163,7 +163,7 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose }) => {
                 <span className="text-lg font-semibold text-gray-900">
                   Total:
                 </span>
-                <span className="text-lg font-bold text-red-600">
+                <span className="text-lg font-bold text-blue-600">
                   €{formatPrice(cartTotal)}
                 </span>
               </div>
@@ -172,7 +172,7 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose }) => {
               <button
                 onClick={handleCheckout}
                 disabled={isProcessing}
-                className="w-full bg-red-600 hover:bg-red-700 disabled:bg-gray-400 text-white py-3 rounded-lg font-semibold transition-colors flex items-center justify-center"
+                className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white py-3 rounded-lg font-semibold transition-colors flex items-center justify-center"
               >
                 {isProcessing ? (
                   <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white" />

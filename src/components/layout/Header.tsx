@@ -19,19 +19,19 @@ const Header: React.FC<HeaderProps> = ({ currentRole, onRoleChange }) => {
 
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex space-x-8">
-            <a href="/" className="text-gray-700 hover:text-red-600 transition-colors">Inicio</a>
-            <a href="/courses" className="text-gray-700 hover:text-red-600 transition-colors">Cursos</a>
-            <a href="#" className="text-gray-700 hover:text-red-600 transition-colors">Formación</a>
-            <a href="/viajes-y-talleres" className="text-gray-700 hover:text-red-600 transition-colors">Viajes y Talleres</a>
-            <a href="/testimonios" className="text-gray-700 hover:text-red-600 transition-colors">Testimonios</a>
-            <a href="/contact" className="text-gray-700 hover:text-red-600 transition-colors">Contacto</a>
+            <a href="/" className="text-gray-700 hover:text-blue-600 transition-colors">Inicio</a>
+            <a href="/courses" className="text-gray-700 hover:text-blue-600 transition-colors">Cursos</a>
+            <a href="#" className="text-gray-700 hover:text-blue-600 transition-colors">Formación</a>
+            <a href="/viajes-y-talleres" className="text-gray-700 hover:text-blue-600 transition-colors">Viajes y Talleres</a>
+            <a href="/testimonios" className="text-gray-700 hover:text-blue-600 transition-colors">Testimonios</a>
+            <a href="/contact" className="text-gray-700 hover:text-blue-600 transition-colors">Contacto</a>
           </nav>
 
           {/* Search, Cart, Login and Menu */}
           <div className="flex items-center space-x-4">
             <button
               onClick={() => setIsSearchOpen(!isSearchOpen)}
-              className="p-2 text-gray-500 hover:text-red-600 transition-colors"
+              className="p-2 text-gray-500 hover:text-blue-600 transition-colors"
             >
               <Search className="h-5 w-5" />
             </button>
@@ -43,7 +43,7 @@ const Header: React.FC<HeaderProps> = ({ currentRole, onRoleChange }) => {
             <div className="hidden md:flex items-center space-x-2">
               <a
                 href="/login/student"
-                className="px-4 py-2 text-sm text-gray-700 hover:text-red-600 transition-colors"
+                className="px-4 py-2 text-sm text-gray-700 hover:text-blue-600 transition-colors"
               >
                 Estudiante
               </a>

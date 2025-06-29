@@ -114,7 +114,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ studentId, teacherId, onClose }
             <div
               className={`max-w-xs px-4 py-2 rounded-lg ${
                 message.sender_id === studentId
-                  ? 'bg-red-600 text-white'
+                  ? 'bg-blue-600 text-white'
                   : 'bg-gray-100 text-gray-800'
               }`}
             >
@@ -140,7 +140,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ studentId, teacherId, onClose }
           />
           <button
             type="submit"
-            className="bg-red-600 text-white p-2 rounded-md hover:bg-red-700 transition-colors"
+            className="bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700 transition-colors"
             disabled={isLoading}
           >
             <Send size={20} />

@@ -46,7 +46,7 @@ const MaterialForm: React.FC<MaterialFormProps> = ({ courseId, onSubmit, isLoadi
       <h2 className="text-xl font-semibold mb-6">Add Study Material</h2>
       
       {error && (
-        <div className="mb-4 bg-red-50 text-red-700 p-3 rounded-md text-sm">
+        <div className="mb-4 bg-blue-50 text-blue-700 p-3 rounded-md text-sm">
           {error}
         </div>
       )}
@@ -82,7 +82,7 @@ const MaterialForm: React.FC<MaterialFormProps> = ({ courseId, onSubmit, isLoadi
                 <button
                   type="button"
                   onClick={() => setFile(null)}
-                  className="mt-2 text-xs text-red-500 hover:text-red-700"
+                  className="mt-2 text-xs text-blue-500 hover:text-blue-700"
                 >
                   Remove
                 </button>
@@ -123,7 +123,7 @@ const MaterialForm: React.FC<MaterialFormProps> = ({ courseId, onSubmit, isLoadi
         
         <button
           type="submit"
-          className="w-full bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors"
+          className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
           disabled={isLoading || !file}
         >
           {isLoading ? 'Uploading...' : 'Upload Material'}

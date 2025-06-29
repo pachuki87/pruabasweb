@@ -5,9 +5,9 @@
 :root {
   --primary-color: #0066cc;
   --secondary-color: #ffa500;
-  --accent-color: #00cc66;
+  --accent-color: #0066cc;
   --warning-color: #ff6600;
-  --error-color: #cc0000;
+  --error-color: #0066cc;
   --success-color: #00cc66;
   --lidera-light-blue: #7ba7d1;
 }
@@ -42,7 +42,7 @@ body {
 }
 
 .form-input {
-  @apply w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent;
+  @apply w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent;
 }
 
 .form-label {

@@ -68,7 +68,7 @@ const QuizzesPage: React.FC<QuizzesPageProps> = ({ role }) => {
         {role === 'teacher' && (
           <Link
             to={`/${role}/quizzes/add`}
-            className="flex items-center bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition-colors"
+            className="flex items-center bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
           >
             <PlusCircle className="w-5 h-5 mr-2" />
             Add Quiz
@@ -93,7 +93,7 @@ const QuizzesPage: React.FC<QuizzesPageProps> = ({ role }) => {
           {role === 'teacher' && (
             <Link
               to={`/${role}/quizzes/add`}
-              className="inline-flex items-center bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition-colors"
+              className="inline-flex items-center bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
             >
               <PlusCircle className="w-5 h-5 mr-2" />
               Create Your First Quiz
@@ -123,7 +123,7 @@ const QuizzesPage: React.FC<QuizzesPageProps> = ({ role }) => {
               {quizzes.map((quiz) => (
                 <tr key={quiz.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-red-600">
+                    <div className="text-sm font-medium text-blue-600">
                       {quiz.title}
                     </div>
                   </td>
@@ -142,7 +142,7 @@ const QuizzesPage: React.FC<QuizzesPageProps> = ({ role }) => {
                     ) : (
                       <button
                         onClick={() => handleAttemptQuiz(quiz.id)}
-                        className="text-red-600 hover:text-red-900 bg-red-50 px-3 py-1 rounded-md"
+                        className="text-blue-600 hover:text-blue-900 bg-blue-50 px-3 py-1 rounded-md"
                       >
                         Attempt Quiz
                       </button>
@@ -154,7 +154,7 @@ const QuizzesPage: React.FC<QuizzesPageProps> = ({ role }) => {
                         {!quiz.assigned && (
                           <button
                             onClick={() => handleAssignQuiz(quiz.id)}
-                            className="text-red-600 hover:text-red-900"
+                            className="text-blue-600 hover:text-blue-900"
                             title="Assign quiz"
                           >
                             <Check className="w-5 h-5" />

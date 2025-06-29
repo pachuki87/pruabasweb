@@ -9,6 +9,7 @@ type Material = {
   title: string;
   detail: string;
   remarks: string | null;
+  file_path: string;
 };
 
 type StudyMaterialsPageProps = {
@@ -121,7 +122,7 @@ const StudyMaterialsPage: React.FC<StudyMaterialsPageProps> = ({ role }) => {
         {role === 'teacher' && (
           <button
             onClick={() => setShowForm(!showForm)}
-            className="flex items-center gap-2 bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition-colors"
+            className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
           >
             <Plus className="w-4 h-4" />
             {showForm ? 'Cancelar' : 'Añadir Material'}
@@ -186,7 +187,7 @@ const StudyMaterialsPage: React.FC<StudyMaterialsPageProps> = ({ role }) => {
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <button
                       onClick={() => handleDownload(material)}
-                      className="text-red-600 hover:text-red-800 bg-red-50 px-3 py-1 rounded-md"
+                      className="text-blue-600 hover:text-blue-800 bg-blue-50 px-3 py-1 rounded-md"
                     >
                       <Download className="w-4 h-4 inline-block mr-1" />
                       Download Materials

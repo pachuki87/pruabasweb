@@ -2,7 +2,12 @@ import React, { useState } from 'react';
 import { Search, Menu, X, ChevronDown } from 'lucide-react';
 import CartIcon from '../CartIcon';
 
-const Header = () => {
+interface HeaderProps {
+  currentRole: string;
+  onRoleChange: (role: string) => void;
+}
+
+const Header: React.FC<HeaderProps> = ({ currentRole, onRoleChange }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
@@ -17,7 +22,7 @@ const Header = () => {
             <a href="/" className="text-gray-700 hover:text-red-600 transition-colors">Inicio</a>
             <a href="/courses" className="text-gray-700 hover:text-red-600 transition-colors">Cursos</a>
             <a href="#" className="text-gray-700 hover:text-red-600 transition-colors">Formación</a>
-            <a href="/viajes-talleres" className="text-gray-700 hover:text-red-600 transition-colors">Viajes y Talleres</a>
+            <a href="/viajes-y-talleres" className="text-gray-700 hover:text-red-600 transition-colors">Viajes y Talleres</a>
             <a href="/testimonios" className="text-gray-700 hover:text-red-600 transition-colors">Testimonios</a>
             <a href="/contact" className="text-gray-700 hover:text-red-600 transition-colors">Contacto</a>
           </nav>
@@ -80,7 +85,7 @@ const Header = () => {
               <a href="/" className="block text-gray-700 hover:text-lidera-light-blue transition-colors">Inicio</a>
               <a href="/courses" className="block text-gray-700 hover:text-lidera-light-blue transition-colors">Cursos</a>
               <a href="#" className="block text-gray-700 hover:text-lidera-light-blue transition-colors">Formación</a>
-              <a href="/viajes-talleres" className="block text-gray-700 hover:text-lidera-light-blue transition-colors">Viajes y Talleres</a>
+              <a href="/viajes-y-talleres" className="block text-gray-700 hover:text-lidera-light-blue transition-colors">Viajes y Talleres</a>
               <a href="/testimonios" className="block text-gray-700 hover:text-lidera-light-blue transition-colors">Testimonios</a>
               <a href="/contact" className="block text-gray-700 hover:text-lidera-light-blue transition-colors">Contacto</a>
               

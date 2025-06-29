@@ -61,13 +61,13 @@ const FaqsPage: React.FC<FaqsPageProps> = ({ currentRole, onRoleChange }) => {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Header />
+      <Header currentRole={currentRole} onRoleChange={onRoleChange} />
       
       <main className="flex-grow bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
           <div className="max-w-4xl mx-auto">
             <h1 className="text-4xl lg:text-6xl font-bold text-center mb-16 leading-tight">
-              Preguntas <span className="text-red-400">Frecuentes</span>
+              Preguntas <span className="text-lidera-light-blue">Frecuentes</span>
             </h1>
             
             {isLoading ? (
@@ -88,15 +88,15 @@ const FaqsPage: React.FC<FaqsPageProps> = ({ currentRole, onRoleChange }) => {
                   >
                     <button
                       onClick={() => toggleFaq(faq.id)}
-                      className="w-full flex items-center justify-between p-6 text-left hover:bg-gray-750 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500"
+                      className="w-full flex items-center justify-between p-6 text-left hover:bg-gray-750 transition-colors focus:outline-none focus:ring-2 focus:ring-lidera-light-blue"
                     >
                       <span className="font-semibold text-white text-lg">
                         {faq.question}
                       </span>
                       {openFaq === faq.id ? (
-                        <ChevronUp className="w-6 h-6 text-red-400" />
+                        <ChevronUp className="w-6 h-6 text-lidera-light-blue" />
                       ) : (
-                        <ChevronDown className="w-6 h-6 text-red-400" />
+                        <ChevronDown className="w-6 h-6 text-lidera-light-blue" />
                       )}
                     </button>
                     

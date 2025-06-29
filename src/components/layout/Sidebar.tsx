@@ -33,7 +33,7 @@ const Sidebar: React.FC<SidebarProps> = ({ role }) => {
     <>
       {/* Mobile sidebar toggle button - only visible on small screens */}
       <button 
-        className="fixed z-20 bottom-4 right-4 md:hidden bg-red-600 text-white p-3 rounded-full shadow-lg"
+        className="fixed z-20 bottom-4 right-4 md:hidden bg-blue-600 text-white p-3 rounded-full shadow-lg"
         onClick={toggleSidebar}
         aria-label={sidebarOpen ? "Cerrar menú lateral" : "Abrir menú lateral"}
       >
@@ -73,7 +73,7 @@ const Sidebar: React.FC<SidebarProps> = ({ role }) => {
                   to={`/${role}/dashboard`}
                   className={`flex items-center px-4 py-2 text-sm rounded-md ${
                     isActive(`/${role}/dashboard`)
-                      ? 'bg-red-50 text-red-700'
+                      ? 'bg-blue-50 text-blue-700'
                       : 'text-gray-700 hover:bg-gray-100'
                   }`}
                   onClick={() => setSidebarOpen(false)}
@@ -87,7 +87,7 @@ const Sidebar: React.FC<SidebarProps> = ({ role }) => {
                   to={`/${role}/courses`}
                   className={`flex items-center px-4 py-2 text-sm rounded-md ${
                     isActive(`/${role}/courses`) || location.pathname.includes(`/${role}/courses/`)
-                      ? 'bg-red-50 text-red-700'
+                      ? 'bg-blue-50 text-blue-700'
                       : 'text-gray-700 hover:bg-gray-100'
                   }`}
                   onClick={() => setSidebarOpen(false)}
@@ -101,7 +101,7 @@ const Sidebar: React.FC<SidebarProps> = ({ role }) => {
                   to={`/${role}/quizzes`}
                   className={`flex items-center px-4 py-2 text-sm rounded-md ${
                     isActive(`/${role}/quizzes`) || location.pathname.includes(`/${role}/quizzes/`)
-                      ? 'bg-red-50 text-red-700'
+                      ? 'bg-blue-50 text-blue-700'
                       : 'text-gray-700 hover:bg-gray-100'
                   }`}
                   onClick={() => setSidebarOpen(false)}
@@ -117,7 +117,7 @@ const Sidebar: React.FC<SidebarProps> = ({ role }) => {
                       to={`/${role}/quizzes/add`}
                       className={`flex items-center px-4 py-2 text-sm rounded-md ${
                         isActive(`/${role}/quizzes/add`)
-                          ? 'bg-red-50 text-red-700'
+                          ? 'bg-blue-50 text-blue-700'
                           : 'text-gray-700 hover:bg-gray-100'
                       }`}
                       onClick={() => setSidebarOpen(false)}
@@ -131,7 +131,7 @@ const Sidebar: React.FC<SidebarProps> = ({ role }) => {
                       to={`/${role}/users`}
                       className={`flex items-center px-4 py-2 text-sm rounded-md ${
                         isActive(`/${role}/users`)
-                          ? 'bg-red-50 text-red-700'
+                          ? 'bg-blue-50 text-blue-700'
                           : 'text-gray-700 hover:bg-gray-100'
                       }`}
                       onClick={() => setSidebarOpen(false)}
@@ -145,7 +145,7 @@ const Sidebar: React.FC<SidebarProps> = ({ role }) => {
                       to={`/${role}/courses/add`}
                       className={`flex items-center px-4 py-2 text-sm rounded-md ${
                         isActive(`/${role}/courses/add`)
-                          ? 'bg-red-50 text-red-700'
+                          ? 'bg-blue-50 text-blue-700'
                           : 'text-gray-700 hover:bg-gray-100'
                       }`}
                       onClick={() => setSidebarOpen(false)}
@@ -161,7 +161,7 @@ const Sidebar: React.FC<SidebarProps> = ({ role }) => {
                   to={`/${role}/profile`}
                   className={`flex items-center px-4 py-2 text-sm rounded-md ${
                     isActive(`/${role}/profile`)
-                      ? 'bg-red-50 text-red-700'
+                      ? 'bg-blue-50 text-blue-700'
                       : 'text-gray-700 hover:bg-gray-100'
                   }`}
                   onClick={() => setSidebarOpen(false)}
@@ -175,7 +175,7 @@ const Sidebar: React.FC<SidebarProps> = ({ role }) => {
                   to={`/${role}/change-password`}
                   className={`flex items-center px-4 py-2 text-sm rounded-md ${
                     isActive(`/${role}/change-password`)
-                      ? 'bg-red-50 text-red-700'
+                      ? 'bg-blue-50 text-blue-700'
                       : 'text-gray-700 hover:bg-gray-100'
                   }`}
                   onClick={() => setSidebarOpen(false)}
@@ -187,7 +187,7 @@ const Sidebar: React.FC<SidebarProps> = ({ role }) => {
               <li>
                 <Link
                   to="/logout"
-                  className="flex items-center px-4 py-2 text-sm rounded-md text-red-600 hover:bg-red-50"
+                  className="flex items-center px-4 py-2 text-sm rounded-md text-blue-600 hover:bg-blue-50"
                   onClick={() => setSidebarOpen(false)}
                 >
                   <LogOut className="h-5 w-5 mr-3" />

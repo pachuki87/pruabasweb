@@ -86,11 +86,11 @@ function CoursesPage({ currentRole, onRoleChange }: CoursesPageProps) {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
-      <Header />
+      <Header currentRole={currentRole} onRoleChange={onRoleChange} />
       <div className="max-w-7xl mx-auto py-20 px-4 sm:px-6 lg:px-8">
         <div className="text-center">
           <h1 className="text-4xl lg:text-6xl font-bold text-white mb-8 leading-tight">
-            Cursos <span className="text-red-400">Disponibles</span>
+            Cursos <span className="text-lidera-light-blue">Disponibles</span>
           </h1>
           <p className="text-xl text-gray-300 mb-12">
             Explora nuestra amplia gama de cursos diseñados para ayudarte a tener éxito
@@ -98,7 +98,7 @@ function CoursesPage({ currentRole, onRoleChange }: CoursesPageProps) {
           {location.search && (
             <div className="mb-8 p-4 bg-gray-800 border border-gray-700 rounded-lg">
               <p className="text-lg text-gray-300">
-                Resultados de búsqueda para: <span className="font-semibold text-red-400">"{new URLSearchParams(location.search).get('search')}"</span>
+                Resultados de búsqueda para: <span className="font-semibold text-lidera-light-blue">"{new URLSearchParams(location.search).get('search')}"</span>
                 {cursosFiltrados.length === 0 && " - No se encontraron cursos"}
                 {cursosFiltrados.length > 0 && ` - ${cursosFiltrados.length} curso(s) encontrado(s)`}
               </p>

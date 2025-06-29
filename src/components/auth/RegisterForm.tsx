@@ -221,7 +221,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ role, onRegister }) => {
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
-                className="w-full pl-10 pr-4 py-2 text-gray-700 bg-gray-50 border border-gray-300 rounded-md focus:border-red-500 focus:outline-none focus:ring"
+                className="w-full pl-10 pr-4 py-2 text-gray-700 bg-gray-50 border border-gray-300 rounded-md focus:border-blue-500 focus:outline-none focus:ring"
                 placeholder="Contraseña"
                 required
               />
@@ -235,7 +235,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ role, onRegister }) => {
                   name="qualification"
                   value={formData.qualification}
                   onChange={handleChange}
-                  className="w-full pl-10 pr-4 py-2 text-gray-700 bg-gray-50 border border-gray-300 rounded-md focus:border-red-500 focus:outline-none focus:ring"
+                  className="w-full pl-10 pr-4 py-2 text-gray-700 bg-gray-50 border border-gray-300 rounded-md focus:border-blue-500 focus:outline-none focus:ring"
                   placeholder="Título"
                 />
               </div>
@@ -248,7 +248,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ role, onRegister }) => {
                 name="mobile"
                 value={formData.mobile}
                 onChange={handleChange}
-                className="w-full pl-10 pr-4 py-2 text-gray-700 bg-gray-50 border border-gray-300 rounded-md focus:border-red-500 focus:outline-none focus:ring"
+                className="w-full pl-10 pr-4 py-2 text-gray-700 bg-gray-50 border border-gray-300 rounded-md focus:border-blue-500 focus:outline-none focus:ring"
                 placeholder="Número de Móvil"
               />
             </div>
@@ -261,7 +261,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ role, onRegister }) => {
                   name="skills"
                   value={formData.skills}
                   onChange={handleChange}
-                  className="w-full pl-10 pr-4 py-2 text-gray-700 bg-gray-50 border border-gray-300 rounded-md focus:border-red-500 focus:outline-none focus:ring"
+                  className="w-full pl-10 pr-4 py-2 text-gray-700 bg-gray-50 border border-gray-300 rounded-md focus:border-blue-500 focus:outline-none focus:ring"
                   placeholder="Habilidades"
                 />
               </div>
@@ -269,7 +269,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ role, onRegister }) => {
             
             <button
               type="submit"
-              className="w-full px-4 py-2 text-white bg-red-600 rounded-md hover:bg-red-700 focus:outline-none focus:bg-red-700 transition-colors"
+              className="w-full px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:bg-blue-700 transition-colors"
               disabled={isLoading}
             >
               {isLoading ? 'Registrando...' : 'Regístrate'}
@@ -278,13 +278,13 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ role, onRegister }) => {
           
           <p className="mt-6 text-sm text-center text-gray-600">
             ¿Ya tienes una cuenta?{' '}
-            <Link to={`/login/${role}`} className="text-red-500 hover:underline">
+            <Link to={`/login/${role}`} className="text-blue-500 hover:underline">
               Iniciar Sesión
             </Link>
           </p>
         </div>
         
-        <div className="hidden md:block md:w-1/2 bg-red-50 flex items-center justify-center">
+        <div className="hidden md:block md:w-1/2 bg-blue-50 flex items-center justify-center">
           <img 
             src="https://images.pexels.com/photos/4144294/pexels-photo-4144294.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" 
             alt="Registration illustration" 

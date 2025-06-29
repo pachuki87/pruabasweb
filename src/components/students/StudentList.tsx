@@ -8,7 +8,10 @@ type Student = {
   name: string; // Ensure name is always a string
   email: string;
   joinDate: string;
-  // result is optional, so no changes needed here
+  result?: { // Add result property
+    score: number;
+    totalQuestions: number;
+  };
 };
 
 // StudentListProps remains the same
@@ -94,7 +97,7 @@ const StudentList: React.FC<StudentListProps> = ({
     content = <div className="p-6 text-center text-gray-500">Cargando estudiantes...</div>;
   } else if (errorFetching) {
     console.log('[StudentList] Rendering: Error message -', errorFetching);
-    content = <div className="p-6 text-center text-red-500">{errorFetching}</div>;
+    content = <div className="p-6 text-center text-blue-500">{errorFetching}</div>;
   } else if (filteredStudents.length === 0) {
     console.log('[StudentList] Rendering: "No se encontraron estudiantes" (Search term might be active)');
     content = <div className="p-6 text-center text-gray-500">No se encontraron estudiantes</div>;

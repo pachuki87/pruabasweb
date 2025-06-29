@@ -176,7 +176,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ role, onLogin }) => {
         </div>
         
         {error && (
-          <div className="mb-4 bg-red-50 text-red-700 p-3 rounded-md text-sm">
+          <div className="mb-4 bg-blue-50 text-blue-700 p-3 rounded-md text-sm">
             {error}
           </div>
         )}
@@ -215,21 +215,21 @@ const LoginForm: React.FC<LoginFormProps> = ({ role, onLogin }) => {
                 type="checkbox"
                 checked={rememberMe}
                 onChange={(e) => setRememberMe(e.target.checked)}
-                className="w-4 h-4 text-red-600 border-gray-300 rounded focus:ring-red-500"
+                className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
               />
               <label htmlFor="remember-me" className="block ml-2 text-sm text-gray-600">
                 Recordarme
               </label>
             </div>
             
-            <a href="#" className="text-sm text-red-500 hover:underline">
+            <a href="#" className="text-sm text-blue-500 hover:underline">
               ¿Olvidaste tu contraseña?
             </a>
           </div>
           
           <button
             type="submit"
-            className="w-full bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors"
+            className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
             disabled={isLoading}
           >
             {isLoading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
@@ -238,7 +238,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ role, onLogin }) => {
         
         <p className="mt-6 text-sm text-center text-gray-600">
           ¿No tienes una cuenta?{' '}
-          <Link to={`/register/${role}`} className="text-red-500 hover:underline">
+          <Link to={`/register/${role}`} className="text-blue-500 hover:underline">
             Regístrate
           </Link>
         </p>

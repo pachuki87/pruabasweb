@@ -94,7 +94,7 @@ const CourseCard: React.FC<CourseCardProps> = ({
   };
 
   return (
-    <div className="bg-gray-800 border border-gray-700 rounded-lg overflow-hidden shadow-xl hover:border-red-400 transition-all hover:shadow-2xl">
+    <div className="bg-gray-800 border border-gray-700 rounded-lg overflow-hidden shadow-xl hover:border-blue-400 transition-all hover:shadow-2xl">
       <div className="h-40 bg-gray-700 flex items-center justify-center overflow-hidden">
         <img 
           src={getImageUrl()} 
@@ -110,7 +110,7 @@ const CourseCard: React.FC<CourseCardProps> = ({
         
         <div className="flex items-center justify-between mt-4">
           <div className="flex items-center text-gray-300">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1 text-blue-400" viewBox="0 0 20 20" fill="currentColor">
               <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z" />
             </svg>
             <span>{enrollment} estudiante(s)</span>
@@ -128,7 +128,7 @@ const CourseCard: React.FC<CourseCardProps> = ({
                   ? 'bg-green-600 text-white'
                   : isAdding
                   ? 'bg-gray-400 text-white cursor-not-allowed'
-                  : 'bg-red-600 hover:bg-red-700 text-white'
+                  : 'bg-blue-600 hover:bg-blue-700 text-white'
               }`}
               title={inCart(id) ? 'Ya está en el carrito' : 'Agregar al carrito'}
             >
@@ -161,7 +161,7 @@ const CourseCard: React.FC<CourseCardProps> = ({
               <>
                 <button 
                   onClick={handleEdit}
-                  className="p-1 text-red-400 bg-red-900/30 rounded hover:bg-red-900/50 transition-colors"
+                  className="p-1 text-blue-400 bg-blue-900/30 rounded hover:bg-blue-900/50 transition-colors"
                   title="Edit course"
                 >
                   <Edit size={18} />
@@ -169,7 +169,7 @@ const CourseCard: React.FC<CourseCardProps> = ({
                 
                 <button 
                   onClick={handleDelete}
-                  className="p-1 text-red-400 bg-red-900/30 rounded hover:bg-red-900/50 transition-colors"
+                  className="p-1 text-blue-400 bg-blue-900/30 rounded hover:bg-blue-900/50 transition-colors"
                   title="Delete course"
                 >
                   <Trash size={18} />

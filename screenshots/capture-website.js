@@ -27,7 +27,7 @@ const __dirname = dirname(__filename);
     { name: '01-homepage', url: '/' },
     { name: '02-cursos', url: '/cursos' },
     { name: '03-formacion', url: '/formacion' },
-    { name: '04-viajes-talleres', url: '/viajes-talleres' },
+    { name: '04-viajes-talleres', url: '/viajes-y-talleres' }
     { name: '05-testimonios', url: '/testimonios' },
     { name: '06-contacto', url: '/contacto' },
     { name: '07-login', url: '/auth/login' },

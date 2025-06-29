@@ -1,0 +1,12 @@
+Original Red Colors Replaced:
+
+- Tailwind CSS class: `bg-red-600`, `text-red-600`
+  - Hex value: `#dc2626` (used for various buttons and text)
+- Tailwind CSS class: `hover:bg-red-700`, `hover:text-red-700`
+  - Hex value: `#b91c1c` (used for hover states of buttons and text)
+- Tailwind CSS class: `text-red-400`
+  - Hex value: `#f87171` (used for specific text elements like "adicciones" and statistics)
+- CSS variable: `--error-color`
+  - Hex value: `#cc0000` (original value in `src/index.css`)
+- CSS variable: `--warning-color`
+  - Hex value: `#ff6600` (original value in `src/index.css`)

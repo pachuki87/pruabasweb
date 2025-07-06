@@ -86,10 +86,12 @@ const Header: React.FC<HeaderProps> = ({ currentRole, onRoleChange }) => {
         {isMenuOpen && (
           <div className="lg:hidden absolute top-16 left-0 right-0 bg-white border-t border-gray-200">
             <nav className="px-4 py-6 space-y-4">
-              <a href="/" className="block text-gray-700 hover:text-lidera-light-blue transition-colors flex items-center space-x-2">
-                    <img src={logo2} alt="Logo" className="h-20 w-20" />
-                    <span>Inicio</span>
-                  </a>
+              <div className="flex flex-col items-center mb-4">
+                <img src={logo2} alt="Logo" className="h-20 w-20" />
+              </div>
+              <a href="/" className="block text-gray-700 hover:text-lidera-light-blue transition-colors">
+                Inicio
+              </a>
               <a href="/courses" className="block text-gray-700 hover:text-lidera-light-blue transition-colors">Cursos</a>
               <a href="#" className="block text-gray-700 hover:text-lidera-light-blue transition-colors">Formación</a>
               <a href="/viajes-y-talleres" className="block text-gray-700 hover:text-lidera-light-blue transition-colors">Viajes y Talleres</a>

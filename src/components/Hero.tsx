@@ -1,4 +1,5 @@
 import React from 'react';
+import lideraLogo from '../assets/WhatsApp Image 2025-06-30 at 18.03.49.png';
 
 const Hero = () => {
   return (
@@ -17,7 +18,7 @@ const Hero = () => {
         {/* Logo grande */}
         <div className="text-center mb-12">
           <img 
-            src="/instituto-lidera-logo.jpeg"
+            src={lideraLogo}
             alt="Instituto Lidera"
             className="h-32 w-auto mx-auto mb-4"
           />

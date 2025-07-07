@@ -20,7 +20,7 @@ const Hero = () => {
           <img 
             src={lideraLogo}
             alt="Instituto Lidera"
-            className="h-32 w-auto mx-auto mb-4"
+            className="h-64 w-auto mx-auto mb-4"
           />
         </div>
         

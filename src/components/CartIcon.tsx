@@ -20,14 +20,14 @@ const CartIcon: React.FC = () => {
       {/* Cart Icon Button */}
       <button
         onClick={toggleCart}
-        className="relative p-2 text-gray-600 hover:text-blue-600 transition-colors"
+        className="relative p-2 text-gray-600 hover:text-red-600 transition-colors"
         title="Abrir carrito"
       >
         <ShoppingCart size={24} />
         
         {/* Badge with item count */}
         {!isEmpty && (
-          <span className="absolute -top-1 -right-1 bg-blue-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center min-w-[20px]">
+          <span className="absolute -top-1 -right-1 bg-red-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center min-w-[20px]">
             {totalUniqueItems > 99 ? '99+' : totalUniqueItems}
           </span>
         )}

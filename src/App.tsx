@@ -23,14 +23,11 @@ import HomePage from './pages/HomePage';
 import LoginPage from './pages/auth/LoginPage';
 import RegisterPage from './pages/auth/RegisterPage';
 import AboutPage from './pages/AboutPage';
-import ContactPage from './pages/ContactPage'; // Import contact page
 import FaqsPage from './pages/FaqsPage';
 import CoursesPage from './pages/CoursesPage';
 import NotFoundPage from './pages/NotFoundPage';
 import MasterAdiccionesPage from './pages/MasterAdiccionesPage'; // Import the new page
 import PaymentPage from './pages/PaymentPage'; // Import the payment page
-import TestimoniosPage from './pages/TestimoniosPage'; // Import testimonios page
-import ViajesYTalleresPage from './pages/ViajesYTalleresPage'; // Import viajes y talleres page
 
 // Dashboard Pages
 import DashboardPage from './pages/dashboard/DashboardPage';
@@ -44,6 +41,7 @@ import AssignQuizPage from './pages/dashboard/AssignQuizPage';
 import StudyMaterialsPage from './pages/dashboard/StudyMaterialsPage';
 import UserProfilePage from './pages/dashboard/UserProfilePage';
 import ChangePasswordPage from './pages/dashboard/ChangePasswordPage';
+import LessonPage from './pages/courses/LessonPage';
 
 // Components
 import StudentList from './components/students/StudentList';
@@ -122,11 +120,8 @@ function App() {
           {/* Public routes */}
           <Route path="/" element={<HomePage currentRole={currentRole} onRoleChange={handleRoleChange} />} />
           <Route path="/about" element={<AboutPage currentRole={currentRole} onRoleChange={handleRoleChange} />} />
-          <Route path="/contact" element={<ContactPage currentRole={currentRole} onRoleChange={handleRoleChange} />} />
           <Route path="/faqs" element={<FaqsPage currentRole={currentRole} onRoleChange={handleRoleChange} />} />
           <Route path="/courses" element={<CoursesPage currentRole={currentRole} onRoleChange={handleRoleChange} />} />
-          <Route path="/testimonios" element={<TestimoniosPage currentRole={currentRole} onRoleChange={handleRoleChange} />} />
-          <Route path="/viajes-y-talleres" element={<ViajesYTalleresPage currentRole={currentRole} onRoleChange={handleRoleChange} />} />
           <Route path="/master-adicciones" element={<MasterAdiccionesPage />} />
           <Route path="/payment" element={<PaymentPage />} />
           
@@ -139,6 +134,7 @@ function App() {
             <Route path="dashboard" element={<DashboardPage role="student" />} />
             <Route path="courses" element={<UserCoursesPage role="student" />} />
             <Route path="courses/:id" element={<CourseDetailsPage role="student" />} />
+            <Route path="courses/:courseId/lessons/:lessonId" element={<LessonPage />} />
             <Route path="quizzes" element={<QuizzesPage role="student" />} />
             <Route path="profile" element={<UserProfilePage role="student" />} />
             <Route path="change-password" element={<ChangePasswordPage role="student" />} />
@@ -150,6 +146,7 @@ function App() {
             <Route path="courses/add" element={<AddCoursePage />} />
             <Route path="courses/edit/:id" element={<EditCoursePage />} />
             <Route path="courses/:id" element={<CourseDetailsPage role="teacher" />} />
+            <Route path="courses/:courseId/lessons/:lessonId" element={<LessonPage />} />
             <Route path="courses/:id/materials" element={<StudyMaterialsPage role="teacher" />} />
             <Route path="quizzes" element={<QuizzesPage role="teacher" />} />
             <Route path="quizzes/add" element={<AddQuizPage />} />

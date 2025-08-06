@@ -163,7 +163,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
             onClick={() => setPaymentMethod('card')}
             className={`p-3 border rounded-lg flex items-center justify-center space-x-2 transition-colors ${
               paymentMethod === 'card'
-                ? 'border-blue-500 bg-blue-50 text-blue-700'
+                ? 'border-red-500 bg-red-50 text-red-700'
                 : 'border-gray-300 hover:border-gray-400'
             }`}
           >
@@ -175,7 +175,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
             onClick={() => setPaymentMethod('bizum')}
             className={`p-3 border rounded-lg flex items-center justify-center space-x-2 transition-colors ${
               paymentMethod === 'bizum'
-                ? 'border-blue-500 bg-blue-50 text-blue-700'
+                ? 'border-red-500 bg-red-50 text-red-700'
                 : 'border-gray-300 hover:border-gray-400'
             }`}
           >
@@ -196,13 +196,13 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
                 type="text"
                 value={formData.cardholderName}
                 onChange={(e) => handleInputChange('cardholderName', e.target.value)}
-                className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-                  errors.cardholderName ? 'border-blue-500' : 'border-gray-300'
+                className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 ${
+                  errors.cardholderName ? 'border-red-500' : 'border-gray-300'
                 }`}
                 placeholder="Juan Pérez"
               />
               {errors.cardholderName && (
-                <p className="text-blue-500 text-xs mt-1">{errors.cardholderName}</p>
+                <p className="text-red-500 text-xs mt-1">{errors.cardholderName}</p>
               )}
             </div>
 
@@ -215,12 +215,12 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
                     onChange: (e) => handleInputChange('cardNumber', e.target.value)
                   })}
                   placeholder="1234 5678 9012 3456"
-                  className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-                    errors.cardNumber ? 'border-blue-500' : 'border-gray-300'
+                  className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 ${
+                    errors.cardNumber ? 'border-red-500' : 'border-gray-300'
                   }`}
                 />
               {errors.cardNumber && (
-                <p className="text-blue-500 text-xs mt-1">{errors.cardNumber}</p>
+                <p className="text-red-500 text-xs mt-1">{errors.cardNumber}</p>
               )}
             </div>
 
@@ -234,12 +234,12 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
                     onChange: (e) => handleInputChange('expiryDate', e.target.value)
                   })}
                   placeholder="MM/AA"
-                  className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-                    errors.expiryDate ? 'border-blue-500' : 'border-gray-300'
+                  className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 ${
+                    errors.expiryDate ? 'border-red-500' : 'border-gray-300'
                   }`}
                 />
                 {errors.expiryDate && (
-                  <p className="text-blue-500 text-xs mt-1">{errors.expiryDate}</p>
+                  <p className="text-red-500 text-xs mt-1">{errors.expiryDate}</p>
                 )}
               </div>
               <div>
@@ -251,12 +251,12 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
                     onChange: (e) => handleInputChange('cvc', e.target.value)
                   })}
                   placeholder="123"
-                  className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-                    errors.cvc ? 'border-blue-500' : 'border-gray-300'
+                  className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 ${
+                    errors.cvc ? 'border-red-500' : 'border-gray-300'
                   }`}
                 />
                 {errors.cvc && (
-                  <p className="text-blue-500 text-xs mt-1">{errors.cvc}</p>
+                  <p className="text-red-500 text-xs mt-1">{errors.cvc}</p>
                 )}
               </div>
             </div>
@@ -272,14 +272,14 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
               type="tel"
               value={formData.bizumPhone}
               onChange={(e) => handleInputChange('bizumPhone', e.target.value)}
-              className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-                errors.bizumPhone ? 'border-blue-500' : 'border-gray-300'
+              className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 ${
+                errors.bizumPhone ? 'border-red-500' : 'border-gray-300'
               }`}
               placeholder="612 345 678"
               maxLength={9}
             />
             {errors.bizumPhone && (
-              <p className="text-blue-500 text-xs mt-1">{errors.bizumPhone}</p>
+              <p className="text-red-500 text-xs mt-1">{errors.bizumPhone}</p>
             )}
             <p className="text-xs text-gray-500 mt-1">
               Recibirás una notificación en tu app de Bizum
@@ -291,7 +291,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
           <button
             type="submit"
             disabled={isProcessing}
-            className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white py-3 px-4 rounded-lg font-semibold transition-colors flex items-center justify-center space-x-2"
+            className="w-full bg-red-600 hover:bg-red-700 disabled:bg-gray-400 text-white py-3 px-4 rounded-lg font-semibold transition-colors flex items-center justify-center space-x-2"
           >
             {isProcessing ? (
               <>

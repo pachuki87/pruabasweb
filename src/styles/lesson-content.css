@@ -1,0 +1,245 @@
+/* Estilos para el contenido de las lecciones */
+.lesson-content {
+  /* Prevenir texto tachado */
+  text-decoration: none !important;
+  line-height: 1.7;
+  color: #374151;
+}
+
+/* Asegurar que ningún elemento tenga texto tachado */
+.lesson-content *,
+.lesson-content *::before,
+.lesson-content *::after {
+  text-decoration: none !important;
+}
+
+/* Específicamente para elementos que podrían tener strikethrough */
+.lesson-content s,
+.lesson-content strike,
+.lesson-content del {
+  text-decoration: none !important;
+  background-color: #fef3c7;
+  padding: 0 2px;
+  border-radius: 2px;
+}
+
+.lesson-content h1,
+.lesson-content h2,
+.lesson-content h3,
+.lesson-content h4,
+.lesson-content h5,
+.lesson-content h6 {
+  color: #1f2937;
+  font-weight: 600;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.lesson-content h1 {
+  font-size: 2rem;
+  border-bottom: 2px solid #e5e7eb;
+  padding-bottom: 0.5rem;
+  text-decoration: none !important;
+}
+
+.lesson-content h2 {
+  font-size: 1.5rem;
+  color: #dc2626;
+  text-decoration: none !important;
+}
+
+.lesson-content h3 {
+  font-size: 1.25rem;
+  color: #2563eb;
+  text-decoration: none !important;
+}
+
+.lesson-content p {
+  margin-bottom: 1rem;
+  text-align: justify;
+}
+
+.lesson-content ul,
+.lesson-content ol {
+  margin-bottom: 1rem;
+  padding-left: 1.5rem;
+}
+
+.lesson-content li {
+  margin-bottom: 0.5rem;
+}
+
+.lesson-content blockquote {
+  border-left: 4px solid #dc2626;
+  background-color: #fef2f2;
+  padding: 1rem;
+  margin: 1.5rem 0;
+  font-style: italic;
+}
+
+.lesson-content img {
+  max-width: 100%;
+  height: auto;
+  margin: 1.5rem auto;
+  display: block;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.lesson-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  background-color: white;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+}
+
+.lesson-content th,
+.lesson-content td {
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.lesson-content th {
+  background-color: #f9fafb;
+  font-weight: 600;
+  color: #374151;
+}
+
+.lesson-content a {
+  color: #2563eb;
+  text-decoration: underline;
+  transition: color 0.2s;
+}
+
+.lesson-content a:hover {
+  color: #1d4ed8;
+}
+
+.lesson-content code {
+  background-color: #f3f4f6;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-family: 'Courier New', monospace;
+  font-size: 0.875rem;
+}
+
+.lesson-content pre {
+  background-color: #1f2937;
+  color: #f9fafb;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+
+.lesson-content pre code {
+  background-color: transparent;
+  padding: 0;
+  color: inherit;
+}
+
+.lesson-content .highlight {
+  background-color: #fef3c7;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+}
+
+.lesson-content .note {
+  background-color: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin: 1.5rem 0;
+}
+
+.lesson-content .warning {
+  background-color: #fef3c7;
+  border: 1px solid #fbbf24;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin: 1.5rem 0;
+}
+
+.lesson-content .error {
+  background-color: #fef2f2;
+  border: 1px solid #fca5a5;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin: 1.5rem 0;
+}
+
+/* Estilos específicos para el contenido del Instituto Lidera */
+.lesson-content .instituto-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.lesson-content .instituto-logo {
+  max-width: 200px;
+  margin: 0 auto 1rem;
+}
+
+.lesson-content .lesson-title {
+  color: #dc2626;
+  font-size: 1.75rem;
+  font-weight: bold;
+  text-align: center;
+  margin: 2rem 0;
+  padding: 1rem;
+  background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+  border-radius: 0.5rem;
+  border: 2px solid #fecaca;
+}
+
+.lesson-content .section-divider {
+  border: none;
+  height: 2px;
+  background: linear-gradient(90deg, #dc2626 0%, #ef4444 50%, #dc2626 100%);
+  margin: 2rem 0;
+  border-radius: 1px;
+}
+
+.lesson-content .objectives-list {
+  background-color: #f0f9ff;
+  border-left: 4px solid #0ea5e9;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  border-radius: 0 0.5rem 0.5rem 0;
+}
+
+.lesson-content .objectives-list h3 {
+  color: #0ea5e9;
+  margin-top: 0;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .lesson-content {
+    font-size: 0.9rem;
+  }
+  
+  .lesson-content h1 {
+    font-size: 1.5rem;
+  }
+  
+  .lesson-content h2 {
+    font-size: 1.25rem;
+  }
+  
+  .lesson-content h3 {
+    font-size: 1.125rem;
+  }
+  
+  .lesson-content table {
+    font-size: 0.875rem;
+  }
+  
+  .lesson-content th,
+  .lesson-content td {
+    padding: 0.5rem;
+  }
+}

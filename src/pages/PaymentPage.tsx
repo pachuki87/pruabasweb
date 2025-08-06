@@ -87,7 +87,7 @@ const PaymentPage: React.FC = () => {
                     <div className="pt-3 border-t border-gray-300">
                       <div className="flex justify-between items-center">
                         <p className="text-lg font-semibold">Total:</p>
-                        <p className="text-lg font-bold text-blue-600">€{(cartData.total / 100).toFixed(2)}</p>
+                        <p className="text-lg font-bold text-red-600">€{(cartData.total / 100).toFixed(2)}</p>
                       </div>
                       <p className="text-sm text-gray-600">{cartData.itemCount} curso(s)</p>
                     </div>
@@ -113,7 +113,7 @@ const PaymentPage: React.FC = () => {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button
                 onClick={handleBackToHome}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
+                className="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
               >
                 Volver al Inicio
               </button>
@@ -191,7 +191,7 @@ const PaymentPage: React.FC = () => {
                   <div className="border-t pt-4">
                     <div className="flex justify-between items-center text-lg">
                       <span className="font-semibold">Total:</span>
-                      <span className="font-bold text-blue-600">€{(cartData.total / 100).toFixed(2)}</span>
+                      <span className="font-bold text-red-600">€{(cartData.total / 100).toFixed(2)}</span>
                     </div>
                   </div>
                 </>
@@ -220,7 +220,7 @@ const PaymentPage: React.FC = () => {
                   <div className="border-t pt-4">
                     <div className="flex justify-between items-center text-lg">
                       <span className="font-semibold">Total:</span>
-                      <span className="font-bold text-blue-600">€{(displayData.price / 100).toFixed(2)}</span>
+                      <span className="font-bold text-red-600">€{(displayData.price / 100).toFixed(2)}</span>
                     </div>
                   </div>
                 </>

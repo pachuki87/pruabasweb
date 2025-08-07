@@ -79,7 +79,7 @@ const LessonPage: React.FC = () => {
         const mapTitleToSlug = (titulo: string): string => {
           const titleMappings: { [key: string]: string } = {
             '¿Qué significa ser adicto?': '01_¿Qué significa ser adicto_',
-            '¿Qué es una adicción? 1 Cuestionario': '02_¿Qué es una adicción_1 Cuestionario',
+            '¿Qué es una adicción 1 Cuestionario': '02_¿Qué es una adicción_1 Cuestionario',
             'Consecuencias de las adicciones': '03_Consecuencias de las adicciones',
             'Criterios para diagnosticar una conducta adictiva según DSM 51 Cuestionario': '04_Criterios para diagnosticar una conducta adictiva según DSM 51 Cuestionario',
             'Criterios para diagnosticar una conducta adictiva (DSM-5) Cuestionario': '04_Criterios para diagnosticar una conducta adictiva según DSM 51 Cuestionario',

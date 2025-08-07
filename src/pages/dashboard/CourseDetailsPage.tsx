@@ -424,10 +424,6 @@ const CourseDetailsPage: React.FC<CourseDetailsPageProps> = ({ role }) => {
                       </div>
                       
                       {lesson.descripcion && (
-                        <p className="text-gray-600 text-sm mt-1">{lesson.descripcion}</p>
-                      )}
-                      
-                      {lesson.descripcion && (
                         <p className="text-gray-600 text-sm mt-2">{lesson.descripcion}</p>
                       )}
                     </div>

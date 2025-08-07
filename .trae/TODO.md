@@ -7,6 +7,6 @@
 - [x] 9: Cambiar botones rojos en Navbar.tsx (Regístrate e Iniciar Sesión) (priority: High)
 - [x] 5: Revisar y cambiar colores en StudyMaterialsPage.tsx (priority: Medium)
 - [x] 6: Revisar otros archivos del dashboard para elementos rojos (priority: Medium)
+- [x] 10: Subir cambios finales a GitHub (priority: Medium)
 - [x] 7: Probar los cambios en el navegador (priority: Low)
 - [x] 8: Subir cambios a GitHub (priority: Low)
-- [ ] 10: Subir cambios finales a GitHub (**IN PROGRESS**) (priority: Medium)

@@ -144,7 +144,7 @@ const AssignQuizPage: React.FC = () => {
                 
                 <button
                   onClick={handleAssignQuiz}
-                  className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition-colors"
+                  className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? 'Assigning...' : 'Assign Quiz'}

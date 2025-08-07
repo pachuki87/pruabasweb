@@ -255,8 +255,8 @@ const CourseDetailsPage: React.FC<CourseDetailsPageProps> = ({ role }) => {
               onClick={() => setActiveTab('resumen')}
               className={`px-4 py-3 text-sm font-medium ${
                 activeTab === 'resumen'
-                  ? 'border-b-2 border-red-600 text-red-600'
-                  : 'text-gray-700 hover:text-red-600'
+                  ? 'border-b-2 border-blue-600 text-blue-600'
+                  : 'text-gray-700 hover:text-blue-600'
               }`}
             >
               <BookOpen className="w-4 h-4 inline mr-1" />
@@ -266,8 +266,8 @@ const CourseDetailsPage: React.FC<CourseDetailsPageProps> = ({ role }) => {
               onClick={() => setActiveTab('chapters')}
               className={`px-4 py-3 text-sm font-medium ${
                 activeTab === 'chapters'
-                  ? 'border-b-2 border-red-600 text-red-600'
-                  : 'text-gray-700 hover:text-red-600'
+                  ? 'border-b-2 border-blue-600 text-blue-600'
+                  : 'text-gray-700 hover:text-blue-600'
               }`}
             >
               <FileText className="w-4 h-4 inline mr-1" />
@@ -277,8 +277,8 @@ const CourseDetailsPage: React.FC<CourseDetailsPageProps> = ({ role }) => {
               onClick={() => setActiveTab('quizzes')}
               className={`px-4 py-3 text-sm font-medium ${
                 activeTab === 'quizzes'
-                  ? 'border-b-2 border-red-600 text-red-600'
-                  : 'text-gray-700 hover:text-red-600'
+                  ? 'border-b-2 border-blue-600 text-blue-600'
+                  : 'text-gray-700 hover:text-blue-600'
               }`}
             >
               <FileQuestion className="w-4 h-4 inline mr-1" />
@@ -288,8 +288,8 @@ const CourseDetailsPage: React.FC<CourseDetailsPageProps> = ({ role }) => {
               onClick={() => setActiveTab('materials')}
               className={`px-4 py-3 text-sm font-medium ${
                 activeTab === 'materials'
-                  ? 'border-b-2 border-red-600 text-red-600'
-                  : 'text-gray-700 hover:text-red-600'
+                  ? 'border-b-2 border-blue-600 text-blue-600'
+                  : 'text-gray-700 hover:text-blue-600'
               }`}
             >
               <FileText className="w-4 h-4 inline mr-1" />
@@ -300,8 +300,8 @@ const CourseDetailsPage: React.FC<CourseDetailsPageProps> = ({ role }) => {
                 onClick={() => setActiveTab('manage-materials')}
                 className={`px-4 py-3 text-sm font-medium ${
                   activeTab === 'manage-materials'
-                    ? 'border-b-2 border-red-600 text-red-600'
-                    : 'text-gray-700 hover:text-red-600'
+                    ? 'border-b-2 border-blue-600 text-blue-600'
+                    : 'text-gray-700 hover:text-blue-600'
                 }`}
               >
                 <Settings className="w-4 h-4 inline mr-1" />
@@ -323,7 +323,7 @@ const CourseDetailsPage: React.FC<CourseDetailsPageProps> = ({ role }) => {
                 <div className="mb-6">
                   <button
                     onClick={() => navigate(`/${role}/courses/${courseId}/lessons/${lessons[0].id}`)}
-                    className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center font-medium"
+                    className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center font-medium max-w-full w-fit overflow-hidden text-ellipsis whitespace-nowrap"
                   >
                     <Play className="w-5 h-5 mr-2" />
                     Comenzar Curso
@@ -379,7 +379,7 @@ const CourseDetailsPage: React.FC<CourseDetailsPageProps> = ({ role }) => {
                 {role === 'teacher' && (
                   <Link
                     to={`/teacher/courses/${courseId}/chapters/add`}
-                    className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition-colors text-sm"
+                    className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors text-sm"
                   >
                     Añadir Lección
                   </Link>
@@ -415,7 +415,7 @@ const CourseDetailsPage: React.FC<CourseDetailsPageProps> = ({ role }) => {
                               <button className="text-blue-600 hover:text-blue-800 text-sm">
                                 Editar
                               </button>
-                              <button className="text-red-600 hover:text-red-800 text-sm">
+                              <button className="text-blue-600 hover:text-blue-800 text-sm">
                                 Eliminar
                               </button>
                             </>
@@ -442,7 +442,7 @@ const CourseDetailsPage: React.FC<CourseDetailsPageProps> = ({ role }) => {
                 {role === 'teacher' && (
                   <Link
                     to={`/teacher/quizzes/add`}
-                    className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition-colors text-sm"
+                    className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors text-sm"
                   >
                     Añadir Cuestionario
                   </Link>
@@ -464,7 +464,7 @@ const CourseDetailsPage: React.FC<CourseDetailsPageProps> = ({ role }) => {
                 {role === 'teacher' && (
                   <Link
                     to={`/teacher/courses/edit/${courseId}`}
-                    className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition-colors text-sm"
+                    className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors text-sm"
                   >
                     Añadir Material
                   </Link>
@@ -487,7 +487,7 @@ const CourseDetailsPage: React.FC<CourseDetailsPageProps> = ({ role }) => {
                         href={material.url} 
                         target="_blank" 
                         rel="noopener noreferrer" 
-                        className="text-red-600 hover:underline flex items-center"
+                        className="text-blue-600 hover:underline flex items-center"
                       >
                         <FileText className="w-5 h-5 mr-2" />
                         {material.name}
@@ -507,7 +507,7 @@ const CourseDetailsPage: React.FC<CourseDetailsPageProps> = ({ role }) => {
                 
                 <Link
                   to={`/teacher/courses/edit/${courseId}`}
-                  className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition-colors text-sm"
+                  className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors text-sm"
                 >
                   Añadir Material
                 </Link>
@@ -526,7 +526,7 @@ const CourseDetailsPage: React.FC<CourseDetailsPageProps> = ({ role }) => {
                   {materials.map((material, index) => (
                     <div key={index} className="border rounded-md p-4 hover:bg-gray-50 flex items-center justify-between">
                       <div className="flex items-center">
-                        <FileText className="w-5 h-5 mr-2 text-red-600" />
+                        <FileText className="w-5 h-5 mr-2 text-blue-600" />
                         <span className="font-medium">{material.name}</span>
                       </div>
                       <div className="flex items-center space-x-2">
@@ -540,7 +540,7 @@ const CourseDetailsPage: React.FC<CourseDetailsPageProps> = ({ role }) => {
                         </a>
                         <button
                           onClick={() => deleteMaterial(material.name)}
-                          className="text-red-600 hover:text-red-800 text-sm px-3 py-1 border border-red-600 rounded-md hover:bg-red-50 transition-colors flex items-center"
+                          className="text-blue-600 hover:text-blue-800 text-sm px-3 py-1 border border-blue-600 rounded-md hover:bg-blue-50 transition-colors flex items-center"
                         >
                           <Trash2 className="w-4 h-4 mr-1" />
                           Eliminar

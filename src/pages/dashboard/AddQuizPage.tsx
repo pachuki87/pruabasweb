@@ -83,7 +83,7 @@ const AddQuizPage: React.FC = () => {
           </p>
           <button
             onClick={() => navigate('/teacher/courses/add')}
-            className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition-colors"
+            className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
           >
             Create Course
           </button>

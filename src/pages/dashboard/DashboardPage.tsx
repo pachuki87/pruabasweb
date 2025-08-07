@@ -216,7 +216,7 @@ const DashboardPage: React.FC<DashboardProps> = ({ role }) => {
                 <span className="ml-auto text-gray-400">hace 2 horas</span>
               </li>
               <li className="flex items-center text-sm text-gray-600">
-                <span className="w-3 h-3 bg-red-500 rounded-full mr-3"></span>
+                <span className="w-3 h-3 bg-blue-500 rounded-full mr-3"></span>
                 <span>Agregaste un nuevo capítulo a <strong>Master en Adicciones</strong></span>
                 <span className="ml-auto text-gray-400">Ayer</span>
               </li>

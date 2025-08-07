@@ -1,7 +1,10 @@
 # TODO:
 
-- [x] 1: Localizar la posición exacta donde insertar la sección "2. ORIGEN" en el archivo contenido.html (priority: High)
-- [x] 2: Agregar la sección "2. ORIGEN" con el contenido sobre dolor emocional (priority: High)
-- [x] 3: Corregir la numeración de las secciones siguientes (2. CLASIFICACIÓN → 3. CLASIFICACIÓN, etc.) (priority: High)
-- [x] 4: Verificar que el contenido se muestre correctamente en el navegador (priority: Medium)
-- [x] 5: Confirmar que la estructura HTML sea válida y consistente (priority: Low)
+- [x] 1: Identificar todos los elementos rojos en CourseDetailsPage.tsx (tabs, botones, enlaces) (priority: High)
+- [x] 2: Cambiar colores rojos por azules en CourseDetailsPage.tsx (priority: High)
+- [x] 3: Identificar elementos rojos en UserCoursesPage.tsx (priority: High)
+- [x] 4: Cambiar colores rojos por azules en UserCoursesPage.tsx (priority: High)
+- [x] 5: Revisar y cambiar colores en StudyMaterialsPage.tsx (priority: Medium)
+- [x] 6: Revisar otros archivos del dashboard para elementos rojos (priority: Medium)
+- [x] 7: Probar los cambios en el navegador (priority: Low)
+- [ ] 8: Subir cambios a GitHub (**IN PROGRESS**) (priority: Low)

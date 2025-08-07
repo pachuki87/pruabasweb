@@ -204,7 +204,7 @@ const UserCoursesPage: React.FC<UserCoursesPageProps> = ({ role }) => {
                   <td className="px-6 py-4 whitespace-nowrap">
                     <Link
                       to={`/${role}/courses/${course.id}`}
-                      className="text-red-600 hover:text-red-800"
+                      className="text-blue-600 hover:text-blue-800"
                     >
                       {course.title}
                     </Link>
@@ -222,7 +222,7 @@ const UserCoursesPage: React.FC<UserCoursesPageProps> = ({ role }) => {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-center">
                     <button
-                      className="text-red-600 hover:text-red-800"
+                      className="text-blue-600 hover:text-blue-800"
                       onClick={() => {/* Handle chat */}}
                     >
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">

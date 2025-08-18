@@ -1,25 +1,50 @@
 import React, { useState, useEffect } from 'react';
-import { FileText, Download, ExternalLink } from 'lucide-react';
+import { FileText, Download, ExternalLink, BookOpen } from 'lucide-react';
+import { useNavigate, useParams } from 'react-router-dom';
 
 interface LessonViewerProps {
   lessonSlug: string;
   lessonTitle: string;
+  lessonContent?: string; // Contenido HTML desde la base de datos
   pdfs?: string[];
   hasQuiz?: boolean;
+  quizId?: string | null;
   onBackToCourse?: () => void;
   onNextLesson?: () => void;
   onPreviousLesson?: () => void;
 }
 
-const LessonViewer: React.FC<LessonViewerProps> = ({ 
-  lessonSlug, 
-  lessonTitle, 
-  pdfs = [], 
+const LessonViewer: React.FC<LessonViewerProps> = ({
+  lessonSlug,
+  lessonTitle,
+  lessonContent,
+  pdfs = [],
   hasQuiz = false,
+  quizId,
   onBackToCourse,
   onNextLesson,
   onPreviousLesson
 }) => {
+  const navigate = useNavigate();
+  const { courseId } = useParams<{ courseId: string }>();
+
+  const handleQuizClick = () => {
+    if (quizId && courseId) {
+      // Determinar el rol del usuario desde la URL actual
+      const currentPath = window.location.pathname;
+      const isStudent = currentPath.includes('/student/');
+      const isTeacher = currentPath.includes('/teacher/');
+      
+      if (isStudent) {
+        navigate(`/student/quizzes/attempt/${quizId}`);
+      } else if (isTeacher) {
+        navigate(`/teacher/quizzes/attempt/${quizId}`);
+      } else {
+        // Fallback para rutas sin rol específico
+        navigate(`/student/quizzes/attempt/${quizId}`);
+      }
+    }
+  };
   const [content, setContent] = useState<string>('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -59,35 +84,43 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
   }, [onBackToCourse, onNextLesson, onPreviousLesson]);
 
   useEffect(() => {
-    console.log('🔄 LessonViewer useEffect triggered - lessonSlug:', lessonSlug);
+    console.log('🔄 LessonViewer useEffect triggered - lessonContent available:', !!lessonContent);
     
     const loadContent = async () => {
-      console.log('🎬 LessonViewer - Loading content for lessonSlug:', lessonSlug);
-      if (!lessonSlug || lessonSlug.trim() === '' || lessonSlug === 'undefined') {
-        console.log('❌ No valid lessonSlug provided:', lessonSlug);
-        setLoading(false);
-        setError('No se proporcionó un identificador de lección válido');
-        return;
-      }
-      
       setLoading(true);
       setError(null);
       
       try {
-        const contentUrl = `/course-content/Módulo 1/${lessonSlug}/contenido.html`;
-        console.log('🌐 Fetching content from:', contentUrl);
-        const response = await fetch(contentUrl);
-        console.log('📡 Response status:', response.status, response.statusText);
-        
-        if (!response.ok) {
-          throw new Error(`Error ${response.status}: ${response.statusText}`);
+        if (lessonContent && lessonContent.trim()) {
+          // Usar contenido de la base de datos
+          console.log('📄 Using database content, length:', lessonContent.length);
+          const processedContent = processHtmlContent(lessonContent, lessonSlug);
+          console.log('✅ Database content processed and ready to display');
+          setContent(processedContent);
+        } else {
+          // Fallback: intentar cargar desde archivos estáticos
+          console.log('🎬 LessonViewer - Fallback to static content for lessonSlug:', lessonSlug);
+          if (!lessonSlug || lessonSlug.trim() === '' || lessonSlug === 'undefined') {
+            console.log('❌ No valid lessonSlug provided:', lessonSlug);
+            setError('No se proporcionó contenido para esta lección');
+            return;
+          }
+          
+          const contentUrl = `/course-content/Módulo 1/${lessonSlug}/contenido.html`;
+          console.log('🌐 Fetching content from:', contentUrl);
+          const response = await fetch(contentUrl);
+          console.log('📡 Response status:', response.status, response.statusText);
+          
+          if (!response.ok) {
+            throw new Error(`Error ${response.status}: ${response.statusText}`);
+          }
+          
+          const htmlContent = await response.text();
+          console.log('📄 HTML content loaded, length:', htmlContent.length);
+          const processedContent = processHtmlContent(htmlContent, lessonSlug);
+          console.log('✅ Content processed and ready to display');
+          setContent(processedContent);
         }
-        
-        const htmlContent = await response.text();
-        console.log('📄 HTML content loaded, length:', htmlContent.length);
-        const processedContent = processHtmlContent(htmlContent, lessonSlug);
-        console.log('✅ Content processed and ready to display');
-        setContent(processedContent);
       } catch (err) {
         console.error('❌ Error loading lesson content:', err);
         setError(err instanceof Error ? err.message : 'Error desconocido');
@@ -98,7 +131,7 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
     };
 
     loadContent();
-  }, [lessonSlug]);
+  }, [lessonSlug, lessonContent]);
 
   const processHtmlContent = (html: string, slug: string): string => {
     // Crear un parser DOM temporal
@@ -220,11 +253,14 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
               </button>
             ))}
             
-            {hasQuiz && (
-              <div className="inline-flex items-center px-3 py-2 bg-green-100 text-green-700 rounded-lg">
-                <ExternalLink className="w-4 h-4 mr-2" />
-                <span className="text-sm font-medium">Cuestionario disponible</span>
-              </div>
+            {hasQuiz && quizId && (
+              <button 
+                onClick={handleQuizClick}
+                className="inline-flex items-center px-3 py-2 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition-colors cursor-pointer"
+              >
+                <BookOpen className="w-4 h-4 mr-2" />
+                <span className="text-sm font-medium">Cuestionario disponible - Hacer clic para acceder</span>
+              </button>
             )}
           </div>
         )}

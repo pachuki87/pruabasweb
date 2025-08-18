@@ -24,10 +24,33 @@ interface Course {
 const LessonPage: React.FC = () => {
   const { courseId, lessonId } = useParams<{ courseId: string; lessonId: string }>();
   const navigate = useNavigate();
+
+  // Función para obtener el quiz ID asociado a una lección
+  const getQuizIdForLesson = async (lessonId: string): Promise<string | null> => {
+    try {
+      const { data, error } = await supabase
+        .from('cuestionarios')
+        .select('id')
+        .eq('leccion_id', lessonId)
+        .limit(1);
+      
+      if (error) {
+        console.log('No quiz found for lesson:', lessonId);
+        return null;
+      }
+      
+      // Retornar el primer quiz ID si existe
+      return data && data.length > 0 ? data[0].id : null;
+    } catch (err) {
+      console.error('Error fetching quiz for lesson:', err);
+      return null;
+    }
+  };
   
   const [course, setCourse] = useState<Course | null>(null);
   const [lessons, setLessons] = useState<Lesson[]>([]);
   const [currentLesson, setCurrentLesson] = useState<Lesson | null>(null);
+  const [currentQuizId, setCurrentQuizId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -110,6 +133,29 @@ const LessonPage: React.FC = () => {
           return titulo.replace(/[^a-zA-Z0-9\s]/g, '').replace(/\s+/g, '_');
         };
 
+        // Obtener información de cuestionarios para todas las lecciones
+        const { data: quizData, error: quizError } = await supabase
+          .from('cuestionarios')
+          .select('leccion_id, id')
+          .in('leccion_id', lessonsData.map(l => l.id));
+        
+        if (quizError) {
+          console.error('❌ Quiz data error:', quizError);
+        }
+        
+        console.log('📝 Quiz data loaded:', quizData);
+        
+        // Crear un mapa de lección ID a quiz ID
+        const quizMap = new Map();
+        if (quizData) {
+          quizData.forEach(quiz => {
+            if (!quizMap.has(quiz.leccion_id)) {
+              quizMap.set(quiz.leccion_id, []);
+            }
+            quizMap.get(quiz.leccion_id).push(quiz.id);
+          });
+        }
+        
         // Procesar lecciones para extraer información de PDFs y cuestionarios
         const processedLessons = lessonsData.map(lesson => {
           const generatedSlug = mapTitleToSlug(lesson.titulo);
@@ -117,7 +163,9 @@ const LessonPage: React.FC = () => {
           
           // Extraer PDFs basado en el slug generado
           const pdfs: string[] = [];
-          const hasQuiz = lesson.titulo ? lesson.titulo.includes('Cuestionario') : false;
+          const hasQuiz = quizMap.has(lesson.id) && quizMap.get(lesson.id).length > 0;
+          
+          console.log('🎯 Lesson', lesson.titulo, 'has quiz:', hasQuiz, 'quiz IDs:', quizMap.get(lesson.id));
           
           // Buscar PDFs en el directorio correspondiente basado en el slug
           if (generatedSlug.includes('Material Complementario')) {
@@ -158,10 +206,16 @@ const LessonPage: React.FC = () => {
           if (lesson) {
             console.log('✅ Found target lesson:', lesson);
             setCurrentLesson(lesson);
+            // Obtener el quiz ID para esta lección
+            const quizId = await getQuizIdForLesson(lesson.id);
+            setCurrentQuizId(quizId);
           } else {
             console.log('❌ Target lesson not found, using first lesson');
             console.log('🎯 Setting first lesson as current:', processedLessons[0]);
             setCurrentLesson(processedLessons[0]);
+            // Obtener el quiz ID para la primera lección
+            const quizId = await getQuizIdForLesson(processedLessons[0].id);
+            setCurrentQuizId(quizId);
             // Actualizar la URL para reflejar la lección actual
             const currentPath = window.location.pathname;
             const isStudent = currentPath.includes('/student/');
@@ -177,6 +231,9 @@ const LessonPage: React.FC = () => {
           console.log('📝 No specific lessonId, selecting first lesson');
           console.log('🎯 Setting first lesson as current:', processedLessons[0]);
           setCurrentLesson(processedLessons[0]);
+          // Obtener el quiz ID para la primera lección
+          const quizId = await getQuizIdForLesson(processedLessons[0].id);
+          setCurrentQuizId(quizId);
         }
 
       } catch (err) {
@@ -196,8 +253,12 @@ const LessonPage: React.FC = () => {
     }
   }, [courseId, lessonId]);
 
-  const handleLessonSelect = (lesson: Lesson) => {
+  const handleLessonSelect = async (lesson: Lesson) => {
     setCurrentLesson(lesson);
+    // Obtener el quiz ID para la nueva lección
+    const quizId = await getQuizIdForLesson(lesson.id);
+    setCurrentQuizId(quizId);
+    
     // Determinar el rol del usuario desde la URL actual
     const currentPath = window.location.pathname;
     const isStudent = currentPath.includes('/student/');
@@ -339,8 +400,10 @@ const LessonPage: React.FC = () => {
             <LessonViewer
               lessonSlug={currentLesson.slug || ''}
               lessonTitle={currentLesson.titulo}
+              lessonContent={currentLesson?.contenido_html}
               pdfs={currentLesson.pdfs}
               hasQuiz={currentLesson.tiene_cuestionario}
+              quizId={currentQuizId}
               onBackToCourse={handleBackToCourse}
               onNextLesson={handleNextLesson}
               onPreviousLesson={handlePreviousLesson}

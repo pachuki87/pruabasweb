@@ -1,0 +1,29 @@
+
+{
+  "lesson": "Criterios para diagnosticar una conducta adictiva según DSM 5",
+  "lesson_number": 4,
+  "slug": "criterios-dsm-5",
+  "expected_quiz_count": 1,
+  "quizzes": [
+    {
+      "quiz_title": "Cuestionario: Criterios DSM-5",
+      "questions": [
+        {
+          "question": "¿Cuántos criterios del DSM-5 se requieren para diagnosticar un trastorno por uso de sustancias?",
+          "type": "multiple_choice",
+          "options": [
+            "Al menos 2 criterios",
+            "Al menos 5 criterios",
+            "Todos los criterios",
+            "Solo 1 criterio"
+          ],
+          "correct": null,
+          "explanation": null,
+          "notes": "Quiz structure identified - needs manual extraction from course platform"
+        }
+      ]
+    }
+  ],
+  "extraction_status": "template_created",
+  "notes": "Template created based on course analysis. Manual extraction needed to complete quiz content."
+}

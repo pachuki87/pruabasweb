@@ -1,0 +1,24 @@
+
+{
+  "lesson": "Psicología positiva",
+  "lesson_number": 11,
+  "slug": "psicologia-positiva",
+  "expected_quiz_count": 1,
+  "quizzes": [
+    {
+      "quiz_title": "Cuestionario: Psicología Positiva",
+      "questions": [
+        {
+          "question": "Template question for Psicología Positiva",
+          "type": "multiple_choice",
+          "options": [],
+          "correct": null,
+          "explanation": null,
+          "notes": "Quiz structure identified - needs manual extraction from course platform"
+        }
+      ]
+    }
+  ],
+  "extraction_status": "template_created",
+  "notes": "Template created based on course analysis. Manual extraction needed to complete quiz content."
+}

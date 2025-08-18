@@ -1,0 +1,57 @@
+{
+  "timestamp": "2025-08-18T11:05:34.153Z",
+  "course": "MÁSTER EN ADICCIONES E INTERVENCIÓN PSICOSOCIAL",
+  "existingFolders": [
+    "1)FUNDAMENTOS P TERAPEUTICO",
+    "2) TERAPIA COGNITIVA DROGODEPENDENENCIAS",
+    "3) FAMILIA Y TRABAJO EQUIPO",
+    "4)RECOVERY COACHING",
+    "6) INTERVENCION FAMILIAR Y RECOVERY MENTORING",
+    "7) NUEVOS MODELOS TERAPEUTICOS",
+    "9) INTELIGENCIA EMOCIONAL"
+  ],
+  "validLessonNumbers": [
+    1,
+    2,
+    3,
+    4,
+    6,
+    7,
+    9
+  ],
+  "totalLessonsFound": 7,
+  "validLessonsKept": 6,
+  "lessonsDeleted": 1,
+  "deletedLessons": [
+    {
+      "orden": 5,
+      "titulo": "Intervención Familiar y Recovery Mentoring"
+    }
+  ],
+  "keptLessons": [
+    {
+      "orden": 1,
+      "titulo": "Fundamentos Proceso Terapéutico"
+    },
+    {
+      "orden": 2,
+      "titulo": "Terapia Cognitiva en Drogodependencias"
+    },
+    {
+      "orden": 3,
+      "titulo": "Familia y Trabajo en Equipo"
+    },
+    {
+      "orden": 4,
+      "titulo": "Recovery Coaching"
+    },
+    {
+      "orden": 6,
+      "titulo": "Nuevos Modelos Terapéuticos"
+    },
+    {
+      "orden": 7,
+      "titulo": "Inteligencia Emocional Aplicada"
+    }
+  ]
+}

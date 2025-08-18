@@ -42,11 +42,11 @@ import StudyMaterialsPage from './pages/dashboard/StudyMaterialsPage';
 import UserProfilePage from './pages/dashboard/UserProfilePage';
 import ChangePasswordPage from './pages/dashboard/ChangePasswordPage';
 import LessonPage from './pages/courses/LessonPage';
-
 // Components
 import StudentList from './components/students/StudentList';
 import AddStudentForm from './components/students/AddStudentForm'; // Import AddStudentForm
 import AssignCoursesToStudent from './components/students/AssignCoursesToStudent'; // Import AssignCoursesToStudent
+import QuizAttemptPage from './pages/courses/QuizAttemptPage'; // Import QuizAttemptPage
 
 // Type definitions
 type User = {
@@ -136,6 +136,7 @@ function App() {
             <Route path="courses/:id" element={<CourseDetailsPage role="student" />} />
             <Route path="courses/:courseId/lessons/:lessonId" element={<LessonPage />} />
             <Route path="quizzes" element={<QuizzesPage role="student" />} />
+            <Route path="quizzes/attempt/:quizId" element={<QuizAttemptPage />} />
             <Route path="profile" element={<UserProfilePage role="student" />} />
             <Route path="change-password" element={<ChangePasswordPage role="student" />} />
           </Route>
@@ -149,6 +150,7 @@ function App() {
             <Route path="courses/:courseId/lessons/:lessonId" element={<LessonPage />} />
             <Route path="courses/:id/materials" element={<StudyMaterialsPage role="teacher" />} />
             <Route path="quizzes" element={<QuizzesPage role="teacher" />} />
+            <Route path="quizzes/attempt/:quizId" element={<QuizAttemptPage />} />
             <Route path="quizzes/add" element={<AddQuizPage />} />
             <Route path="quizzes/assign/:id" element={<AssignQuizPage />} />
             <Route path="users" element={<StudentList />} /> {/* Added route for StudentList */}

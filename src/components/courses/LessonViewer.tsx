@@ -93,7 +93,7 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
       setError(null);
       
       try {
-        // Prioridad 1: Usar archivo HTML migrado si está disponible
+        // Prioridad 1: Usar archivo HTML migrado si está disponible y tiene contenido válido
         if (lessonFileUrl && lessonFileUrl.trim()) {
           console.log('📁 Loading content from migrated file:', lessonFileUrl);
           try {
@@ -101,11 +101,17 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
             if (response.ok) {
               const htmlContent = await response.text();
               console.log('✅ Migrated file content loaded, length:', htmlContent.length);
-              const processedContent = processHtmlContent(htmlContent, lessonSlug);
-              console.log('✅ Migrated content processed and ready to display');
-              setContent(processedContent);
-              setLoading(false);
-              return;
+              
+              // Verificar si el contenido es válido (no es placeholder)
+              if (!htmlContent.includes('Contenido pendiente de asignar')) {
+                const processedContent = processHtmlContent(htmlContent, lessonSlug);
+                console.log('✅ Migrated content processed and ready to display');
+                setContent(processedContent);
+                setLoading(false);
+                return;
+              } else {
+                console.log('⚠️ Migrated file contains placeholder content, trying fallbacks...');
+              }
             } else {
               console.log('⚠️ Failed to load migrated file, trying fallbacks...');
             }

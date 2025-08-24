@@ -5,7 +5,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 interface LessonViewerProps {
   lessonSlug: string;
   lessonTitle: string;
-  lessonContent?: string; // Contenido HTML desde la base de datos
+  lessonContent?: string; // Contenido HTML desde la base de datos (legacy)
+  lessonFileUrl?: string; // URL del archivo HTML migrado
   pdfs?: string[];
   hasQuiz?: boolean;
   quizId?: string | null;
@@ -18,9 +19,10 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
   lessonSlug,
   lessonTitle,
   lessonContent,
+  lessonFileUrl,
   pdfs = [],
   hasQuiz = false,
-  quizId,
+  quizId = null,
   onBackToCourse,
   onNextLesson,
   onPreviousLesson
@@ -91,14 +93,35 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
       setError(null);
       
       try {
+        // Prioridad 1: Usar archivo HTML migrado si está disponible
+        if (lessonFileUrl && lessonFileUrl.trim()) {
+          console.log('📁 Loading content from migrated file:', lessonFileUrl);
+          try {
+            const response = await fetch(lessonFileUrl);
+            if (response.ok) {
+              const htmlContent = await response.text();
+              console.log('✅ Migrated file content loaded, length:', htmlContent.length);
+              const processedContent = processHtmlContent(htmlContent, lessonSlug);
+              console.log('✅ Migrated content processed and ready to display');
+              setContent(processedContent);
+              setLoading(false);
+              return;
+            } else {
+              console.log('⚠️ Failed to load migrated file, trying fallbacks...');
+            }
+          } catch (fetchError) {
+            console.log('⚠️ Error loading migrated file:', fetchError, 'trying fallbacks...');
+          }
+        }
+        
+        // Prioridad 2: Usar contenido de la base de datos (legacy)
         if (lessonContent && lessonContent.trim()) {
-          // Usar contenido de la base de datos
-          console.log('📄 Using database content, length:', lessonContent.length);
+          console.log('📄 Using legacy database content, length:', lessonContent.length);
           const processedContent = processHtmlContent(lessonContent, lessonSlug);
-          console.log('✅ Database content processed and ready to display');
+          console.log('✅ Legacy database content processed and ready to display');
           setContent(processedContent);
         } else {
-          // Fallback: intentar cargar desde archivos estáticos
+          // Prioridad 3: Fallback a archivos estáticos
           console.log('🎬 LessonViewer - Fallback to static content for lessonSlug:', lessonSlug);
           if (!lessonSlug || lessonSlug.trim() === '' || lessonSlug === 'undefined') {
             console.log('❌ No valid lessonSlug provided:', lessonSlug);
@@ -131,7 +154,7 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
     };
 
     loadContent();
-  }, [lessonSlug, lessonContent]);
+  }, [lessonSlug, lessonContent, lessonFileUrl]);
 
   const processHtmlContent = (html: string, slug: string): string => {
     // Crear un parser DOM temporal

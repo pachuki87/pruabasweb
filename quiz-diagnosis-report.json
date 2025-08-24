@@ -1,0 +1,551 @@
+{
+  "timestamp": "2025-08-24T20:27:19.671Z",
+  "course_info": {
+    "id": "d7c3e503-ed61-4d7a-9e5f-aedc407d4836",
+    "titulo": "Experto en Conductas Adictivas",
+    "descripcion": "Curso completo sobre el tratamiento y comprensión de las conductas adictivas. Incluye fundamentos teóricos, criterios diagnósticos según DSM-5, terapias psicológicas innovadoras, mindfulness aplicado, terapia integral de pareja, psicología positiva y manejo de recaídas. Dirigido a profesionales de la salud mental que deseen especializarse en el campo de las adicciones.",
+    "profesor_id": null,
+    "creado_en": "2025-08-06T12:06:50.346362+00:00",
+    "imagen_url": "https://institutolidera.com/wp-content/uploads/2022/10/que-es-adiccion.jpg"
+  },
+  "lessons": [
+    {
+      "id": "172b9f29-17dd-4c7f-8a98-8c3989e296d8",
+      "curso_id": "d7c3e503-ed61-4d7a-9e5f-aedc407d4836",
+      "titulo": "¿Qué significa ser adicto",
+      "descripcion": "Experto en Conductas Adictivas ¿Qué significa ser adicto? En Progreso 1. DEFINICIÓN DE SER ADICTO: Se puede definir como aquel comportamiento de búsqueda, obtención y consumo de drogas o realización de la conducta problema (juego, sexo, compras, móvil…) en la que esta cobra más protagonismo que otras situaciones que anteriormente eran importantes para la persona, haciendo que estas pasen a un segundo plano o le parezcan innecesarias. 2. ORIGEN TODA CONDUCTA ADICTIVA SE ORIGINA POR UN DOLOR EMOCI...",
+      "contenido_html": null,
+      "orden": 1,
+      "duracion_estimada": 5,
+      "imagen_url": "https://institutolidera.com/wp-content/uploads/2022/10/bandera-espana.png",
+      "video_url": null,
+      "tiene_cuestionario": false,
+      "creado_en": "2025-08-06T12:09:36.307417+00:00",
+      "actualizado_en": "2025-08-06T12:09:36.307417+00:00",
+      "leccion_anterior_id": null,
+      "leccion_siguiente_id": "d0bc75a7-463a-49ce-8191-5836fe75664c",
+      "archivo_url": "/test-url"
+    },
+    {
+      "id": "d0bc75a7-463a-49ce-8191-5836fe75664c",
+      "curso_id": "d7c3e503-ed61-4d7a-9e5f-aedc407d4836",
+      "titulo": "¿Qué es una adicción 1 Cuestionario",
+      "descripcion": "Experto en Conductas Adictivas ¿Qué es una adicción? En Progreso 1. DEFINICIÓN DE ADICCIÓN: Patrón de conducta persistente caracterizada por un deseo o necesidad de continuar la actividad que se sitúa fuera de control voluntario con una tendencia a incrementar la frecuencia o cantidad de actividad con el paso del tiempo, dependencia psicológica de algún elemento. 2. CLASIFICACIÓN QUÍMICA CONDUCTA ADICTIVA POR CONSUMO DE UNA SUSTANCIA QUÍMICA. Ejemplo: Cannabis, cocaína, anfetamina... COMPORTAMEN...",
+      "contenido_html": null,
+      "orden": 2,
+      "duracion_estimada": 5,
+      "imagen_url": "https://institutolidera.com/wp-content/uploads/2022/10/bandera-espana.png",
+      "video_url": null,
+      "tiene_cuestionario": false,
+      "creado_en": "2025-08-06T12:09:36.397362+00:00",
+      "actualizado_en": "2025-08-06T12:09:36.397362+00:00",
+      "leccion_anterior_id": "172b9f29-17dd-4c7f-8a98-8c3989e296d8",
+      "leccion_siguiente_id": "5e51f668-67b6-4ae6-b127-4ddfd2b72d92",
+      "archivo_url": "/lessons/leccion-2-qu-es-una-adiccin-1-cuestionario.html"
+    },
+    {
+      "id": "5e51f668-67b6-4ae6-b127-4ddfd2b72d92",
+      "curso_id": "d7c3e503-ed61-4d7a-9e5f-aedc407d4836",
+      "titulo": "Consecuencias de las adicciones",
+      "descripcion": "Experto en Conductas Adictivas Consecuencias de las adicciones En Progreso 1. CONSECUENCIAS FÍSICAS Enfermedades pulmonares Enfermedades cardiacas Cáncer Problemas dentales Riesgo de contraer infecciones Sudoración Temblores Ojeras Nerviosismo Impaciencia… 2. CONSECUENCIAS CEREBRALES La adicción es considerada una enfermedad cerebral puesto que las drogas cambian el cerebro modificando su estructura y funcionamiento. Estos cambios son los responsables de los comportamientos peligrosos que se obs...",
+      "contenido_html": null,
+      "orden": 3,
+      "duracion_estimada": 5,
+      "imagen_url": "https://institutolidera.com/wp-content/uploads/2022/10/bandera-espana.png",
+      "video_url": null,
+      "tiene_cuestionario": false,
+      "creado_en": "2025-08-06T12:09:36.484006+00:00",
+      "actualizado_en": "2025-08-06T12:09:36.484006+00:00",
+      "leccion_anterior_id": "d0bc75a7-463a-49ce-8191-5836fe75664c",
+      "leccion_siguiente_id": "f40519ef-c569-4dd9-874b-df9a9b7cad26",
+      "archivo_url": "/lessons/leccion-3-consecuencias-de-las-adicciones.html"
+    },
+    {
+      "id": "f40519ef-c569-4dd9-874b-df9a9b7cad26",
+      "curso_id": "d7c3e503-ed61-4d7a-9e5f-aedc407d4836",
+      "titulo": "Criterios para diagnosticar una conducta adictiva según DSM 51 Cuestionario",
+      "descripcion": "Experto en Conductas Adictivas Criterios para diagnosticar una conducta adictiva según DSM 5 En Progreso 1.CRITERIOS DE DIAGNÓSTICOS CRITERIOS UTILIZADOS POR EL DSM-5 PARA DIAGNOSTICAR EL TRASTORNO POR USO DE SUSTANCIAS: El individuo consume la sustancia en cantidades mayores o durante un periodo de tiempo más largo del que había previsto inicialmente. El individuo expresa un deseo persistente de reducir o regular el uso de sustancias y puede informar de múltiples esfuerzos infructuosos para dis...",
+      "contenido_html": null,
+      "orden": 4,
+      "duracion_estimada": 5,
+      "imagen_url": "https://institutolidera.com/wp-content/uploads/2022/10/bandera-espana.png",
+      "video_url": null,
+      "tiene_cuestionario": true,
+      "creado_en": "2025-08-06T12:09:36.562726+00:00",
+      "actualizado_en": "2025-08-06T12:09:36.562726+00:00",
+      "leccion_anterior_id": "5e51f668-67b6-4ae6-b127-4ddfd2b72d92",
+      "leccion_siguiente_id": "64e1b69a-795b-4cf0-b2ce-4b4a416c2ede",
+      "archivo_url": "/lessons/leccion-4-criterios-para-diagnosticar-una-conducta-adictiva-.html"
+    },
+    {
+      "id": "64e1b69a-795b-4cf0-b2ce-4b4a416c2ede",
+      "curso_id": "d7c3e503-ed61-4d7a-9e5f-aedc407d4836",
+      "titulo": "Material Complementario y Ejercicios2 Cuestionarios",
+      "descripcion": "Experto en Conductas Adictivas Material Complementario y Ejercicios En Progreso Material complementario En los siguientes vídeos puedes encontrar un resumen muy breve de lo leído anteriormente. En los siguientes enlaces puedes encontrar material de lectura. Clasificación de sustancias Fundamentos básicos de la conducta adictiva Informe europeo sobre drogas Programa Ibiza Contenido de la Lección Elige una droga para añadir Experiencia con la adicción Anterior Lección Volver al Curso Siguiente Lec...",
+      "contenido_html": null,
+      "orden": 5,
+      "duracion_estimada": 5,
+      "imagen_url": "https://institutolidera.com/wp-content/uploads/2022/10/bandera-espana.png",
+      "video_url": null,
+      "tiene_cuestionario": true,
+      "creado_en": "2025-08-06T12:09:36.868109+00:00",
+      "actualizado_en": "2025-08-06T12:09:36.868109+00:00",
+      "leccion_anterior_id": "f40519ef-c569-4dd9-874b-df9a9b7cad26",
+      "leccion_siguiente_id": "ba9f3851-65a0-4dc2-91ab-02fadd60e4a3",
+      "archivo_url": "/lessons/leccion-5-material-complementario-y-ejercicios2-cuestionario.html"
+    },
+    {
+      "id": "ba9f3851-65a0-4dc2-91ab-02fadd60e4a3",
+      "curso_id": "d7c3e503-ed61-4d7a-9e5f-aedc407d4836",
+      "titulo": "Adicciones Comportamentales2 Cuestionarios",
+      "descripcion": "Experto en Conductas Adictivas Adicciones Comportamentales En Progreso ADICCIÓN A LAS TIC: TECNOLOGÍA DE LA INFORMACIÓN Y LA COMUNICACIÓN Internet, móviles y videojuegos ocupan un espacio importante en el proceso de socialización, influyendo en comportamientos y actitudes; en consecuencia, están emergiendo un nuevo tipo de desadaptaciones conductuales producto de la generalización de las Tecnologías. Los personas jóvenes han encontrado en estas tecnologías un medio extraordinario de relación, co...",
+      "contenido_html": null,
+      "orden": 6,
+      "duracion_estimada": 11,
+      "imagen_url": "https://institutolidera.com/wp-content/uploads/2022/10/adicciones-juego-grafico.jpg",
+      "video_url": null,
+      "tiene_cuestionario": true,
+      "creado_en": "2025-08-06T12:09:37.267658+00:00",
+      "actualizado_en": "2025-08-06T12:09:37.267658+00:00",
+      "leccion_anterior_id": "64e1b69a-795b-4cf0-b2ce-4b4a416c2ede",
+      "leccion_siguiente_id": "730130ed-e1ea-4a84-a13f-c84b285b7c9f",
+      "archivo_url": "/lessons/leccion-6-adicciones-comportamentales2-cuestionarios.html"
+    },
+    {
+      "id": "730130ed-e1ea-4a84-a13f-c84b285b7c9f",
+      "curso_id": "d7c3e503-ed61-4d7a-9e5f-aedc407d4836",
+      "titulo": "La familia",
+      "descripcion": "Experto en Conductas Adictivas La familia En Progreso LA FAMILIA El apoyo de la familia puede ser fundamental para el tratamiento de una persona adicta. Pero la familia también tiene trabajo y cambios que hacer. Puede llegar el momento en el que la familia se convierta en co-adicto, esto significa que el o los familiares también reajustan su conducta involuntariamente, perdiendo sus principios y haciendo cosas que nunca se les hubiese pasado por la cabeza como, por ejemplo: Ocultar actitudes y/o...",
+      "contenido_html": null,
+      "orden": 7,
+      "duracion_estimada": 7,
+      "imagen_url": "https://institutolidera.com/wp-content/uploads/2022/10/bandera-espana.png",
+      "video_url": null,
+      "tiene_cuestionario": false,
+      "creado_en": "2025-08-06T12:09:37.344087+00:00",
+      "actualizado_en": "2025-08-06T12:09:37.344087+00:00",
+      "leccion_anterior_id": "ba9f3851-65a0-4dc2-91ab-02fadd60e4a3",
+      "leccion_siguiente_id": "53d25a2f-8f39-44c5-ba5e-ebd46e2a3a21",
+      "archivo_url": "/lessons/leccion-7-la-familia.html"
+    },
+    {
+      "id": "53d25a2f-8f39-44c5-ba5e-ebd46e2a3a21",
+      "curso_id": "d7c3e503-ed61-4d7a-9e5f-aedc407d4836",
+      "titulo": "La recaída",
+      "descripcion": "Experto en Conductas Adictivas La recaída En Progreso LA RECAÍDA La superación a la adicción supone dejar de consumir una droga en caso de que la adicción sea a una sustancia o dejar/reducir/modificar en el caso de que la adicción sea comportamental. La persona adicta pasa por diferentes etapas antes de tomar la decisión de dejarlo. El proceso podría ser el siguiente: PRIMERO: No hay pensamientos serios de cambio. SEGUNDO: Hay un pensamiento serio de cambio. TERCERO: Te preparas para cambiar. CU...",
+      "contenido_html": null,
+      "orden": 8,
+      "duracion_estimada": 5,
+      "imagen_url": "https://institutolidera.com/wp-content/uploads/2022/10/bandera-espana.png",
+      "video_url": null,
+      "tiene_cuestionario": false,
+      "creado_en": "2025-08-06T12:09:37.426496+00:00",
+      "actualizado_en": "2025-08-06T12:09:37.426496+00:00",
+      "leccion_anterior_id": "730130ed-e1ea-4a84-a13f-c84b285b7c9f",
+      "leccion_siguiente_id": "50a45273-f086-4ad7-8290-7ba44a518b4d",
+      "archivo_url": "/lessons/leccion-8-la-recada.html"
+    },
+    {
+      "id": "50a45273-f086-4ad7-8290-7ba44a518b4d",
+      "curso_id": "d7c3e503-ed61-4d7a-9e5f-aedc407d4836",
+      "titulo": "Nuevas terapias psicológicas",
+      "descripcion": "Experto en Conductas Adictivas Nuevas terapias psicológicas En Progreso PROCESO DE LA TERAPIA DE CONDUCTA A LA TERCERA OLA DE TERAPIAS DE CONDUCTA O TERAPIAS DE TERCERA GENERACIÓN Desde sus orígenes, a lo largo de su historia y aún en la actualidad, la denominada Terapia de Conducta se ha caracterizado por realizar una aproximación monista, directa, objetiva y racional al estudio del comportamiento humano. Una de las características que mejor define a esta aproximación es el hecho de estar intrí...",
+      "contenido_html": null,
+      "orden": 9,
+      "duracion_estimada": 20,
+      "imagen_url": "https://institutolidera.com/wp-content/uploads/2022/10/bandera-espana.png",
+      "video_url": null,
+      "tiene_cuestionario": false,
+      "creado_en": "2025-08-06T12:09:37.507273+00:00",
+      "actualizado_en": "2025-08-06T12:09:37.507273+00:00",
+      "leccion_anterior_id": "53d25a2f-8f39-44c5-ba5e-ebd46e2a3a21",
+      "leccion_siguiente_id": "9d91427d-0ab8-45d5-b761-684d3497e2a3",
+      "archivo_url": "/lessons/leccion-9-nuevas-terapias-psicolgicas.html"
+    },
+    {
+      "id": "9d91427d-0ab8-45d5-b761-684d3497e2a3",
+      "curso_id": "d7c3e503-ed61-4d7a-9e5f-aedc407d4836",
+      "titulo": "Terapia integral de pareja1 Cuestionario",
+      "descripcion": "Experto en Conductas Adictivas Terapia integral de pareja En Progreso TERAPIA INTEGRAL DE PAREJA (TIP) En el siguiente enlace podrás descargar un texto de Rafael Morón Gaspar sobre la terapia integral de pareja, que se engloba dentro de las terapias de tercera generación. Texto TIP Contenido de la Lección Terapia de tercera generación/Terapia integral de pareja Anterior Lección Volver al Curso Siguiente Lección...",
+      "contenido_html": null,
+      "orden": 10,
+      "duracion_estimada": 5,
+      "imagen_url": "https://institutolidera.com/wp-content/uploads/2022/10/bandera-espana.png",
+      "video_url": null,
+      "tiene_cuestionario": true,
+      "creado_en": "2025-08-06T12:09:37.579774+00:00",
+      "actualizado_en": "2025-08-06T12:09:37.579774+00:00",
+      "leccion_anterior_id": "50a45273-f086-4ad7-8290-7ba44a518b4d",
+      "leccion_siguiente_id": "d3b2fd97-3f62-4825-99f4-e8e56eaaf08e",
+      "archivo_url": "/lessons/leccion-10-terapia-integral-de-pareja1-cuestionario.html"
+    },
+    {
+      "id": "d3b2fd97-3f62-4825-99f4-e8e56eaaf08e",
+      "curso_id": "d7c3e503-ed61-4d7a-9e5f-aedc407d4836",
+      "titulo": "Psicología positiva1 Cuestionario",
+      "descripcion": "Experto en Conductas Adictivas Psicología positiva En Progreso PSICOLOGÍA POSITIVA La Psicología positiva es un movimiento que estudia aquello que es bueno en la vida y por lo que merece la pena ser vivida. No es la antítesis de una psicología “negativa” y no está ciega al dolor y la adversidad. En las situaciones difíciles emergen algunas de nuestras mejores fortalezas y es donde los mecanismos saludables de resistencia se ponen de manifiesto. Este proceso de transformación positiva, es fundame...",
+      "contenido_html": null,
+      "orden": 11,
+      "duracion_estimada": 5,
+      "imagen_url": "https://institutolidera.com/wp-content/uploads/2022/10/bandera-espana.png",
+      "video_url": null,
+      "tiene_cuestionario": true,
+      "creado_en": "2025-08-06T12:09:37.72905+00:00",
+      "actualizado_en": "2025-08-06T12:09:37.72905+00:00",
+      "leccion_anterior_id": "9d91427d-0ab8-45d5-b761-684d3497e2a3",
+      "leccion_siguiente_id": "1cf3848f-f965-4a1e-9810-955e082472fb",
+      "archivo_url": "/lessons/leccion-11-psicologa-positiva1-cuestionario.html"
+    },
+    {
+      "id": "1cf3848f-f965-4a1e-9810-955e082472fb",
+      "curso_id": "d7c3e503-ed61-4d7a-9e5f-aedc407d4836",
+      "titulo": "Mindfulness aplicado a la Conducta Adictiva1 Cuestionario",
+      "descripcion": "Experto en Conductas Adictivas Mindfulness aplicado a la Conducta Adictiva En Progreso ¿QUÉ ES MINDFULNESS? El término Mindfulness se puede traducir como “conciencia plena” o “atención plena”, es decir, Mindfulness es la experiencia de llevar la propia atención a las experiencias que se están experimentando en el momento presente, aceptándolas sin juzgar. La vida cotidiana nos demuestra que nuestra mente y nuestro cuerpo pueden disociarse, que la mente puede vagar, que podemos no tener concienci...",
+      "contenido_html": null,
+      "orden": 12,
+      "duracion_estimada": 9,
+      "imagen_url": "https://institutolidera.com/wp-content/uploads/2022/10/bandera-espana.png",
+      "video_url": null,
+      "tiene_cuestionario": true,
+      "creado_en": "2025-08-06T12:09:37.972483+00:00",
+      "actualizado_en": "2025-08-06T12:09:37.972483+00:00",
+      "leccion_anterior_id": "d3b2fd97-3f62-4825-99f4-e8e56eaaf08e",
+      "leccion_siguiente_id": null,
+      "archivo_url": "/lessons/leccion-12-mindfulness-aplicado-a-la-conducta-adictiva1-cuest.html"
+    }
+  ],
+  "questionnaires": [
+    {
+      "id": "eab3cbb6-2699-4887-9026-f5c38e2a6534",
+      "titulo": "Cuestionario: Criterios diagnósticos DSM-5",
+      "curso_id": "d7c3e503-ed61-4d7a-9e5f-aedc407d4836",
+      "creado_en": "2025-08-17T18:22:35.309254+00:00",
+      "leccion_id": "f40519ef-c569-4dd9-874b-df9a9b7cad26"
+    },
+    {
+      "id": "3b94f1a2-6074-4110-9b88-e449c5bf43f4",
+      "titulo": "Cuestionario: Adicciones sin sustancias",
+      "curso_id": "d7c3e503-ed61-4d7a-9e5f-aedc407d4836",
+      "creado_en": "2025-08-17T18:22:36.064374+00:00",
+      "leccion_id": "ba9f3851-65a0-4dc2-91ab-02fadd60e4a3"
+    },
+    {
+      "id": "e254f246-bd7f-4703-a0d1-516001c215b0",
+      "titulo": "Cuestionario: Terapia de pareja en adicciones",
+      "curso_id": "d7c3e503-ed61-4d7a-9e5f-aedc407d4836",
+      "creado_en": "2025-08-17T18:22:36.716532+00:00",
+      "leccion_id": "9d91427d-0ab8-45d5-b761-684d3497e2a3"
+    },
+    {
+      "id": "613e9e5c-0900-4bc4-a0f4-b4952673b2f1",
+      "titulo": "Cuestionario: Enfoque de psicología positiva",
+      "curso_id": "d7c3e503-ed61-4d7a-9e5f-aedc407d4836",
+      "creado_en": "2025-08-17T18:22:37.10215+00:00",
+      "leccion_id": "d3b2fd97-3f62-4825-99f4-e8e56eaaf08e"
+    },
+    {
+      "id": "1fc56403-995c-41bd-9e54-efc9402a3049",
+      "titulo": "Cuestionario: Mindfulness en adicciones",
+      "curso_id": "d7c3e503-ed61-4d7a-9e5f-aedc407d4836",
+      "creado_en": "2025-08-17T18:22:37.452851+00:00",
+      "leccion_id": "1cf3848f-f965-4a1e-9810-955e082472fb"
+    },
+    {
+      "id": "fd2601d9-21bd-4f07-8b63-c41248616a41",
+      "titulo": "Cuestionario: Criterios diagnósticos DSM-5",
+      "curso_id": "d7c3e503-ed61-4d7a-9e5f-aedc407d4836",
+      "creado_en": "2025-08-17T18:23:31.592555+00:00",
+      "leccion_id": "f40519ef-c569-4dd9-874b-df9a9b7cad26"
+    },
+    {
+      "id": "9c846fb2-a0fa-4f3b-a8a7-000b8d9d33a7",
+      "titulo": "Cuestionario: Adicciones sin sustancias",
+      "curso_id": "d7c3e503-ed61-4d7a-9e5f-aedc407d4836",
+      "creado_en": "2025-08-17T18:23:32.002748+00:00",
+      "leccion_id": "ba9f3851-65a0-4dc2-91ab-02fadd60e4a3"
+    },
+    {
+      "id": "e74cf4f4-e87b-4a76-8ff5-7211b2c5f078",
+      "titulo": "Cuestionario: Terapia de pareja en adicciones",
+      "curso_id": "d7c3e503-ed61-4d7a-9e5f-aedc407d4836",
+      "creado_en": "2025-08-17T18:23:32.302865+00:00",
+      "leccion_id": "9d91427d-0ab8-45d5-b761-684d3497e2a3"
+    },
+    {
+      "id": "ac2849d7-e9f6-4e5b-a874-795a5f2392ca",
+      "titulo": "Cuestionario: Enfoque de psicología positiva",
+      "curso_id": "d7c3e503-ed61-4d7a-9e5f-aedc407d4836",
+      "creado_en": "2025-08-17T18:23:32.539419+00:00",
+      "leccion_id": "d3b2fd97-3f62-4825-99f4-e8e56eaaf08e"
+    },
+    {
+      "id": "6e6ae64a-830c-40c2-bbc3-6205628d58b4",
+      "titulo": "Cuestionario: Mindfulness en adicciones",
+      "curso_id": "d7c3e503-ed61-4d7a-9e5f-aedc407d4836",
+      "creado_en": "2025-08-17T18:23:32.765514+00:00",
+      "leccion_id": "1cf3848f-f965-4a1e-9810-955e082472fb"
+    },
+    {
+      "id": "5ee13079-2e2f-47f4-9902-d4f5fad79692",
+      "titulo": "Cuestionario: Criterios diagnósticos DSM-5",
+      "curso_id": "d7c3e503-ed61-4d7a-9e5f-aedc407d4836",
+      "creado_en": "2025-08-17T18:23:49.911019+00:00",
+      "leccion_id": "f40519ef-c569-4dd9-874b-df9a9b7cad26"
+    },
+    {
+      "id": "efa1b4b4-cce9-42fd-a0c9-ff780de70ba0",
+      "titulo": "Cuestionario: Adicciones sin sustancias",
+      "curso_id": "d7c3e503-ed61-4d7a-9e5f-aedc407d4836",
+      "creado_en": "2025-08-17T18:23:50.910623+00:00",
+      "leccion_id": "ba9f3851-65a0-4dc2-91ab-02fadd60e4a3"
+    },
+    {
+      "id": "3e0d30c9-52e0-4a6d-b201-744b76c065b5",
+      "titulo": "Cuestionario: Terapia de pareja en adicciones",
+      "curso_id": "d7c3e503-ed61-4d7a-9e5f-aedc407d4836",
+      "creado_en": "2025-08-17T18:23:51.816275+00:00",
+      "leccion_id": "9d91427d-0ab8-45d5-b761-684d3497e2a3"
+    },
+    {
+      "id": "56e3143d-b800-4787-926b-afa8ab809dfa",
+      "titulo": "Cuestionario: Enfoque de psicología positiva",
+      "curso_id": "d7c3e503-ed61-4d7a-9e5f-aedc407d4836",
+      "creado_en": "2025-08-17T18:23:52.326783+00:00",
+      "leccion_id": "d3b2fd97-3f62-4825-99f4-e8e56eaaf08e"
+    },
+    {
+      "id": "dd94b42c-6374-4952-99f6-1572b5c7f3b7",
+      "titulo": "Cuestionario: Mindfulness en adicciones",
+      "curso_id": "d7c3e503-ed61-4d7a-9e5f-aedc407d4836",
+      "creado_en": "2025-08-17T18:23:52.837505+00:00",
+      "leccion_id": "1cf3848f-f965-4a1e-9810-955e082472fb"
+    },
+    {
+      "id": "e69debc2-cc97-49fb-a377-270a01db36da",
+      "titulo": "Cuestionario: Criterios diagnósticos DSM-5",
+      "curso_id": "d7c3e503-ed61-4d7a-9e5f-aedc407d4836",
+      "creado_en": "2025-08-24T20:16:25.781839+00:00",
+      "leccion_id": "f40519ef-c569-4dd9-874b-df9a9b7cad26"
+    },
+    {
+      "id": "1e6365cd-a7e5-414d-a7f5-796cd796e839",
+      "titulo": "Cuestionario: Adicciones sin sustancias",
+      "curso_id": "d7c3e503-ed61-4d7a-9e5f-aedc407d4836",
+      "creado_en": "2025-08-24T20:16:27.627716+00:00",
+      "leccion_id": "ba9f3851-65a0-4dc2-91ab-02fadd60e4a3"
+    },
+    {
+      "id": "3f80187b-0a2b-47de-88c4-861e48227780",
+      "titulo": "Cuestionario: Terapia de pareja en adicciones",
+      "curso_id": "d7c3e503-ed61-4d7a-9e5f-aedc407d4836",
+      "creado_en": "2025-08-24T20:16:29.230115+00:00",
+      "leccion_id": "9d91427d-0ab8-45d5-b761-684d3497e2a3"
+    },
+    {
+      "id": "bf2cdf41-87ca-49e0-b678-8fab354bbec3",
+      "titulo": "Cuestionario: Enfoque de psicología positiva",
+      "curso_id": "d7c3e503-ed61-4d7a-9e5f-aedc407d4836",
+      "creado_en": "2025-08-24T20:16:29.982578+00:00",
+      "leccion_id": "d3b2fd97-3f62-4825-99f4-e8e56eaaf08e"
+    },
+    {
+      "id": "47e06f3c-cf1a-4e49-9920-5bef14e87ed0",
+      "titulo": "Cuestionario: Mindfulness en adicciones",
+      "curso_id": "d7c3e503-ed61-4d7a-9e5f-aedc407d4836",
+      "creado_en": "2025-08-24T20:16:30.558295+00:00",
+      "leccion_id": "1cf3848f-f965-4a1e-9810-955e082472fb"
+    }
+  ],
+  "associations": [
+    {
+      "lesson_id": "172b9f29-17dd-4c7f-8a98-8c3989e296d8",
+      "lesson_title": "¿Qué significa ser adicto",
+      "lesson_order": 1,
+      "associated_quizzes": []
+    },
+    {
+      "lesson_id": "d0bc75a7-463a-49ce-8191-5836fe75664c",
+      "lesson_title": "¿Qué es una adicción 1 Cuestionario",
+      "lesson_order": 2,
+      "associated_quizzes": []
+    },
+    {
+      "lesson_id": "5e51f668-67b6-4ae6-b127-4ddfd2b72d92",
+      "lesson_title": "Consecuencias de las adicciones",
+      "lesson_order": 3,
+      "associated_quizzes": []
+    },
+    {
+      "lesson_id": "f40519ef-c569-4dd9-874b-df9a9b7cad26",
+      "lesson_title": "Criterios para diagnosticar una conducta adictiva según DSM 51 Cuestionario",
+      "lesson_order": 4,
+      "associated_quizzes": [
+        {
+          "id": "eab3cbb6-2699-4887-9026-f5c38e2a6534",
+          "titulo": "Cuestionario: Criterios diagnósticos DSM-5",
+          "created_at": "2025-08-17T18:22:35.309254+00:00"
+        },
+        {
+          "id": "fd2601d9-21bd-4f07-8b63-c41248616a41",
+          "titulo": "Cuestionario: Criterios diagnósticos DSM-5",
+          "created_at": "2025-08-17T18:23:31.592555+00:00"
+        },
+        {
+          "id": "5ee13079-2e2f-47f4-9902-d4f5fad79692",
+          "titulo": "Cuestionario: Criterios diagnósticos DSM-5",
+          "created_at": "2025-08-17T18:23:49.911019+00:00"
+        },
+        {
+          "id": "e69debc2-cc97-49fb-a377-270a01db36da",
+          "titulo": "Cuestionario: Criterios diagnósticos DSM-5",
+          "created_at": "2025-08-24T20:16:25.781839+00:00"
+        }
+      ]
+    },
+    {
+      "lesson_id": "64e1b69a-795b-4cf0-b2ce-4b4a416c2ede",
+      "lesson_title": "Material Complementario y Ejercicios2 Cuestionarios",
+      "lesson_order": 5,
+      "associated_quizzes": []
+    },
+    {
+      "lesson_id": "ba9f3851-65a0-4dc2-91ab-02fadd60e4a3",
+      "lesson_title": "Adicciones Comportamentales2 Cuestionarios",
+      "lesson_order": 6,
+      "associated_quizzes": [
+        {
+          "id": "3b94f1a2-6074-4110-9b88-e449c5bf43f4",
+          "titulo": "Cuestionario: Adicciones sin sustancias",
+          "created_at": "2025-08-17T18:22:36.064374+00:00"
+        },
+        {
+          "id": "9c846fb2-a0fa-4f3b-a8a7-000b8d9d33a7",
+          "titulo": "Cuestionario: Adicciones sin sustancias",
+          "created_at": "2025-08-17T18:23:32.002748+00:00"
+        },
+        {
+          "id": "efa1b4b4-cce9-42fd-a0c9-ff780de70ba0",
+          "titulo": "Cuestionario: Adicciones sin sustancias",
+          "created_at": "2025-08-17T18:23:50.910623+00:00"
+        },
+        {
+          "id": "1e6365cd-a7e5-414d-a7f5-796cd796e839",
+          "titulo": "Cuestionario: Adicciones sin sustancias",
+          "created_at": "2025-08-24T20:16:27.627716+00:00"
+        }
+      ]
+    },
+    {
+      "lesson_id": "730130ed-e1ea-4a84-a13f-c84b285b7c9f",
+      "lesson_title": "La familia",
+      "lesson_order": 7,
+      "associated_quizzes": []
+    },
+    {
+      "lesson_id": "53d25a2f-8f39-44c5-ba5e-ebd46e2a3a21",
+      "lesson_title": "La recaída",
+      "lesson_order": 8,
+      "associated_quizzes": []
+    },
+    {
+      "lesson_id": "50a45273-f086-4ad7-8290-7ba44a518b4d",
+      "lesson_title": "Nuevas terapias psicológicas",
+      "lesson_order": 9,
+      "associated_quizzes": []
+    },
+    {
+      "lesson_id": "9d91427d-0ab8-45d5-b761-684d3497e2a3",
+      "lesson_title": "Terapia integral de pareja1 Cuestionario",
+      "lesson_order": 10,
+      "associated_quizzes": [
+        {
+          "id": "e254f246-bd7f-4703-a0d1-516001c215b0",
+          "titulo": "Cuestionario: Terapia de pareja en adicciones",
+          "created_at": "2025-08-17T18:22:36.716532+00:00"
+        },
+        {
+          "id": "e74cf4f4-e87b-4a76-8ff5-7211b2c5f078",
+          "titulo": "Cuestionario: Terapia de pareja en adicciones",
+          "created_at": "2025-08-17T18:23:32.302865+00:00"
+        },
+        {
+          "id": "3e0d30c9-52e0-4a6d-b201-744b76c065b5",
+          "titulo": "Cuestionario: Terapia de pareja en adicciones",
+          "created_at": "2025-08-17T18:23:51.816275+00:00"
+        },
+        {
+          "id": "3f80187b-0a2b-47de-88c4-861e48227780",
+          "titulo": "Cuestionario: Terapia de pareja en adicciones",
+          "created_at": "2025-08-24T20:16:29.230115+00:00"
+        }
+      ]
+    },
+    {
+      "lesson_id": "d3b2fd97-3f62-4825-99f4-e8e56eaaf08e",
+      "lesson_title": "Psicología positiva1 Cuestionario",
+      "lesson_order": 11,
+      "associated_quizzes": [
+        {
+          "id": "613e9e5c-0900-4bc4-a0f4-b4952673b2f1",
+          "titulo": "Cuestionario: Enfoque de psicología positiva",
+          "created_at": "2025-08-17T18:22:37.10215+00:00"
+        },
+        {
+          "id": "ac2849d7-e9f6-4e5b-a874-795a5f2392ca",
+          "titulo": "Cuestionario: Enfoque de psicología positiva",
+          "created_at": "2025-08-17T18:23:32.539419+00:00"
+        },
+        {
+          "id": "56e3143d-b800-4787-926b-afa8ab809dfa",
+          "titulo": "Cuestionario: Enfoque de psicología positiva",
+          "created_at": "2025-08-17T18:23:52.326783+00:00"
+        },
+        {
+          "id": "bf2cdf41-87ca-49e0-b678-8fab354bbec3",
+          "titulo": "Cuestionario: Enfoque de psicología positiva",
+          "created_at": "2025-08-24T20:16:29.982578+00:00"
+        }
+      ]
+    },
+    {
+      "lesson_id": "1cf3848f-f965-4a1e-9810-955e082472fb",
+      "lesson_title": "Mindfulness aplicado a la Conducta Adictiva1 Cuestionario",
+      "lesson_order": 12,
+      "associated_quizzes": [
+        {
+          "id": "1fc56403-995c-41bd-9e54-efc9402a3049",
+          "titulo": "Cuestionario: Mindfulness en adicciones",
+          "created_at": "2025-08-17T18:22:37.452851+00:00"
+        },
+        {
+          "id": "6e6ae64a-830c-40c2-bbc3-6205628d58b4",
+          "titulo": "Cuestionario: Mindfulness en adicciones",
+          "created_at": "2025-08-17T18:23:32.765514+00:00"
+        },
+        {
+          "id": "dd94b42c-6374-4952-99f6-1572b5c7f3b7",
+          "titulo": "Cuestionario: Mindfulness en adicciones",
+          "created_at": "2025-08-17T18:23:52.837505+00:00"
+        },
+        {
+          "id": "47e06f3c-cf1a-4e49-9920-5bef14e87ed0",
+          "titulo": "Cuestionario: Mindfulness en adicciones",
+          "created_at": "2025-08-24T20:16:30.558295+00:00"
+        }
+      ]
+    }
+  ],
+  "issues": [
+    "12 lecciones sin numero_leccion definido",
+    "Cuestionarios duplicados encontrados: Cuestionario: Criterios diagnósticos DSM-5, Cuestionario: Adicciones sin sustancias, Cuestionario: Terapia de pareja en adicciones, Cuestionario: Enfoque de psicología positiva, Cuestionario: Mindfulness en adicciones"
+  ],
+  "recommendations": [
+    "Actualizar campo numero_leccion en las lecciones afectadas",
+    "Eliminar cuestionarios duplicados de la base de datos"
+  ],
+  "url_structure": {
+    "lesson_url": "/student/courses/d7c3e503-ed61-4d7a-9e5f-aedc407d4836/lessons/172b9f29-17dd-4c7f-8a98-8c3989e296d8",
+    "quiz_url": "/student/quizzes/attempt/eab3cbb6-2699-4887-9026-f5c38e2a6534",
+    "expected_navigation": "LessonPage -> LessonViewer -> QuizAttemptPage"
+  }
+}

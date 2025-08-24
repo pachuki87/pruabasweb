@@ -10,7 +10,8 @@ interface Lesson {
   titulo: string;
   slug?: string; // Opcional porque lo generamos dinámicamente
   orden: number;
-  contenido_html: string;
+  archivo_url?: string; // URL del archivo HTML migrado
+  contenido_html?: string; // Mantenemos por compatibilidad, pero será null después de la migración
   pdfs?: string[];
   tiene_cuestionario?: boolean;
 }
@@ -401,6 +402,7 @@ const LessonPage: React.FC = () => {
               lessonSlug={currentLesson.slug || ''}
               lessonTitle={currentLesson.titulo}
               lessonContent={currentLesson?.contenido_html}
+              lessonFileUrl={currentLesson?.archivo_url}
               pdfs={currentLesson.pdfs}
               hasQuiz={currentLesson.tiene_cuestionario}
               quizId={currentQuizId}

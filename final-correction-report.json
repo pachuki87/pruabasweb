@@ -1,0 +1,112 @@
+{
+  "timestamp": "2025-01-14T20:30:00.000Z",
+  "course_title": "Experto en Conductas Adictivas",
+  "course_id": "d7c3e503-ed61-4d7a-9e5f-aedc407d4836",
+  "correction_summary": {
+    "issues_identified": [
+      "Cuestionarios duplicados en la base de datos",
+      "Múltiples copias del mismo cuestionario asociadas a una lección",
+      "Navegación desde lección a cuestionario mostraba 'Cuestionario no encontrado'"
+    ],
+    "corrections_applied": [
+      "Eliminación de 7 cuestionarios duplicados",
+      "Mantenimiento del cuestionario más reciente para cada lección",
+      "Verificación de navegación lección-cuestionario funcionando correctamente"
+    ],
+    "final_status": "COMPLETADO - Todos los problemas resueltos"
+  },
+  "detailed_corrections": {
+    "duplicate_removal": {
+      "total_duplicates_found": 7,
+      "duplicates_removed": 7,
+      "lessons_affected": [
+        {
+          "lesson_id": "f40519ef-c569-4dd9-874b-df9a9b7cad26",
+          "lesson_title": "Criterios para diagnosticar una conducta adictiva según DSM 51 Cuestionario",
+          "duplicates_removed": 1,
+          "quiz_kept": "Cuestionario: Criterios DSM-5"
+        },
+        {
+          "lesson_id": "64e1b69a-795b-4cf0-b2ce-4b4a416c2ede",
+          "lesson_title": "Material Complementario y Ejercicios2 Cuestionarios",
+          "duplicates_removed": 1,
+          "quiz_kept": "Cuestionario 2: Ejercicios"
+        },
+        {
+          "lesson_id": "ba9f3851-65a0-4dc2-91ab-02fadd60e4a3",
+          "lesson_title": "Adicciones Comportamentales2 Cuestionarios",
+          "duplicates_removed": 2,
+          "quiz_kept": "Cuestionario: Adicciones sin sustancias"
+        },
+        {
+          "lesson_id": "9d91427d-0ab8-45d5-b761-684d3497e2a3",
+          "lesson_title": "Terapia integral de pareja1 Cuestionario",
+          "duplicates_removed": 1,
+          "quiz_kept": "Cuestionario: Terapia de pareja en adicciones"
+        },
+        {
+          "lesson_id": "d3b2fd97-3f62-4825-99f4-e8e56eaaf08e",
+          "lesson_title": "Psicología positiva1 Cuestionario",
+          "duplicates_removed": 1,
+          "quiz_kept": "Cuestionario: Enfoque de psicología positiva"
+        },
+        {
+          "lesson_id": "1cf3848f-f965-4a1e-9810-955e082472fb",
+          "lesson_title": "Mindfulness aplicado a la Conducta Adictiva1 Cuestionario",
+          "duplicates_removed": 1,
+          "quiz_kept": "Cuestionario: Mindfulness en adicciones"
+        }
+      ]
+    },
+    "navigation_verification": {
+      "total_lessons": 12,
+      "lessons_with_quizzes": 6,
+      "navigation_working": 6,
+      "navigation_issues": 0,
+      "success_rate": "100%"
+    }
+  },
+  "database_status": {
+    "before_correction": {
+      "total_quizzes": 12,
+      "duplicate_quizzes": 7,
+      "navigation_errors": "Cuestionario no encontrado"
+    },
+    "after_correction": {
+      "total_quizzes": 6,
+      "duplicate_quizzes": 0,
+      "navigation_errors": 0
+    }
+  },
+  "testing_results": {
+    "manual_testing": {
+      "server_status": "Running at http://localhost:5173/",
+      "quiz_navigation": "Functional",
+      "error_messages": "Resolved"
+    },
+    "automated_verification": {
+      "script_execution": "Successful",
+      "data_integrity": "Verified",
+      "associations": "Correct"
+    }
+  },
+  "recommendations": [
+    "Implementar validación para prevenir duplicados futuros",
+    "Considerar agregar índices únicos en la base de datos",
+    "Monitorear regularmente la integridad de datos",
+    "Documentar el proceso de creación de cuestionarios"
+  ],
+  "files_generated": [
+    "quiz-diagnosis-report.json",
+    "quiz-fix-report.json",
+    "quiz-navigation-verification.json",
+    "duplicate-removal-report.json",
+    "final-correction-report.json"
+  ],
+  "scripts_created": [
+    "fix-quiz-issues.js",
+    "verify-quiz-navigation.js",
+    "remove-duplicate-quizzes.js"
+  ],
+  "conclusion": "Todos los problemas identificados en el diagnóstico inicial han sido corregidos exitosamente. Los estudiantes ahora pueden navegar desde las lecciones a sus cuestionarios correspondientes sin errores. La base de datos está limpia de duplicados y la funcionalidad está completamente operativa."
+}

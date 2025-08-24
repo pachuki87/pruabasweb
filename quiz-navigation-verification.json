@@ -1,0 +1,149 @@
+{
+  "timestamp": "2025-08-24T20:42:48.909Z",
+  "course_id": "d7c3e503-ed61-4d7a-9e5f-aedc407d4836",
+  "verification_results": [
+    {
+      "lesson_id": "172b9f29-17dd-4c7f-8a98-8c3989e296d8",
+      "lesson_title": "¿Qué significa ser adicto",
+      "lesson_order": 1,
+      "has_quiz_flag": false,
+      "quiz_found": false,
+      "quiz_id": null,
+      "quiz_title": null,
+      "navigation_working": false,
+      "issues": []
+    },
+    {
+      "lesson_id": "d0bc75a7-463a-49ce-8191-5836fe75664c",
+      "lesson_title": "¿Qué es una adicción 1 Cuestionario",
+      "lesson_order": 2,
+      "has_quiz_flag": false,
+      "quiz_found": false,
+      "quiz_id": null,
+      "quiz_title": null,
+      "navigation_working": false,
+      "issues": []
+    },
+    {
+      "lesson_id": "5e51f668-67b6-4ae6-b127-4ddfd2b72d92",
+      "lesson_title": "Consecuencias de las adicciones",
+      "lesson_order": 3,
+      "has_quiz_flag": false,
+      "quiz_found": false,
+      "quiz_id": null,
+      "quiz_title": null,
+      "navigation_working": false,
+      "issues": []
+    },
+    {
+      "lesson_id": "f40519ef-c569-4dd9-874b-df9a9b7cad26",
+      "lesson_title": "Criterios para diagnosticar una conducta adictiva según DSM 51 Cuestionario",
+      "lesson_order": 4,
+      "has_quiz_flag": true,
+      "quiz_found": true,
+      "quiz_id": "eab3cbb6-2699-4887-9026-f5c38e2a6534",
+      "quiz_title": "Cuestionario: Criterios diagnósticos DSM-5",
+      "navigation_working": true,
+      "issues": []
+    },
+    {
+      "lesson_id": "64e1b69a-795b-4cf0-b2ce-4b4a416c2ede",
+      "lesson_title": "Material Complementario y Ejercicios2 Cuestionarios",
+      "lesson_order": 5,
+      "has_quiz_flag": true,
+      "quiz_found": true,
+      "quiz_id": "6a097982-a0fc-4e7d-851d-d3bad2195e70",
+      "quiz_title": "Cuestionario 2: Ejercicios",
+      "navigation_working": true,
+      "issues": []
+    },
+    {
+      "lesson_id": "ba9f3851-65a0-4dc2-91ab-02fadd60e4a3",
+      "lesson_title": "Adicciones Comportamentales2 Cuestionarios",
+      "lesson_order": 6,
+      "has_quiz_flag": true,
+      "quiz_found": true,
+      "quiz_id": "3b94f1a2-6074-4110-9b88-e449c5bf43f4",
+      "quiz_title": "Cuestionario: Adicciones sin sustancias",
+      "navigation_working": true,
+      "issues": []
+    },
+    {
+      "lesson_id": "730130ed-e1ea-4a84-a13f-c84b285b7c9f",
+      "lesson_title": "La familia",
+      "lesson_order": 7,
+      "has_quiz_flag": false,
+      "quiz_found": false,
+      "quiz_id": null,
+      "quiz_title": null,
+      "navigation_working": false,
+      "issues": []
+    },
+    {
+      "lesson_id": "53d25a2f-8f39-44c5-ba5e-ebd46e2a3a21",
+      "lesson_title": "La recaída",
+      "lesson_order": 8,
+      "has_quiz_flag": false,
+      "quiz_found": false,
+      "quiz_id": null,
+      "quiz_title": null,
+      "navigation_working": false,
+      "issues": []
+    },
+    {
+      "lesson_id": "50a45273-f086-4ad7-8290-7ba44a518b4d",
+      "lesson_title": "Nuevas terapias psicológicas",
+      "lesson_order": 9,
+      "has_quiz_flag": false,
+      "quiz_found": false,
+      "quiz_id": null,
+      "quiz_title": null,
+      "navigation_working": false,
+      "issues": []
+    },
+    {
+      "lesson_id": "9d91427d-0ab8-45d5-b761-684d3497e2a3",
+      "lesson_title": "Terapia integral de pareja1 Cuestionario",
+      "lesson_order": 10,
+      "has_quiz_flag": true,
+      "quiz_found": true,
+      "quiz_id": "e254f246-bd7f-4703-a0d1-516001c215b0",
+      "quiz_title": "Cuestionario: Terapia de pareja en adicciones",
+      "navigation_working": true,
+      "issues": []
+    },
+    {
+      "lesson_id": "d3b2fd97-3f62-4825-99f4-e8e56eaaf08e",
+      "lesson_title": "Psicología positiva1 Cuestionario",
+      "lesson_order": 11,
+      "has_quiz_flag": true,
+      "quiz_found": true,
+      "quiz_id": "613e9e5c-0900-4bc4-a0f4-b4952673b2f1",
+      "quiz_title": "Cuestionario: Enfoque de psicología positiva",
+      "navigation_working": true,
+      "issues": []
+    },
+    {
+      "lesson_id": "1cf3848f-f965-4a1e-9810-955e082472fb",
+      "lesson_title": "Mindfulness aplicado a la Conducta Adictiva1 Cuestionario",
+      "lesson_order": 12,
+      "has_quiz_flag": true,
+      "quiz_found": true,
+      "quiz_id": "1fc56403-995c-41bd-9e54-efc9402a3049",
+      "quiz_title": "Cuestionario: Mindfulness en adicciones",
+      "navigation_working": true,
+      "issues": []
+    }
+  ],
+  "issues_found": [],
+  "recommendations": [
+    "Todas las asociaciones están correctas",
+    "Realizar prueba manual en la interfaz para confirmar funcionamiento"
+  ],
+  "summary": {
+    "total_lessons": 12,
+    "lessons_with_quizzes": 6,
+    "working_navigation": 6,
+    "broken_navigation": 0
+  }
+}

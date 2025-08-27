@@ -1,0 +1,1 @@
+SELECT id, titulo FROM cursos WHERE titulo ILIKE '%experto%' OR titulo ILIKE '%conductas%' OR titulo ILIKE '%adictivas%';

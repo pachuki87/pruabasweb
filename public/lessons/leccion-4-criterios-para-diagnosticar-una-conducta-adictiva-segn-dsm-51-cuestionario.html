@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criterios para diagnosticar una conducta adictiva según DSM-5 - Cuestionario</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .lesson-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .lesson-header {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
+            padding: 30px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .lesson-header h1 {
+            color: white;
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .lesson-info {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.1em;
+            font-weight: 500;
+        }
+
+        .lesson-content {
+            padding: 40px;
+            color: white;
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .section-icon {
+            font-size: 2em;
+            margin-right: 15px;
+            filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3));
+        }
+
+        .section h2 {
+            color: #fff;
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .criteria-list {
+            list-style: none;
+            counter-reset: criteria-counter;
+        }
+
+        .criteria-list li {
+            background: rgba(255, 255, 255, 0.1);
+            margin-bottom: 15px;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #4CAF50;
+            counter-increment: criteria-counter;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .criteria-list li:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateX(5px);
+        }
+
+        .criteria-list li::before {
+            content: counter(criteria-counter);
+            position: absolute;
+            left: -15px;
+            top: 15px;
+            background: #4CAF50;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9em;
+            box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+        }
+
+        .criteria-list li {
+            margin-left: 20px;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .lesson-container {
+                border-radius: 15px;
+            }
+
+            .lesson-header {
+                padding: 20px;
+            }
+
+            .lesson-header h1 {
+                font-size: 1.8em;
+            }
+
+            .lesson-content {
+                padding: 20px;
+            }
+
+            .section {
+                padding: 20px;
+            }
+
+            .section-icon {
+                font-size: 1.5em;
+            }
+
+            .criteria-list li {
+                margin-left: 15px;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="lesson-container">
+        <div class="lesson-header">
+            <h1>Criterios para diagnosticar una conducta adictiva según DSM-5</h1>
+            <div class="lesson-info">
+                <strong>Lección 4</strong> de 12
+            </div>
+        </div>
+        
+        <div class="lesson-content">
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-icon">📋</div>
+                    <h2>Criterios de Diagnóstico</h2>
+                </div>
+                <p style="margin-bottom: 20px; font-size: 1.1em; opacity: 0.9;">El DSM-5 establece criterios específicos para diagnosticar el trastorno por uso de sustancias. Estos criterios ayudan a los profesionales de la salud mental a identificar y evaluar la gravedad de los problemas relacionados con el consumo de sustancias.</p>
+            </div>
+
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-icon">🔍</div>
+                    <h2>Criterios utilizados por el DSM-5 para diagnosticar el trastorno por uso de sustancias</h2>
+                </div>
+                
+                <ol class="criteria-list">
+                    <li>El individuo consume la sustancia en cantidades mayores o durante un periodo de tiempo más largo del que había previsto inicialmente.</li>
+                    
+                    <li>El individuo expresa un deseo persistente de reducir o regular el uso de sustancias y puede informar de múltiples esfuerzos infructuosos para disminuir o suspender el uso.</li>
+                    
+                    <li>El individuo emplea una gran cantidad de tiempo para obtener la sustancia, consumirla o recuperarse de sus efectos. En los casos en los que el trastorno es más grave casi todas las actividades de la vida diario del sujeto giran en torno a la sustancia.</li>
+                    
+                    <li>Craving, que se manifiesta por un intenso deseo de consumir droga. El craving se define como una necesidad de droga que puede ocurrir en cualquier momento pero que es más probable que aparezca en el entorno donde la droga se obtuvo o utilizó previamente.</li>
+                    
+                    <li>El uso recurrente de la sustancia puede resultar en un incumplimiento de las obligaciones laborales, familiares o escolares.</li>
+                    
+                    <li>El individuo continúa consumiendo la sustancia a pesar de los problemas sociales o interpersonales que se derivan o se exacerban con el consumo.</li>
+                    
+                    <li>Las actividades sociales, ocupacionales o recreativas importantes pueden ser abandonadas o reducidas por el uso de la droga. El individuo puede retirarse de la familia y de actividades lúdicas o pasatiempos con el fin de pasar el mayor tiempo posible utilizando la sustancia.</li>
+                    
+                    <li>Se consume la sustancia en situaciones en las que es peligroso para la integridad física de la persona.</li>
+                    
+                    <li>El individuo puede continuar usando la sustancia a pesar de tener conciencia de que existe un problema de salud físico o psicológico recurrente que es probable que se haya causado o exacerbado por la sustancia. Esto significa que el individuo es incapaz de abstenerse de utilizar la droga a pesar de que es consciente de que el consumo pone en riesgo su salud.</li>
+                    
+                    <li>El individuo desarrolla tolerancia, es decir, necesita dosis cada vez más grandes de droga para lograr el efecto deseado.</li>
+                    
+                    <li>Síndrome de abstinencia que se produce cuando disminuye la concentración de la sustancia en el cuerpo del adicto. Este síndrome se alivia cuando el sujeto consume la sustancia.</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

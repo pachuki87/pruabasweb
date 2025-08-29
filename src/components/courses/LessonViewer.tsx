@@ -183,21 +183,48 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
     // Extraer el contenido principal
     let mainContent = '';
     
-    // Buscar diferentes estructuras de contenido
-    const contentSelectors = [
-      '.main-content',
-      '.content',
-      'main',
-      '.lesson-content',
-      'body > div',
-      'body'
-    ];
+    // Primero, intentar encontrar el contenedor principal de Elementor
+    let elementorContainer = doc.querySelector('.elementor[data-elementor-post-type="sfwd-lessons"]');
     
-    for (const selector of contentSelectors) {
-      const element = doc.querySelector(selector);
-      if (element && element.innerHTML.trim()) {
-        mainContent = element.innerHTML;
-        break;
+    if (elementorContainer) {
+      mainContent = elementorContainer.innerHTML;
+    } else {
+      // Buscar diferentes estructuras de contenido
+      const contentSelectors = [
+        '.entry-content',
+        '.main-content', 
+        '.content',
+        'main',
+        '.lesson-content',
+        'article .entry-content',
+        'body > div',
+        'body'
+      ];
+      
+      for (const selector of contentSelectors) {
+        const element = doc.querySelector(selector);
+        if (element && element.innerHTML.trim()) {
+          mainContent = element.innerHTML;
+          break;
+        }
+      }
+      
+      // Si no encontramos contenido con los selectores, buscar específicamente las secciones de Elementor
+      if (!mainContent || mainContent.trim().length < 100) {
+        const elementorSections = doc.querySelectorAll('.elementor-section');
+        if (elementorSections.length > 0) {
+          let combinedContent = '';
+          elementorSections.forEach(section => {
+            // Solo incluir secciones que contengan texto o widgets de contenido
+            const textContent = section.textContent?.trim() || '';
+            if (textContent.length > 10 && !textContent.includes('Navegación del sitio')) {
+              combinedContent += section.outerHTML;
+            }
+          });
+          if (combinedContent) {
+            mainContent = combinedContent;
+          }
+        }
       }
     }
     
@@ -332,9 +359,62 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
       {/* Contenido de la lección */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
         <div 
-          className="prose prose-lg max-w-none lesson-content"
+          className="prose prose-lg max-w-none lesson-content elementor-content"
           dangerouslySetInnerHTML={{ __html: content }}
         />
+        
+        <style jsx>{`
+          .elementor-content .elementor-section {
+            margin-bottom: 2rem;
+          }
+          
+          .elementor-content .elementor-widget-container {
+            margin-bottom: 1rem;
+          }
+          
+          .elementor-content .elementor-widget-text-editor p {
+            margin-bottom: 1rem;
+            line-height: 1.6;
+            color: #374151;
+          }
+          
+          .elementor-content .elementor-button {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            background-color: #dc2626;
+            color: white;
+            text-decoration: none;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            margin: 0.5rem 0;
+            transition: background-color 0.2s;
+          }
+          
+          .elementor-content .elementor-button:hover {
+            background-color: #b91c1c;
+          }
+          
+          .elementor-content .elementor-button-icon {
+            margin-right: 0.5rem;
+          }
+          
+          .elementor-content iframe {
+            width: 100%;
+            max-width: 640px;
+            height: 360px;
+            border-radius: 0.5rem;
+            margin: 1rem 0;
+          }
+          
+          .elementor-content .has-inline-color {
+            color: inherit;
+          }
+          
+          .elementor-content .has-woostify-heading-color {
+            color: #1f2937;
+          }
+        `}</style>
       </div>
     </div>
   );

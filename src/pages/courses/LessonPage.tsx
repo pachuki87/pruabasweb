@@ -224,10 +224,10 @@ const LessonPage: React.FC = () => {
             pdfs.push('Articilo-Terapia-Integral-de-Pareja.pdf');
           }
           if (generatedSlug.includes('Psicología positiva')) {
-            pdfs.push('Psicolgia-positiva-introduccion.pdf');
+            pdfs.push('Psicolgia-positiva-introduccion.pdf', 'Psicologia-positiva-la-investigacion-sobre-los-efectos-de-las-emociones-positivas.pdf');
           }
           
-          // Enlaces externos para Adicciones Comportamentales2 Cuestionarios
+          // Enlaces externos para Adicciones Comportamentales2 Cuestionarios y Psicología positiva
           const externalLinks: any[] = [];
           if (generatedSlug.includes('Adicciones Comportamentales2 Cuestionarios')) {
             externalLinks.push(
@@ -259,6 +259,17 @@ const LessonPage: React.FC = () => {
               {
                 title: 'Test',
                 url: 'https://www.psicologosonline.cl/articulos/aprende-a-eliminar-la-dependencia-emocional',
+                isExternal: true
+              }
+            );
+          }
+          
+          // Video de YouTube para Psicología positiva
+          if (generatedSlug.includes('Psicología positiva')) {
+            externalLinks.push(
+              {
+                title: 'Video: Victor Küppers - El valor de tu actitud',
+                url: 'https://www.youtube.com/watch?v=Z3_f6a-YrY8',
                 isExternal: true
               }
             );

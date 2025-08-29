@@ -13,6 +13,7 @@ interface Lesson {
   archivo_url?: string; // URL del archivo HTML migrado
   contenido_html?: string; // Mantenemos por compatibilidad, pero será null después de la migración
   pdfs?: string[];
+  externalLinks?: Array<{title: string; url: string; isExternal: boolean}>;
   tiene_cuestionario?: boolean;
 }
 
@@ -29,6 +30,50 @@ const LessonPage: React.FC = () => {
   // Función para obtener el quiz ID asociado a una lección
   const getQuizIdForLesson = async (lessonId: string): Promise<string | null> => {
     try {
+      // Primero verificar si es la lección 2 o 4
+      const { data: lessonData, error: lessonError } = await supabase
+        .from('lecciones')
+        .select('titulo, orden')
+        .eq('id', lessonId)
+        .single();
+      
+      if (lessonError) {
+        console.log('Error fetching lesson info:', lessonError);
+      }
+      
+      // Si es la lección 2, buscar específicamente el cuestionario de texto libre
+      if (lessonData && (lessonData.orden === 2 || lessonData.titulo.includes('¿Qué es una adicción'))) {
+        console.log('🎯 Detected lesson 2, looking for text-based quiz');
+        const { data: textQuizData, error: textQuizError } = await supabase
+          .from('cuestionarios')
+          .select('id')
+          .eq('leccion_id', lessonId)
+          .eq('titulo', 'Definición conducta adictiva')
+          .limit(1);
+        
+        if (!textQuizError && textQuizData && textQuizData.length > 0) {
+          console.log('✅ Found text-based quiz for lesson 2:', textQuizData[0].id);
+          return textQuizData[0].id;
+        }
+      }
+      
+      // Si es la lección 4, buscar específicamente el cuestionario de criterios DSM V
+      if (lessonData && (lessonData.orden === 4 || lessonData.titulo.includes('Criterios para diagnosticar'))) {
+        console.log('🎯 Detected lesson 4, looking for DSM V criteria quiz');
+        const { data: dsmQuizData, error: dsmQuizError } = await supabase
+          .from('cuestionarios')
+          .select('id')
+          .eq('leccion_id', lessonId)
+          .eq('titulo', 'Criterio de diagnóstico DSM V')
+          .limit(1);
+        
+        if (!dsmQuizError && dsmQuizData && dsmQuizData.length > 0) {
+          console.log('✅ Found DSM V criteria quiz for lesson 4:', dsmQuizData[0].id);
+          return dsmQuizData[0].id;
+        }
+      }
+      
+      // Para otras lecciones o si no se encuentra el cuestionario específico, usar el comportamiento original
       const { data, error } = await supabase
         .from('cuestionarios')
         .select('id')
@@ -172,6 +217,9 @@ const LessonPage: React.FC = () => {
           if (generatedSlug.includes('Material Complementario')) {
             pdfs.push('Clasificacion-de-sustancias.pdf', 'Fundamentos-de-la-conducta-adictiva.pdf', 'Informe-europeo-sobre-drogas-2020.pdf', 'Programa-Ibiza.pdf');
           }
+          if (generatedSlug.includes('Criterios para diagnosticar') || generatedSlug.includes('DSM')) {
+            pdfs.push('Actividad-casos-clinicos.pdf');
+          }
           if (generatedSlug.includes('Terapia integral')) {
             pdfs.push('Articilo-Terapia-Integral-de-Pareja.pdf');
           }
@@ -179,10 +227,48 @@ const LessonPage: React.FC = () => {
             pdfs.push('Psicolgia-positiva-introduccion.pdf');
           }
           
+          // Enlaces externos para Adicciones Comportamentales2 Cuestionarios
+          const externalLinks: any[] = [];
+          if (generatedSlug.includes('Adicciones Comportamentales2 Cuestionarios')) {
+            externalLinks.push(
+              {
+                title: 'Aquí tienes un artículo sobre el tratamiento de las adicciones a las TIC',
+                url: 'https://sindrome-adicciones.es/adiccion-a-las-nuevas-tecnologias/',
+                isExternal: true
+              },
+              {
+                title: 'Test',
+                url: 'https://www.ocu.org/tecnologia/telefono/noticias/test-adiccion-movil',
+                isExternal: true
+              },
+              {
+                title: 'Artículo sobre el juego y cómo dejarlo',
+                url: 'https://sindrome-adicciones.es/adiccion-al-juego/',
+                isExternal: true
+              },
+              {
+                title: 'Artículo sobre la adicción al móvil',
+                url: 'https://www.nuestropsicologoenmadrid.com/adiccion-movil/',
+                isExternal: true
+              },
+              {
+                title: 'Artículo sobre la adicción al porno',
+                url: 'https://www.abc.es/familia/parejas/daniel-adicto-porno-pensaba-fundido-genitales-20221103163535-nt.html',
+                isExternal: true
+              },
+              {
+                title: 'Test',
+                url: 'https://www.psicologosonline.cl/articulos/aprende-a-eliminar-la-dependencia-emocional',
+                isExternal: true
+              }
+            );
+          }
+          
           return {
             ...lesson,
             slug: generatedSlug,
             pdfs,
+            externalLinks,
             tiene_cuestionario: hasQuiz
           };
         });
@@ -404,6 +490,7 @@ const LessonPage: React.FC = () => {
               lessonContent={currentLesson?.contenido_html}
               lessonFileUrl={currentLesson?.archivo_url}
               pdfs={currentLesson.pdfs}
+              externalLinks={currentLesson.externalLinks}
               hasQuiz={currentLesson.tiene_cuestionario}
               quizId={currentQuizId}
               onBackToCourse={handleBackToCourse}

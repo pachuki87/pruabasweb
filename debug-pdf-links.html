@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug PDF Links</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .pdf-link {
+            display: inline-flex;
+            align-items: center;
+            padding: 15px 25px;
+            background-color: #dc3545;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 1.2em;
+            margin: 10px 0;
+            width: fit-content;
+        }
+        .pdf-link:hover {
+            background-color: #c82333;
+        }
+        .debug-info {
+            background: #e9ecef;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <h1>Debug: Enlaces PDF de la Lección 5</h1>
+    
+    <div class="test-container">
+        <h2>Test 1: Enlace directo (como en el HTML original)</h2>
+        <a href="/course-content/Módulo 1/05_Material Complementario y Ejercicios2 Cuestionarios/Clasificacion-de-sustancias.pdf" 
+           target="_blank" 
+           class="pdf-link">
+            📄 Clasificación de sustancias (Enlace directo)
+        </a>
+        <div class="debug-info">
+            href="/course-content/Módulo 1/05_Material Complementario y Ejercicios2 Cuestionarios/Clasificacion-de-sustancias.pdf"
+        </div>
+    </div>
+    
+    <div class="test-container">
+        <h2>Test 2: Enlace con ruta absoluta</h2>
+        <a href="http://localhost:5174/course-content/Módulo 1/05_Material Complementario y Ejercicios2 Cuestionarios/Clasificacion-de-sustancias.pdf" 
+           target="_blank" 
+           class="pdf-link">
+            📄 Clasificación de sustancias (Ruta absoluta)
+        </a>
+        <div class="debug-info">
+            href="http://localhost:5174/course-content/Módulo 1/05_Material Complementario y Ejercicios2 Cuestionarios/Clasificacion-de-sustancias.pdf"
+        </div>
+    </div>
+    
+    <div class="test-container">
+        <h2>Test 3: Verificar si el archivo existe</h2>
+        <button onclick="checkFileExists()" style="padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;">
+            Verificar si el archivo PDF existe
+        </button>
+        <div id="file-check-result" class="debug-info" style="display: none;"></div>
+    </div>
+    
+    <div class="test-container">
+        <h2>Test 4: Simular el contenido procesado por React</h2>
+        <div id="react-content"></div>
+        <button onclick="simulateReactContent()" style="padding: 10px 20px; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer;">
+            Simular contenido de React
+        </button>
+    </div>
+    
+    <script>
+        async function checkFileExists() {
+            const resultDiv = document.getElementById('file-check-result');
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = 'Verificando...';
+            
+            try {
+                const response = await fetch('/course-content/Módulo 1/05_Material Complementario y Ejercicios2 Cuestionarios/Clasificacion-de-sustancias.pdf', {
+                    method: 'HEAD'
+                });
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = '✅ El archivo PDF existe y es accesible';
+                    resultDiv.style.background = '#d4edda';
+                } else {
+                    resultDiv.innerHTML = `❌ El archivo no existe o no es accesible (Status: ${response.status})`;
+                    resultDiv.style.background = '#f8d7da';
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `❌ Error al verificar el archivo: ${error.message}`;
+                resultDiv.style.background = '#f8d7da';
+            }
+        }
+        
+        function simulateReactContent() {
+            const container = document.getElementById('react-content');
+            
+            // Simular el HTML que genera React
+            const htmlContent = `
+                <div class="pdf-links" style="margin: 20px 0;">
+                    <div style="margin: 15px 0;">
+                        <a href="/course-content/Módulo 1/05_Material Complementario y Ejercicios2 Cuestionarios/Clasificacion-de-sustancias.pdf" 
+                           target="_blank" 
+                           style="display: inline-flex; align-items: center; padding: 15px 25px; background-color: #dc3545; color: white; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 1.2em; width: fit-content;">
+                            📄 Clasificación de sustancias (Simulado React)
+                        </a>
+                    </div>
+                </div>
+            `;
+            
+            container.innerHTML = htmlContent;
+        }
+        
+        // Agregar event listeners para debug
+        document.addEventListener('click', function(e) {
+            if (e.target.tagName === 'A') {
+                console.log('Click en enlace:', e.target.href);
+                console.log('Target:', e.target.target);
+                console.log('Elemento:', e.target);
+            }
+        });
+    </script>
+</body>
+</html>

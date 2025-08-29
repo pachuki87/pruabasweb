@@ -8,11 +8,13 @@ interface LessonViewerProps {
   lessonContent?: string; // Contenido HTML desde la base de datos (legacy)
   lessonFileUrl?: string; // URL del archivo HTML migrado
   pdfs?: string[];
+  externalLinks?: Array<{title: string; url: string; isExternal: boolean}>;
   hasQuiz?: boolean;
   quizId?: string | null;
   onBackToCourse?: () => void;
   onNextLesson?: () => void;
   onPreviousLesson?: () => void;
+  onQuizClick?: () => void;
 }
 
 const LessonViewer: React.FC<LessonViewerProps> = ({
@@ -21,6 +23,7 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
   lessonContent,
   lessonFileUrl,
   pdfs = [],
+  externalLinks = [],
   hasQuiz = false,
   quizId = null,
   onBackToCourse,
@@ -217,10 +220,15 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
     mainContent = mainContent.replace(
       /href="([^"]*)"/g,
       (match, href) => {
-        // Interceptar enlaces a institutolidera.com para navegación local
-        if (href.includes('institutolidera.com')) {
+        // Interceptar enlaces a institutolidera.com para navegación local, EXCEPTO PDFs
+        if (href.includes('institutolidera.com') && !href.includes('.pdf')) {
           // Detectar tipo de enlace por el contexto
           return 'href="#" data-navigation-link="true" data-href="' + href + '"';
+        }
+        
+        // Mantener enlaces PDF como enlaces normales
+        if (href.includes('.pdf')) {
+          return match;
         }
         
         // Mantener enlaces internos y anclas
@@ -253,6 +261,10 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
     window.open(pdfPath, '_blank');
   };
 
+  const handleExternalLinkClick = (url: string) => {
+    window.open(url, '_blank', 'noopener,noreferrer');
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center p-8">
@@ -278,7 +290,7 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
         <h1 className="text-2xl font-bold text-gray-900 mb-4">{lessonTitle}</h1>
         
         {/* Materiales y recursos */}
-        {(pdfs.length > 0 || hasQuiz) && (
+        {(pdfs.length > 0 || externalLinks.length > 0 || hasQuiz) && (
           <div className="flex flex-wrap gap-3">
             {pdfs.map((pdf, index) => (
               <button
@@ -288,6 +300,18 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
               >
                 <FileText className="w-4 h-4 mr-2" />
                 <span className="text-sm font-medium">{pdf}</span>
+                <Download className="w-4 h-4 ml-2" />
+              </button>
+            ))}
+            
+            {externalLinks.map((link, index) => (
+              <button
+                key={`external-${index}`}
+                onClick={() => handleExternalLinkClick(link.url)}
+                className="inline-flex items-center px-3 py-2 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors"
+              >
+                <FileText className="w-4 h-4 mr-2" />
+                <span className="text-sm font-medium">{link.title}</span>
                 <Download className="w-4 h-4 ml-2" />
               </button>
             ))}

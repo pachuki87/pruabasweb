@@ -57,10 +57,20 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
       const link = target.closest('a[data-navigation-link="true"]') as HTMLAnchorElement;
       
       if (link) {
-        event.preventDefault();
         const href = link.getAttribute('data-href') || link.getAttribute('href') || '';
         const linkText = link.textContent?.trim() || '';
         
+        // Solo interceptar enlaces de navegación del curso, NO enlaces PDF
+        const isPdfLink = href.includes('.pdf') || href.includes('/course-content/');
+        
+        if (isPdfLink) {
+          // Permitir que los enlaces PDF funcionen normalmente
+          console.log('📄 PDF link clicked, allowing normal behavior:', linkText, href);
+          return;
+        }
+        
+        // Solo prevenir el comportamiento por defecto para enlaces de navegación
+        event.preventDefault();
         console.log('🔗 Navigation link clicked:', linkText, href);
         
         // Detectar tipo de navegación por el texto del enlace

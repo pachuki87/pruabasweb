@@ -170,7 +170,7 @@ const LessonPage: React.FC = () => {
           
           // Buscar PDFs en el directorio correspondiente basado en el slug
           if (generatedSlug.includes('Material Complementario')) {
-            pdfs.push('Clasificacion-de-sustancias.pdf', 'Fundamentos-de-la-conducta-adictiva.pdf');
+            pdfs.push('Clasificacion-de-sustancias.pdf', 'Fundamentos-de-la-conducta-adictiva.pdf', 'Informe-europeo-sobre-drogas-2020.pdf', 'Programa-Ibiza.pdf');
           }
           if (generatedSlug.includes('Terapia integral')) {
             pdfs.push('Articilo-Terapia-Integral-de-Pareja.pdf');

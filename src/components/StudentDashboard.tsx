@@ -232,7 +232,7 @@ const StudentDashboard: React.FC = () => {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            ¡Hola, {user?.name}! 👋
+            ¡Hola, {user?.nombre || user?.name}! 👋
           </h1>
           <p className="text-gray-600">
             Aquí tienes un resumen de tu progreso académico

@@ -51,13 +51,13 @@ const UserCoursesPage: React.FC<UserCoursesPageProps> = ({ role }) => {
         const enrolledCourseIds = enrollmentsData.map(enrollment => enrollment.curso_id);
 
         ({ data: coursesData, error: coursesError } = await supabase
-          .from('courses')
+          .from('cursos')
           .select('id, title, teacher_id')
           .in('id', enrolledCourseIds));
       } else if (role === 'teacher') {
         // Fetch courses created by teacher
         ({ data: coursesData, error: coursesError } = await supabase
-          .from('courses')
+          .from('cursos')
           .select('id, title, teacher_id')
           .eq('teacher_id', user.id));
       } else {
@@ -76,15 +76,15 @@ const UserCoursesPage: React.FC<UserCoursesPageProps> = ({ role }) => {
       let teachersMap = new Map();
       if (teacherIds.length > 0) {
         const { data: teachersData, error: teachersError } = await supabase
-          .from('users')
-          .select('id, name')
+          .from('usuarios')
+          .select('id, nombre')
           .in('id', teacherIds);
 
         if (teachersError) {
           console.error('Error fetching teachers:', teachersError);
         } else {
           teachersData.forEach(teacher => {
-            teachersMap.set(teacher.id, teacher.name);
+            teachersMap.set(teacher.id, teacher.nombre || teacher.name || 'Desconocido');
           });
         }
       }

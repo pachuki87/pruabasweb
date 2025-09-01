@@ -9,36 +9,30 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
-      users: {
+      usuarios: {
         Row: {
           id: string
           email: string
-          name: string
-          role: 'student' | 'teacher'
-          created_at: string
-          mobile: string | null
-          skills: string | null
-          qualification: string | null
+          nombre: string | null
+          name: string | null
+          rol: 'estudiante' | 'profesor'
+          creado_en: string
         }
         Insert: {
           id?: string
           email: string
-          name: string
-          role: 'student' | 'teacher'
-          created_at?: string
-          mobile?: string | null
-          skills?: string | null
-          qualification?: string | null
+          nombre?: string | null
+          name?: string | null
+          rol: 'estudiante' | 'profesor'
+          creado_en?: string
         }
         Update: {
           id?: string
           email?: string
-          name?: string
-          role?: 'student' | 'teacher'
-          created_at?: string
-          mobile?: string | null
-          skills?: string | null
-          qualification?: string | null
+          nombre?: string | null
+          name?: string | null
+          rol?: 'estudiante' | 'profesor'
+          creado_en?: string
         }
       }
       courses: {

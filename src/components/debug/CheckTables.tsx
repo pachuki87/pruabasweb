@@ -18,12 +18,12 @@ const CheckTables: React.FC = () => {
           inscripciones: null
         };
 
-        // Verificar users
-        try {
-          const { data, error } = await supabase.from('users').select('id').limit(1);
-          checks.users = error ? error.message : 'EXISTS';
+        // Verificar usuarios
+          try {
+            const { data, error } = await supabase.from('usuarios').select('id').limit(1);
+            checks.usuarios = error ? error.message : 'EXISTS';
         } catch (e) {
-          checks.users = 'ERROR: ' + (e as Error).message;
+            checks.usuarios = 'ERROR: ' + (e as Error).message;
         }
 
         // Verificar usuarios

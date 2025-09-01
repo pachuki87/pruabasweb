@@ -10,13 +10,18 @@ import { useAuth } from '../../contexts/AuthContext';
 interface Lesson {
   id: string;
   titulo: string;
+  descripcion?: string;
   slug?: string; // Opcional porque lo generamos dinámicamente
   orden: number;
-  archivo_url?: string; // URL del archivo HTML migrado
-  contenido_html?: string; // Mantenemos por compatibilidad, pero será null después de la migración
+  duracion_estimada?: number;
+  imagen_url?: string;
+  video_url?: string;
+  archivo_url?: string; // URL del archivo HTML
   pdfs?: string[];
   externalLinks?: Array<{title: string; url: string; isExternal: boolean}>;
   tiene_cuestionario?: boolean;
+  leccion_anterior_id?: string;
+  leccion_siguiente_id?: string;
 }
 
 interface Course {
@@ -160,7 +165,7 @@ const NewLessonPage: React.FC = () => {
         console.log('📖 Loading lessons for courseId:', courseId);
         const { data: lessonsData, error: lessonsError } = await supabase
           .from('lecciones')
-          .select('*')
+          .select('id, titulo, descripcion, orden, duracion_estimada, imagen_url, video_url, tiene_cuestionario, archivo_url, leccion_anterior_id, leccion_siguiente_id')
           .eq('curso_id', courseId)
           .order('orden', { ascending: true });
 

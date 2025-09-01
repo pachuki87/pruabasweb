@@ -375,7 +375,7 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
           dangerouslySetInnerHTML={{ __html: content }}
         />
         
-        <style jsx>{`
+        <style jsx="true">{`
           .elementor-content .elementor-section {
             margin-bottom: 2rem;
           }

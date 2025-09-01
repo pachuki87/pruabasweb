@@ -33,7 +33,7 @@ type CourseDetailsPageProps = {
 };
 
 const CourseDetailsPage: React.FC<CourseDetailsPageProps> = ({ role }) => {
-  const { id: courseId } = useParams<{ id: string }>();
+  const { courseId } = useParams<{ courseId: string }>();
   const navigate = useNavigate();
   
   // State variables
@@ -113,8 +113,8 @@ const CourseDetailsPage: React.FC<CourseDetailsPageProps> = ({ role }) => {
 
       // Transform materials data to match expected format
       const transformedMaterials = (data || []).map(material => ({
-        name: material.titulo || material.nombre || 'Material sin nombre',
-        url: material.url || material.archivo_url || '#'
+        name: material.titulo || 'Material sin nombre',
+        url: material.url_archivo || '#'
       }));
 
       setMaterials(transformedMaterials);
@@ -484,7 +484,7 @@ const CourseDetailsPage: React.FC<CourseDetailsPageProps> = ({ role }) => {
                   {materials.map((material, index) => (
                     <div key={index} className="border rounded-md p-4 hover:bg-gray-50 flex items-center justify-between">
                       <a 
-                        href={material.url} 
+                        href={material.url_archivo} 
                         target="_blank" 
                         rel="noopener noreferrer" 
                         className="text-blue-600 hover:underline flex items-center"
@@ -531,7 +531,7 @@ const CourseDetailsPage: React.FC<CourseDetailsPageProps> = ({ role }) => {
                       </div>
                       <div className="flex items-center space-x-2">
                         <a 
-                          href={material.url} 
+                          href={material.url_archivo} 
                           target="_blank" 
                           rel="noopener noreferrer" 
                           className="text-blue-600 hover:text-blue-800 text-sm px-3 py-1 border border-blue-600 rounded-md hover:bg-blue-50 transition-colors"

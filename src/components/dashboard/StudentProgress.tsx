@@ -40,7 +40,7 @@ const StudentProgress: React.FC = () => {
             titulo
           )
         `)
-        .eq('usuario_id', user.id);
+        .eq('user_id', user.id);
 
       if (enrollmentsError) throw enrollmentsError;
 
@@ -58,9 +58,9 @@ const StudentProgress: React.FC = () => {
 
         // Count total chapters
         const { count: totalChapters, error: chaptersError } = await supabase
-          .from('chapters')
+          .from('lecciones')
           .select('*', { count: 'exact', head: true })
-          .eq('course_id', courseId);
+          .eq('curso_id', courseId);
 
         if (chaptersError) {
           console.error('Error fetching chapters:', chaptersError);
@@ -69,9 +69,9 @@ const StudentProgress: React.FC = () => {
 
         // Count total quizzes
         const { count: totalQuizzes, error: quizzesError } = await supabase
-          .from('quizzes')
+          .from('cuestionarios')
           .select('*', { count: 'exact', head: true })
-          .eq('course_id', courseId);
+          .eq('curso_id', courseId);
 
         if (quizzesError) {
           console.error('Error fetching quizzes:', quizzesError);
@@ -80,14 +80,14 @@ const StudentProgress: React.FC = () => {
 
         // Count completed quizzes (quiz attempts by this student)
         const { count: completedQuizzes, error: attemptsError } = await supabase
-          .from('quiz_attempts')
+          .from('respuestas_texto_libre')
           .select('quiz_id', { count: 'exact', head: true })
           .eq('student_id', user.id)
           .in('quiz_id', 
             await supabase
-              .from('quizzes')
+              .from('cuestionarios')
               .select('id')
-              .eq('course_id', courseId)
+              .eq('curso_id', courseId)
               .then(({ data }) => data?.map(q => q.id) || [])
           );
 

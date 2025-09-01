@@ -28,7 +28,7 @@ const CourseRating: React.FC<CourseRatingProps> = ({
       const { error } = await supabase
         .from('course_ratings')
         .upsert({
-          course_id: courseId,
+          curso_id: courseId,
           student_id: studentId,
           rating,
           review: review.trim()

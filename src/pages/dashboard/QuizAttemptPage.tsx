@@ -16,10 +16,10 @@ type Quiz = {
   id: string;
   title: string;
   description?: string;
-  course_id: string;
-  lesson_id?: string;
+  curso_id: string;
+  chapter_id?: string;
   questions: Question[];
-};
+}
 
 const QuizAttemptPage: React.FC = () => {
   const { quizId } = useParams<{ quizId: string }>();
@@ -44,7 +44,7 @@ const QuizAttemptPage: React.FC = () => {
       
       // Fetch quiz data
       const { data: quizData, error: quizError } = await supabase
-        .from('quizzes')
+        .from('cuestionarios')
         .select('*')
         .eq('id', quizId)
         .single();
@@ -57,7 +57,7 @@ const QuizAttemptPage: React.FC = () => {
 
       // Fetch quiz questions
       const { data: questionsData, error: questionsError } = await supabase
-        .from('quiz_questions')
+        .from('preguntas')
         .select('*')
         .eq('quiz_id', quizId)
         .order('order_index');
@@ -72,8 +72,8 @@ const QuizAttemptPage: React.FC = () => {
         id: quizData.id,
         title: quizData.title,
         description: quizData.description,
-        course_id: quizData.course_id,
-        lesson_id: quizData.lesson_id,
+        curso_id: quizData.curso_id,
+        chapter_id: quizData.chapter_id,
         questions: questionsData.map(q => ({
           id: q.id,
           question: q.question,
@@ -132,7 +132,7 @@ const QuizAttemptPage: React.FC = () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
         const { error } = await supabase
-          .from('quiz_attempts')
+          .from('respuestas_texto_libre')
           .insert({
             quiz_id: quiz.id,
             student_id: user.id,
@@ -159,10 +159,10 @@ const QuizAttemptPage: React.FC = () => {
   };
 
   const handleBackToCourse = () => {
-    if (quiz?.lesson_id) {
-      navigate(`/student/courses/${quiz.course_id}/lessons/${quiz.lesson_id}`);
+    if (quiz?.chapter_id) {
+      navigate(`/student/courses/${quiz.curso_id}/lessons/${quiz.chapter_id}`);
     } else {
-      navigate(`/student/courses/${quiz?.course_id}`);
+      navigate(`/student/courses/${quiz?.curso_id}`);
     }
   };
 

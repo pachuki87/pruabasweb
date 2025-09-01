@@ -69,7 +69,7 @@ export interface Database {
           id: string
           title: string
           description: string | null
-          course_id: string
+          curso_id: string
           video_url: string | null
           remarks: string | null
           created_at: string
@@ -78,7 +78,7 @@ export interface Database {
           id?: string
           title: string
           description?: string | null
-          course_id: string
+          curso_id: string
           video_url?: string | null
           remarks?: string | null
           created_at?: string
@@ -87,7 +87,7 @@ export interface Database {
           id?: string
           title?: string
           description?: string | null
-          course_id?: string
+          curso_id?: string
           video_url?: string | null
           remarks?: string | null
           created_at?: string
@@ -97,19 +97,19 @@ export interface Database {
         Row: {
           id: string
           title: string
-          course_id: string
+          curso_id: string
           created_at: string
         }
         Insert: {
           id?: string
           title: string
-          course_id: string
+          curso_id: string
           created_at?: string
         }
         Update: {
           id?: string
           title?: string
-          course_id?: string
+          curso_id?: string
           created_at?: string
         }
       }
@@ -168,19 +168,19 @@ export interface Database {
       inscripciones: {
         Row: {
           id: string
-          usuario_id: string
+          user_id: string
           curso_id: string
           created_at: string
         }
         Insert: {
           id?: string
-          usuario_id: string
+          user_id: string
           curso_id: string
           created_at?: string
         }
         Update: {
           id?: string
-          usuario_id?: string
+          user_id?: string
           curso_id?: string
           created_at?: string
         }
@@ -189,7 +189,7 @@ export interface Database {
         Row: {
           id: string
           title: string
-          course_id: string
+          curso_id: string
           file_url: string
           remarks: string | null
           created_at: string
@@ -197,7 +197,7 @@ export interface Database {
         Insert: {
           id?: string
           title: string
-          course_id: string
+          curso_id: string
           file_url: string
           remarks?: string | null
           created_at?: string
@@ -205,7 +205,7 @@ export interface Database {
         Update: {
           id?: string
           title?: string
-          course_id?: string
+          curso_id?: string
           file_url?: string
           remarks?: string | null
           created_at?: string
@@ -214,9 +214,9 @@ export interface Database {
       user_course_progress: {
         Row: {
           id: string
-          usuario_id: string
+          user_id: string
           curso_id: string
-          leccion_id: string | null
+          chapter_id: string | null
           progress_percentage: number
           completed_at: string | null
           last_accessed_at: string
@@ -227,9 +227,9 @@ export interface Database {
         }
         Insert: {
           id?: string
-          usuario_id: string
+          user_id: string
           curso_id: string
-          leccion_id?: string | null
+          chapter_id?: string | null
           progress_percentage?: number
           completed_at?: string | null
           last_accessed_at?: string
@@ -240,9 +240,9 @@ export interface Database {
         }
         Update: {
           id?: string
-          usuario_id?: string
+          user_id?: string
           curso_id?: string
-          leccion_id?: string | null
+          chapter_id?: string | null
           progress_percentage?: number
           completed_at?: string | null
           last_accessed_at?: string
@@ -255,8 +255,8 @@ export interface Database {
       user_test_results: {
         Row: {
           id: string
-          usuario_id: string
-          cuestionario_id: string
+          user_id: string
+          quiz_id: string
           curso_id: string
           score: number
           total_questions: number
@@ -272,8 +272,8 @@ export interface Database {
         }
         Insert: {
           id?: string
-          usuario_id: string
-          cuestionario_id: string
+          user_id: string
+          quiz_id: string
           curso_id: string
           score: number
           total_questions: number
@@ -289,8 +289,8 @@ export interface Database {
         }
         Update: {
           id?: string
-          usuario_id?: string
-          cuestionario_id?: string
+          user_id?: string
+          quiz_id?: string
           curso_id?: string
           score?: number
           total_questions?: number

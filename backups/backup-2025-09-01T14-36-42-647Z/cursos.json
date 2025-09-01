@@ -1,0 +1,18 @@
+[
+  {
+    "id": "d7c3e503-ed61-4d7a-9e5f-aedc407d4836",
+    "titulo": "Experto en Conductas Adictivas",
+    "descripcion": "Curso completo sobre el tratamiento y comprensión de las conductas adictivas. Incluye fundamentos teóricos, criterios diagnósticos según DSM-5, terapias psicológicas innovadoras, mindfulness aplicado, terapia integral de pareja, psicología positiva y manejo de recaídas. Dirigido a profesionales de la salud mental que deseen especializarse en el campo de las adicciones.",
+    "profesor_id": "79bcdeb7-512b-45cd-88df-f5b44169115e",
+    "creado_en": "2025-08-06T12:06:50.346362+00:00",
+    "imagen_url": "https://institutolidera.com/wp-content/uploads/2022/10/que-es-adiccion.jpg"
+  },
+  {
+    "id": "b5ef8c64-fe26-4f20-8221-80a1bf475b05",
+    "titulo": "MÁSTER EN ADICCIONES E INTERVENCIÓN PSICOSOCIAL",
+    "descripcion": "Curso especializado en inteligencia emocional aplicada a la prevención y tratamiento de conductas adictivas. Desarrolla habilidades para el manejo emocional, autoconocimiento y regulación emocional.",
+    "profesor_id": "79bcdeb7-512b-45cd-88df-f5b44169115e",
+    "creado_en": "2025-08-17T17:11:58.244158+00:00",
+    "imagen_url": "https://trae-api-us.mchost.guru/api/ide/v1/text_to_image?prompt=emotional%20intelligence%20brain%20with%20colorful%20emotions%20modern%20educational%20style&image_size=landscape_16_9"
+  }
+]

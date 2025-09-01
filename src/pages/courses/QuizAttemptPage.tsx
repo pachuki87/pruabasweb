@@ -131,7 +131,7 @@ const QuizAttemptPage: React.FC = () => {
             .insert({
               pregunta_id: questionId,
               respuesta: textAnswer.trim(),
-              usuario_id: 'anonymous' // Puedes cambiar esto si tienes autenticación
+              user_id: 'anonymous' // Puedes cambiar esto si tienes autenticación
             });
         }
       }

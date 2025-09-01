@@ -32,7 +32,7 @@ export class ProgressService {
       const { data: existingProgress, error: fetchError } = await supabase
         .from('user_course_progress')
         .select('*')
-        .eq('usuario_id', userId)
+        .eq('user_id', userId)
         .eq('curso_id', courseId)
         .eq('leccion_id', chapterId)
         .single();
@@ -65,7 +65,7 @@ export class ProgressService {
       } else {
         // Crear nuevo registro de progreso
         const insertData: UserCourseProgressInsert = {
-          usuario_id: userId,
+          user_id: userId,
           curso_id: courseId,
           leccion_id: chapterId,
           progress_percentage: progressPercentage,
@@ -105,7 +105,7 @@ export class ProgressService {
             descripcion
           )
         `)
-        .eq('usuario_id', userId)
+        .eq('user_id', userId)
         .eq('curso_id', courseId)
         .order('last_accessed_at', { ascending: false });
 
@@ -125,7 +125,7 @@ export class ProgressService {
       const { data, error } = await supabase
         .from('user_course_summary')
         .select('*')
-        .eq('usuario_id', userId);
+        .eq('user_id', userId);
 
       if (error) throw error;
       return data;
@@ -170,8 +170,8 @@ export class ProgressService {
       const { data: previousAttempts, error: countError } = await supabase
         .from('user_test_results')
         .select('attempt_number')
-        .eq('usuario_id', userId)
-        .eq('cuestionario_id', quizId)
+        .eq('user_id', userId)
+        .eq('quiz_id', quizId)
         .order('attempt_number', { ascending: false })
         .limit(1);
 
@@ -182,8 +182,8 @@ export class ProgressService {
         : 1;
 
       const insertData: UserTestResultsInsert = {
-        usuario_id: userId,
-        cuestionario_id: quizId,
+        user_id: userId,
+        quiz_id: quizId,
         curso_id: courseId,
         score,
         total_questions: totalQuestions,
@@ -220,7 +220,7 @@ export class ProgressService {
         .from('user_test_results')
         .select(`
           *,
-          quizzes:cuestionario_id (
+          quizzes:quiz_id (
             id,
             titulo
           ),
@@ -229,7 +229,7 @@ export class ProgressService {
             titulo
           )
         `)
-        .eq('usuario_id', userId)
+        .eq('user_id', userId)
         .order('completed_at', { ascending: false });
 
       if (courseId) {
@@ -255,7 +255,7 @@ export class ProgressService {
       const { data: courseProgress, error: courseError } = await supabase
         .from('user_course_summary')
         .select('*')
-        .eq('usuario_id', userId);
+        .eq('user_id', userId);
 
       if (courseError) throw courseError;
 
@@ -264,14 +264,14 @@ export class ProgressService {
         .from('user_test_results')
         .select(`
           *,
-          quizzes:cuestionario_id (
+          quizzes:quiz_id (
             titulo
           ),
           courses:curso_id (
             titulo
           )
         `)
-        .eq('usuario_id', userId)
+        .eq('user_id', userId)
         .order('completed_at', { ascending: false })
         .limit(10);
 

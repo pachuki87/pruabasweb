@@ -5,12 +5,12 @@ import CourseForm from '../../components/courses/CourseForm';
 import { supabase } from '../../lib/supabase';
 
 const EditCoursePage: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
+  const { courseId } = useParams<{ courseId: string }>();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (formData: FormData) => {
-    if (!id) return;
+    if (!courseId) return;
     
     setIsSubmitting(true);
     
@@ -37,7 +37,7 @@ const EditCoursePage: React.FC = () => {
 
       setIsSubmitting(false);
       toast.success('Curso actualizado exitosamente!');
-      navigate(`/teacher/courses/${id}`); // Navigate back to the course details page
+      navigate(`/teacher/courses/${courseId}`); // Navigate back to the course details page
     } catch (error: any) {
       console.error('Error al actualizar el curso:', error);
       setIsSubmitting(false);
@@ -45,7 +45,7 @@ const EditCoursePage: React.FC = () => {
     }
   };
 
-  if (!id) {
+  if (!courseId) {
     return <div>Course ID is required</div>;
   }
 
@@ -54,7 +54,7 @@ const EditCoursePage: React.FC = () => {
       <h1 className="text-2xl font-bold mb-6">Edit Course</h1>
       
       <CourseForm
-        courseId={id}
+        courseId={courseId}
         teacherId="teacher-id" // In a real app, this would be the logged-in teacher's ID
         onSubmit={handleSubmit}
         isLoading={isSubmitting}

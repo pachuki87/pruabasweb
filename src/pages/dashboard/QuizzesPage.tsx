@@ -7,7 +7,7 @@ import { supabase } from '../../lib/supabase';
 type Quiz = {
   id: string;
   title: string;
-  course_id: string;
+  curso_id: string;
   course_title: string;
   assigned: boolean;
 };

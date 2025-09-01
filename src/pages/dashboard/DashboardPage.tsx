@@ -50,7 +50,7 @@ const DashboardPage: React.FC<DashboardProps> = ({ role }) => {
         const { count: coursesCount, error: coursesError } = await supabase
           .from('cursos')
           .select('*', { count: 'exact', head: true })
-          .eq('profesor_id', user.id);
+          .eq('teacher_id', user.id);
 
         if (coursesError) throw coursesError;
 
@@ -58,7 +58,7 @@ const DashboardPage: React.FC<DashboardProps> = ({ role }) => {
         const { data: teacherCourses } = await supabase
           .from('cursos')
           .select('id')
-          .eq('profesor_id', user.id);
+          .eq('teacher_id', user.id);
 
         const courseIds = teacherCourses?.map(course => course.id) || [];
         
@@ -71,9 +71,9 @@ const DashboardPage: React.FC<DashboardProps> = ({ role }) => {
 
         // Fetch total quizzes for teacher's courses
         const { count: quizzesCount, error: quizzesError } = await supabase
-          .from('quizzes')
+          .from('cuestionarios')
           .select('*', { count: 'exact', head: true })
-          .in('course_id', courseIds);
+          .in('curso_id', courseIds);
 
         if (quizzesError) throw quizzesError;
 
@@ -91,13 +91,13 @@ const DashboardPage: React.FC<DashboardProps> = ({ role }) => {
         const { count: enrolledCoursesCount, error: enrolledError } = await supabase
           .from('inscripciones')
           .select('*', { count: 'exact', head: true })
-          .eq('usuario_id', user.id);
+          .eq('user_id', user.id);
 
         if (enrolledError) throw enrolledError;
 
         // Fetch completed quizzes
         const { count: completedQuizzesCount, error: quizzesError } = await supabase
-          .from('quiz_attempts')
+          .from('respuestas_texto_libre')
           .select('*', { count: 'exact', head: true })
           .eq('student_id', user.id);
 
@@ -107,16 +107,16 @@ const DashboardPage: React.FC<DashboardProps> = ({ role }) => {
         const { data: enrollments } = await supabase
         .from('inscripciones')
           .select('curso_id')
-          .eq('usuario_id', user.id);
+        .eq('user_id', user.id);
 
         let completedCoursesCount = 0;
         if (enrollments) {
           for (const enrollment of enrollments) {
             const { data: quizAttempts } = await supabase
-              .from('quiz_attempts')
+              .from('respuestas_texto_libre')
               .select('quiz_id')
               .eq('student_id', user.id)
-              .eq('quiz_id', enrollment.course_id);
+              .eq('quiz_id', enrollment.curso_id);
             
             if (quizAttempts && quizAttempts.length > 0) {
               completedCoursesCount++;

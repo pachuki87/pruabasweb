@@ -135,7 +135,7 @@ function App() {
           <Route path="/student" element={<DashboardLayout role="student" onRoleChange={handleRoleChange} />}>
             <Route path="dashboard" element={<DashboardPage role="student" />} />
             <Route path="courses" element={<UserCoursesPage role="student" />} />
-            <Route path="courses/:id" element={<CourseDetailsPage role="student" />} />
+            <Route path="courses/:courseId" element={<CourseDetailsPage role="student" />} />
             <Route path="courses/:courseId/lessons/:lessonId" element={<NewLessonPage />} />
             <Route path="quizzes" element={<QuizzesPage role="student" />} />
             <Route path="quizzes/attempt/:quizId" element={<QuizAttemptPage />} />
@@ -147,10 +147,10 @@ function App() {
             <Route path="dashboard" element={<DashboardPage role="teacher" />} />
             <Route path="courses" element={<UserCoursesPage role="teacher" />} />
             <Route path="courses/add" element={<AddCoursePage />} />
-            <Route path="courses/edit/:id" element={<EditCoursePage />} />
-            <Route path="courses/:id" element={<CourseDetailsPage role="teacher" />} />
+            <Route path="courses/edit/:courseId" element={<EditCoursePage />} />
+            <Route path="courses/:courseId" element={<CourseDetailsPage role="teacher" />} />
             <Route path="courses/:courseId/lessons/:lessonId" element={<NewLessonPage />} />
-            <Route path="courses/:id/materials" element={<StudyMaterialsPage role="teacher" />} />
+            <Route path="courses/:courseId/materials" element={<StudyMaterialsPage role="teacher" />} />
             <Route path="quizzes" element={<QuizzesPage role="teacher" />} />
             <Route path="quizzes/attempt/:quizId" element={<QuizAttemptPage />} />
             <Route path="quizzes/add" element={<AddQuizPage />} />

@@ -369,7 +369,11 @@ const NewLessonPage: React.FC = () => {
             
             // Registrar progreso del usuario si está autenticado
             if (user && courseId) {
-              await updateChapterProgress(lesson.id, 'in_progress');
+              await updateChapterProgress({
+                courseId,
+                chapterId: lesson.id,
+                progressPercentage: 0
+              });
               setStartTime(new Date());
               setLastActivityTime(new Date());
             }
@@ -383,7 +387,11 @@ const NewLessonPage: React.FC = () => {
             
             // Registrar progreso del usuario si está autenticado
             if (user && courseId) {
-              await updateChapterProgress(processedLessons[0].id, 'in_progress');
+              await updateChapterProgress({
+                courseId,
+                chapterId: processedLessons[0].id,
+                progressPercentage: 0
+              });
               setStartTime(new Date());
               setLastActivityTime(new Date());
             }
@@ -461,7 +469,11 @@ const NewLessonPage: React.FC = () => {
     
     // Registrar progreso del usuario si está autenticado
     if (user && courseId) {
-      await updateChapterProgress(lesson.id, 'in_progress');
+      await updateChapterProgress({
+        courseId,
+        chapterId: lesson.id,
+        progressPercentage: 0
+      });
       setStartTime(new Date());
       setLastActivityTime(new Date());
     }

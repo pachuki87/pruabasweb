@@ -36,7 +36,7 @@ const CheckTables: React.FC = () => {
 
         // Verificar courses
         try {
-          const { data, error } = await supabase.from('courses').select('id').limit(1);
+          const { data, error } = await supabase.from('cursos').select('id').limit(1);
           checks.courses = error ? error.message : 'EXISTS';
         } catch (e) {
           checks.courses = 'ERROR: ' + (e as Error).message;

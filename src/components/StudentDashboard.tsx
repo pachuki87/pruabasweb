@@ -300,11 +300,11 @@ const StudentDashboard: React.FC = () => {
               {courseProgress.length > 0 ? (
                 courseProgress.map((course: any) => (
                   <CourseProgressItem
-                    key={course.course_id}
+                    key={course.curso_id}
                     course={course}
                     onClick={() => {
                       // Navegar al curso
-                      window.location.href = `/courses/${course.course_id}`;
+                      window.location.href = `/courses/${course.curso_id}`;
                     }}
                   />
                 ))

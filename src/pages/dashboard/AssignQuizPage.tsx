@@ -14,7 +14,7 @@ type Student = {
 type Quiz = {
   id: string;
   title: string;
-  course_id: string;
+  curso_id: string;
   course_title: string;
 };
 
@@ -43,7 +43,7 @@ const AssignQuizPage: React.FC = () => {
         const mockQuiz: Quiz = {
           id: quizId || 'quiz-adicciones-1', // Usar un ID representativo
           title: 'Quiz Master en Adicciones',
-          course_id: 'c563c497-5583-451a-a625-a3c07d6cb6b4', // ID del Master en Adicciones
+          curso_id: 'c563c497-5583-451a-a625-a3c07d6cb6b4', // ID del Master en Adicciones
           course_title: 'Master en Adicciones',
         };
         

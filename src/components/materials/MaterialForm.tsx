@@ -36,7 +36,7 @@ const MaterialForm: React.FC<MaterialFormProps> = ({ courseId, onSubmit, isLoadi
     formData.append('title', title);
     formData.append('file', file);
     formData.append('remarks', remarks);
-    formData.append('course_id', courseId);
+    formData.append('curso_id', courseId);
     
     onSubmit(formData);
   };

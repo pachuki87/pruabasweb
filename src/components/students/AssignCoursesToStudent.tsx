@@ -60,7 +60,7 @@ const AssignCoursesToStudent: React.FC = () => {
       const { data: assignedData, error: assignedError } = await supabase
         .from('inscripciones')
         .select('curso_id')
-        .eq('usuario_id', studentId);
+        .eq('user_id', studentId);
 
       if (assignedError) throw assignedError;
       if (assignedData) {
@@ -91,14 +91,14 @@ const AssignCoursesToStudent: React.FC = () => {
       const { error: deleteError } = await supabase
         .from('inscripciones')
         .delete()
-        .eq('usuario_id', studentId);
+        .eq('user_id', studentId);
 
       if (deleteError) throw deleteError;
 
       // Insert new assignments
       if (assignedCourseIds.length > 0) {
         const assignmentsToInsert = selectedCourseIds.map(courseId => ({
-          usuario_id: studentId,
+          user_id: studentId,
           curso_id: courseId
         }));
         const { error: insertError } = await supabase

@@ -17,7 +17,7 @@ type StudyMaterialsPageProps = {
 };
 
 const StudyMaterialsPage: React.FC<StudyMaterialsPageProps> = ({ role }) => {
-  const { id: courseId } = useParams<{ id: string }>();
+  const { courseId } = useParams<{ courseId: string }>();
   const [materials, setMaterials] = useState<Material[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);

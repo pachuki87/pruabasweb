@@ -40,7 +40,7 @@ const LessonNavigation: React.FC<LessonNavigationProps> = ({
     if (courseProgress && courseProgress.length > 0) {
       const progressMap: {[key: string]: any} = {};
       courseProgress.forEach((progress: any) => {
-        progressMap[progress.chapter_id] = progress;
+        progressMap[progress.leccion_id] = progress;
       });
       setLessonProgress(progressMap);
     }

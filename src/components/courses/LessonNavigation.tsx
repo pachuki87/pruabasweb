@@ -1,5 +1,8 @@
-import React from 'react';
-import { ChevronLeft, ChevronRight, BookOpen, FileText } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { BookOpen, ChevronLeft, ChevronRight, FileText } from 'lucide-react';
+import ProgressIndicator from './ProgressIndicator';
+import { useProgress } from '../../hooks/useProgress';
+import { useAuth } from '../../contexts/AuthContext';
 
 interface Lesson {
   id: string;
@@ -13,18 +16,50 @@ interface Lesson {
 interface LessonNavigationProps {
   lessons: Lesson[];
   currentLessonId: string;
+  courseId: string;
   onLessonSelect: (lesson: Lesson) => void;
 }
 
 const LessonNavigation: React.FC<LessonNavigationProps> = ({
   lessons,
   currentLessonId,
+  courseId,
   onLessonSelect
 }) => {
+  const { user } = useAuth();
+  const { courseProgress, loading } = useProgress(courseId);
+  const [lessonProgress, setLessonProgress] = useState<{[key: string]: any}>({});
+  
   const currentIndex = lessons.findIndex(lesson => lesson.id === currentLessonId);
   const currentLesson = lessons[currentIndex];
   const previousLesson = currentIndex > 0 ? lessons[currentIndex - 1] : null;
   const nextLesson = currentIndex < lessons.length - 1 ? lessons[currentIndex + 1] : null;
+
+  // Cargar progreso de las lecciones
+  useEffect(() => {
+    if (courseProgress && courseProgress.length > 0) {
+      const progressMap: {[key: string]: any} = {};
+      courseProgress.forEach((progress: any) => {
+        progressMap[progress.chapter_id] = progress;
+      });
+      setLessonProgress(progressMap);
+    }
+  }, [courseProgress]);
+
+  // Función para obtener el estado de progreso de una lección
+  const getLessonProgressStatus = (lessonId: string) => {
+    const progress = lessonProgress[lessonId];
+    if (!progress) return 'not_started';
+    if (progress.is_completed) return 'completed';
+    if (progress.progress_percentage > 0) return 'in_progress';
+    return 'not_started';
+  };
+
+  // Función para obtener el porcentaje de progreso
+  const getLessonProgressPercentage = (lessonId: string) => {
+    const progress = lessonProgress[lessonId];
+    return progress ? progress.progress_percentage || 0 : 0;
+  };
 
   return (
     <div className="bg-white rounded-lg shadow-lg border border-gray-200 min-h-[calc(100vh-12rem)] flex flex-col">
@@ -57,11 +92,23 @@ const LessonNavigation: React.FC<LessonNavigationProps> = ({
                       }`}>
                         {lesson.orden.toString().padStart(2, '0')}
                       </span>
-                      <h4 className={`font-semibold text-sm leading-tight ${
-                        isActive ? 'text-blue-900' : 'text-gray-900'
-                      }`}>
-                        {lesson.titulo}
-                      </h4>
+                      <div className="flex-1">
+                        <h4 className={`font-semibold text-sm leading-tight ${
+                          isActive ? 'text-blue-900' : 'text-gray-900'
+                        }`}>
+                          {lesson.titulo}
+                        </h4>
+                        {user && (
+                          <div className="mt-1">
+                            <ProgressIndicator
+                              status={getLessonProgressStatus(lesson.id)}
+                              percentage={getLessonProgressPercentage(lesson.id)}
+                              size="sm"
+                              showText={false}
+                            />
+                          </div>
+                        )}
+                      </div>
                     </div>
                     
                     {/* Indicadores de recursos */}

@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
+import CheckTables from '../debug/CheckTables';
 
 type Course = {
   id: string;
-  titulo: string;
+  title: string;
 };
 
 const AssignCoursesToStudent: React.FC = () => {
@@ -48,7 +49,7 @@ const AssignCoursesToStudent: React.FC = () => {
 
       const { data: coursesData, error: coursesError } = await supabase
         .from('cursos')
-        .select('id, titulo');
+        .select('id, title');
 
       if (coursesError) throw coursesError;
       if (coursesData) {
@@ -96,7 +97,7 @@ const AssignCoursesToStudent: React.FC = () => {
 
       // Insert new assignments
       if (assignedCourseIds.length > 0) {
-        const assignmentsToInsert = assignedCourseIds.map(courseId => ({
+        const assignmentsToInsert = selectedCourseIds.map(courseId => ({
           usuario_id: studentId,
           curso_id: courseId
         }));
@@ -122,6 +123,7 @@ const AssignCoursesToStudent: React.FC = () => {
 
   return (
     <div className="max-w-2xl mx-auto bg-white p-6 rounded-md shadow-md">
+      <CheckTables />
       <h2 className="text-2xl font-bold mb-4">Asignar Cursos a {studentEmail}</h2>
       
       {message && (
@@ -146,7 +148,7 @@ const AssignCoursesToStudent: React.FC = () => {
                   className="form-checkbox h-5 w-5 text-blue-600"
                 />
                 <label htmlFor={course.id} className="ml-3 text-gray-900 text-lg">
-                  {course.titulo}
+                  {course.title}
                 </label>
               </div>
             ))}

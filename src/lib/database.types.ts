@@ -171,23 +171,23 @@ export interface Database {
           created_at?: string
         }
       }
-      enrollments: {
+      inscripciones: {
         Row: {
           id: string
-          student_id: string
-          course_id: string
+          usuario_id: string
+          curso_id: string
           created_at: string
         }
         Insert: {
           id?: string
-          student_id: string
-          course_id: string
+          usuario_id: string
+          curso_id: string
           created_at?: string
         }
         Update: {
           id?: string
-          student_id?: string
-          course_id?: string
+          usuario_id?: string
+          curso_id?: string
           created_at?: string
         }
       }
@@ -214,6 +214,100 @@ export interface Database {
           course_id?: string
           file_url?: string
           remarks?: string | null
+          created_at?: string
+        }
+      }
+      user_course_progress: {
+        Row: {
+          id: string
+          user_id: string
+          course_id: string
+          chapter_id: string | null
+          progress_percentage: number
+          completed_at: string | null
+          last_accessed_at: string
+          time_spent_minutes: number
+          is_completed: boolean
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          course_id: string
+          chapter_id?: string | null
+          progress_percentage?: number
+          completed_at?: string | null
+          last_accessed_at?: string
+          time_spent_minutes?: number
+          is_completed?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          course_id?: string
+          chapter_id?: string | null
+          progress_percentage?: number
+          completed_at?: string | null
+          last_accessed_at?: string
+          time_spent_minutes?: number
+          is_completed?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+      }
+      user_test_results: {
+        Row: {
+          id: string
+          user_id: string
+          quiz_id: string
+          course_id: string
+          score: number
+          total_questions: number
+          correct_answers: number
+          incorrect_answers: number
+          time_taken_minutes: number | null
+          passed: boolean
+          attempt_number: number
+          answers_data: Json | null
+          started_at: string | null
+          completed_at: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          quiz_id: string
+          course_id: string
+          score: number
+          total_questions: number
+          correct_answers: number
+          incorrect_answers: number
+          time_taken_minutes?: number | null
+          passed?: boolean
+          attempt_number?: number
+          answers_data?: Json | null
+          started_at?: string | null
+          completed_at?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          quiz_id?: string
+          course_id?: string
+          score?: number
+          total_questions?: number
+          correct_answers?: number
+          incorrect_answers?: number
+          time_taken_minutes?: number | null
+          passed?: boolean
+          attempt_number?: number
+          answers_data?: Json | null
+          started_at?: string | null
+          completed_at?: string | null
           created_at?: string
         }
       }

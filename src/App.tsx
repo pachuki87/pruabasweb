@@ -4,6 +4,7 @@ import { Toaster } from 'sonner';
 import { ErrorBoundary } from 'react-error-boundary';
 import { CartProvider } from 'react-use-cart';
 import { supabase, getUserById, getUsers } from './lib/supabase'; // Import supabase, getUsers
+import { AuthProvider } from './contexts/AuthContext';
 
 // Layouts
 import DashboardLayout from './components/layout/DashboardLayout';
@@ -41,7 +42,7 @@ import AssignQuizPage from './pages/dashboard/AssignQuizPage';
 import StudyMaterialsPage from './pages/dashboard/StudyMaterialsPage';
 import UserProfilePage from './pages/dashboard/UserProfilePage';
 import ChangePasswordPage from './pages/dashboard/ChangePasswordPage';
-import LessonPage from './pages/courses/LessonPage';
+import NewLessonPage from './pages/courses/NewLessonPage';
 // Components
 import StudentList from './components/students/StudentList';
 import AddStudentForm from './components/students/AddStudentForm'; // Import AddStudentForm
@@ -112,10 +113,11 @@ function App() {
   };
 
   return (
-    <CartProvider>
-      <Toaster position="top-right" />
-      
-      <BrowserRouter>
+    <AuthProvider>
+      <CartProvider>
+        <Toaster position="top-right" />
+        
+        <BrowserRouter>
         <Routes>
           {/* Public routes */}
           <Route path="/" element={<HomePage currentRole={currentRole} onRoleChange={handleRoleChange} />} />
@@ -134,7 +136,7 @@ function App() {
             <Route path="dashboard" element={<DashboardPage role="student" />} />
             <Route path="courses" element={<UserCoursesPage role="student" />} />
             <Route path="courses/:id" element={<CourseDetailsPage role="student" />} />
-            <Route path="courses/:courseId/lessons/:lessonId" element={<LessonPage />} />
+            <Route path="courses/:courseId/lessons/:lessonId" element={<NewLessonPage />} />
             <Route path="quizzes" element={<QuizzesPage role="student" />} />
             <Route path="quizzes/attempt/:quizId" element={<QuizAttemptPage />} />
             <Route path="profile" element={<UserProfilePage role="student" />} />
@@ -147,7 +149,7 @@ function App() {
             <Route path="courses/add" element={<AddCoursePage />} />
             <Route path="courses/edit/:id" element={<EditCoursePage />} />
             <Route path="courses/:id" element={<CourseDetailsPage role="teacher" />} />
-            <Route path="courses/:courseId/lessons/:lessonId" element={<LessonPage />} />
+            <Route path="courses/:courseId/lessons/:lessonId" element={<NewLessonPage />} />
             <Route path="courses/:id/materials" element={<StudyMaterialsPage role="teacher" />} />
             <Route path="quizzes" element={<QuizzesPage role="teacher" />} />
             <Route path="quizzes/attempt/:quizId" element={<QuizAttemptPage />} />
@@ -173,8 +175,9 @@ function App() {
           {/* 404 route */}
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
-      </BrowserRouter>
-    </CartProvider>
+        </BrowserRouter>
+      </CartProvider>
+    </AuthProvider>
   );
 }
 

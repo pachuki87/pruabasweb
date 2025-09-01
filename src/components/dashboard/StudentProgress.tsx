@@ -32,15 +32,15 @@ const StudentProgress: React.FC = () => {
 
       // Fetch enrolled courses
       const { data: enrollments, error: enrollmentsError } = await supabase
-        .from('enrollments')
+        .from('inscripciones')
         .select(`
-          course_id,
-          courses (
+          curso_id,
+          cursos!inner (
             id,
-            title
+            titulo
           )
         `)
-        .eq('student_id', user.id);
+        .eq('usuario_id', user.id);
 
       if (enrollmentsError) throw enrollmentsError;
 
@@ -53,8 +53,8 @@ const StudentProgress: React.FC = () => {
       const progressData: CourseProgress[] = [];
 
       for (const enrollment of enrollments) {
-        const courseId = enrollment.course_id;
-        const courseTitle = enrollment.courses?.title || 'Curso sin título';
+        const courseId = enrollment.curso_id;
+        const courseTitle = enrollment.cursos?.titulo || 'Curso sin título';
 
         // Count total chapters
         const { count: totalChapters, error: chaptersError } = await supabase

@@ -2,34 +2,52 @@ import React, { useState, useEffect } from 'react';
 import { FileText, Download, ExternalLink, BookOpen } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-interface LessonViewerProps {
-  lessonSlug: string;
-  lessonTitle: string;
-  lessonContent?: string; // Contenido HTML desde la base de datos (legacy)
-  lessonFileUrl?: string; // URL del archivo HTML migrado
+interface Lesson {
+  id: string;
+  titulo: string;
+  slug: string;
+  contenido?: string;
+  archivo_url?: string;
   pdfs?: string[];
-  externalLinks?: Array<{title: string; url: string; isExternal: boolean}>;
-  hasQuiz?: boolean;
+  enlaces_externos?: Array<{title: string; url: string; isExternal: boolean}>;
+  tiene_cuestionario?: boolean;
+}
+
+interface Course {
+  id: string;
+  titulo: string;
+  descripcion: string;
+}
+
+interface LessonViewerProps {
+  lesson: Lesson;
+  course: Course;
   quizId?: string | null;
   onBackToCourse?: () => void;
   onNextLesson?: () => void;
   onPreviousLesson?: () => void;
-  onQuizClick?: () => void;
+  canGoNext?: boolean;
+  canGoPrevious?: boolean;
 }
 
 const LessonViewer: React.FC<LessonViewerProps> = ({
-  lessonSlug,
-  lessonTitle,
-  lessonContent,
-  lessonFileUrl,
-  pdfs = [],
-  externalLinks = [],
-  hasQuiz = false,
+  lesson,
+  course,
   quizId = null,
   onBackToCourse,
   onNextLesson,
-  onPreviousLesson
+  onPreviousLesson,
+  canGoNext = false,
+  canGoPrevious = false
 }) => {
+  // Extraer propiedades del objeto lesson
+  const lessonSlug = lesson.slug;
+  const lessonTitle = lesson.titulo;
+  const lessonContent = lesson.contenido;
+  const lessonFileUrl = lesson.archivo_url;
+  const pdfs = lesson.pdfs || [];
+  const externalLinks = lesson.enlaces_externos || [];
+  const hasQuiz = lesson.tiene_cuestionario || false;
   const navigate = useNavigate();
   const { courseId } = useParams<{ courseId: string }>();
 

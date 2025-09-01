@@ -63,9 +63,9 @@ const DashboardPage: React.FC<DashboardProps> = ({ role }) => {
         const courseIds = teacherCourses?.map(course => course.id) || [];
         
         const { count: studentsCount, error: studentsError } = await supabase
-          .from('enrollments')
+          .from('inscripciones')
           .select('*', { count: 'exact', head: true })
-          .in('course_id', courseIds);
+          .in('curso_id', courseIds);
 
         if (studentsError) throw studentsError;
 
@@ -89,9 +89,9 @@ const DashboardPage: React.FC<DashboardProps> = ({ role }) => {
         // Student stats
         // Fetch enrolled courses
         const { count: enrolledCoursesCount, error: enrolledError } = await supabase
-          .from('enrollments')
+          .from('inscripciones')
           .select('*', { count: 'exact', head: true })
-          .eq('student_id', user.id);
+          .eq('usuario_id', user.id);
 
         if (enrolledError) throw enrolledError;
 
@@ -105,9 +105,9 @@ const DashboardPage: React.FC<DashboardProps> = ({ role }) => {
 
         // Calculate completed courses (simplified: courses with at least one quiz attempt)
         const { data: enrollments } = await supabase
-          .from('enrollments')
-          .select('course_id')
-          .eq('student_id', user.id);
+        .from('inscripciones')
+          .select('curso_id')
+          .eq('usuario_id', user.id);
 
         let completedCoursesCount = 0;
         if (enrollments) {

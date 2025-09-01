@@ -25,10 +25,28 @@ interface Course {
   descripcion: string;
 }
 
-const LessonPage: React.FC = () => {
-  const { courseId, lessonId } = useParams<{ courseId: string; lessonId: string }>();
+const NewLessonPage: React.FC = () => {
+  console.log('🚀🚀🚀 NUEVO LESSONPAGE FUNCIONANDO CORRECTAMENTE 🚀🚀🚀');
+  
+  const { courseId: rawCourseId, lessonId } = useParams<{ courseId: string; lessonId: string }>();
+  console.log('📥 RAW PARAMS - rawCourseId:', rawCourseId, 'lessonId:', lessonId);
+  
   const navigate = useNavigate();
   const { user } = useAuth();
+  
+  // Mapear slug de curso a UUID real
+  const mapCourseSlugToId = (slug: string): string => {
+    const courseMapping: { [key: string]: string } = {
+      'master-adicciones': 'b5ef8c64-fe26-4f20-8221-80a1bf475b05',
+      'experto-conductas-adictivas': 'd7c3e503-ed61-4d7a-9e5f-aedc407d4836'
+    };
+    console.log('🔄 MAPEO DE CURSO - slug:', slug, '-> UUID:', courseMapping[slug] || slug);
+    return courseMapping[slug] || slug;
+  };
+  
+  const courseId = mapCourseSlugToId(rawCourseId || '');
+  console.log('✅ CURSO MAPEADO - rawCourseId:', rawCourseId, '-> courseId:', courseId);
+  
   const { updateChapterProgress, trackStudyTime } = useProgress(courseId);
   
   // Estado para tracking de tiempo
@@ -112,7 +130,7 @@ const LessonPage: React.FC = () => {
     console.log('🔄 useEffect triggered - courseId:', courseId, 'lessonId:', lessonId);
     
     const loadCourseData = async () => {
-      console.log('🔍 LessonPage - courseId:', courseId, 'lessonId:', lessonId);
+      console.log('🔍 NewLessonPage - courseId:', courseId, 'lessonId:', lessonId);
       if (!courseId) {
         console.log('❌ No courseId provided');
         setLoading(false);
@@ -370,9 +388,9 @@ const LessonPage: React.FC = () => {
             const isTeacher = currentPath.includes('/teacher/');
             
             if (isStudent) {
-              navigate(`/student/courses/${courseId}/lessons/${processedLessons[0].id}`, { replace: true });
+              navigate(`/student/courses/${rawCourseId}/lessons/${processedLessons[0].id}`, { replace: true });
             } else if (isTeacher) {
-              navigate(`/teacher/courses/${courseId}/lessons/${processedLessons[0].id}`, { replace: true });
+              navigate(`/teacher/courses/${rawCourseId}/lessons/${processedLessons[0].id}`, { replace: true });
             }
           }
         } else {
@@ -401,119 +419,99 @@ const LessonPage: React.FC = () => {
     }
   }, [courseId, lessonId]);
 
-  // Efecto para registrar tiempo de estudio al salir de la página
+  // Efecto para rastrear tiempo de estudio al salir de la página
   useEffect(() => {
     const handleBeforeUnload = async () => {
-      if (user && courseId && currentLesson && startTime) {
-        const studyTime = Math.floor((new Date().getTime() - startTime.getTime()) / 1000);
-        if (studyTime > 30) {
-          await trackStudyTime(currentLesson.id, studyTime);
+      if (user && currentLesson && startTime && lastActivityTime) {
+        const studyTime = Math.floor((lastActivityTime.getTime() - startTime.getTime()) / 1000);
+        if (studyTime > 0) {
+          await updateStudyTime(currentLesson.id, studyTime);
         }
       }
     };
 
-    const handleVisibilityChange = () => {
-      if (document.visibilityState === 'hidden') {
-        handleBeforeUnload();
-      } else if (document.visibilityState === 'visible') {
-        setLastActivityTime(new Date());
-      }
-    };
-
     window.addEventListener('beforeunload', handleBeforeUnload);
-    document.addEventListener('visibilitychange', handleVisibilityChange);
-
     return () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
-      document.removeEventListener('visibilitychange', handleVisibilityChange);
-      // Registrar tiempo final al desmontar el componente
       handleBeforeUnload();
     };
-  }, [user, courseId, currentLesson, startTime, trackStudyTime]);
+  }, [user, currentLesson, startTime, lastActivityTime]);
 
   const handleLessonSelect = async (lesson: Lesson) => {
-    // Registrar tiempo de estudio de la lección anterior
-    if (user && courseId && currentLesson && startTime) {
-      const studyTime = Math.floor((new Date().getTime() - startTime.getTime()) / 1000);
-      if (studyTime > 30) { // Solo registrar si estudió más de 30 segundos
-        await trackStudyTime(currentLesson.id, studyTime);
+    console.log('🎯 Selecting lesson:', lesson.titulo);
+    
+    // Actualizar tiempo de estudio de la lección anterior
+    if (user && currentLesson && startTime && lastActivityTime) {
+      const studyTime = Math.floor((lastActivityTime.getTime() - startTime.getTime()) / 1000);
+      if (studyTime > 0) {
+        await updateStudyTime(currentLesson.id, studyTime);
       }
     }
     
     setCurrentLesson(lesson);
-    // Obtener el quiz ID para la nueva lección
+    
+    // Obtener el quiz ID para esta lección
     const quizId = await getQuizIdForLesson(lesson.id);
     setCurrentQuizId(quizId);
     
-    // Registrar progreso de la nueva lección
+    // Registrar progreso del usuario si está autenticado
     if (user && courseId) {
       await updateChapterProgress(lesson.id, 'in_progress');
       setStartTime(new Date());
       setLastActivityTime(new Date());
     }
     
-    // Determinar el rol del usuario desde la URL actual
+    // Actualizar la URL
     const currentPath = window.location.pathname;
     const isStudent = currentPath.includes('/student/');
     const isTeacher = currentPath.includes('/teacher/');
     
     if (isStudent) {
-      navigate(`/student/courses/${courseId}/lessons/${lesson.id}`, { replace: true });
+      navigate(`/student/courses/${rawCourseId}/lessons/${lesson.id}`);
     } else if (isTeacher) {
-      navigate(`/teacher/courses/${courseId}/lessons/${lesson.id}`, { replace: true });
-    } else {
-      // Fallback para rutas sin rol específico
-      navigate(`/student/courses/${courseId}/lessons/${lesson.id}`, { replace: true });
+      navigate(`/teacher/courses/${rawCourseId}/lessons/${lesson.id}`);
     }
   };
 
   const handleNextLesson = () => {
-    if (!currentLesson) return;
+    if (!currentLesson || lessons.length === 0) return;
     
     const currentIndex = lessons.findIndex(l => l.id === currentLesson.id);
     if (currentIndex < lessons.length - 1) {
       const nextLesson = lessons[currentIndex + 1];
-      console.log('📍 Navigating to next lesson:', nextLesson.titulo);
       handleLessonSelect(nextLesson);
-    } else {
-      console.log('📍 Already at last lesson');
     }
   };
 
   const handlePreviousLesson = () => {
-    if (!currentLesson) return;
+    if (!currentLesson || lessons.length === 0) return;
     
     const currentIndex = lessons.findIndex(l => l.id === currentLesson.id);
     if (currentIndex > 0) {
       const previousLesson = lessons[currentIndex - 1];
-      console.log('📍 Navigating to previous lesson:', previousLesson.titulo);
       handleLessonSelect(previousLesson);
-    } else {
-      console.log('📍 Already at first lesson');
     }
   };
 
   const handleBackToCourse = () => {
-    // Determinar el rol del usuario desde la URL actual
     const currentPath = window.location.pathname;
     const isStudent = currentPath.includes('/student/');
     const isTeacher = currentPath.includes('/teacher/');
     
     if (isStudent) {
-      navigate(`/student/courses/${courseId}`);
+      navigate(`/student/courses/${rawCourseId}`);
     } else if (isTeacher) {
-      navigate(`/teacher/courses/${courseId}`);
-    } else {
-      // Fallback para rutas sin rol específico
-      navigate(`/student/courses/${courseId}`);
+      navigate(`/teacher/courses/${rawCourseId}`);
     }
   };
 
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-        <span className="ml-4 text-gray-600">Cargando curso...</span>
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Cargando lección...</p>
+        </div>
       </div>
     );
   }
@@ -521,14 +519,15 @@ const LessonPage: React.FC = () => {
   if (error) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="bg-red-50 border border-red-200 rounded-lg p-6 max-w-md">
-          <h3 className="text-red-800 font-semibold mb-2">Error al cargar el curso</h3>
-          <p className="text-red-600 mb-4">{error}</p>
+        <div className="text-center">
+          <div className="text-red-500 text-6xl mb-4">⚠️</div>
+          <h2 className="text-2xl font-bold text-gray-800 mb-2">Error al cargar la lección</h2>
+          <p className="text-gray-600 mb-4">{error}</p>
           <button
-            onClick={() => navigate('/dashboard')}
-            className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors"
+            onClick={() => window.location.reload()}
+            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
           >
-            Volver al Dashboard
+            Reintentar
           </button>
         </div>
       </div>
@@ -539,12 +538,14 @@ const LessonPage: React.FC = () => {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <h3 className="text-gray-800 font-semibold mb-2">Curso no encontrado</h3>
+          <div className="text-gray-400 text-6xl mb-4">📚</div>
+          <h2 className="text-2xl font-bold text-gray-800 mb-2">Lección no encontrada</h2>
+          <p className="text-gray-600 mb-4">La lección que buscas no existe o no está disponible.</p>
           <button
-            onClick={() => navigate('/dashboard')}
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+            onClick={handleBackToCourse}
+            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
           >
-            Volver al Dashboard
+            Volver al curso
           </button>
         </div>
       </div>
@@ -584,6 +585,7 @@ const LessonPage: React.FC = () => {
             <LessonNavigation
               lessons={lessons}
               currentLessonId={currentLesson.id}
+              courseId={course.id}
               onLessonSelect={handleLessonSelect}
             />
           </div>
@@ -591,17 +593,13 @@ const LessonPage: React.FC = () => {
           {/* Main content - Lesson viewer */}
           <div className="lg:col-span-3">
             <LessonViewer
-              lessonSlug={currentLesson.slug || ''}
-              lessonTitle={currentLesson.titulo}
-              lessonContent={currentLesson?.contenido_html}
-              lessonFileUrl={currentLesson?.archivo_url}
-              pdfs={currentLesson.pdfs}
-              externalLinks={currentLesson.externalLinks}
-              hasQuiz={currentLesson.tiene_cuestionario}
+              lesson={currentLesson}
+              course={course}
               quizId={currentQuizId}
-              onBackToCourse={handleBackToCourse}
               onNextLesson={handleNextLesson}
               onPreviousLesson={handlePreviousLesson}
+              canGoNext={lessons.findIndex(l => l.id === currentLesson.id) < lessons.length - 1}
+              canGoPrevious={lessons.findIndex(l => l.id === currentLesson.id) > 0}
             />
           </div>
         </div>
@@ -610,4 +608,4 @@ const LessonPage: React.FC = () => {
   );
 };
 
-export default LessonPage;
+export default NewLessonPage;

@@ -40,15 +40,15 @@ const UserCoursesPage: React.FC<UserCoursesPageProps> = ({ role }) => {
       if (role === 'student') {
         // Fetch enrolled courses for student
         const { data: enrollmentsData, error: enrollmentsError } = await supabase
-          .from('enrollments')
-          .select('course_id')
-          .eq('student_id', user.id);
+      .from('inscripciones')
+      .select('curso_id')
+      .eq('usuario_id', user.id);
 
         if (enrollmentsError) {
           throw enrollmentsError;
         }
 
-        const enrolledCourseIds = enrollmentsData.map(enrollment => enrollment.course_id);
+        const enrolledCourseIds = enrollmentsData.map(enrollment => enrollment.curso_id);
 
         ({ data: coursesData, error: coursesError } = await supabase
           .from('courses')
@@ -115,10 +115,10 @@ const UserCoursesPage: React.FC<UserCoursesPageProps> = ({ role }) => {
 
       // Check if already enrolled
       const { data: existingEnrollment, error: checkError } = await supabase
-        .from('enrollments')
+        .from('inscripciones')
         .select('id')
-        .eq('student_id', user.id)
-        .eq('course_id', courseId)
+        .eq('usuario_id', user.id)
+        .eq('curso_id', courseId)
         .single();
 
       if (checkError && checkError.code !== 'PGRST116') {
@@ -132,10 +132,10 @@ const UserCoursesPage: React.FC<UserCoursesPageProps> = ({ role }) => {
 
       // Create enrollment
       const { error: insertError } = await supabase
-        .from('enrollments')
+        .from('inscripciones')
         .insert({
-          student_id: user.id,
-          course_id: courseId,
+          usuario_id: user.id,
+          curso_id: courseId,
           enrolled_at: new Date().toISOString()
         });
 

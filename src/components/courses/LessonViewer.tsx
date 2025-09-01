@@ -278,7 +278,7 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
   };
 
   const handlePdfDownload = (pdfName: string) => {
-    const pdfPath = `/course-content/Módulo 1/${lessonSlug}/${pdfName}`;
+    const pdfPath = `/pdfs/master-adicciones/${pdfName}`;
     window.open(pdfPath, '_blank');
   };
 

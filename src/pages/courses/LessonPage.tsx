@@ -213,18 +213,46 @@ const LessonPage: React.FC = () => {
           
           console.log('🎯 Lesson', lesson.titulo, 'has quiz:', hasQuiz, 'quiz IDs:', quizMap.get(lesson.id));
           
-          // Buscar PDFs en el directorio correspondiente basado en el slug
-          if (generatedSlug.includes('Material Complementario')) {
-            pdfs.push('Clasificacion-de-sustancias.pdf', 'Fundamentos-de-la-conducta-adictiva.pdf', 'Informe-europeo-sobre-drogas-2020.pdf', 'Programa-Ibiza.pdf');
-          }
-          if (generatedSlug.includes('Criterios para diagnosticar') || generatedSlug.includes('DSM')) {
-            pdfs.push('Actividad-casos-clinicos.pdf');
-          }
-          if (generatedSlug.includes('Terapia integral')) {
-            pdfs.push('Articilo-Terapia-Integral-de-Pareja.pdf');
-          }
-          if (generatedSlug.includes('Psicología positiva')) {
-            pdfs.push('Psicolgia-positiva-introduccion.pdf', 'Psicologia-positiva-la-investigacion-sobre-los-efectos-de-las-emociones-positivas.pdf');
+          // Verificar si es el curso Master en Adicciones
+          const isMasterCourse = courseId === 'b5ef8c64-fe26-4f20-8221-80a1bf475b05';
+          
+          if (isMasterCourse) {
+            // PDFs para el Master en Adicciones
+            if (lesson.titulo.includes('FUNDAMENTOS P TERAPEUTICO')) {
+              pdfs.push('Bloque-1-Tecnico-en-Adicciones.pdf', 'Manual-MATRIX-para-Terapeutas.pdf');
+            }
+            if (lesson.titulo.includes('TERAPIA COGNITIVA DROGODEPENDENENCIAS')) {
+              pdfs.push('BLOQUE 2 TÉCNICO EN ADICCIONES.pdf', 'Manual-MATRIX-para-Terapeutas.pdf');
+            }
+            if (lesson.titulo.includes('FAMILIA Y TRABAJO EQUIPO')) {
+              pdfs.push('Bloque-III-Familia-y-Trabajo-en-Equipo.pdf', 'Manual-MATRIX-para-Terapeutas.pdf');
+            }
+            if (lesson.titulo.includes('RECOVERY COACHING')) {
+              pdfs.push('Bloque-IV-Recovery-Coaching.pdf', 'Manual-MATRIX-para-Terapeutas.pdf');
+            }
+            if (lesson.titulo.includes('INTERVENCION FAMILIAR Y RECOVERY MENTORING')) {
+              pdfs.push('Bloque-VI-Intervencion-Familiar-y-Recovery-Mentoring.pdf', 'Manual-MATRIX-para-Terapeutas.pdf');
+            }
+            if (lesson.titulo.includes('NUEVOS MODELOS TERAPEUTICOS')) {
+              pdfs.push('Bloque-VII-Nuevos-Modelos-Terapeuticos.pdf', 'Manual-MATRIX-para-Terapeutas.pdf');
+            }
+            if (lesson.titulo.includes('INTELIGENCIA EMOCIONAL')) {
+              pdfs.push('Bloque-IX-Inteligencia-Emocional.pdf', 'Manual-MATRIX-para-Terapeutas.pdf');
+            }
+          } else {
+            // PDFs para el curso Experto en Conductas Adictivas
+            if (generatedSlug.includes('Material Complementario')) {
+              pdfs.push('Clasificacion-de-sustancias.pdf', 'Fundamentos-de-la-conducta-adictiva.pdf', 'Informe-europeo-sobre-drogas-2020.pdf', 'Programa-Ibiza.pdf');
+            }
+            if (generatedSlug.includes('Criterios para diagnosticar') || generatedSlug.includes('DSM')) {
+              pdfs.push('Actividad-casos-clinicos.pdf');
+            }
+            if (generatedSlug.includes('Terapia integral')) {
+              pdfs.push('Articilo-Terapia-Integral-de-Pareja.pdf');
+            }
+            if (generatedSlug.includes('Psicología positiva')) {
+              pdfs.push('Psicolgia-positiva-introduccion.pdf', 'Psicologia-positiva-la-investigacion-sobre-los-efectos-de-las-emociones-positivas.pdf');
+            }
           }
           
           // Enlaces externos para Adicciones Comportamentales2 Cuestionarios y Psicología positiva

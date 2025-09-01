@@ -214,9 +214,9 @@ export interface Database {
       user_course_progress: {
         Row: {
           id: string
-          user_id: string
-          course_id: string
-          chapter_id: string | null
+          usuario_id: string
+          curso_id: string
+          leccion_id: string | null
           progress_percentage: number
           completed_at: string | null
           last_accessed_at: string
@@ -227,9 +227,9 @@ export interface Database {
         }
         Insert: {
           id?: string
-          user_id: string
-          course_id: string
-          chapter_id?: string | null
+          usuario_id: string
+          curso_id: string
+          leccion_id?: string | null
           progress_percentage?: number
           completed_at?: string | null
           last_accessed_at?: string
@@ -240,9 +240,9 @@ export interface Database {
         }
         Update: {
           id?: string
-          user_id?: string
-          course_id?: string
-          chapter_id?: string | null
+          usuario_id?: string
+          curso_id?: string
+          leccion_id?: string | null
           progress_percentage?: number
           completed_at?: string | null
           last_accessed_at?: string
@@ -255,9 +255,9 @@ export interface Database {
       user_test_results: {
         Row: {
           id: string
-          user_id: string
-          quiz_id: string
-          course_id: string
+          usuario_id: string
+          cuestionario_id: string
+          curso_id: string
           score: number
           total_questions: number
           correct_answers: number
@@ -272,9 +272,9 @@ export interface Database {
         }
         Insert: {
           id?: string
-          user_id: string
-          quiz_id: string
-          course_id: string
+          usuario_id: string
+          cuestionario_id: string
+          curso_id: string
           score: number
           total_questions: number
           correct_answers: number
@@ -289,9 +289,9 @@ export interface Database {
         }
         Update: {
           id?: string
-          user_id?: string
-          quiz_id?: string
-          course_id?: string
+          usuario_id?: string
+          cuestionario_id?: string
+          curso_id?: string
           score?: number
           total_questions?: number
           correct_answers?: number

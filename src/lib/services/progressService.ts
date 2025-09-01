@@ -32,9 +32,9 @@ export class ProgressService {
       const { data: existingProgress, error: fetchError } = await supabase
         .from('user_course_progress')
         .select('*')
-        .eq('user_id', userId)
-        .eq('course_id', courseId)
-        .eq('chapter_id', chapterId)
+        .eq('usuario_id', userId)
+        .eq('curso_id', courseId)
+        .eq('leccion_id', chapterId)
         .single();
 
       if (fetchError && fetchError.code !== 'PGRST116') {
@@ -65,9 +65,9 @@ export class ProgressService {
       } else {
         // Crear nuevo registro de progreso
         const insertData: UserCourseProgressInsert = {
-          user_id: userId,
-          course_id: courseId,
-          chapter_id: chapterId,
+          usuario_id: userId,
+          curso_id: courseId,
+          leccion_id: chapterId,
           progress_percentage: progressPercentage,
           time_spent_minutes: timeSpentMinutes,
           is_completed: isCompleted,
@@ -99,14 +99,14 @@ export class ProgressService {
         .from('user_course_progress')
         .select(`
           *,
-          chapters:chapter_id (
+          chapters:leccion_id (
             id,
-            title,
-            description
+            titulo,
+            descripcion
           )
         `)
-        .eq('user_id', userId)
-        .eq('course_id', courseId)
+        .eq('usuario_id', userId)
+        .eq('curso_id', courseId)
         .order('last_accessed_at', { ascending: false });
 
       if (error) throw error;
@@ -125,7 +125,7 @@ export class ProgressService {
       const { data, error } = await supabase
         .from('user_course_summary')
         .select('*')
-        .eq('user_id', userId);
+        .eq('usuario_id', userId);
 
       if (error) throw error;
       return data;
@@ -170,8 +170,8 @@ export class ProgressService {
       const { data: previousAttempts, error: countError } = await supabase
         .from('user_test_results')
         .select('attempt_number')
-        .eq('user_id', userId)
-        .eq('quiz_id', quizId)
+        .eq('usuario_id', userId)
+        .eq('cuestionario_id', quizId)
         .order('attempt_number', { ascending: false })
         .limit(1);
 
@@ -182,9 +182,9 @@ export class ProgressService {
         : 1;
 
       const insertData: UserTestResultsInsert = {
-        user_id: userId,
-        quiz_id: quizId,
-        course_id: courseId,
+        usuario_id: userId,
+        cuestionario_id: quizId,
+        curso_id: courseId,
         score,
         total_questions: totalQuestions,
         correct_answers: correctAnswers,
@@ -220,20 +220,20 @@ export class ProgressService {
         .from('user_test_results')
         .select(`
           *,
-          quizzes:quiz_id (
+          quizzes:cuestionario_id (
             id,
-            title
+            titulo
           ),
-          courses:course_id (
+          courses:curso_id (
             id,
-            title
+            titulo
           )
         `)
-        .eq('user_id', userId)
+        .eq('usuario_id', userId)
         .order('completed_at', { ascending: false });
 
       if (courseId) {
-        query = query.eq('course_id', courseId);
+        query = query.eq('curso_id', courseId);
       }
 
       const { data, error } = await query;
@@ -255,7 +255,7 @@ export class ProgressService {
       const { data: courseProgress, error: courseError } = await supabase
         .from('user_course_summary')
         .select('*')
-        .eq('user_id', userId);
+        .eq('usuario_id', userId);
 
       if (courseError) throw courseError;
 
@@ -264,14 +264,14 @@ export class ProgressService {
         .from('user_test_results')
         .select(`
           *,
-          quizzes:quiz_id (
-            title
+          quizzes:cuestionario_id (
+            titulo
           ),
-          courses:course_id (
-            title
+          courses:curso_id (
+            titulo
           )
         `)
-        .eq('user_id', userId)
+        .eq('usuario_id', userId)
         .order('completed_at', { ascending: false })
         .limit(10);
 

@@ -241,14 +241,19 @@ const StudentDashboard: React.FC = () => {
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <ProgressCard
-            title="Cursos Totales"
-            value={stats.totalCourses || 0}
-            subtitle={`${stats.completedCourses || 0} completados`}
-            icon={<BookOpen className="w-6 h-6" />}
-            color="#3B82F6"
-            progress={stats.totalCourses > 0 ? (stats.completedCourses / stats.totalCourses) * 100 : 0}
-          />
+          <div 
+            className="cursor-pointer transform hover:scale-105 transition-transform"
+            onClick={() => window.location.href = '/student/courses'}
+          >
+            <ProgressCard
+              title="Cursos Totales"
+              value={stats.totalCourses || 0}
+              subtitle={`${stats.completedCourses || 0} completados`}
+              icon={<BookOpen className="w-6 h-6" />}
+              color="#3B82F6"
+              progress={stats.totalCourses > 0 ? (stats.completedCourses / stats.totalCourses) * 100 : 0}
+            />
+          </div>
           
           <ProgressCard
             title="Progreso Promedio"
@@ -281,7 +286,16 @@ const StudentDashboard: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Course Progress */}
           <div className="bg-white rounded-lg shadow-md p-6">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">Progreso por Curso</h2>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl font-bold text-gray-900">Progreso por Curso</h2>
+              <button
+                onClick={() => window.location.href = '/student/courses'}
+                className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2"
+              >
+                <BookOpen className="w-4 h-4" />
+                <span>Ver Todos los Cursos</span>
+              </button>
+            </div>
             <div className="space-y-4">
               {courseProgress.length > 0 ? (
                 courseProgress.map((course: any) => (
@@ -297,7 +311,13 @@ const StudentDashboard: React.FC = () => {
               ) : (
                 <div className="text-center py-8">
                   <BookOpen className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                  <p className="text-gray-600">No tienes cursos inscritos aún</p>
+                  <p className="text-gray-600 mb-4">No tienes cursos inscritos aún</p>
+                  <button
+                    onClick={() => window.location.href = '/student/courses'}
+                    className="px-6 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors"
+                  >
+                    Explorar Cursos
+                  </button>
                 </div>
               )}
             </div>

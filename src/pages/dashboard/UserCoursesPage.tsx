@@ -52,14 +52,14 @@ const UserCoursesPage: React.FC<UserCoursesPageProps> = ({ role }) => {
 
         ({ data: coursesData, error: coursesError } = await supabase
           .from('cursos')
-          .select('id, title, teacher_id')
+          .select('id, titulo, profesor_id')
           .in('id', enrolledCourseIds));
       } else if (role === 'teacher') {
         // Fetch courses created by teacher
         ({ data: coursesData, error: coursesError } = await supabase
           .from('cursos')
-          .select('id, title, teacher_id')
-          .eq('teacher_id', user.id));
+          .select('id, titulo, profesor_id')
+          .eq('profesor_id', user.id));
       } else {
         // Rol desconocido, no cargar cursos
         setCourses([]);
@@ -72,7 +72,7 @@ const UserCoursesPage: React.FC<UserCoursesPageProps> = ({ role }) => {
       }
 
       // Get teacher names
-      const teacherIds = coursesData.map(course => course.teacher_id).filter(Boolean);
+      const teacherIds = coursesData.map(course => course.profesor_id).filter(Boolean);
       let teachersMap = new Map();
       if (teacherIds.length > 0) {
         const { data: teachersData, error: teachersError } = await supabase
@@ -91,9 +91,9 @@ const UserCoursesPage: React.FC<UserCoursesPageProps> = ({ role }) => {
 
       const formattedCourses = coursesData.map(course => ({
         id: course.id,
-        title: course.title,
-        teacher_name: teachersMap.get(course.teacher_id) || 'Desconocido',
-        teacher_id: course.teacher_id
+        title: course.titulo,
+        teacher_name: teachersMap.get(course.profesor_id) || 'Desconocido',
+        teacher_id: course.profesor_id
       }));
 
       setCourses(formattedCourses);
@@ -116,7 +116,7 @@ const UserCoursesPage: React.FC<UserCoursesPageProps> = ({ role }) => {
       // Check if already enrolled
       const { data: existingEnrollment, error: checkError } = await supabase
         .from('inscripciones')
-        .select('id')
+        .select('usuario_id')
         .eq('usuario_id', user.id)
         .eq('curso_id', courseId)
         .single();

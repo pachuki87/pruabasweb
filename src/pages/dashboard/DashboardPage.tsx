@@ -48,17 +48,17 @@ const DashboardPage: React.FC<DashboardProps> = ({ role }) => {
       if (role === 'teacher') {
         // Fetch total courses for teacher
         const { count: coursesCount, error: coursesError } = await supabase
-          .from('courses')
+          .from('cursos')
           .select('*', { count: 'exact', head: true })
-          .eq('teacher_id', user.id);
+          .eq('profesor_id', user.id);
 
         if (coursesError) throw coursesError;
 
         // Fetch total students enrolled in teacher's courses
         const { data: teacherCourses } = await supabase
-          .from('courses')
+          .from('cursos')
           .select('id')
-          .eq('teacher_id', user.id);
+          .eq('profesor_id', user.id);
 
         const courseIds = teacherCourses?.map(course => course.id) || [];
         

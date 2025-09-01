@@ -198,38 +198,32 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
         '.lesson-content',
         'article .entry-content',
         'body > div',
-        'body'
+        // Añadir un selector más genérico para el contenido principal si existe
+        '[role="main"]',
+        '#main',
+        '#content'
       ];
-      
+
       for (const selector of contentSelectors) {
         const element = doc.querySelector(selector);
-        if (element && element.innerHTML.trim()) {
+        if (element) {
+          console.log(`✅ Content found with selector: ${selector}`);
           mainContent = element.innerHTML;
           break;
         }
       }
       
-      // Si no encontramos contenido con los selectores, buscar específicamente las secciones de Elementor
-      if (!mainContent || mainContent.trim().length < 100) {
-        const elementorSections = doc.querySelectorAll('.elementor-section');
-        if (elementorSections.length > 0) {
-          let combinedContent = '';
-          elementorSections.forEach(section => {
-            // Solo incluir secciones que contengan texto o widgets de contenido
-            const textContent = section.textContent?.trim() || '';
-            if (textContent.length > 10 && !textContent.includes('Navegación del sitio')) {
-              combinedContent += section.outerHTML;
-            }
-          });
-          if (combinedContent) {
-            mainContent = combinedContent;
-          }
-        }
+      // Si después de buscar los selectores no se encuentra contenido, usar el body
+      if (!mainContent && doc.body) {
+        console.log('⚠️ No specific content container found, falling back to body content.');
+        mainContent = doc.body.innerHTML;
       }
     }
-    
+
+    // Si el contenido principal sigue vacío, devolver el HTML original
     if (!mainContent) {
-      mainContent = doc.body?.innerHTML || html;
+      console.log('⚠️ Could not extract main content, returning full HTML body.');
+      return doc.body.innerHTML || html;
     }
     
     // Ajustar rutas de imágenes

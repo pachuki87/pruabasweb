@@ -29,7 +29,7 @@ const supabase = createClient(
     // Buscar las lecciones del curso
     const { data: lecciones, error: leccionesError } = await supabase
       .from('lecciones')
-      .select('id, titulo, contenido_html, orden')
+      .select('id, titulo, contenido_html, orden, archivo_url')
       .eq('curso_id', curso.id)
       .order('orden');
 
@@ -44,6 +44,7 @@ const supabase = createClient(
     lecciones.forEach(leccion => {
       console.log(`Lección ${leccion.orden}: ${leccion.titulo}`);
       console.log(`Contenido HTML: ${leccion.contenido_html ? leccion.contenido_html.length + ' caracteres' : 'VACÍO'}`);
+      console.log(`Archivo URL: ${leccion.archivo_url || 'No definido'}`);
       console.log('---');
     });
 

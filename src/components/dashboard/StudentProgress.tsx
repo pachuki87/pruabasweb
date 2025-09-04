@@ -82,7 +82,7 @@ const StudentProgress: React.FC = () => {
         const { count: completedQuizzes, error: attemptsError } = await supabase
           .from('respuestas_texto_libre')
           .select('pregunta_id', { count: 'exact', head: true })
-          .or(`user_id.eq.${user.id},user_id.eq.'anonymous'`)
+          .or(`user_id.eq.${user.id},user_id.eq.anonymous`)
           .in('pregunta_id', 
             await supabase
               .from('cuestionarios')

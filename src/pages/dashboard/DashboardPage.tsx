@@ -99,7 +99,7 @@ const DashboardPage: React.FC<DashboardProps> = ({ role }) => {
         const { count: completedQuizzesCount, error: quizzesError } = await supabase
           .from('respuestas_texto_libre')
           .select('*', { count: 'exact', head: true })
-          .or(`user_id.eq.${user.id},user_id.eq.'anonymous'`);
+          .or(`user_id.eq.${user.id},user_id.eq.anonymous`);
 
         if (quizzesError) throw quizzesError;
 
@@ -124,7 +124,7 @@ const DashboardPage: React.FC<DashboardProps> = ({ role }) => {
               const { data: quizAttempts } = await supabase
                 .from('respuestas_texto_libre')
                 .select('pregunta_id')
-                .or(`user_id.eq.${user.id},user_id.eq.'anonymous'`)
+                .or(`user_id.eq.${user.id},user_id.eq.anonymous`)
                 .in('pregunta_id', quizIds);
               
               if (quizAttempts && quizAttempts.length > 0) {
@@ -134,9 +134,9 @@ const DashboardPage: React.FC<DashboardProps> = ({ role }) => {
           }
         }
 
-        // Forzar que siempre muestre 1 curso para estudiantes
+        // Usar el número real de cursos inscritos
         setStats({
-          courses: 1, // Forzar a 1 para solucionar el problema de visualización
+          courses: enrolledCoursesCount || 0, // Usar el valor real de cursos inscritos
           students: 0,
           chapters: 0,
           quizzes: completedQuizzesCount || 0,

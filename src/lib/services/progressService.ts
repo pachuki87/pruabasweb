@@ -34,7 +34,7 @@ export class ProgressService {
         .select('*')
         .eq('user_id', userId)
         .eq('curso_id', courseId)
-        .eq('leccion_id', chapterId)
+        .eq('chapter_id', chapterId)
         .single();
 
       if (fetchError && fetchError.code !== 'PGRST116') {
@@ -67,7 +67,7 @@ export class ProgressService {
         const insertData: UserCourseProgressInsert = {
           user_id: userId,
           curso_id: courseId,
-          leccion_id: chapterId,
+          chapter_id: chapterId,
           progress_percentage: progressPercentage,
           time_spent_minutes: timeSpentMinutes,
           is_completed: isCompleted,
@@ -99,7 +99,7 @@ export class ProgressService {
         .from('user_course_progress')
         .select(`
           *,
-          chapters:leccion_id (
+          chapters:chapter_id (
             id,
             titulo,
             descripcion

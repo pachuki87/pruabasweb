@@ -81,9 +81,9 @@ const StudentProgress: React.FC = () => {
         // Count completed quizzes (quiz attempts by this student)
         const { count: completedQuizzes, error: attemptsError } = await supabase
           .from('respuestas_texto_libre')
-          .select('quiz_id', { count: 'exact', head: true })
-          .eq('student_id', user.id)
-          .in('quiz_id', 
+          .select('pregunta_id', { count: 'exact', head: true })
+          .or(`user_id.eq.${user.id},user_id.eq.'anonymous'`)
+          .in('pregunta_id', 
             await supabase
               .from('cuestionarios')
               .select('id')
@@ -148,6 +148,9 @@ const StudentProgress: React.FC = () => {
 
   return (
     <div className="space-y-6">
+      <p className="text-lg font-medium text-gray-700 mb-4">
+        Tienes <span className="font-bold text-blue-600">{courseProgress.length}</span> curso{courseProgress.length !== 1 ? 's' : ''} inscrito{courseProgress.length !== 1 ? 's' : ''}
+      </p>
       {courseProgress.map((course) => (
         <div key={course.id} className="border-b border-gray-100 pb-4 last:border-b-0">
           <h3 className="text-md font-medium mb-3">{course.title}</h3>

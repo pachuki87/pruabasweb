@@ -29,7 +29,7 @@ const supabase = createClient(
     // Buscar las lecciones del curso
     const { data: lecciones, error: leccionesError } = await supabase
       .from('lecciones')
-      .select('id, titulo, contenido_html, orden, archivo_url')
+      .select('id, titulo, descripcion, orden, archivo_url, duracion_estimada')
       .eq('curso_id', curso.id)
       .order('orden');
 
@@ -41,20 +41,26 @@ const supabase = createClient(
     console.log('Lecciones del curso:');
     console.log('===================');
     
-    lecciones.forEach(leccion => {
-      console.log(`Lección ${leccion.orden}: ${leccion.titulo}`);
-      console.log(`Contenido HTML: ${leccion.contenido_html ? leccion.contenido_html.length + ' caracteres' : 'VACÍO'}`);
-      console.log(`Archivo URL: ${leccion.archivo_url || 'No definido'}`);
-      console.log('---');
-    });
+    if (lecciones.length > 0) {
+      console.log('\nLecciones encontradas:');
+      lecciones.forEach(leccion => {
+        console.log(`Lección ${leccion.orden}: ${leccion.titulo}`);
+        console.log(`Descripción: ${leccion.descripcion || 'Sin descripción'}`);
+        console.log(`Archivo URL: ${leccion.archivo_url || 'No definido'}`);
+        console.log(`Duración: ${leccion.duracion_estimada || 'No definida'} minutos`);
+        console.log('---');
+      });
+    } else {
+      console.log('No se encontraron lecciones para este curso.');
+    }
 
     console.log(`\nTotal de lecciones: ${lecciones.length}`);
-    const leccionesVacias = lecciones.filter(l => !l.contenido_html || l.contenido_html.trim() === '');
-    console.log(`Lecciones vacías: ${leccionesVacias.length}`);
+    const leccionesSinArchivo = lecciones.filter(l => !l.archivo_url || l.archivo_url.trim() === '');
+    console.log(`Lecciones sin archivo: ${leccionesSinArchivo.length}`);
     
-    if (leccionesVacias.length > 0) {
-      console.log('\nLecciones que necesitan contenido:');
-      leccionesVacias.forEach(l => console.log(`- Lección ${l.orden}: ${l.titulo}`));
+    if (leccionesSinArchivo.length > 0) {
+      console.log('\nLecciones que necesitan archivo:');
+      leccionesSinArchivo.forEach(l => console.log(`- Lección ${l.orden}: ${l.titulo}`));
     }
 
   } catch (error) {

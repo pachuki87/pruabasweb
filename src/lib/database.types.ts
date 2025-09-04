@@ -99,18 +99,21 @@ export interface Database {
           title: string
           curso_id: string
           created_at: string
+          chapter_id: string | null
         }
         Insert: {
           id?: string
           title: string
           curso_id: string
           created_at?: string
+          chapter_id?: string | null
         }
         Update: {
           id?: string
           title?: string
           curso_id?: string
           created_at?: string
+          chapter_id?: string | null
         }
       }
       quiz_questions: {
@@ -191,24 +194,33 @@ export interface Database {
           title: string
           curso_id: string
           file_url: string
-          remarks: string | null
           created_at: string
+          chapter_id: string | null
+          material_type: string | null
+          description: string | null
+          file_size: number | null
         }
         Insert: {
           id?: string
           title: string
           curso_id: string
           file_url: string
-          remarks?: string | null
           created_at?: string
+          chapter_id?: string | null
+          material_type?: string | null
+          description?: string | null
+          file_size?: number | null
         }
         Update: {
           id?: string
           title?: string
           curso_id?: string
           file_url?: string
-          remarks?: string | null
           created_at?: string
+          chapter_id?: string | null
+          material_type?: string | null
+          description?: string | null
+          file_size?: number | null
         }
       }
       user_course_progress: {

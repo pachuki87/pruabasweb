@@ -138,7 +138,7 @@ const QuizAttemptPage: React.FC = () => {
             student_id: user.id,
             score: finalScore,
             answers: selectedAnswers,
-            completed_at: new Date().toISOString()
+            fecha_completado: new Date().toISOString()
           });
 
         if (error) {

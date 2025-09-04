@@ -228,40 +228,52 @@ export interface Database {
           id: string
           user_id: string
           curso_id: string
+          leccion_id: string | null
           chapter_id: string | null
-          progress_percentage: number
-          completed_at: string | null
-          last_accessed_at: string
-          time_spent_minutes: number
-          is_completed: boolean
-          created_at: string
-          updated_at: string
+          estado: string
+          progreso_porcentaje: number | null
+          tiempo_estudiado: number | null
+          fecha_inicio: string | null
+          fecha_completado: string | null
+          ultima_actividad: string | null
+          notas_usuario: string | null
+          marcadores: Json | null
+          creado_en: string | null
+          actualizado_en: string | null
         }
         Insert: {
           id?: string
           user_id: string
           curso_id: string
+          leccion_id?: string | null
           chapter_id?: string | null
-          progress_percentage?: number
-          completed_at?: string | null
-          last_accessed_at?: string
-          time_spent_minutes?: number
-          is_completed?: boolean
-          created_at?: string
-          updated_at?: string
+          estado: string
+          progreso_porcentaje?: number | null
+          tiempo_estudiado?: number | null
+          fecha_inicio?: string | null
+          fecha_completado?: string | null
+          ultima_actividad?: string | null
+          notas_usuario?: string | null
+          marcadores?: Json | null
+          creado_en?: string | null
+          actualizado_en?: string | null
         }
         Update: {
           id?: string
           user_id?: string
           curso_id?: string
+          leccion_id?: string | null
           chapter_id?: string | null
-          progress_percentage?: number
-          completed_at?: string | null
-          last_accessed_at?: string
-          time_spent_minutes?: number
-          is_completed?: boolean
-          created_at?: string
-          updated_at?: string
+          estado?: string
+          progreso_porcentaje?: number | null
+          tiempo_estudiado?: number | null
+          fecha_inicio?: string | null
+          fecha_completado?: string | null
+          ultima_actividad?: string | null
+          notas_usuario?: string | null
+          marcadores?: Json | null
+          creado_en?: string | null
+          actualizado_en?: string | null
         }
       }
       user_test_results: {
@@ -279,7 +291,7 @@ export interface Database {
           attempt_number: number
           answers_data: Json | null
           started_at: string | null
-          completed_at: string | null
+          fecha_completado: string | null
           created_at: string
         }
         Insert: {
@@ -296,7 +308,7 @@ export interface Database {
           attempt_number?: number
           answers_data?: Json | null
           started_at?: string | null
-          completed_at?: string | null
+          fecha_completado?: string | null
           created_at?: string
         }
         Update: {
@@ -313,7 +325,7 @@ export interface Database {
           attempt_number?: number
           answers_data?: Json | null
           started_at?: string | null
-          completed_at?: string | null
+          fecha_completado?: string | null
           created_at?: string
         }
       }

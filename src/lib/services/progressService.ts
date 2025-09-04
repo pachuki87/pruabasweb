@@ -46,11 +46,11 @@ export class ProgressService {
       if (existingProgress) {
         // Actualizar progreso existente
         const updateData: UserCourseProgressUpdate = {
-          progress_percentage: Math.max(existingProgress.progress_percentage, progressPercentage),
-          time_spent_minutes: existingProgress.time_spent_minutes + timeSpentMinutes,
-          is_completed: isCompleted || existingProgress.is_completed,
-          last_accessed_at: now,
-          completed_at: isCompleted && !existingProgress.completed_at ? now : existingProgress.completed_at
+          progreso_porcentaje: Math.max(existingProgress.progreso_porcentaje || 0, progressPercentage),
+          tiempo_estudiado: (existingProgress.tiempo_estudiado || 0) + timeSpentMinutes,
+          estado: isCompleted ? 'completado' : (existingProgress.estado || 'en_progreso'),
+          ultima_actividad: now,
+          fecha_completado: isCompleted && !existingProgress.fecha_completado ? now : existingProgress.fecha_completado
         };
 
         const { data, error } = await supabase
@@ -68,11 +68,11 @@ export class ProgressService {
           user_id: userId,
           curso_id: courseId,
           chapter_id: chapterId,
-          progress_percentage: progressPercentage,
-          time_spent_minutes: timeSpentMinutes,
-          is_completed: isCompleted,
-          last_accessed_at: now,
-          completed_at: isCompleted ? now : null
+          progreso_porcentaje: progressPercentage,
+          tiempo_estudiado: timeSpentMinutes,
+          estado: isCompleted ? 'completado' : 'en_progreso',
+          ultima_actividad: now,
+          fecha_completado: isCompleted ? now : null
         };
 
         const { data, error } = await supabase
@@ -107,7 +107,7 @@ export class ProgressService {
         `)
         .eq('user_id', userId)
         .eq('curso_id', courseId)
-        .order('last_accessed_at', { ascending: false });
+        .order('ultima_actividad', { ascending: false });
 
       if (error) throw error;
       return data;
@@ -194,7 +194,7 @@ export class ProgressService {
         attempt_number: attemptNumber,
         answers_data: answersData,
         started_at: startedAt,
-        completed_at: completedAt || new Date().toISOString()
+        fecha_completado: completedAt || new Date().toISOString()
       };
 
       const { data, error } = await supabase
@@ -230,7 +230,7 @@ export class ProgressService {
           )
         `)
         .eq('user_id', userId)
-        .order('completed_at', { ascending: false });
+        .order('fecha_completado', { ascending: false });
 
       if (courseId) {
         query = query.eq('curso_id', courseId);
@@ -272,7 +272,7 @@ export class ProgressService {
           )
         `)
         .eq('user_id', userId)
-        .order('completed_at', { ascending: false })
+        .order('fecha_completado', { ascending: false })
         .limit(10);
 
       if (testsError) throw testsError;

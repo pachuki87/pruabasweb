@@ -8,23 +8,23 @@ type UserTestResults = Database['public']['Tables']['user_test_results']['Row'];
 
 interface UseProgressReturn {
   // Estado del progreso
-  courseProgress: UserCourseProgress[] | null;
-  userStats: any;
-  testResults: UserTestResults[] | null;
-  loading: boolean;
+  progresoDelCurso: UserCourseProgress[] | null;
+  estadisticasUsuario: any;
+  resultadosPruebas: UserTestResults[] | null;
+  cargando: boolean;
   error: string | null;
   
   // Funciones para actualizar progreso
-  updateChapterProgress: (params: {
-    courseId: string;
-    chapterId: string;
-    progressPercentage?: number;
-    timeSpentMinutes?: number;
-    isCompleted?: boolean;
+  actualizarProgresoCapitulo: (params: {
+    cursoId: string;
+    capituloId: string;
+    porcentajeProgreso?: number;
+    tiempoEstudioMinutos?: number;
+    estaCompletado?: boolean;
   }) => Promise<void>;
   
-  markChapterCompleted: (courseId: string, chapterId: string) => Promise<void>;
-  trackStudyTime: (courseId: string, chapterId: string, minutes: number) => Promise<void>;
+  marcarCapituloCompletado: (cursoId: string, capituloId: string) => Promise<void>;
+  registrarTiempoEstudio: (cursoId: string, capituloId: string, minutos: number) => Promise<void>;
   
   saveTestResults: (params: {
     quizId: string;
@@ -195,18 +195,18 @@ export const useProgress = (courseId?: string): UseProgressReturn => {
   };
 
   return {
-    courseProgress,
-    userStats,
-    testResults,
-    loading,
-    error,
-    updateChapterProgress,
-    markChapterCompleted,
-    trackStudyTime,
-    saveTestResults,
-    refreshProgress,
-    getCourseProgress,
-    getUserTestResults
+    courseProgress: courseProgress,
+    userStats: userStats,
+    testResults: testResults,
+    loading: loading,
+    error: error,
+    updateChapterProgress: updateChapterProgress,
+    markChapterCompleted: markChapterCompleted,
+    trackStudyTime: trackStudyTime,
+    saveTestResults: saveTestResults,
+    refreshProgress: refreshProgress,
+    getCourseProgress: getCourseProgress,
+    getUserTestResults: getUserTestResults
   };
 };
 

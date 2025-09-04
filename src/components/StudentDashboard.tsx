@@ -161,9 +161,9 @@ const RecentTestItem: React.FC<RecentTestItemProps> = ({ test }) => {
         <span>Intento #{test.attempt_number}</span>
       </div>
       
-      {test.completed_at && (
+      {test.fecha_completado && (
         <p className="text-xs text-gray-500 mt-2">
-          {new Date(test.completed_at).toLocaleDateString('es-ES', {
+          {new Date(test.fecha_completado).toLocaleDateString('es-ES', {
             year: 'numeric',
             month: 'short',
             day: 'numeric',

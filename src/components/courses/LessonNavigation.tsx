@@ -50,15 +50,15 @@ const LessonNavigation: React.FC<LessonNavigationProps> = ({
   const getLessonProgressStatus = (lessonId: string) => {
     const progress = lessonProgress[lessonId];
     if (!progress) return 'not_started';
-    if (progress.is_completed) return 'completed';
-    if (progress.progress_percentage > 0) return 'in_progress';
+    if (progress.estado === 'completado') return 'completed';
+    if (progress.progreso_porcentaje > 0) return 'in_progress';
     return 'not_started';
   };
 
   // Función para obtener el porcentaje de progreso
   const getLessonProgressPercentage = (lessonId: string) => {
     const progress = lessonProgress[lessonId];
-    return progress ? progress.progress_percentage || 0 : 0;
+    return progress ? progress.progreso_porcentaje || 0 : 0;
   };
 
   return (

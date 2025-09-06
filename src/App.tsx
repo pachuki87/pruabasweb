@@ -124,7 +124,7 @@ function App() {
           <Route path="/about" element={<AboutPage currentRole={currentRole} onRoleChange={handleRoleChange} />} />
           <Route path="/faqs" element={<FaqsPage currentRole={currentRole} onRoleChange={handleRoleChange} />} />
           <Route path="/courses" element={<CoursesPage currentRole={currentRole} onRoleChange={handleRoleChange} />} />
-          <Route path="/master-adicciones" element={<MasterAdiccionesPage />} />
+          <Route path="/master-adicciones-intervencion" element={<MasterAdiccionesPage />} />
           <Route path="/payment" element={<PaymentPage />} />
           
           {/* Auth routes */}

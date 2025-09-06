@@ -12,15 +12,6 @@ const Programs = () => {
       image: "https://images.pexels.com/photos/1438072/pexels-photo-1438072.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop"
     },
     {
-      icon: <Briefcase className="h-8 w-8" />,
-      titulo: "MASTER EN ADICCIONES",
-      subtitle: "29 ESTUDIANTES",
-      programs: ["Fundamentos de Adicciones", "Evaluación y Diagnóstico", "Tratamiento Integral", "Investigación Aplicada"],
-      color: "bg-gray-800",
-      link: "/master-adicciones",
-      image: "https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop"
-    },
-    {
       icon: <Users className="h-8 w-8" />,
       titulo: "EXPERTO EN CONDUCTAS ADICTIVAS",
       subtitle: "83 ESTUDIANTES",

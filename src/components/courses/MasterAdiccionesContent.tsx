@@ -6,9 +6,9 @@ const MasterAdiccionesContent: React.FC = () => {
   const [activeTab, setActiveTab] = useState("inicio");
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 text-gray-800">
+    <div className="min-h-screen bg-gray-50 text-gray-800">
       {/* Header */}
-      <header className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-700 text-white shadow-2xl relative overflow-hidden">
+      <header className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 text-white shadow-2xl relative overflow-hidden">
         <div className="absolute inset-0 bg-black opacity-10"></div>
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-pulse"></div>
         <div className="container mx-auto px-4 py-8 flex justify-between items-center relative z-10">
@@ -17,8 +17,8 @@ const MasterAdiccionesContent: React.FC = () => {
               <FaBrain className="text-2xl" />
             </div>
             <div>
-              <h1 className="text-3xl font-bold bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent">Máster en Adicciones e Intervención Psicosocial</h1>
-              <p className="text-blue-100 text-sm mt-1">Formación especializada en tratamiento de adicciones</p>
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-white to-gray-100 bg-clip-text text-transparent">Máster en Adicciones e Intervención Psicosocial</h1>
+              <p className="text-gray-100 text-sm mt-1">Formación especializada en tratamiento de adicciones</p>
             </div>
           </div>
           <nav className="space-x-4 hidden md:flex">
@@ -45,7 +45,7 @@ const MasterAdiccionesContent: React.FC = () => {
               key={tab}
               onClick={() => setActiveTab(tab)}
               className={`px-3 py-2 rounded-md capitalize transition ${
-                activeTab === tab ? "bg-blue-100 text-blue-700 font-medium" : "hover:bg-gray-100"
+                activeTab === tab ? "bg-lidera-light-blue text-white font-medium" : "hover:bg-gray-100"
               }`}
             >
               {tab}
@@ -85,7 +85,7 @@ function SectionSummary() {
       title: 'Inicio',
       description: 'Máster práctico en adicciones, modalidad blended, duración Oct 2025-Jun 2026, 20-80 plazas',
       icon: <FaHome className="text-2xl" />,
-      color: 'from-blue-500 to-indigo-600'
+      color: 'from-lidera-light-blue to-gray-600'
     },
     {
       id: 'metodologia',
@@ -99,7 +99,7 @@ function SectionSummary() {
       title: 'Módulos',
       description: '10 módulos desde fundamentos hasta trabajo final, incluyendo terapia cognitiva, familia, recovery coaching, género e inteligencia emocional',
       icon: <FaBook className="text-2xl" />,
-      color: 'from-purple-500 to-pink-600'
+      color: 'from-gray-600 to-gray-700'
     },
     {
       id: 'profesorado',
@@ -152,7 +152,7 @@ function HomeSection() {
             alt="Terapia y rehabilitación" 
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-900/80 via-indigo-900/70 to-purple-900/80"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-gray-900/80 via-gray-800/70 to-gray-900/80"></div>
         </div>
         <div className="relative z-10 px-8 py-16 text-white">
           <div className="max-w-4xl mx-auto text-center">
@@ -160,7 +160,7 @@ function HomeSection() {
               Transforma Vidas a Través de la 
               <span className="bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent">Intervención Especializada</span>
             </h2>
-            <p className="text-xl md:text-2xl mb-8 text-blue-100 leading-relaxed">
+            <p className="text-xl md:text-2xl mb-8 text-gray-100 leading-relaxed">
               Máster orientado a la práctica, centrado en el diseño y aplicación de intervenciones terapéuticas eficaces frente a las adicciones y conductas autodestructivas.
             </p>
             <div className="flex flex-wrap justify-center gap-4 mb-8">
@@ -173,7 +173,7 @@ function HomeSection() {
                 <span className="text-sm font-medium">Profesorado Experto</span>
               </div>
               <div className="flex items-center bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full">
-                <FaLaptop className="mr-2 text-blue-400" />
+                <FaLaptop className="mr-2 text-lidera-light-blue" />
                 <span className="text-sm font-medium">Modalidad Blended</span>
               </div>
             </div>
@@ -191,7 +191,7 @@ function HomeSection() {
           <StatCard titulo="Duración" value="Octubre 2025 - Junio 2026" icon={<FaClock />} />
         </div>
         <div className="mt-12 text-center">
-          <button className="bg-gradient-to-r from-red-600 to-pink-600 text-white px-8 py-4 rounded-xl hover:from-red-700 hover:to-pink-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl font-semibold text-lg">
+          <button className="bg-lidera-light-blue hover:bg-[#6a96c0] text-white px-8 py-4 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl font-semibold text-lg">
             <FaStar className="inline mr-2" />
             Inscríbete Ahora
           </button>
@@ -212,11 +212,11 @@ function MetodologiaSection() {
             alt="Metodología de aprendizaje" 
             className="w-full h-64 object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-indigo-900/80 to-purple-900/80"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-gray-900/80 to-gray-800/80"></div>
         </div>
         <div className="relative z-10 px-8 py-12 text-white text-center">
           <h2 className="text-4xl font-bold mb-4">Metodología Innovadora</h2>
-          <p className="text-xl text-indigo-100 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xl text-gray-100 max-w-3xl mx-auto leading-relaxed">
             Modalidad <strong className="text-yellow-400">blended learning</strong> que combina la flexibilidad del aprendizaje online 
             con la experiencia práctica de talleres presenciales especializados.
           </p>
@@ -235,7 +235,7 @@ function TalleresPresenciales() {
   return (
     <div className="bg-white p-8 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100">
       <div className="flex items-center mb-6">
-        <div className="bg-gradient-to-r from-blue-500 to-indigo-600 p-3 rounded-full mr-4">
+        <div className="bg-gradient-to-r from-lidera-light-blue to-gray-600 p-3 rounded-full mr-4">
           <FaUsers className="text-white text-xl" />
         </div>
         <h3 className="text-2xl font-bold text-gray-800">Talleres Presenciales</h3>
@@ -243,7 +243,7 @@ function TalleresPresenciales() {
       
       <div className="space-y-4 mb-6">
         <div className="flex items-center text-gray-700">
-          <FaClock className="text-blue-500 mr-3" />
+          <FaClock className="text-lidera-light-blue mr-3" />
           <span><strong>Duración:</strong> Domingo intensivo (09:00 - 15:00 h)</span>
         </div>
         <div className="flex items-center text-gray-700">
@@ -256,8 +256,8 @@ function TalleresPresenciales() {
         </div>
       </div>
       
-      <div className="bg-blue-50 p-4 rounded-xl mb-6">
-        <p className="text-sm text-blue-800">
+      <div className="bg-gray-50 p-4 rounded-xl mb-6">
+          <p className="text-sm text-gray-800">
           <FaHome className="inline mr-2" />
           Si no se alcanza el mínimo, los talleres se realizarán en Valencia sin gastos adicionales.
         </p>
@@ -265,11 +265,11 @@ function TalleresPresenciales() {
       
       <div>
         <h4 className="font-bold text-gray-800 mb-3 flex items-center">
-          <FaBook className="text-purple-500 mr-2" />
+          <FaBook className="text-lidera-light-blue mr-2" />
           Temarios Especializados:
         </h4>
         <div className="space-y-2">
-          <div className="flex items-center bg-gradient-to-r from-purple-50 to-pink-50 p-3 rounded-lg">
+          <div className="flex items-center bg-gradient-to-r from-gray-50 to-gray-100 p-3 rounded-lg">
             <FaHeart className="text-pink-500 mr-3" />
             <span className="font-medium">El Perdón Interior</span>
           </div>

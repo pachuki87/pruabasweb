@@ -275,7 +275,7 @@ const HomePageClone: React.FC<HomePageCloneProps> = ({ currentRole, onRoleChange
                 <CourseCard
                   key={curso.id}
                   id={curso.id}
-                  title={curso.titulo}
+                  titulo={curso.titulo}
                   image={curso.imagen}
                   enrollment={curso.inscripcion}
                   role={currentRole}

@@ -4,7 +4,7 @@ const Events = () => {
   const events = [
     {
       date: { day: "15", month: "DIC" },
-      title: "Conferencia de Liderazgo Empresarial 2025",
+      titulo: "Conferencia de Liderazgo Empresarial 2025",
       time: "18:30",
       location: "Madrid",
       type: "Conferencia",
@@ -13,7 +13,7 @@ const Events = () => {
     },
     {
       date: { day: "18", month: "DIC" },
-      title: "Taller de Gestión del Cambio",
+      titulo: "Taller de Gestión del Cambio",
       time: "19:00",
       location: "Barcelona",
       type: "Taller",
@@ -22,7 +22,7 @@ const Events = () => {
     },
     {
       date: { day: "20", month: "DIC" },
-      title: "Sesión Informativa Programas 2025",
+      titulo: "Sesión Informativa Programas 2025",
       time: "18:00",
       location: "Online",
       type: "Info Session",
@@ -31,7 +31,7 @@ const Events = () => {
     },
     {
       date: { day: "22", month: "DIC" },
-      title: "Networking Alumni Navidad",
+      titulo: "Networking Alumni Navidad",
       time: "20:00",
       location: "Valencia",
       type: "Networking",
@@ -51,7 +51,7 @@ const Events = () => {
               <div className="relative h-48">
                 <img 
                   src={event.image}
-                  alt={event.title}
+                  alt={event.titulo}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
@@ -70,7 +70,7 @@ const Events = () => {
               
               <div className="p-6">
                 <h3 className="text-lg font-bold text-gray-900 mb-3 group-hover:text-lidera-light-blue transition-colors">
-                  {event.title}
+                  {event.titulo}
                 </h3>
                 
                 <div className="space-y-2 text-sm text-gray-600">

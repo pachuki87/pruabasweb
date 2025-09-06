@@ -38,7 +38,7 @@ export interface Database {
       courses: {
         Row: {
           id: string
-          title: string
+          titulo: string
           description: string | null
           image_url: string | null
           teacher_id: string
@@ -47,7 +47,7 @@ export interface Database {
         }
         Insert: {
           id?: string
-          title: string
+          titulo: string
           description?: string | null
           image_url?: string | null
           teacher_id: string
@@ -56,7 +56,7 @@ export interface Database {
         }
         Update: {
           id?: string
-          title?: string
+          titulo?: string
           description?: string | null
           image_url?: string | null
           teacher_id?: string
@@ -67,7 +67,7 @@ export interface Database {
       chapters: {
         Row: {
           id: string
-          title: string
+          titulo: string
           description: string | null
           curso_id: string
           video_url: string | null
@@ -76,7 +76,7 @@ export interface Database {
         }
         Insert: {
           id?: string
-          title: string
+          titulo: string
           description?: string | null
           curso_id: string
           video_url?: string | null
@@ -85,7 +85,7 @@ export interface Database {
         }
         Update: {
           id?: string
-          title?: string
+          titulo?: string
           description?: string | null
           curso_id?: string
           video_url?: string | null
@@ -96,21 +96,21 @@ export interface Database {
       quizzes: {
         Row: {
           id: string
-          title: string
+          titulo: string
           curso_id: string
           created_at: string
           chapter_id: string | null
         }
         Insert: {
           id?: string
-          title: string
+          titulo: string
           curso_id: string
           created_at?: string
           chapter_id?: string | null
         }
         Update: {
           id?: string
-          title?: string
+          titulo?: string
           curso_id?: string
           created_at?: string
           chapter_id?: string | null
@@ -191,7 +191,7 @@ export interface Database {
       study_materials: {
         Row: {
           id: string
-          title: string
+          titulo: string
           curso_id: string
           file_url: string
           created_at: string
@@ -202,7 +202,7 @@ export interface Database {
         }
         Insert: {
           id?: string
-          title: string
+          titulo: string
           curso_id: string
           file_url: string
           created_at?: string
@@ -213,7 +213,7 @@ export interface Database {
         }
         Update: {
           id?: string
-          title?: string
+          titulo?: string
           curso_id?: string
           file_url?: string
           created_at?: string

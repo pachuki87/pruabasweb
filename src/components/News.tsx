@@ -3,21 +3,21 @@ import { Calendar, ArrowRight } from 'lucide-react';
 const News = () => {
   const news = [
     {
-      title: "Nuevo protocolo de intervención en adicciones comportamentales",
+      titulo: "Nuevo protocolo de intervención en adicciones comportamentales",
       excerpt: "Instituto Lidera presenta un innovador protocolo para el tratamiento de adicciones comportamentales desarrollado por nuestro equipo de investigación.",
       date: "15 MAY 2025",
       category: "Instituto Lidera",
       image: "https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop"
     },
     {
-      title: "Estudio sobre eficacia de terapias grupales en adicciones",
+      titulo: "Estudio sobre eficacia de terapias grupales en adicciones",
       excerpt: "Un nuevo estudio analiza la efectividad de las terapias grupales en el tratamiento de diferentes tipos de adicciones.",
       date: "12 MAY 2025",
       category: "Research",
       image: "https://images.pexels.com/photos/3184339/pexels-photo-3184339.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop"
     },
     {
-      title: "La Alumni Association presenta casos de éxito en centros de tratamiento",
+      titulo: "La Alumni Association presenta casos de éxito en centros de tratamiento",
       excerpt: "Conoce los casos de éxito más destacados de alumni de Instituto Lidera en centros de tratamiento de adicciones.",
       date: "10 MAY 2025",
       category: "Alumni",
@@ -41,7 +41,7 @@ const News = () => {
               <div className="relative h-48 rounded-xl mb-6 overflow-hidden">
                 <img 
                   src={article.image}
-                  alt={article.title}
+                  alt={article.titulo}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
@@ -59,7 +59,7 @@ const News = () => {
                 </div>
                 
                 <h3 className="text-xl font-bold text-gray-900 group-hover:text-lidera-light-blue transition-colors line-clamp-2">
-                  {article.title}
+                  {article.titulo}
                 </h3>
                 
                 <p className="text-gray-600 line-clamp-3">

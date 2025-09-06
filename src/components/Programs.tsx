@@ -4,7 +4,7 @@ const Programs = () => {
   const programs = [
     {
       icon: <GraduationCap className="h-8 w-8" />,
-      title: "MASTER EN ADICCIONES E INTERVENCIÓN",
+      titulo: "MASTER EN ADICCIONES E INTERVENCIÓN",
       subtitle: "82 ESTUDIANTES",
       programs: ["Neurobiología de las Adicciones", "Intervención Psicosocial", "Terapias Especializadas", "Prevención y Rehabilitación"],
       color: "bg-lidera-light-blue",
@@ -13,7 +13,7 @@ const Programs = () => {
     },
     {
       icon: <Briefcase className="h-8 w-8" />,
-      title: "MASTER EN ADICCIONES",
+      titulo: "MASTER EN ADICCIONES",
       subtitle: "29 ESTUDIANTES",
       programs: ["Fundamentos de Adicciones", "Evaluación y Diagnóstico", "Tratamiento Integral", "Investigación Aplicada"],
       color: "bg-gray-800",
@@ -22,7 +22,7 @@ const Programs = () => {
     },
     {
       icon: <Users className="h-8 w-8" />,
-      title: "EXPERTO EN CONDUCTAS ADICTIVAS",
+      titulo: "EXPERTO EN CONDUCTAS ADICTIVAS",
       subtitle: "83 ESTUDIANTES",
       programs: ["Psicología de las Adicciones", "Conductas Compulsivas", "Intervención Familiar", "Casos Clínicos"],
       color: "bg-lidera-light-blue",
@@ -61,7 +61,7 @@ const Programs = () => {
                   <div className="relative h-32 overflow-hidden">
                     <img 
                       src={program.image}
-                      alt={program.title}
+                      alt={program.titulo}
                       className="w-full h-full object-cover opacity-30 group-hover:opacity-50 transition-opacity"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
@@ -73,7 +73,7 @@ const Programs = () => {
                   </div>
                   
                   <div className="p-6">
-                    <h3 className="text-xl font-bold mb-2">{program.title}</h3>
+                    <h3 className="text-xl font-bold mb-2">{program.titulo}</h3>
                     <p className="text-sm opacity-80 mb-4">{program.subtitle}</p>
                     
                     <div className="space-y-2">

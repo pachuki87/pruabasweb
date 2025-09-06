@@ -4,7 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { BookOpen, Clock, Trophy, TrendingUp, CheckCircle, AlertCircle } from 'lucide-react';
 
 interface ProgressCardProps {
-  title: string;
+  titulo: string;
   value: string | number;
   subtitle?: string;
   icon: React.ReactNode;
@@ -13,7 +13,7 @@ interface ProgressCardProps {
 }
 
 const ProgressCard: React.FC<ProgressCardProps> = ({ 
-  title, 
+  titulo, 
   value, 
   subtitle, 
   icon, 
@@ -24,7 +24,7 @@ const ProgressCard: React.FC<ProgressCardProps> = ({
     <div className="bg-white rounded-lg shadow-md p-6 border-l-4" style={{ borderLeftColor: color }}>
       <div className="flex items-center justify-between">
         <div className="flex-1">
-          <h3 className="text-sm font-medium text-gray-600 mb-1">{title}</h3>
+          <h3 className="text-sm font-medium text-gray-600 mb-1">{titulo}</h3>
           <p className="text-2xl font-bold text-gray-900">{value}</p>
           {subtitle && (
             <p className="text-sm text-gray-500 mt-1">{subtitle}</p>
@@ -73,7 +73,7 @@ const CourseProgressItem: React.FC<CourseProgressItemProps> = ({ course, onClick
     >
       <div className="flex items-start justify-between mb-3">
         <div className="flex-1">
-          <h4 className="font-semibold text-gray-900 mb-1">{course.course_title}</h4>
+          <h4 className="font-semibold text-gray-900 mb-1">{course.course_titulo}</h4>
           <div className="flex items-center text-sm text-gray-600 space-x-4">
             <span className="flex items-center">
               <BookOpen className="w-4 h-4 mr-1" />
@@ -138,8 +138,8 @@ const RecentTestItem: React.FC<RecentTestItemProps> = ({ test }) => {
     <div className="bg-white rounded-lg shadow-sm border p-4">
       <div className="flex items-start justify-between mb-2">
         <div className="flex-1">
-          <h4 className="font-medium text-gray-900">{test.quizzes?.title || 'Examen'}</h4>
-          <p className="text-sm text-gray-600">{test.courses?.title}</p>
+          <h4 className="font-medium text-gray-900">{test.quizzes?.titulo || 'Examen'}</h4>
+          <p className="text-sm text-gray-600">{test.courses?.titulo}</p>
         </div>
         <div className="ml-4 text-right">
           <div className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
@@ -246,7 +246,7 @@ const StudentDashboard: React.FC = () => {
             onClick={() => window.location.href = '/student/courses'}
           >
             <ProgressCard
-              title="Cursos Totales"
+              titulo="Cursos Totales"
               value={stats.totalCourses || 0}
               subtitle={`${stats.completedCourses || 0} completados`}
               icon={<BookOpen className="w-6 h-6" />}
@@ -256,7 +256,7 @@ const StudentDashboard: React.FC = () => {
           </div>
           
           <ProgressCard
-            title="Progreso Promedio"
+            titulo="Progreso Promedio"
             value={`${Math.round(stats.averageProgress || 0)}%`}
             subtitle="En todos los cursos"
             icon={<TrendingUp className="w-6 h-6" />}
@@ -265,7 +265,7 @@ const StudentDashboard: React.FC = () => {
           />
           
           <ProgressCard
-            title="Tiempo de Estudio"
+            titulo="Tiempo de Estudio"
             value={`${Math.round((stats.totalTimeSpent || 0) / 60)}h`}
             subtitle="Total acumulado"
             icon={<Clock className="w-6 h-6" />}
@@ -273,7 +273,7 @@ const StudentDashboard: React.FC = () => {
           />
           
           <ProgressCard
-            title="Promedio Exámenes"
+            titulo="Promedio Exámenes"
             value={`${Math.round(stats.averageTestScore || 0)}%`}
             subtitle="Calificación promedio"
             icon={<Trophy className="w-6 h-6" />}

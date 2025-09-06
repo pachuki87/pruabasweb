@@ -6,7 +6,7 @@ import MaterialForm from '../../components/materials/MaterialForm';
 
 type Material = {
   id: string;
-  title: string;
+  titulo: string;
   detail: string;
   remarks: string | null;
   file_path: string;
@@ -52,7 +52,7 @@ const StudyMaterialsPage: React.FC<StudyMaterialsPageProps> = ({ role }) => {
     setIsUploading(true);
     try {
       const file = formData.get('file') as File;
-      const title = formData.get('title') as string;
+      const titulo = formData.get('titulo') as string;
       const remarks = formData.get('remarks') as string;
 
       // 1. Upload file to Supabase Storage
@@ -72,7 +72,7 @@ const StudyMaterialsPage: React.FC<StudyMaterialsPageProps> = ({ role }) => {
         .insert([
           {
             curso_id: courseId,
-            title: title,
+            titulo: titulo,
             detail: file.name,
             remarks: remarks,
             file_path: filePath
@@ -175,7 +175,7 @@ const StudyMaterialsPage: React.FC<StudyMaterialsPageProps> = ({ role }) => {
                 <tr key={material.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className="text-sm font-medium text-gray-900">
-                      {material.title}
+                      {material.titulo}
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">

@@ -8,7 +8,7 @@ type QuizFormProps = {
 };
 
 export type QuizFormData = {
-  title: string;
+  titulo: string;
   courseId?: string;
   questions: {
     question: string;
@@ -18,7 +18,7 @@ export type QuizFormData = {
 };
 
 const QuizForm: React.FC<QuizFormProps> = ({ courseId, onSubmit, isLoading }) => {
-  const [title, setTitle] = useState('');
+  const [titulo, setTitle] = useState('');
   const [questions, setQuestions] = useState([
     {
       question: '',
@@ -65,7 +65,7 @@ const QuizForm: React.FC<QuizFormProps> = ({ courseId, onSubmit, isLoading }) =>
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSubmit({
-      title,
+      titulo,
       courseId,
       questions
     });
@@ -77,13 +77,13 @@ const QuizForm: React.FC<QuizFormProps> = ({ courseId, onSubmit, isLoading }) =>
       
       <form onSubmit={handleSubmit}>
         <div className="mb-6">
-          <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="titulo" className="block text-sm font-medium text-gray-700 mb-1">
             Quiz Title
           </label>
           <input
             type="text"
-            id="title"
-            value={title}
+            id="titulo"
+            value={titulo}
             onChange={(e) => setTitle(e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             required

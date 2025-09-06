@@ -5,7 +5,7 @@ import { supabase } from '../../lib/supabase';
 
 type Course = {
   id: string;
-  title: string;
+  titulo: string;
   teacher_name: string;
   teacher_id?: string;
 };
@@ -91,7 +91,7 @@ const UserCoursesPage: React.FC<UserCoursesPageProps> = ({ role }) => {
 
       const formattedCourses = coursesData.map(course => ({
         id: course.id,
-        title: course.titulo,
+        titulo: course.titulo,
         teacher_name: teachersMap.get(course.teacher_id) || 'Desconocido',
         teacher_id: course.teacher_id
       }));
@@ -206,7 +206,7 @@ const UserCoursesPage: React.FC<UserCoursesPageProps> = ({ role }) => {
                       to={`/${role}/courses/${course.id}`}
                       className="text-blue-600 hover:text-blue-800"
                     >
-                      {course.title}
+                      {course.titulo}
                     </Link>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">

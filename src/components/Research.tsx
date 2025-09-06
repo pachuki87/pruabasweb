@@ -4,7 +4,7 @@ const Research = () => {
   const articles = [
     {
       category: "LIDERAZGO",
-      title: "El futuro del liderazgo en la era digital",
+      titulo: "El futuro del liderazgo en la era digital",
       excerpt: "Un análisis sobre cómo los líderes deben adaptarse a las nuevas tecnologías y modelos de trabajo híbrido para mantener la efectividad organizacional.",
       author: "Equipo Instituto Lidera",
       icon: <Brain className="h-6 w-6" />,
@@ -12,7 +12,7 @@ const Research = () => {
     },
     {
       category: "GESTIÓN",
-      title: "Estrategias de gestión del cambio que funcionan",
+      titulo: "Estrategias de gestión del cambio que funcionan",
       excerpt: "Metodologías probadas para liderar procesos de transformación organizacional y gestionar la resistencia al cambio de manera efectiva.",
       author: "Equipo Instituto Lidera",
       icon: <Globe className="h-6 w-6" />,
@@ -20,7 +20,7 @@ const Research = () => {
     },
     {
       category: "INNOVACIÓN",
-      title: "Desarrollo de equipos de alto rendimiento",
+      titulo: "Desarrollo de equipos de alto rendimiento",
       excerpt: "Claves para formar y liderar equipos que superen las expectativas y generen resultados excepcionales en entornos competitivos.",
       author: "Equipo Instituto Lidera",
       icon: <TrendingUp className="h-6 w-6" />,
@@ -42,7 +42,7 @@ const Research = () => {
               <div className="relative rounded-xl overflow-hidden mb-6">
                 <img 
                   src={article.image}
-                  alt={article.title}
+                  alt={article.titulo}
                   className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
@@ -58,7 +58,7 @@ const Research = () => {
               
               <div className="space-y-4">
                 <h3 className="text-xl font-bold text-gray-900 group-hover:text-lidera-light-blue transition-colors line-clamp-3">
-                  {article.title}
+                  {article.titulo}
                 </h3>
                 
                 <p className="text-gray-600 line-clamp-3">

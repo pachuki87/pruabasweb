@@ -5,7 +5,7 @@ import CheckTables from '../debug/CheckTables';
 
 type Course = {
   id: string;
-  title: string;
+  titulo: string;
 };
 
 const AssignCoursesToStudent: React.FC = () => {
@@ -49,7 +49,7 @@ const AssignCoursesToStudent: React.FC = () => {
 
       const { data: coursesData, error: coursesError } = await supabase
         .from('cursos')
-        .select('id, title');
+        .select('id, titulo');
 
       if (coursesError) throw coursesError;
       if (coursesData) {
@@ -148,7 +148,7 @@ const AssignCoursesToStudent: React.FC = () => {
                   className="form-checkbox h-5 w-5 text-blue-600"
                 />
                 <label htmlFor={course.id} className="ml-3 text-gray-900 text-lg">
-                  {course.title}
+                  {course.titulo}
                 </label>
               </div>
             ))}

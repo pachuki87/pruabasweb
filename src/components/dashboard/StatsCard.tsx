@@ -1,12 +1,12 @@
 import React from 'react';
 
 type StatsCardProps = {
-  title: string;
+  titulo: string;
   value: string | number;
   color?: 'blue' | 'gray' | 'green' | 'red';
 };
 
-const StatsCard: React.FC<StatsCardProps> = ({ title, value, color = 'red' }) => {
+const StatsCard: React.FC<StatsCardProps> = ({ titulo, value, color = 'red' }) => {
   const getColorClasses = () => {
     switch (color) {
       case 'blue':
@@ -25,7 +25,7 @@ const StatsCard: React.FC<StatsCardProps> = ({ title, value, color = 'red' }) =>
   return (
     <div className={`rounded-lg shadow-md overflow-hidden ${getColorClasses()}`}>
       <div className="p-5 text-center">
-        <h3 className="text-lg font-medium mb-2">{title}</h3>
+        <h3 className="text-lg font-medium mb-2">{titulo}</h3>
         <p className="text-3xl font-bold">{value}</p>
       </div>
     </div>

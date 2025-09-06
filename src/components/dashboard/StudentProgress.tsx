@@ -3,7 +3,7 @@ import { supabase } from '../../lib/supabase';
 
 type CourseProgress = {
   id: string;
-  title: string;
+  titulo: string;
   totalChapters: number;
   completedChapters: number;
   totalQuizzes: number;
@@ -105,7 +105,7 @@ const StudentProgress: React.FC = () => {
 
         progressData.push({
           id: courseId,
-          title: courseTitle,
+          titulo: courseTitle,
           totalChapters: totalChapters || 0,
           completedChapters,
           totalQuizzes: totalQuizzes || 0,
@@ -153,7 +153,7 @@ const StudentProgress: React.FC = () => {
       </p>
       {courseProgress.map((course) => (
         <div key={course.id} className="border-b border-gray-100 pb-4 last:border-b-0">
-          <h3 className="text-md font-medium mb-3">{course.title}</h3>
+          <h3 className="text-md font-medium mb-3">{course.titulo}</h3>
           
           <div className="w-full bg-gray-200 rounded-full h-2.5 mb-2">
             <div 

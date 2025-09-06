@@ -5,7 +5,7 @@ import { useCart } from 'react-use-cart';
 
 type CourseCardProps = {
   id: string;
-  title: string;
+  titulo: string;
   image: string;
   enrollment: number;
   role: string;
@@ -15,7 +15,7 @@ type CourseCardProps = {
 
 const CourseCard: React.FC<CourseCardProps> = ({ 
   id, 
-  title, 
+  titulo, 
   image, 
   enrollment, 
   role,
@@ -52,12 +52,12 @@ const CourseCard: React.FC<CourseCardProps> = ({
     // Datos del curso para agregar al carrito
     const courseItem = {
       id,
-      name: title,
+      name: titulo,
       price: 2500, // Precio en centavos (25.00 EUR)
       quantity: 1,
       image: getImageUrl(),
       duration: '12 meses',
-      description: `Curso especializado: ${title}`
+      description: `Curso especializado: ${titulo}`
     };
     
     addItem(courseItem);
@@ -80,7 +80,7 @@ const CourseCard: React.FC<CourseCardProps> = ({
       'conductas': 'https://images.pexels.com/photos/4101143/pexels-photo-4101143.jpeg',
     };
     
-    const lowerTitle = title.toLowerCase();
+    const lowerTitle = titulo.toLowerCase();
     
     // Intentar encontrar una imagen que coincida con el título
     for (const [key, url] of Object.entries(imageMap)) {
@@ -98,14 +98,14 @@ const CourseCard: React.FC<CourseCardProps> = ({
       <div className="h-40 bg-gray-700 flex items-center justify-center overflow-hidden">
         <img 
           src={getImageUrl()} 
-          alt={title} 
+          alt={titulo} 
           className="w-full h-full object-cover"
         />
       </div>
       
       <div className="p-4">
         <h3 className="text-lg font-semibold text-white mb-2 line-clamp-1">
-          {title}
+          {titulo}
         </h3>
         
         <div className="flex items-center justify-between mt-4">

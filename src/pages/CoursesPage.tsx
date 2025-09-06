@@ -120,7 +120,7 @@ function CoursesPage({ currentRole, onRoleChange }: CoursesPageProps) {
               <CourseCard
                 key={curso.id}
                 id={curso.id}
-                title={curso.titulo}
+                titulo={curso.titulo}
                 image={curso.imagen}
                 enrollment={curso.inscripcion}
                 role={currentRole}

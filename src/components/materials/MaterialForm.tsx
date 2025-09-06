@@ -8,7 +8,7 @@ type MaterialFormProps = {
 };
 
 const MaterialForm: React.FC<MaterialFormProps> = ({ courseId, onSubmit, isLoading }) => {
-  const [title, setTitle] = useState('');
+  const [titulo, setTitle] = useState('');
   const [file, setFile] = useState<File | null>(null);
   const [remarks, setRemarks] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -33,7 +33,7 @@ const MaterialForm: React.FC<MaterialFormProps> = ({ courseId, onSubmit, isLoadi
     
     // Create FormData object
     const formData = new FormData();
-    formData.append('title', title);
+    formData.append('titulo', titulo);
     formData.append('file', file);
     formData.append('remarks', remarks);
     formData.append('curso_id', courseId);
@@ -53,13 +53,13 @@ const MaterialForm: React.FC<MaterialFormProps> = ({ courseId, onSubmit, isLoadi
       
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
-          <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="titulo" className="block text-sm font-medium text-gray-700 mb-1">
             Title
           </label>
           <input
             type="text"
-            id="title"
-            value={title}
+            id="titulo"
+            value={titulo}
             onChange={(e) => setTitle(e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             required

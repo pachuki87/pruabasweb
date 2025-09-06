@@ -6,9 +6,9 @@ import { supabase } from '../../lib/supabase';
 
 type Quiz = {
   id: string;
-  title: string;
+  titulo: string;
   curso_id: string;
-  course_title: string;
+  course_titulo: string;
   assigned: boolean;
 };
 
@@ -124,11 +124,11 @@ const QuizzesPage: React.FC<QuizzesPageProps> = ({ role }) => {
                 <tr key={quiz.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm font-medium text-blue-600">
-                      {quiz.title}
+                      {quiz.titulo}
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">{quiz.course_title}</div>
+                    <div className="text-sm text-gray-900">{quiz.course_titulo}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     {role === 'teacher' ? (

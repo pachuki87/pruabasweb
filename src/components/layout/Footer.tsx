@@ -38,19 +38,19 @@ const Footer = () => {
 
   const footerSections = [
     {
-      title: "Programas",
+      titulo: "Programas",
       links: ["Master en Adicciones e Intervención", "Master en Adicciones", "Experto en Conductas Adictivas"]
     },
     {
-      title: "Cursos",
+      titulo: "Cursos",
       links: ["Master en Adicciones e Intervención", "Master en Adicciones", "Experto en Conductas Adictivas"]
     },
     {
-      title: "Alumni",
+      titulo: "Alumni",
       links: ["Red de Alumni", "Servicios", "Eventos", "Directorio", "Oportunidades"]
     },
     {
-      title: "Campus",
+      titulo: "Campus",
       links: ["Valencia", "Online"]
     }
   ];
@@ -98,7 +98,7 @@ const Footer = () => {
           {/* Footer Sections */}
           {footerSections.map((section, index) => (
             <div key={index}>
-              <h3 className="font-bold text-lg mb-4">{section.title}</h3>
+              <h3 className="font-bold text-lg mb-4">{section.titulo}</h3>
               <ul className="space-y-2">
                 {section.links.map((link, linkIndex) => (
                   <li key={linkIndex}>

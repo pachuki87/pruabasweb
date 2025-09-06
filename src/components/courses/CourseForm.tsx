@@ -11,7 +11,7 @@ type CourseFormProps = {
 
 type Course = {
   id: string;
-  title: string;
+  titulo: string;
   description: string;
   technologies: string;
   image_url: string | null;
@@ -23,7 +23,7 @@ const CourseForm: React.FC<CourseFormProps> = ({
   onSubmit, 
   isLoading 
 }) => {
-  const [title, setTitle] = useState('');
+  const [titulo, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [technologies, setTechnologies] = useState('');
   const [image, setImage] = useState<File | null>(null);
@@ -54,13 +54,13 @@ const CourseForm: React.FC<CourseFormProps> = ({
       // Mock data for the example
       const data: Course = {
         id: courseId,
-        title: 'Master en Adicciones',
+        titulo: 'Master en Adicciones',
         description: 'Información actualizada sobre el Master en Adicciones.',
         technologies: 'psicologia,neurociencia,terapia',
         image_url: null
       };
       
-      setTitle(data.title);
+      setTitle(data.titulo);
       setDescription(data.description);
       setTechnologies(data.technologies);
       
@@ -102,7 +102,7 @@ const CourseForm: React.FC<CourseFormProps> = ({
 
     // Create a FormData object to handle file uploads
     const formData = new FormData();
-    formData.append('title', title);
+    formData.append('titulo', titulo);
     formData.append('description', description);
     formData.append('technologies', technologies);
     formData.append('teacher_id', teacherId);
@@ -180,13 +180,13 @@ const CourseForm: React.FC<CourseFormProps> = ({
       
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
-          <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="titulo" className="block text-sm font-medium text-gray-700 mb-1">
             Title
           </label>
           <input
             type="text"
-            id="title"
-            value={title}
+            id="titulo"
+            value={titulo}
             onChange={(e) => setTitle(e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             required

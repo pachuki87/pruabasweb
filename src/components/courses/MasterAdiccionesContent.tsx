@@ -74,9 +74,9 @@ function HomeSection() {
           y conductas autodestructivas.
         </p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
-          <StatCard title="Duración" value="Octubre 2025 - Junio 2026" />
-          <StatCard title="Plazas" value="20 - 80 por edición" />
-          <StatCard title="Precio" value={`${getMasterPrice()} €`} />
+          <StatCard titulo="Duración" value="Octubre 2025 - Junio 2026" />
+          <StatCard titulo="Plazas" value="20 - 80 por edición" />
+          <StatCard titulo="Precio" value={`${getMasterPrice()} €`} />
         </div>
         <div className="mt-6 text-center">
           <button className="bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700 transition-colors">
@@ -85,21 +85,7 @@ function HomeSection() {
         </div>
       </section>
 
-      <section className="mb-12">
-        <h2 className="text-2xl font-semibold mb-4">Propuesta Económica</h2>
-        <ul className="list-disc pl-6 space-y-2">
-          <li>
-            Comisión del 20% para EsVidas por cada alumno derivado (en lugar del 25% propuesto).
-          </li>
-          <li>
-            Mínimo de 15 alumnos para impartir talleres presenciales en Jerez (de lo contrario se imparten
-            en Valencia sin costes adicionales).
-          </li>
-          <li>
-            La colaboración de EsVidas es considerada fundamental para el éxito del proyecto.
-          </li>
-        </ul>
-      </section>
+
     </>
   );
 }
@@ -379,10 +365,10 @@ function ContactoSection() {
   );
 }
 
-function StatCard({ title, value }) {
+function StatCard({ titulo, value }) {
   return (
     <div className="bg-white p-5 rounded-lg shadow-md text-center">
-      <h3 className="text-lg font-semibold text-gray-600">{title}</h3>
+      <h3 className="text-lg font-semibold text-gray-600">{titulo}</h3>
       <p className="text-xl font-bold text-blue-600 mt-2">{value}</p>
     </div>
   );

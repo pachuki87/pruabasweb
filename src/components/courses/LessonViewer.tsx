@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FileText, Download, ExternalLink, BookOpen } from 'lucide-react';
+import { ChevronLeft, ChevronRight, FileText, Download, ExternalLink, BookOpen, Clock, User } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 interface Lesson {
@@ -166,8 +166,12 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
             return;
           }
           
-          const contentUrl = `/course-content/Módulo 1/${lessonSlug}/contenido.html`;
-          console.log('🌐 Fetching content from:', contentUrl);
+          // Determinar la ruta del contenido basado en el curso
+          const isMasterCourse = course.id === 'b5ef8c64-fe26-4f20-8221-80a1bf475b05';
+          const contentUrl = isMasterCourse 
+            ? `/master-content/${lessonSlug}/contenido.html`
+            : `/course-content/Módulo 1/${lessonSlug}/contenido.html`;
+          console.log('🌐 Fetching content from:', contentUrl, 'isMasterCourse:', isMasterCourse);
           const response = await fetch(contentUrl);
           console.log('📡 Response status:', response.status, response.statusText);
           
@@ -251,7 +255,12 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
         if (src.startsWith('http') || src.startsWith('/')) {
           return match;
         }
-        return `src="/course-content/Módulo 1/${slug}/imagenes/${src}"`;
+        // Determinar la ruta de imágenes basado en el curso
+        const isMasterCourse = course.id === 'b5ef8c64-fe26-4f20-8221-80a1bf475b05';
+        const imagePath = isMasterCourse 
+          ? `/master-content/${slug}/imagenes/${src}`
+          : `/course-content/Módulo 1/${slug}/imagenes/${src}`;
+        return `src="${imagePath}"`;
       }
     );
     
@@ -276,7 +285,12 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
         }
         
         // Ajustar rutas relativas
-        return `href="/course-content/Módulo 1/${slug}/${href}"`;
+        // Determinar la ruta basado en el curso
+        const isMasterCourse = course.id === 'b5ef8c64-fe26-4f20-8221-80a1bf475b05';
+        const linkPath = isMasterCourse 
+          ? `/master-content/${slug}/${href}`
+          : `/course-content/Módulo 1/${slug}/${href}`;
+        return `href="${linkPath}"`;
       }
     );
     
@@ -293,11 +307,6 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
     );
     
     return mainContent;
-  };
-
-  const handlePdfDownload = (pdfName: string) => {
-    const pdfPath = `/pdfs/master-adicciones/${pdfName}`;
-    window.open(pdfPath, '_blank');
   };
 
   const handleExternalLinkClick = (url: string) => {
@@ -330,39 +339,72 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
         
         {/* Materiales y recursos */}
         {(pdfs.length > 0 || externalLinks.length > 0 || hasQuiz) && (
-          <div className="flex flex-wrap gap-3">
-            {pdfs.map((pdf, index) => (
-              <button
-                key={index}
-                onClick={() => handlePdfDownload(pdf)}
-                className="inline-flex items-center px-3 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors"
-              >
-                <FileText className="w-4 h-4 mr-2" />
-                <span className="text-sm font-medium">{pdf}</span>
-                <Download className="w-4 h-4 ml-2" />
-              </button>
-            ))}
+          <div className="space-y-4">
+            {pdfs.length > 0 && (
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-3">📄 Materiales de la Lección</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {pdfs.map((pdf, index) => {
+                    const pdfPath = `/pdfs/master-adicciones/${pdf}`;
+                    return (
+                      <div key={index} className="bg-red-50 border border-red-200 rounded-lg p-4">
+                        <div className="flex items-center mb-2">
+                          <FileText className="w-5 h-5 mr-2 text-red-600" />
+                          <span className="text-sm font-medium text-gray-900 truncate">{pdf.replace('.pdf', '')}</span>
+                        </div>
+                        <div className="flex space-x-2">
+                          <a
+                            href={pdfPath}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex-1 bg-red-600 text-white px-3 py-2 rounded-md hover:bg-red-700 transition-colors text-xs text-center"
+                          >
+                            Ver PDF
+                          </a>
+                          <a
+                            href={pdfPath}
+                            download
+                            className="flex-1 bg-gray-100 text-gray-700 px-3 py-2 rounded-md hover:bg-gray-200 transition-colors text-xs text-center"
+                          >
+                            Descargar
+                          </a>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
             
-            {externalLinks.map((link, index) => (
-              <button
-                key={`external-${index}`}
-                onClick={() => handleExternalLinkClick(link.url)}
-                className="inline-flex items-center px-3 py-2 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors"
-              >
-                <FileText className="w-4 h-4 mr-2" />
-                <span className="text-sm font-medium">{link.title}</span>
-                <Download className="w-4 h-4 ml-2" />
-              </button>
-            ))}
+            {externalLinks.length > 0 && (
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-3">🔗 Enlaces Externos</h3>
+                <div className="flex flex-wrap gap-3">
+                  {externalLinks.map((link, index) => (
+                    <button
+                      key={`external-${index}`}
+                      onClick={() => handleExternalLinkClick(link.url)}
+                      className="inline-flex items-center px-3 py-2 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors"
+                    >
+                      <ExternalLink className="w-4 h-4 mr-2" />
+                      <span className="text-sm font-medium">{link.title}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
             
             {hasQuiz && quizId && (
-              <button 
-                onClick={handleQuizClick}
-                className="inline-flex items-center px-3 py-2 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition-colors cursor-pointer"
-              >
-                <BookOpen className="w-4 h-4 mr-2" />
-                <span className="text-sm font-medium">Cuestionario disponible - Hacer clic para acceder</span>
-              </button>
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-3">📝 Evaluación</h3>
+                <button 
+                  onClick={handleQuizClick}
+                  className="inline-flex items-center px-4 py-3 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition-colors cursor-pointer"
+                >
+                  <BookOpen className="w-5 h-5 mr-2" />
+                  <span className="font-medium">Realizar Cuestionario</span>
+                </button>
+              </div>
             )}
           </div>
         )}

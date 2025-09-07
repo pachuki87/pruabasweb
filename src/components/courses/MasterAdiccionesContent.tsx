@@ -273,8 +273,8 @@ function TalleresPresenciales() {
             <FaHeart className="text-pink-500 mr-3" />
             <span className="font-medium">El Perdón Interior</span>
           </div>
-          <div className="flex items-center bg-gradient-to-r from-blue-50 to-indigo-50 p-3 rounded-lg">
-            <FaBrain className="text-indigo-500 mr-3" />
+          <div className="flex items-center bg-gradient-to-r from-gray-50 to-gray-100 p-3 rounded-lg">
+            <FaBrain className="text-lidera-light-blue mr-3" />
             <span className="font-medium">Inteligencia Emocional</span>
           </div>
           <div className="flex items-center bg-gradient-to-r from-green-50 to-teal-50 p-3 rounded-lg">
@@ -317,9 +317,9 @@ function PracticasOnline() {
           <p className="text-sm text-gray-700">Tres sesiones online dirigidas por especialistas en adicciones</p>
         </div>
         
-        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 rounded-xl">
+        <div className="bg-gradient-to-r from-gray-50 to-gray-100 p-4 rounded-xl">
           <div className="flex items-center mb-2">
-            <FaHandsHelping className="text-blue-600 mr-3" />
+            <FaHandsHelping className="text-lidera-light-blue mr-3" />
             <span className="font-bold text-gray-800">Networking Profesional</span>
           </div>
           <p className="text-sm text-gray-700">Talleres y seminarios para crear redes profesionales especializadas</p>
@@ -442,11 +442,11 @@ function ModulosSection() {
             alt="Módulos académicos" 
             className="w-full h-64 object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-purple-900/80 to-pink-900/80"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-gray-900/80 to-gray-800/80"></div>
         </div>
         <div className="relative z-10 px-8 py-12 text-white text-center">
           <h2 className="text-4xl font-bold mb-4">Programa Académico</h2>
-          <p className="text-xl text-purple-100 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xl text-gray-100 max-w-3xl mx-auto leading-relaxed">
             10 módulos especializados que abarcan desde los fundamentos teóricos hasta las técnicas más innovadoras en el tratamiento de adicciones.
           </p>
         </div>

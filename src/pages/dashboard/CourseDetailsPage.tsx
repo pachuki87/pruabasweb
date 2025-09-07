@@ -114,7 +114,7 @@ const CourseDetailsPage: React.FC<CourseDetailsPageProps> = ({ role }) => {
       // Transform materials data to match expected format
       const transformedMaterials = (data || []).map(material => ({
         name: material.titulo || 'Material sin nombre',
-        url: material.url_archivo || '#'
+        url_archivo: material.url_archivo || '#'
       }));
 
       setMaterials(transformedMaterials);
@@ -480,18 +480,30 @@ const CourseDetailsPage: React.FC<CourseDetailsPageProps> = ({ role }) => {
                   No hay materiales disponibles para este curso todavía.
                 </p>
               ) : (
-                <div className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {materials.map((material, index) => (
-                    <div key={index} className="border rounded-md p-4 hover:bg-gray-50 flex items-center justify-between">
-                      <a 
-                        href={material.url_archivo} 
-                        target="_blank" 
-                        rel="noopener noreferrer" 
-                        className="text-blue-600 hover:underline flex items-center"
-                      >
-                        <FileText className="w-5 h-5 mr-2" />
-                        {material.name}
-                      </a>
+                    <div key={index} className="bg-white border rounded-lg p-4 hover:shadow-md transition-shadow">
+                      <div className="flex items-center mb-3">
+                        <FileText className="w-6 h-6 mr-3 text-red-600" />
+                        <h3 className="font-medium text-gray-900 truncate">{material.name}</h3>
+                      </div>
+                      <div className="flex space-x-2">
+                        <a 
+                          href={material.url_archivo} 
+                          target="_blank" 
+                          rel="noopener noreferrer" 
+                          className="flex-1 bg-red-600 text-white px-3 py-2 rounded-md hover:bg-red-700 transition-colors text-sm text-center"
+                        >
+                          Ver PDF
+                        </a>
+                        <a 
+                          href={material.url_archivo} 
+                          download
+                          className="flex-1 bg-gray-100 text-gray-700 px-3 py-2 rounded-md hover:bg-gray-200 transition-colors text-sm text-center"
+                        >
+                          Descargar
+                        </a>
+                      </div>
                     </div>
                   ))}
                 </div>

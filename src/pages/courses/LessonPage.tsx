@@ -168,7 +168,8 @@ const LessonPage: React.FC = () => {
             'Terapia integral de pareja1 Cuestionario': '10_Terapia integral de pareja1 Cuestionario',
             'Psicología positiva1 Cuestionario': '11_Psicología positiva1 Cuestionario',
             'Mindfulness aplicado a la Conducta Adictiva1 Cuestionario': '12_Mindfulness aplicado a la Conducta Adictiva1 Cuestionario',
-            'Material complementario Mindfulness y ejercicio1 Cuestionario': '13_Material complementario Mindfulness y ejercicio1 Cuestionario'
+            'Material complementario Mindfulness y ejercicio1 Cuestionario': '13_Material complementario Mindfulness y ejercicio1 Cuestionario',
+            'FUNDAMENTOS P TERAPEUTICO': '01_¿Qué significa ser adicto_'
           };
           
           // Buscar coincidencia exacta primero
@@ -230,22 +231,22 @@ const LessonPage: React.FC = () => {
               pdfs.push('Bloque-1-Tecnico-en-Adicciones.pdf', 'Manual-MATRIX-para-Terapeutas.pdf');
             }
             if (lesson.titulo.includes('TERAPIA COGNITIVA DROGODEPENDENENCIAS')) {
-              pdfs.push('BLOQUE 2 TÉCNICO EN ADICCIONES.pdf', 'Manual-MATRIX-para-Terapeutas.pdf');
+              pdfs.push('BLOQUE 2 TÉCNICO EN ADICCIONES.pdf', 'bloque-2-tecnico-adicciones.pdf', 'Manual-MATRIX-para-Terapeutas.pdf');
             }
             if (lesson.titulo.includes('FAMILIA Y TRABAJO EQUIPO')) {
-              pdfs.push('Bloque-III-Familia-y-Trabajo-en-Equipo.pdf', 'Manual-MATRIX-para-Terapeutas.pdf');
+              pdfs.push('BLOQUE III - FAMILIA Y TRABAJO EN EQUIPO.pdf', 'Manual-MATRIX-para-Terapeutas.pdf');
             }
             if (lesson.titulo.includes('RECOVERY COACHING')) {
-              pdfs.push('Bloque-IV-Recovery-Coaching.pdf', 'Manual-MATRIX-para-Terapeutas.pdf');
+              pdfs.push('Recovery Coach reinservida.pdf', 'Manual-MATRIX-para-Terapeutas.pdf');
             }
             if (lesson.titulo.includes('INTERVENCION FAMILIAR Y RECOVERY MENTORING')) {
-              pdfs.push('Bloque-VI-Intervencion-Familiar-y-Recovery-Mentoring.pdf', 'Manual-MATRIX-para-Terapeutas.pdf');
+              pdfs.push('intervencion-Familiar-en-Adicciones-y.-Recovery-Mentoring-1.pdf', 'Manual-MATRIX-para-Terapeutas.pdf');
             }
             if (lesson.titulo.includes('NUEVOS MODELOS TERAPEUTICOS')) {
-              pdfs.push('Bloque-VII-Nuevos-Modelos-Terapeuticos.pdf', 'Manual-MATRIX-para-Terapeutas.pdf');
+              pdfs.push('Manual-MATRIX-para-Terapeutas.pdf');
             }
             if (lesson.titulo.includes('INTELIGENCIA EMOCIONAL')) {
-              pdfs.push('Bloque-IX-Inteligencia-Emocional.pdf', 'Manual-MATRIX-para-Terapeutas.pdf');
+              pdfs.push('Cuaderno-de-ejercicios-de-inteligencia-emocional.pdf', 'PPT INTELIGENCIA EMOCIONAL.pdf', 'Manual-MATRIX-para-Terapeutas.pdf');
             }
           } else {
             // PDFs para el curso Experto en Conductas Adictivas

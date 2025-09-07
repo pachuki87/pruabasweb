@@ -28,6 +28,7 @@ import FaqsPage from './pages/FaqsPage';
 import CoursesPage from './pages/CoursesPage';
 import NotFoundPage from './pages/NotFoundPage';
 import MasterAdiccionesPage from './pages/MasterAdiccionesPage'; // Import the new page
+import ExpertoConductasPage from './pages/ExpertoConductasPage'; // Import the experto page
 import PaymentPage from './pages/PaymentPage'; // Import the payment page
 
 // Dashboard Pages
@@ -125,6 +126,7 @@ function App() {
           <Route path="/faqs" element={<FaqsPage currentRole={currentRole} onRoleChange={handleRoleChange} />} />
           <Route path="/courses" element={<CoursesPage currentRole={currentRole} onRoleChange={handleRoleChange} />} />
           <Route path="/master-adicciones-intervencion" element={<MasterAdiccionesPage />} />
+          <Route path="/experto-conductas-adictivas" element={<ExpertoConductasPage />} />
           <Route path="/payment" element={<PaymentPage />} />
           
           {/* Auth routes */}

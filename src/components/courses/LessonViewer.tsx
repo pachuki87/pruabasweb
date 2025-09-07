@@ -82,7 +82,7 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
         const linkText = link.textContent?.trim() || '';
         
         // Solo interceptar enlaces de navegación del curso, NO enlaces PDF
-        const isPdfLink = href.includes('.pdf') || href.includes('/experto-en-adicciones/');
+        const isPdfLink = href.includes('.pdf') || href.includes('/Experto en Conductas Adictivas/');
         
         if (isPdfLink) {
           // Permitir que los enlaces PDF funcionen normalmente
@@ -170,7 +170,7 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
           const isMasterCourse = course.id === 'b5ef8c64-fe26-4f20-8221-80a1bf475b05';
           const contentUrl = isMasterCourse 
             ? `/master-content/${lessonSlug}/contenido.html`
-            : `/experto-en-adicciones/Módulo 1/${lessonSlug}/contenido.html`;
+            : `/Experto en Conductas Adictivas/Módulo 1/${lessonSlug}/contenido.html`;
           console.log('🌐 Fetching content from:', contentUrl, 'isMasterCourse:', isMasterCourse);
           const response = await fetch(contentUrl);
           console.log('📡 Response status:', response.status, response.statusText);
@@ -259,7 +259,7 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
         const isMasterCourse = course.id === 'b5ef8c64-fe26-4f20-8221-80a1bf475b05';
         const imagePath = isMasterCourse 
           ? `/master-content/${slug}/imagenes/${src}`
-          : `/experto-en-adicciones/Módulo 1/${slug}/imagenes/${src}`;
+          : `/Experto en Conductas Adictivas/Módulo 1/${slug}/imagenes/${src}`;
         return `src="${imagePath}"`;
       }
     );
@@ -289,7 +289,7 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
         const isMasterCourse = course.id === 'b5ef8c64-fe26-4f20-8221-80a1bf475b05';
         const linkPath = isMasterCourse 
           ? `/master-content/${slug}/${href}`
-          : `/experto-en-adicciones/Módulo 1/${slug}/${href}`;
+          : `/Experto en Conductas Adictivas/Módulo 1/${slug}/${href}`;
         return `href="${linkPath}"`;
       }
     );

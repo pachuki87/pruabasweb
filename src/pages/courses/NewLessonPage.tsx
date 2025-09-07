@@ -276,15 +276,18 @@ const NewLessonPage: React.FC = () => {
             if (generatedSlug.includes('Material Complementario')) {
               pdfs.push('Clasificacion-de-sustancias.pdf', 'Fundamentos-de-la-conducta-adictiva.pdf', 'Informe-europeo-sobre-drogas-2020.pdf', 'Programa-Ibiza.pdf');
             }
-            if (generatedSlug.includes('Criterios para diagnosticar') || generatedSlug.includes('DSM')) {
-              pdfs.push('Actividad-casos-clinicos.pdf');
-            }
-            if (generatedSlug.includes('Terapia integral')) {
-              pdfs.push('Articilo-Terapia-Integral-de-Pareja.pdf');
-            }
-            if (generatedSlug.includes('Psicología positiva')) {
-              pdfs.push('Psicolgia-positiva-introduccion.pdf', 'Psicologia-positiva-la-investigacion-sobre-los-efectos-de-las-emociones-positivas.pdf');
-            }
+            // Archivo no disponible: Actividad-casos-clinicos.pdf
+            // if (generatedSlug.includes('Criterios para diagnosticar') || generatedSlug.includes('DSM')) {
+            //   pdfs.push('Actividad-casos-clinicos.pdf');
+            // }
+            // Archivo no disponible: Articilo-Terapia-Integral-de-Pareja.pdf
+            // if (generatedSlug.includes('Terapia integral')) {
+            //   pdfs.push('Articilo-Terapia-Integral-de-Pareja.pdf');
+            // }
+            // Archivos no disponibles: Psicolgia-positiva-introduccion.pdf, Psicologia-positiva-la-investigacion-sobre-los-efectos-de-las-emociones-positivas.pdf
+            // if (generatedSlug.includes('Psicología positiva')) {
+            //   pdfs.push('Psicolgia-positiva-introduccion.pdf', 'Psicologia-positiva-la-investigacion-sobre-los-efectos-de-las-emociones-positivas.pdf');
+            // }
           }
           
           // Enlaces externos para Adicciones Comportamentales2 Cuestionarios y Psicología positiva

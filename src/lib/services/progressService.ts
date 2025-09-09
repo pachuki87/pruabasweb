@@ -45,12 +45,12 @@ export class ProgressService {
       
       if (existingProgress) {
         // Actualizar progreso existente
-        const updateData: UserCourseProgressUpdate = {
+        const updateData = {
           progreso_porcentaje: Math.max(existingProgress.progreso_porcentaje || 0, progressPercentage),
           tiempo_estudiado: (existingProgress.tiempo_estudiado || 0) + timeSpentMinutes,
           estado: isCompleted ? 'completado' : (existingProgress.estado || 'en_progreso'),
           ultima_actividad: now,
-          completed_at: isCompleted && !existingProgress.completed_at ? now : existingProgress.completed_at
+          fecha_completado: isCompleted && !existingProgress.fecha_completado ? now : existingProgress.fecha_completado
         };
 
         const { data, error } = await supabase
@@ -64,7 +64,7 @@ export class ProgressService {
         return data;
       } else {
         // Crear nuevo registro de progreso
-        const insertData: UserCourseProgressInsert = {
+        const insertData = {
           user_id: userId,
           curso_id: courseId,
           leccion_id: chapterId,
@@ -72,7 +72,8 @@ export class ProgressService {
           tiempo_estudiado: timeSpentMinutes,
           estado: isCompleted ? 'completado' : 'en_progreso',
           ultima_actividad: now,
-          completed_at: isCompleted ? now : null
+          fecha_completado: isCompleted ? now : null,
+          fecha_inicio: now
         };
 
         const { data, error } = await supabase
@@ -97,14 +98,7 @@ export class ProgressService {
     try {
       const { data, error } = await supabase
         .from('user_course_progress')
-        .select(`
-          *,
-          lecciones:leccion_id (
-            id,
-            titulo,
-            descripcion
-          )
-        `)
+        .select('*')
         .eq('user_id', userId)
         .eq('curso_id', courseId)
         .order('ultima_actividad', { ascending: false });
@@ -171,7 +165,7 @@ export class ProgressService {
         .from('user_test_results')
         .select('attempt_number')
         .eq('user_id', userId)
-        .eq('quiz_id', quizId)
+        .eq('cuestionario_id', quizId)
         .order('attempt_number', { ascending: false })
         .limit(1);
 
@@ -183,8 +177,8 @@ export class ProgressService {
 
       const insertData: UserTestResultsInsert = {
         user_id: userId,
-        quiz_id: quizId,
-        course_id: courseId,
+        cuestionario_id: quizId,
+        curso_id: courseId,
         score,
         total_questions: totalQuestions,
         correct_answers: correctAnswers,
@@ -220,11 +214,11 @@ export class ProgressService {
         .from('user_test_results')
         .select(`
           *,
-          cuestionarios:quiz_id (
+          cuestionarios:cuestionario_id (
             id,
             titulo
           ),
-          courses:course_id (
+          courses:curso_id (
             id,
             titulo
           )
@@ -233,7 +227,7 @@ export class ProgressService {
         .order('completed_at', { ascending: false });
 
       if (courseId) {
-        query = query.eq('course_id', courseId);
+        query = query.eq('curso_id', courseId);
       }
 
       const { data, error } = await query;
@@ -264,10 +258,10 @@ export class ProgressService {
         .from('user_test_results')
         .select(`
           *,
-          cuestionarios:quiz_id (
+          cuestionarios:cuestionario_id (
             titulo
           ),
-          courses:course_id (
+          courses:curso_id (
             titulo
           )
         `)

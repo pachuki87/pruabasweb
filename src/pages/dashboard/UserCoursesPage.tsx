@@ -116,7 +116,7 @@ const UserCoursesPage: React.FC<UserCoursesPageProps> = ({ role }) => {
       // Check if already enrolled
       const { data: existingEnrollment, error: checkError } = await supabase
         .from('inscripciones')
-        .select('user_id')
+        .select('usuario_id')
         .eq('user_id', user.id)
         .eq('curso_id', courseId)
         .single();

@@ -147,9 +147,9 @@ const QuizAttemptPage: React.FC = () => {
           .from('user_test_results')
           .insert({
             student_id: user.id,
-            quiz_id: quiz.id,
+            cuestionario_id: quiz.id,
             user_id: user.id,
-            course_id: quiz.curso_id,
+            curso_id: quiz.curso_id,
             score: finalScore,
             total_questions: quiz.questions.length,
             correct_answers: correctAnswers,

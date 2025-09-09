@@ -104,7 +104,7 @@ const StudentProgress: React.FC = () => {
         let completedChapters = 0;
         
         if (estadisticasUsuario && estadisticasUsuario.courses) {
-      const courseStats = estadisticasUsuario.courses.find(c => c.course_id === courseId);
+      const courseStats = estadisticasUsuario.courses.find(c => c.curso_id === courseId);
           if (courseStats) {
             progressPercentage = Math.round(courseStats.overall_progress || 0);
             // Estimate completed chapters based on progress

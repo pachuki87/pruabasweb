@@ -35,84 +35,102 @@ export interface Database {
           creado_en?: string
         }
       }
-      courses: {
+      cursos: {
         Row: {
           id: string
           titulo: string
-          description: string | null
-          image_url: string | null
+          descripcion: string | null
+          imagen_url: string | null
           teacher_id: string
-          created_at: string
-          technologies: string | null
+          creado_en: string
         }
         Insert: {
           id?: string
           titulo: string
-          description?: string | null
-          image_url?: string | null
+          descripcion?: string | null
+          imagen_url?: string | null
           teacher_id: string
-          created_at?: string
-          technologies?: string | null
+          creado_en?: string
         }
         Update: {
           id?: string
           titulo?: string
-          description?: string | null
-          image_url?: string | null
+          descripcion?: string | null
+          imagen_url?: string | null
           teacher_id?: string
-          created_at?: string
-          technologies?: string | null
+          creado_en?: string
         }
       }
-      chapters: {
+      lecciones: {
         Row: {
           id: string
-          titulo: string
-          description: string | null
           curso_id: string
+          titulo: string
+          descripcion: string | null
+          orden: number
+          duracion_estimada: number | null
+          imagen_url: string | null
           video_url: string | null
-          remarks: string | null
-          created_at: string
+          tiene_cuestionario: boolean
+          creado_en: string
+          actualizado_en: string
+          leccion_anterior_id: string | null
+          leccion_siguiente_id: string | null
+          archivo_url: string | null
         }
         Insert: {
           id?: string
-          titulo: string
-          description?: string | null
           curso_id: string
+          titulo: string
+          descripcion?: string | null
+          orden: number
+          duracion_estimada?: number | null
+          imagen_url?: string | null
           video_url?: string | null
-          remarks?: string | null
-          created_at?: string
+          tiene_cuestionario?: boolean
+          creado_en?: string
+          actualizado_en?: string
+          leccion_anterior_id?: string | null
+          leccion_siguiente_id?: string | null
+          archivo_url?: string | null
         }
         Update: {
           id?: string
-          titulo?: string
-          description?: string | null
           curso_id?: string
+          titulo?: string
+          descripcion?: string | null
+          orden?: number
+          duracion_estimada?: number | null
+          imagen_url?: string | null
           video_url?: string | null
-          remarks?: string | null
-          created_at?: string
+          tiene_cuestionario?: boolean
+          creado_en?: string
+          actualizado_en?: string
+          leccion_anterior_id?: string | null
+          leccion_siguiente_id?: string | null
+          archivo_url?: string | null
         }
       }
-      quizzes: {
+      cuestionarios: {
         Row: {
           id: string
           titulo: string
           curso_id: string
-          created_at: string
+          creado_en: string
           leccion_id: string | null
         }
         Insert: {
           id?: string
           titulo: string
           curso_id: string
-          created_at?: string
+          creado_en?: string
           leccion_id?: string | null
         }
         Update: {
           id?: string
           titulo?: string
           curso_id?: string
-          created_at?: string
+          creado_en?: string
           leccion_id?: string | null
         }
       }
@@ -137,39 +155,68 @@ export interface Database {
           created_at?: string
         }
       }
-      study_materials: {
+      materiales: {
         Row: {
           id: string
           titulo: string
           curso_id: string
-          file_url: string
-          created_at: string
+          url_archivo: string
+          creado_en: string
           leccion_id: string | null
-          material_type: string | null
-          description: string | null
-          file_size: number | null
+          tipo_material: string | null
+          descripcion: string | null
+          tamaño_archivo: number | null
         }
         Insert: {
           id?: string
           titulo: string
           curso_id: string
-          file_url: string
-          created_at?: string
+          url_archivo: string
+          creado_en?: string
           leccion_id?: string | null
-          material_type?: string | null
-          description?: string | null
-          file_size?: number | null
+          tipo_material?: string | null
+          descripcion?: string | null
+          tamaño_archivo?: number | null
         }
         Update: {
           id?: string
           titulo?: string
           curso_id?: string
-          file_url?: string
-          created_at?: string
+          url_archivo?: string
+          creado_en?: string
           leccion_id?: string | null
-          material_type?: string | null
-          description?: string | null
-          file_size?: number | null
+          tipo_material?: string | null
+          descripcion?: string | null
+          tamaño_archivo?: number | null
+        }
+      }
+      preguntas: {
+        Row: {
+          id: string
+          cuestionario_id: string
+          pregunta: string
+          tipo: string
+          orden: number
+          explicacion: string | null
+          creado_en: string
+        }
+        Insert: {
+          id?: string
+          cuestionario_id: string
+          pregunta: string
+          tipo: string
+          orden: number
+          explicacion?: string | null
+          creado_en?: string
+        }
+        Update: {
+          id?: string
+          cuestionario_id?: string
+          pregunta?: string
+          tipo?: string
+          orden?: number
+          explicacion?: string | null
+          creado_en?: string
         }
       }
       user_course_progress: {
@@ -182,7 +229,7 @@ export interface Database {
           progreso_porcentaje: number | null
           tiempo_estudiado: number | null
           fecha_inicio: string | null
-          completed_at: string | null
+          fecha_completado: string | null
           ultima_actividad: string | null
           notas_usuario: string | null
           marcadores: Json | null
@@ -198,7 +245,7 @@ export interface Database {
           progreso_porcentaje?: number | null
           tiempo_estudiado?: number | null
           fecha_inicio?: string | null
-          completed_at?: string | null
+          fecha_completado?: string | null
           ultima_actividad?: string | null
           notas_usuario?: string | null
           marcadores?: Json | null
@@ -226,53 +273,91 @@ export interface Database {
         Row: {
           id: string
           user_id: string
-          quiz_id: string
-          course_id: string
-          score: number
-          total_questions: number
-          correct_answers: number
-          incorrect_answers: number
-          time_taken_minutes: number | null
-          passed: boolean
-          attempt_number: number
-          answers_data: Json | null
-          started_at: string | null
-          completed_at: string | null
-          created_at: string
+          cuestionario_id: string
+          curso_id: string
+          leccion_id: string | null
+          puntuacion: number
+          puntuacion_maxima: number
+          porcentaje: number
+          tiempo_completado: number | null
+          respuestas_detalle: Json | null
+          aprobado: boolean
+          fecha_completado: string
+          creado_en: string
+          actualizado_en: string
         }
         Insert: {
           id?: string
           user_id: string
-          quiz_id: string
-          course_id: string
-          score: number
-          total_questions: number
-          correct_answers: number
-          incorrect_answers: number
-          time_taken_minutes?: number | null
-          passed?: boolean
-          attempt_number?: number
-          answers_data?: Json | null
-          started_at?: string | null
-          completed_at?: string | null
-          created_at?: string
+          cuestionario_id: string
+          curso_id: string
+          leccion_id?: string | null
+          puntuacion: number
+          puntuacion_maxima: number
+          porcentaje?: number
+          tiempo_completado?: number | null
+          respuestas_detalle?: Json | null
+          aprobado?: boolean
+          fecha_completado?: string
+          creado_en?: string
+          actualizado_en?: string
         }
         Update: {
           id?: string
           user_id?: string
-          quiz_id?: string
-          course_id?: string
-          score?: number
-          total_questions?: number
-          correct_answers?: number
-          incorrect_answers?: number
-          time_taken_minutes?: number | null
-          passed?: boolean
-          attempt_number?: number
-          answers_data?: Json | null
-          started_at?: string | null
-          completed_at?: string | null
-          created_at?: string
+          cuestionario_id?: string
+          curso_id?: string
+          leccion_id?: string | null
+          puntuacion?: number
+          puntuacion_maxima?: number
+          porcentaje?: number
+          tiempo_completado?: number | null
+          respuestas_detalle?: Json | null
+          aprobado?: boolean
+          fecha_completado?: string
+          creado_en?: string
+          actualizado_en?: string
+        }
+      }
+      user_course_summary: {
+        Row: {
+          lecciones_completadas: number | null
+          curso_id: string
+          creado_en: string | null
+          id: string
+          ultimo_acceso_en: string | null
+          porcentaje_progreso: number | null
+          iniciado_en: string | null
+          total_lecciones: number | null
+          tiempo_total_gastado: number | null
+          actualizado_en: string | null
+          user_id: string
+        }
+        Insert: {
+          lecciones_completadas?: number | null
+          curso_id: string
+          creado_en?: string | null
+          id?: string
+          ultimo_acceso_en?: string | null
+          porcentaje_progreso?: number | null
+          iniciado_en?: string | null
+          total_lecciones?: number | null
+          tiempo_total_gastado?: number | null
+          actualizado_en?: string | null
+          user_id: string
+        }
+        Update: {
+          lecciones_completadas?: number | null
+          curso_id?: string
+          creado_en?: string | null
+          id?: string
+          ultimo_acceso_en?: string | null
+          porcentaje_progreso?: number | null
+          iniciado_en?: string | null
+          total_lecciones?: number | null
+          tiempo_total_gastado?: number | null
+          actualizado_en?: string | null
+          user_id?: string
         }
       }
     }

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { ChevronLeft, ChevronRight, FileText, Download, ExternalLink, BookOpen, Clock, User } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
+import QuizComponent from '../QuizComponent';
 
 interface Lesson {
   id: string;
@@ -40,6 +41,7 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
   canGoNext = false,
   canGoPrevious = false
 }) => {
+  const [showQuiz, setShowQuiz] = useState(false);
   // Extraer propiedades del objeto lesson
   const lessonSlug = lesson.slug;
   const lessonTitle = lesson.titulo;
@@ -61,21 +63,13 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
   const { courseId } = useParams<{ courseId: string }>();
 
   const handleQuizClick = () => {
-    if (quizId && courseId) {
-      // Determinar el rol del usuario desde la URL actual
-      const currentPath = window.location.pathname;
-      const isStudent = currentPath.includes('/student/');
-      const isTeacher = currentPath.includes('/teacher/');
-      
-      if (isStudent) {
-        navigate(`/student/quizzes/attempt/${quizId}`);
-      } else if (isTeacher) {
-        navigate(`/teacher/quizzes/attempt/${quizId}`);
-      } else {
-        // Fallback para rutas sin rol específico
-        navigate(`/student/quizzes/attempt/${quizId}`);
-      }
-    }
+    setShowQuiz(true);
+  };
+
+  const handleQuizComplete = () => {
+    setShowQuiz(false);
+    // Opcional: llamar onNextLesson si se desea avanzar automáticamente
+    // onNextLesson && onNextLesson();
   };
   const [content, setContent] = useState<string>('');
   const [loading, setLoading] = useState(true);
@@ -403,16 +397,25 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
               </div>
             )}
             
-            {hasQuiz && quizId && (
+            {hasQuiz && (
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-3">📝 Evaluación</h3>
-                <button 
-                  onClick={handleQuizClick}
-                  className="inline-flex items-center px-4 py-3 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition-colors cursor-pointer"
-                >
-                  <BookOpen className="w-5 h-5 mr-2" />
-                  <span className="font-medium">Realizar Cuestionario</span>
-                </button>
+                {!showQuiz ? (
+                  <button 
+                    onClick={handleQuizClick}
+                    className="inline-flex items-center px-4 py-3 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition-colors cursor-pointer"
+                  >
+                    <BookOpen className="w-5 h-5 mr-2" />
+                    <span className="font-medium">Realizar Cuestionario</span>
+                  </button>
+                ) : (
+                  <div className="mt-4">
+                    <QuizComponent 
+                      leccionId={lesson.id} 
+                      onQuizComplete={handleQuizComplete}
+                    />
+                  </div>
+                )}
               </div>
             )}
           </div>

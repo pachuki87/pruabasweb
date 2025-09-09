@@ -36,7 +36,7 @@ const LessonPage: React.FC = () => {
   const { courseId, lessonId } = useParams<{ courseId: string; lessonId: string }>();
   const navigate = useNavigate();
   const { user } = useAuth();
-  const { updateChapterProgress, trackStudyTime } = useProgress(courseId);
+  const { actualizarProgresoCapitulo, registrarTiempoEstudio } = useProgress(courseId);
   
   // Estado para tracking de tiempo
   const [startTime, setStartTime] = useState<Date | null>(null);
@@ -363,7 +363,12 @@ const LessonPage: React.FC = () => {
             
             // Registrar progreso del usuario si está autenticado
             if (user && courseId) {
-              await updateChapterProgress(lesson.id, 'in_progress');
+              await actualizarProgresoCapitulo({
+                cursoId: courseId,
+                capituloId: lesson.id,
+                porcentajeProgreso: 0,
+                estaCompletado: false
+              });
               setStartTime(new Date());
               setLastActivityTime(new Date());
             }
@@ -377,7 +382,12 @@ const LessonPage: React.FC = () => {
             
             // Registrar progreso del usuario si está autenticado
             if (user && courseId) {
-              await updateChapterProgress(processedLessons[0].id, 'in_progress');
+              await actualizarProgresoCapitulo({
+                cursoId: courseId,
+                capituloId: processedLessons[0].id,
+                porcentajeProgreso: 0,
+                estaCompletado: false
+              });
               setStartTime(new Date());
               setLastActivityTime(new Date());
             }
@@ -424,7 +434,7 @@ const LessonPage: React.FC = () => {
       if (user && courseId && currentLesson && startTime) {
         const studyTime = Math.floor((new Date().getTime() - startTime.getTime()) / 1000);
         if (studyTime > 30) {
-          await trackStudyTime(currentLesson.id, studyTime);
+          await registrarTiempoEstudio(courseId, currentLesson.id, Math.floor(studyTime / 60));
         }
       }
     };
@@ -446,14 +456,14 @@ const LessonPage: React.FC = () => {
       // Registrar tiempo final al desmontar el componente
       handleBeforeUnload();
     };
-  }, [user, courseId, currentLesson, startTime, trackStudyTime]);
+  }, [user, courseId, currentLesson, startTime, registrarTiempoEstudio]);
 
   const handleLessonSelect = async (lesson: Lesson) => {
     // Registrar tiempo de estudio de la lección anterior
     if (user && courseId && currentLesson && startTime) {
       const studyTime = Math.floor((new Date().getTime() - startTime.getTime()) / 1000);
       if (studyTime > 30) { // Solo registrar si estudió más de 30 segundos
-        await trackStudyTime(currentLesson.id, studyTime);
+        await registrarTiempoEstudio(courseId, currentLesson.id, Math.floor(studyTime / 60));
       }
     }
     
@@ -464,7 +474,12 @@ const LessonPage: React.FC = () => {
     
     // Registrar progreso de la nueva lección
     if (user && courseId) {
-      await updateChapterProgress(lesson.id, 'in_progress');
+      await actualizarProgresoCapitulo({
+        cursoId: courseId,
+        capituloId: lesson.id,
+        porcentajeProgreso: 0,
+        estaCompletado: false
+      });
       setStartTime(new Date());
       setLastActivityTime(new Date());
     }

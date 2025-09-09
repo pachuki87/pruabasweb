@@ -1,7 +1,5 @@
 require('dotenv').config();
 const { createClient } = require('@supabase/supabase-js');
-const fs = require('fs');
-const path = require('path');
 
 const supabaseUrl = process.env.VITE_SUPABASE_URL;
 const supabaseKey = process.env.VITE_SUPABASE_ANON_KEY;
@@ -15,118 +13,130 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 
 async function checkPDFMaterials() {
   try {
-    console.log('🔍 Verificando materiales PDF del curso Inteligencia Emocional...');
+    console.log('🔍 Analizando materiales PDF y sus rutas...');
     
-    // Obtener el curso
-    const { data: course, error: courseError } = await supabase
-      .from('cursos')
-      .select('id, titulo')
-      .eq('titulo', 'Inteligencia Emocional')
-      .single();
+    // Obtener todos los materiales PDF con información del curso
+    const { data: materials, error: materialsError } = await supabase
+      .from('materiales')
+      .select(`
+        id,
+        titulo,
+        url_archivo,
+        curso_id,
+        cursos(id, titulo)
+      `)
+      .eq('tipo_material', 'pdf');
 
-    if (courseError || !course) {
-      console.error('❌ Error al obtener el curso:', courseError);
+    if (materialsError) {
+      console.error('❌ Error al obtener materiales:', materialsError);
       return;
     }
 
-    console.log(`✅ Curso encontrado: ${course.titulo}`);
+    console.log(`\n=== MATERIALES PDF ENCONTRADOS (${materials?.length || 0}) ===\n`);
     
-    // Obtener todas las lecciones
-    const { data: lessons, error: lessonsError } = await supabase
-      .from('lecciones')
-      .select('*')
-      .eq('curso_id', course.id)
-      .order('orden');
-
-    if (lessonsError) {
-      console.error('❌ Error al obtener lecciones:', lessonsError);
+    if (!materials || materials.length === 0) {
+      console.log('No se encontraron materiales PDF.');
       return;
     }
 
-    console.log('\n=== VERIFICACIÓN DE MATERIALES PDF ===');
-    
-    // Mapeo de lecciones a carpetas de materiales
-    const lessonFolderMap = {
-      'Fundamentos Proceso Terapéutico': '1)FUNDAMENTOS P TERAPEUTICO',
-      'Terapia Cognitiva en Drogodependencias': '2) TERAPIA COGNITIVA DROGODEPENDENENCIAS',
-      'Familia y Trabajo en Equipo': '3) FAMILIA Y TRABAJO EQUIPO',
-      'Recovery Coaching': '4)RECOVERY COACHING',
-      'Intervención Familiar y Recovery Mentoring': '6) INTERVENCION FAMILIAR Y RECOVERY MENTORING',
-      'Nuevos Modelos Terapéuticos': '7) NUEVOS MODELOS TERAPEUTICOS',
-      'Inteligencia Emocional Aplicada': '9) INTELIGENCIA EMOCIONAL'
-    };
+    // Separar por curso
+    const materialsByCourse = {};
+    materials.forEach(material => {
+      const courseTitle = material.cursos?.titulo || 'Sin curso';
+      if (!materialsByCourse[courseTitle]) {
+        materialsByCourse[courseTitle] = [];
+      }
+      materialsByCourse[courseTitle].push(material);
+    });
 
-    const materialsBasePath = './inteligencia_emocional_drive';
-    
-    for (const lesson of lessons) {
-      console.log(`\n${lesson.orden}. ${lesson.titulo}`);
-      console.log(`   ID: ${lesson.id}`);
+    // Mostrar materiales por curso
+    Object.entries(materialsByCourse).forEach(([courseTitle, courseMaterials]) => {
+      console.log(`\n📚 CURSO: ${courseTitle}`);
+      console.log(`   Materiales: ${courseMaterials.length}`);
       
-      const folderName = lessonFolderMap[lesson.titulo];
-      if (folderName) {
-        const folderPath = path.join(materialsBasePath, folderName);
+      courseMaterials.forEach((material, index) => {
+        console.log(`   ${index + 1}. ${material.titulo}`);
+        console.log(`      URL: ${material.url_archivo}`);
         
-        if (fs.existsSync(folderPath)) {
-          console.log(`   📁 Carpeta de materiales: ${folderName}`);
-          
-          const files = fs.readdirSync(folderPath);
-          const pdfFiles = files.filter(file => file.toLowerCase().endsWith('.pdf'));
-          
-          if (pdfFiles.length > 0) {
-            console.log(`   📄 PDFs disponibles: ${pdfFiles.length}`);
-            pdfFiles.forEach(pdf => {
-              console.log(`      - ${pdf}`);
-            });
-          } else {
-            console.log(`   ⚠️  No se encontraron PDFs en la carpeta`);
-          }
-          
-          // Verificar otros archivos
-          const otherFiles = files.filter(file => !file.toLowerCase().endsWith('.pdf'));
-          if (otherFiles.length > 0) {
-            console.log(`   📎 Otros materiales: ${otherFiles.length}`);
-            otherFiles.forEach(file => {
-              console.log(`      - ${file}`);
-            });
-          }
-        } else {
-          console.log(`   ❌ Carpeta de materiales no encontrada: ${folderName}`);
+        // Detectar problemas de ruta
+        if (courseTitle.toLowerCase().includes('experto') && 
+            material.url_archivo && 
+            material.url_archivo.includes('master-adicciones')) {
+          console.log(`      🚨 PROBLEMA: Material del curso EXPERTO con ruta de MASTER`);
         }
-      } else {
-        console.log(`   ⚠️  No hay mapeo de carpeta definido para esta lección`);
-      }
-    }
-    
-    console.log('\n=== RESUMEN DE MATERIALES ===');
-    
-    // Contar materiales totales
-    let totalPDFs = 0;
-    let totalOtherFiles = 0;
-    let lessonsWithMaterials = 0;
-    
-    for (const lesson of lessons) {
-      const folderName = lessonFolderMap[lesson.titulo];
-      if (folderName) {
-        const folderPath = path.join(materialsBasePath, folderName);
-        if (fs.existsSync(folderPath)) {
-          const files = fs.readdirSync(folderPath);
-          const pdfFiles = files.filter(file => file.toLowerCase().endsWith('.pdf'));
-          const otherFiles = files.filter(file => !file.toLowerCase().endsWith('.pdf'));
-          
-          if (files.length > 0) {
-            lessonsWithMaterials++;
-          }
-          
-          totalPDFs += pdfFiles.length;
-          totalOtherFiles += otherFiles.length;
+        
+        if (courseTitle.toLowerCase().includes('master') && 
+            material.url_archivo && 
+            material.url_archivo.includes('experto-conductas-adictivas')) {
+          console.log(`      🚨 PROBLEMA: Material del curso MASTER con ruta de EXPERTO`);
         }
+      });
+    });
+
+    // Buscar específicamente el archivo problemático
+    const problematicFile = materials.find(m => 
+      m.url_archivo && m.url_archivo.includes('Informe-europeo-sobre-drogas-2020.pdf')
+    );
+
+    if (problematicFile) {
+      console.log('\n🚨 === ARCHIVO PROBLEMÁTICO ENCONTRADO ===');
+      console.log(`ID: ${problematicFile.id}`);
+      console.log(`Título: ${problematicFile.titulo}`);
+      console.log(`Curso: ${problematicFile.cursos?.titulo}`);
+      console.log(`URL actual: ${problematicFile.url_archivo}`);
+      
+      // Sugerir corrección
+      if (problematicFile.url_archivo.includes('master-adicciones')) {
+        const correctUrl = problematicFile.url_archivo.replace('master-adicciones', 'experto-conductas-adictivas');
+        console.log(`\n💡 SOLUCIÓN SUGERIDA:`);
+        console.log(`URL corregida: ${correctUrl}`);
+        console.log(`\nComando SQL para corregir:`);
+        console.log(`UPDATE materiales SET url_archivo = '${correctUrl}' WHERE id = '${problematicFile.id}';`);
       }
+    } else {
+      console.log('\n✅ El archivo "Informe-europeo-sobre-drogas-2020.pdf" no está en la base de datos.');
     }
+
+    // Resumen de problemas
+    console.log('\n🔍 === RESUMEN DE PROBLEMAS DE RUTAS ===');
     
-    console.log(`Lecciones con materiales: ${lessonsWithMaterials}/${lessons.length}`);
-    console.log(`Total de PDFs: ${totalPDFs}`);
-    console.log(`Total de otros archivos: ${totalOtherFiles}`);
+    const expertMaterialsWithMasterPath = materials.filter(m => 
+      m.cursos?.titulo && 
+      m.cursos.titulo.toLowerCase().includes('experto') &&
+      m.url_archivo && 
+      m.url_archivo.includes('master-adicciones')
+    );
     
+    const masterMaterialsWithExpertPath = materials.filter(m => 
+      m.cursos?.titulo && 
+      m.cursos.titulo.toLowerCase().includes('master') &&
+      m.url_archivo && 
+      m.url_archivo.includes('experto-conductas-adictivas')
+    );
+
+    if (expertMaterialsWithMasterPath.length > 0) {
+      console.log(`\n🚨 ${expertMaterialsWithMasterPath.length} materiales del curso EXPERTO con ruta de MASTER:`);
+      expertMaterialsWithMasterPath.forEach(material => {
+        console.log(`   - ${material.titulo}`);
+        console.log(`     ID: ${material.id}`);
+        console.log(`     URL actual: ${material.url_archivo}`);
+        const correctUrl = material.url_archivo.replace('master-adicciones', 'experto-conductas-adictivas');
+        console.log(`     URL correcta: ${correctUrl}`);
+      });
+    }
+
+    if (masterMaterialsWithExpertPath.length > 0) {
+      console.log(`\n🚨 ${masterMaterialsWithExpertPath.length} materiales del curso MASTER con ruta de EXPERTO:`);
+      masterMaterialsWithExpertPath.forEach(material => {
+        console.log(`   - ${material.titulo}`);
+        console.log(`     URL: ${material.url_archivo}`);
+      });
+    }
+
+    if (expertMaterialsWithMasterPath.length === 0 && masterMaterialsWithExpertPath.length === 0) {
+      console.log('\n✅ No se encontraron problemas de rutas entre cursos.');
+    }
+
   } catch (error) {
     console.error('❌ Error general:', error);
   }

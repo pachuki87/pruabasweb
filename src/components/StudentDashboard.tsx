@@ -161,9 +161,9 @@ const RecentTestItem: React.FC<RecentTestItemProps> = ({ test }) => {
         <span>Intento #{test.attempt_number}</span>
       </div>
       
-      {test.fecha_completado && (
+      {test.completed_at && (
         <p className="text-xs text-gray-500 mt-2">
-          {new Date(test.fecha_completado).toLocaleDateString('es-ES', {
+          {new Date(test.completed_at).toLocaleDateString('es-ES', {
             year: 'numeric',
             month: 'short',
             day: 'numeric',
@@ -178,7 +178,7 @@ const RecentTestItem: React.FC<RecentTestItemProps> = ({ test }) => {
 
 const StudentDashboard: React.FC = () => {
   const { user } = useAuth();
-  const { userStats, loading, error, refreshProgress } = useProgress();
+  const { estadisticasUsuario, cargando, error, refreshProgress } = useProgress();
   
   useEffect(() => {
     if (user?.id) {
@@ -186,7 +186,7 @@ const StudentDashboard: React.FC = () => {
     }
   }, [user?.id]);
 
-  if (loading) {
+  if (cargando) {
     return (
       <div className="min-h-screen bg-gray-50 p-6">
         <div className="max-w-7xl mx-auto">
@@ -222,9 +222,9 @@ const StudentDashboard: React.FC = () => {
     );
   }
 
-  const stats = userStats?.stats || {};
-  const courseProgress = userStats?.courseProgress || [];
-  const recentTests = userStats?.recentTests || [];
+  const stats = estadisticasUsuario?.stats || {};
+  const courseProgress = estadisticasUsuario?.courseProgress || [];
+  const recentTests = estadisticasUsuario?.recentTests || [];
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">

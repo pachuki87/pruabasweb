@@ -52,7 +52,7 @@ const NewLessonPage: React.FC = () => {
   const courseId = mapCourseSlugToId(rawCourseId || '');
   console.log('✅ CURSO MAPEADO - rawCourseId:', rawCourseId, '-> courseId:', courseId);
   
-  const { updateChapterProgress, trackStudyTime } = useProgress(courseId);
+  const { actualizarProgresoCapitulo, registrarTiempoEstudio } = useProgress(courseId);
   
   // Estado para tracking de tiempo
   const [startTime, setStartTime] = useState<Date | null>(null);
@@ -410,10 +410,11 @@ const NewLessonPage: React.FC = () => {
             
             // Registrar progreso del usuario si está autenticado
             if (user && courseId) {
-              await updateChapterProgress({
-                courseId,
-                chapterId: lesson.id,
-                progressPercentage: 0
+              await actualizarProgresoCapitulo({
+                cursoId: courseId,
+                capituloId: lesson.id,
+                porcentajeProgreso: 0,
+                estaCompletado: false
               });
               setStartTime(new Date());
               setLastActivityTime(new Date());
@@ -428,10 +429,11 @@ const NewLessonPage: React.FC = () => {
             
             // Registrar progreso del usuario si está autenticado
             if (user && courseId) {
-              await updateChapterProgress({
-                courseId,
-                chapterId: processedLessons[0].id,
-                progressPercentage: 0
+              await actualizarProgresoCapitulo({
+                cursoId: courseId,
+                capituloId: processedLessons[0].id,
+                porcentajeProgreso: 0,
+                estaCompletado: false
               });
               setStartTime(new Date());
               setLastActivityTime(new Date());
@@ -510,10 +512,11 @@ const NewLessonPage: React.FC = () => {
     
     // Registrar progreso del usuario si está autenticado
     if (user && courseId) {
-      await updateChapterProgress({
-        courseId,
-        chapterId: lesson.id,
-        progressPercentage: 0
+      await actualizarProgresoCapitulo({
+        cursoId: courseId,
+        capituloId: lesson.id,
+        porcentajeProgreso: 0,
+        estaCompletado: false
       });
       setStartTime(new Date());
       setLastActivityTime(new Date());

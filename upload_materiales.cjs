@@ -25,29 +25,39 @@ const materialesConfig = {
     curso_id: CURSO_EXPERTO_ID,
     materiales: [
       {
-        archivo: 'seminario-enero-manejo-del-estres-y-ansiedad.pdf',
+        archivo: 'experto-conductas-adictivas/seminario-enero-manejo-del-estres-y-ansiedad.pdf',
         titulo: 'Seminario: Manejo del Estrés y Ansiedad',
         descripcion: 'Material complementario sobre técnicas de manejo del estrés y ansiedad en el contexto de las adicciones'
       },
       {
-        archivo: 'La ventana de johari.pdf',
+        archivo: 'experto-conductas-adictivas/La ventana de johari.pdf',
         titulo: 'La Ventana de Johari',
         descripcion: 'Herramienta de autoconocimiento y comunicación interpersonal'
       },
       {
-        archivo: 'NIÑO INTERIOR .pdf',
+        archivo: 'experto-conductas-adictivas/NIÑO INTERIOR .pdf',
         titulo: 'El Niño Interior',
         descripcion: 'Trabajo terapéutico con el niño interior en procesos de recuperación'
       },
       {
-        archivo: 'PSICOTERAPIA PPT.pdf',
+        archivo: 'experto-conductas-adictivas/PSICOTERAPIA PPT.pdf',
         titulo: 'Presentación: Psicoterapia',
         descripcion: 'Material didáctico sobre fundamentos de psicoterapia'
       },
       {
-        archivo: 'TECNICAS COMUNICATIVAS DEF.pdf',
+        archivo: 'experto-conductas-adictivas/TECNICAS COMUNICATIVAS DEF.pdf',
         titulo: 'Técnicas Comunicativas',
         descripcion: 'Guía de técnicas de comunicación efectiva en terapia'
+      },
+      {
+        archivo: 'experto-conductas-adictivas/2-Guia-IF-Especializados-2014.pdf',
+        titulo: 'Guía de Intervención Familiar Especializada',
+        descripcion: 'Guía especializada para intervención familiar en contextos de adicción'
+      },
+      {
+        archivo: 'experto-conductas-adictivas/informe-educacion-emocional-conductas-adictivas.pdf',
+        titulo: 'Informe: Educación Emocional para Conductas Adictivas',
+        descripcion: 'Informe especializado sobre educación emocional aplicada a conductas adictivas'
       }
     ]
   },
@@ -56,12 +66,12 @@ const materialesConfig = {
     curso_id: CURSO_MASTER_ID,
     materiales: [
       {
-        archivo: 'master-adicciones/Bloque-1-Tecnico-en-Adicciones.pdf',
+        archivo: 'master-adicciones/BLOQUE-1-TECNICO-EN-ADICCIONES.pdf',
         titulo: 'Bloque 1: Técnico en Adicciones',
         descripcion: 'Material fundamental sobre técnicas básicas en el tratamiento de adicciones'
       },
       {
-        archivo: 'master-adicciones/BLOQUE 2 TÉCNICO EN ADICCIONES.pdf',
+        archivo: 'master-adicciones/bloque-2-tecnico-adicciones.pdf',
         titulo: 'Bloque 2: Técnico en Adicciones',
         descripcion: 'Continuación del material técnico sobre tratamiento de adicciones'
       },
@@ -110,62 +120,62 @@ const materialesConfig = {
   // Materiales compartidos (disponibles para ambos cursos)
   compartidos: [
     {
-      archivo: '2-Guia-IF-Especializados-2014.pdf',
+      archivo: 'experto-conductas-adictivas/2-Guia-IF-Especializados-2014.pdf',
       titulo: 'Guía de Intervención Familiar Especializada',
       descripcion: 'Guía especializada para intervención familiar en contextos de adicción'
     },
     {
-      archivo: 'BLOQUE 1 TECNICO EN ADICIONES.pdf',
+      archivo: 'master-adicciones/BLOQUE 1 TECNICO EN ADICIONES.pdf',
       titulo: 'Bloque 1: Técnico en Adicciones (General)',
       descripcion: 'Material base sobre fundamentos técnicos en adicciones'
     },
     {
-      archivo: 'BLOQUE 2 TÉCNICO EN ADICCIONES.pdf',
+      archivo: 'master-adicciones/bloque-2-tecnico-adicciones.pdf',
       titulo: 'Bloque 2: Técnico en Adicciones (General)',
       descripcion: 'Material avanzado sobre técnicas en adicciones'
     },
     {
-      archivo: 'BLOQUE III - FAMILIA Y TRABAJO EN EQUIPO.pdf',
+      archivo: 'master-adicciones/BLOQUE III - FAMILIA Y TRABAJO EN EQUIPO.pdf',
       titulo: 'Bloque 3: Familia y Trabajo en Equipo (General)',
       descripcion: 'Material sobre trabajo familiar y en equipo'
     },
     {
-      archivo: 'BLOQUE-1-TECNICO-EN-ADICCIONES.pdf',
+      archivo: 'master-adicciones/BLOQUE 1 TECNICO EN ADICIONES.pdf',
       titulo: 'Bloque 1: Técnico en Adicciones (Versión 2)',
       descripcion: 'Versión alternativa del material técnico básico'
     },
     {
-      archivo: 'Cuaderno-de-ejercicios-de-inteligencia-emocional.pdf',
+      archivo: 'master-adicciones/Cuaderno-de-ejercicios-de-inteligencia-emocional.pdf',
       titulo: 'Cuaderno de Ejercicios: Inteligencia Emocional (General)',
       descripcion: 'Ejercicios de inteligencia emocional aplicables a ambos cursos'
     },
     {
-      archivo: 'Informe-Educación-emocional-para-las-conductas-adictivas.pdf',
+      archivo: 'experto-conductas-adictivas/informe-educacion-emocional-conductas-adictivas.pdf',
       titulo: 'Informe: Educación Emocional para Conductas Adictivas',
       descripcion: 'Informe especializado sobre educación emocional en adicciones'
     },
     {
-      archivo: 'intervencion-Familiar-en-Adicciones-y.-Recovery-Mentoring-1.pdf',
+      archivo: 'master-adicciones/intervencion-Familiar-en-Adicciones-y.-Recovery-Mentoring-1.pdf',
       titulo: 'Intervención Familiar y Recovery Mentoring (General)',
       descripcion: 'Material sobre intervención familiar y mentoring'
     },
     {
-      archivo: 'MATRIX-manual_terapeuta.pdf',
+      archivo: 'master-adicciones/Manual-MATRIX-para-Terapeutas.pdf',
       titulo: 'Manual MATRIX para Terapeutas (General)',
       descripcion: 'Manual del modelo MATRIX para terapeutas'
     },
     {
-      archivo: 'PPT INTELIGENCIA EMOCIONAL.pdf',
+      archivo: 'master-adicciones/PPT INTELIGENCIA EMOCIONAL.pdf',
       titulo: 'Presentación: Inteligencia Emocional (General)',
       descripcion: 'Presentación sobre inteligencia emocional'
     },
     {
-      archivo: 'Recovery Coach reinservida.pdf',
+      archivo: 'master-adicciones/Recovery Coach reinservida.pdf',
       titulo: 'Recovery Coach (General)',
       descripcion: 'Material sobre Recovery Coaching'
     },
     {
-      archivo: 'TERAPIAS TERCERA GENERACIÓN MASTER DEFINITIVO.pdf',
+      archivo: 'master-adicciones/TERAPIAS TERCERA GENERACIÓN MASTER DEFINITIVO.pdf',
       titulo: 'Terapias de Tercera Generación (General)',
       descripcion: 'Material sobre terapias de tercera generación'
     }
@@ -206,9 +216,9 @@ async function uploadMateriales() {
       // Verificar que el archivo existe
       const filePath = path.join(__dirname, 'public', 'pdfs', material.archivo);
       if (!fs.existsSync(filePath)) {
-        console.log(`⚠️  Archivo no encontrado: ${material.archivo}`);
-        return;
-      }
+      console.log(`⚠️  Archivo no encontrado: ${material.archivo}`);
+      continue;
+    }
       
       const { data, error } = await supabase
         .from('materiales')

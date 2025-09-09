@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
+import { useAuth } from '../../contexts/AuthContext';
+import useProgress from '../../hooks/useProgress';
 
 type CourseProgress = {
   id: string;
@@ -12,12 +14,14 @@ type CourseProgress = {
 };
 
 const StudentProgress: React.FC = () => {
+  const { user } = useAuth();
   const [courseProgress, setCourseProgress] = useState<CourseProgress[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const { estadisticasUsuario, cargando: progressLoading, error: progressError } = useProgress();
 
   useEffect(() => {
     fetchStudentProgress();
-  }, []);
+  }, [user, estadisticasUsuario]);
 
   const fetchStudentProgress = async () => {
     setIsLoading(true);
@@ -95,13 +99,26 @@ const StudentProgress: React.FC = () => {
           console.error('Error fetching quiz attempts:', attemptsError);
         }
 
-        // For now, we'll consider chapters as "completed" if there are quiz attempts
-        // In a real scenario, you might have a separate table for chapter progress
-        const completedChapters = Math.min(completedQuizzes || 0, totalChapters || 0);
+        // Use progress from useProgress hook if available
+        let progressPercentage = 0;
+        let completedChapters = 0;
         
-        const totalItems = (totalChapters || 0) + (totalQuizzes || 0);
-        const completedItems = completedChapters + (completedQuizzes || 0);
-        const progressPercentage = totalItems > 0 ? Math.round((completedItems / totalItems) * 100) : 0;
+        if (estadisticasUsuario && estadisticasUsuario.courses) {
+      const courseStats = estadisticasUsuario.courses.find(c => c.course_id === courseId);
+          if (courseStats) {
+            progressPercentage = Math.round(courseStats.overall_progress || 0);
+            // Estimate completed chapters based on progress
+            completedChapters = Math.round((progressPercentage / 100) * (totalChapters || 0));
+          }
+        }
+        
+        // Fallback to manual calculation if no stats available
+        if (progressPercentage === 0) {
+          completedChapters = Math.min(completedQuizzes || 0, totalChapters || 0);
+          const totalItems = (totalChapters || 0) + (totalQuizzes || 0);
+          const completedItems = completedChapters + (completedQuizzes || 0);
+          progressPercentage = totalItems > 0 ? Math.round((completedItems / totalItems) * 100) : 0;
+        }
 
         progressData.push({
           id: courseId,
@@ -118,12 +135,24 @@ const StudentProgress: React.FC = () => {
       setIsLoading(false);
     } catch (error) {
       console.error('Error fetching student progress:', error);
-      setCourseProgress([]);
       setIsLoading(false);
     }
   };
 
-  if (isLoading) {
+  // Show loading if either local loading or progress loading
+  const showLoading = isLoading || progressLoading;
+
+  // Debug information
+  useEffect(() => {
+    if (progressError) {
+      console.error('Progress hook error:', progressError);
+    }
+    if (estadisticasUsuario) {
+      console.log('User stats from hook:', estadisticasUsuario);
+    }
+  }, [progressError, estadisticasUsuario]);
+
+  if (showLoading) {
     return (
       <div className="space-y-4">
         {[1, 2].map((i) => (

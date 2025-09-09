@@ -17,7 +17,7 @@ type Quiz = {
   title: string;
   description?: string;
   curso_id: string;
-  chapter_id?: string;
+  leccion_id?: string;
   questions: Question[];
 }
 
@@ -31,6 +31,15 @@ const QuizAttemptPage: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showResults, setShowResults] = useState(false);
   const [score, setScore] = useState(0);
+  const [startTime] = useState(Date.now());
+  const [timeElapsed, setTimeElapsed] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTimeElapsed(Math.floor((Date.now() - startTime) / 1000));
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [startTime]);
 
   useEffect(() => {
     if (quizId) {
@@ -59,8 +68,8 @@ const QuizAttemptPage: React.FC = () => {
       const { data: questionsData, error: questionsError } = await supabase
         .from('preguntas')
         .select('*')
-        .eq('quiz_id', quizId)
-        .order('order_index');
+        .eq('cuestionario_id', quizId)
+        .order('orden');
 
       if (questionsError) {
         console.error('Error fetching questions:', questionsError);
@@ -73,11 +82,11 @@ const QuizAttemptPage: React.FC = () => {
         title: quizData.title,
         description: quizData.description,
         curso_id: quizData.curso_id,
-        chapter_id: quizData.chapter_id,
-        questions: questionsData.map(q => ({
+        leccion_id: quizData.leccion_id,
+        questions: (questionsData || []).map(q => ({
           id: q.id,
           question: q.question,
-          options: q.options,
+          options: q.options || [],
           correct_answer: q.correct_answer,
           explanation: q.explanation
         }))
@@ -132,13 +141,21 @@ const QuizAttemptPage: React.FC = () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
         const { error } = await supabase
-          .from('respuestas_texto_libre')
+          .from('user_test_results')
           .insert({
-            quiz_id: quiz.id,
             student_id: user.id,
+            quiz_id: quiz.id,
+            user_id: user.id,
+            course_id: quiz.curso_id,
             score: finalScore,
-            answers: selectedAnswers,
-            fecha_completado: new Date().toISOString()
+            total_questions: quiz.questions.length,
+            correct_answers: correctAnswers,
+            incorrect_answers: quiz.questions.length - correctAnswers,
+            time_taken_minutes: Math.round(timeElapsed / 60),
+            passed: finalScore >= 70,
+            attempt_number: 1,
+            answers_data: selectedAnswers,
+            completed_at: new Date().toISOString()
           });
 
         if (error) {
@@ -159,8 +176,8 @@ const QuizAttemptPage: React.FC = () => {
   };
 
   const handleBackToCourse = () => {
-    if (quiz?.chapter_id) {
-      navigate(`/student/courses/${quiz.curso_id}/lessons/${quiz.chapter_id}`);
+    if (quiz?.leccion_id) {
+      navigate(`/student/courses/${quiz.curso_id}/lessons/${quiz.leccion_id}`);
     } else {
       navigate(`/student/courses/${quiz?.curso_id}`);
     }
@@ -198,7 +215,7 @@ const QuizAttemptPage: React.FC = () => {
           <h2 className="text-3xl font-bold text-gray-900 mb-4">¡Cuestionario Completado!</h2>
           <div className="text-6xl font-bold text-blue-600 mb-4">{score}%</div>
           <p className="text-lg text-gray-600 mb-6">
-            Has respondido correctamente {quiz.questions.filter((_, index) => selectedAnswers[index] === quiz.questions[index].correct_answer).length} de {quiz.questions.length} preguntas
+            Has respondido correctamente {quiz?.questions?.filter((_, index) => selectedAnswers[index] === quiz.questions[index].correct_answer).length || 0} de {quiz?.questions?.length || 0} preguntas
           </p>
           <div className="flex justify-center space-x-4">
             <button
@@ -214,6 +231,22 @@ const QuizAttemptPage: React.FC = () => {
               Ver todos los cuestionarios
             </button>
           </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!quiz || !quiz.questions || quiz.questions.length === 0) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">No hay preguntas disponibles</h2>
+          <button
+            onClick={() => navigate('/student/quizzes')}
+            className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
+          >
+            Volver a cuestionarios
+          </button>
         </div>
       </div>
     );
@@ -254,11 +287,11 @@ const QuizAttemptPage: React.FC = () => {
       {/* Question */}
       <div className="bg-white rounded-lg shadow-md p-6 mb-6">
         <h2 className="text-xl font-semibold text-gray-900 mb-6">
-          {currentQuestion.question}
+          {currentQuestion?.question || 'Pregunta no disponible'}
         </h2>
         
         <div className="space-y-3">
-          {currentQuestion.options.map((option, index) => (
+          {(currentQuestion?.options || []).map((option, index) => (
             <button
               key={index}
               onClick={() => handleAnswerSelect(index)}

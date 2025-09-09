@@ -22,7 +22,7 @@ const QuizProgress: React.FC<QuizProgressProps> = ({
   onProgressSaved
 }) => {
   const { user } = useAuth();
-  const { saveTestResults, markChapterCompleted } = useProgress(courseId);
+  const { saveTestResults, marcarCapituloCompletado } = useProgress(courseId);
 
   useEffect(() => {
     const saveProgress = async () => {
@@ -46,7 +46,7 @@ const QuizProgress: React.FC<QuizProgressProps> = ({
 
         // Si aprobó, marcar la lección como completada
         if (passed) {
-          await markChapterCompleted(lessonId);
+          await marcarCapituloCompletado(lessonId);
         }
 
         // Notificar que se guardó el progreso
@@ -67,7 +67,7 @@ const QuizProgress: React.FC<QuizProgressProps> = ({
     };
 
     saveProgress();
-  }, [user, courseId, lessonId, quizId, score, totalQuestions, timeSpent, saveTestResults, markChapterCompleted, onProgressSaved]);
+  }, [user, courseId, lessonId, quizId, score, totalQuestions, timeSpent, saveTestResults, marcarCapituloCompletado, onProgressSaved]);
 
   return null; // Este componente no renderiza nada, solo maneja la lógica
 };

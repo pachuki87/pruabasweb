@@ -34,7 +34,7 @@ export class ProgressService {
         .select('*')
         .eq('user_id', userId)
         .eq('curso_id', courseId)
-        .eq('chapter_id', chapterId)
+        .eq('leccion_id', chapterId)
         .single();
 
       if (fetchError && fetchError.code !== 'PGRST116') {
@@ -50,7 +50,7 @@ export class ProgressService {
           tiempo_estudiado: (existingProgress.tiempo_estudiado || 0) + timeSpentMinutes,
           estado: isCompleted ? 'completado' : (existingProgress.estado || 'en_progreso'),
           ultima_actividad: now,
-          fecha_completado: isCompleted && !existingProgress.fecha_completado ? now : existingProgress.fecha_completado
+          completed_at: isCompleted && !existingProgress.completed_at ? now : existingProgress.completed_at
         };
 
         const { data, error } = await supabase
@@ -67,12 +67,12 @@ export class ProgressService {
         const insertData: UserCourseProgressInsert = {
           user_id: userId,
           curso_id: courseId,
-          chapter_id: chapterId,
+          leccion_id: chapterId,
           progreso_porcentaje: progressPercentage,
           tiempo_estudiado: timeSpentMinutes,
           estado: isCompleted ? 'completado' : 'en_progreso',
           ultima_actividad: now,
-          fecha_completado: isCompleted ? now : null
+          completed_at: isCompleted ? now : null
         };
 
         const { data, error } = await supabase
@@ -99,7 +99,7 @@ export class ProgressService {
         .from('user_course_progress')
         .select(`
           *,
-          chapters:chapter_id (
+          lecciones:leccion_id (
             id,
             titulo,
             descripcion
@@ -184,7 +184,7 @@ export class ProgressService {
       const insertData: UserTestResultsInsert = {
         user_id: userId,
         quiz_id: quizId,
-        curso_id: courseId,
+        course_id: courseId,
         score,
         total_questions: totalQuestions,
         correct_answers: correctAnswers,
@@ -194,7 +194,7 @@ export class ProgressService {
         attempt_number: attemptNumber,
         answers_data: answersData,
         started_at: startedAt,
-        fecha_completado: completedAt || new Date().toISOString()
+        completed_at: completedAt || new Date().toISOString()
       };
 
       const { data, error } = await supabase
@@ -220,20 +220,20 @@ export class ProgressService {
         .from('user_test_results')
         .select(`
           *,
-          quizzes:quiz_id (
+          cuestionarios:quiz_id (
             id,
             titulo
           ),
-          courses:curso_id (
+          courses:course_id (
             id,
             titulo
           )
         `)
         .eq('user_id', userId)
-        .order('fecha_completado', { ascending: false });
+        .order('completed_at', { ascending: false });
 
       if (courseId) {
-        query = query.eq('curso_id', courseId);
+        query = query.eq('course_id', courseId);
       }
 
       const { data, error } = await query;
@@ -264,15 +264,15 @@ export class ProgressService {
         .from('user_test_results')
         .select(`
           *,
-          quizzes:quiz_id (
+          cuestionarios:quiz_id (
             titulo
           ),
-          courses:curso_id (
+          courses:course_id (
             titulo
           )
         `)
         .eq('user_id', userId)
-        .order('fecha_completado', { ascending: false })
+        .order('completed_at', { ascending: false })
         .limit(10);
 
       if (testsError) throw testsError;

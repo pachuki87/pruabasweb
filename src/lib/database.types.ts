@@ -99,75 +99,24 @@ export interface Database {
           titulo: string
           curso_id: string
           created_at: string
-          chapter_id: string | null
+          leccion_id: string | null
         }
         Insert: {
           id?: string
           titulo: string
           curso_id: string
           created_at?: string
-          chapter_id?: string | null
+          leccion_id?: string | null
         }
         Update: {
           id?: string
           titulo?: string
           curso_id?: string
           created_at?: string
-          chapter_id?: string | null
+          leccion_id?: string | null
         }
       }
-      quiz_questions: {
-        Row: {
-          id: string
-          quiz_id: string
-          question: string
-          options: string[]
-          correct_option: number
-          created_at: string
-        }
-        Insert: {
-          id?: string
-          quiz_id: string
-          question: string
-          options: string[]
-          correct_option: number
-          created_at?: string
-        }
-        Update: {
-          id?: string
-          quiz_id?: string
-          question?: string
-          options?: string[]
-          correct_option?: number
-          created_at?: string
-        }
-      }
-      quiz_attempts: {
-        Row: {
-          id: string
-          student_id: string
-          quiz_id: string
-          score: number
-          total_questions: number
-          created_at: string
-        }
-        Insert: {
-          id?: string
-          student_id: string
-          quiz_id: string
-          score: number
-          total_questions: number
-          created_at?: string
-        }
-        Update: {
-          id?: string
-          student_id?: string
-          quiz_id?: string
-          score?: number
-          total_questions?: number
-          created_at?: string
-        }
-      }
+
       inscripciones: {
         Row: {
           id: string
@@ -195,7 +144,7 @@ export interface Database {
           curso_id: string
           file_url: string
           created_at: string
-          chapter_id: string | null
+          leccion_id: string | null
           material_type: string | null
           description: string | null
           file_size: number | null
@@ -206,7 +155,7 @@ export interface Database {
           curso_id: string
           file_url: string
           created_at?: string
-          chapter_id?: string | null
+          leccion_id?: string | null
           material_type?: string | null
           description?: string | null
           file_size?: number | null
@@ -217,7 +166,7 @@ export interface Database {
           curso_id?: string
           file_url?: string
           created_at?: string
-          chapter_id?: string | null
+          leccion_id?: string | null
           material_type?: string | null
           description?: string | null
           file_size?: number | null
@@ -229,12 +178,11 @@ export interface Database {
           user_id: string
           curso_id: string
           leccion_id: string | null
-          chapter_id: string | null
           estado: string
           progreso_porcentaje: number | null
           tiempo_estudiado: number | null
           fecha_inicio: string | null
-          fecha_completado: string | null
+          completed_at: string | null
           ultima_actividad: string | null
           notas_usuario: string | null
           marcadores: Json | null
@@ -246,12 +194,11 @@ export interface Database {
           user_id: string
           curso_id: string
           leccion_id?: string | null
-          chapter_id?: string | null
           estado: string
           progreso_porcentaje?: number | null
           tiempo_estudiado?: number | null
           fecha_inicio?: string | null
-          fecha_completado?: string | null
+          completed_at?: string | null
           ultima_actividad?: string | null
           notas_usuario?: string | null
           marcadores?: Json | null
@@ -263,7 +210,6 @@ export interface Database {
           user_id?: string
           curso_id?: string
           leccion_id?: string | null
-          chapter_id?: string | null
           estado?: string
           progreso_porcentaje?: number | null
           tiempo_estudiado?: number | null
@@ -281,7 +227,7 @@ export interface Database {
           id: string
           user_id: string
           quiz_id: string
-          curso_id: string
+          course_id: string
           score: number
           total_questions: number
           correct_answers: number
@@ -291,14 +237,14 @@ export interface Database {
           attempt_number: number
           answers_data: Json | null
           started_at: string | null
-          fecha_completado: string | null
+          completed_at: string | null
           created_at: string
         }
         Insert: {
           id?: string
           user_id: string
           quiz_id: string
-          curso_id: string
+          course_id: string
           score: number
           total_questions: number
           correct_answers: number
@@ -308,14 +254,14 @@ export interface Database {
           attempt_number?: number
           answers_data?: Json | null
           started_at?: string | null
-          fecha_completado?: string | null
+          completed_at?: string | null
           created_at?: string
         }
         Update: {
           id?: string
           user_id?: string
           quiz_id?: string
-          curso_id?: string
+          course_id?: string
           score?: number
           total_questions?: number
           correct_answers?: number
@@ -325,7 +271,7 @@ export interface Database {
           attempt_number?: number
           answers_data?: Json | null
           started_at?: string | null
-          fecha_completado?: string | null
+          completed_at?: string | null
           created_at?: string
         }
       }

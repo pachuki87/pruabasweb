@@ -27,7 +27,7 @@ const LessonNavigation: React.FC<LessonNavigationProps> = ({
   onLessonSelect
 }) => {
   const { user } = useAuth();
-  const { courseProgress, loading } = useProgress(courseId);
+  const { progresoDelCurso, cargando } = useProgress(courseId);
   const [lessonProgress, setLessonProgress] = useState<{[key: string]: any}>({});
   
   const currentIndex = lessons.findIndex(lesson => lesson.id === currentLessonId);
@@ -37,14 +37,14 @@ const LessonNavigation: React.FC<LessonNavigationProps> = ({
 
   // Cargar progreso de las lecciones
   useEffect(() => {
-    if (courseProgress && courseProgress.length > 0) {
+    if (progresoDelCurso && progresoDelCurso.length > 0) {
       const progressMap: {[key: string]: any} = {};
-      courseProgress.forEach((progress: any) => {
+      progresoDelCurso.forEach((progress: any) => {
         progressMap[progress.leccion_id] = progress;
       });
       setLessonProgress(progressMap);
     }
-  }, [courseProgress]);
+  }, [progresoDelCurso]);
 
   // Función para obtener el estado de progreso de una lección
   const getLessonProgressStatus = (lessonId: string) => {

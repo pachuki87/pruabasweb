@@ -48,9 +48,9 @@ interface UseProgressReturn {
 
 export const useProgress = (courseId?: string): UseProgressReturn => {
   const { user } = useAuth();
-  const [courseProgress, setCourseProgress] = useState<UserCourseProgress[] | null>(null);
-  const [userStats, setUserStats] = useState<any>(null);
-  const [testResults, setTestResults] = useState<UserTestResults[] | null>(null);
+  const [progresoDelCurso, setProgresoDelCurso] = useState<UserCourseProgress[] | null>(null);
+  const [estadisticasUsuario, setEstadisticasUsuario] = useState<any>(null);
+  const [resultadosPruebas, setResultadosPruebas] = useState<UserTestResults[] | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -71,16 +71,16 @@ export const useProgress = (courseId?: string): UseProgressReturn => {
       // Cargar progreso del curso específico o general
       if (courseId) {
         const progress = await ProgressService.getCourseProgress(user.id, courseId);
-        setCourseProgress(progress);
-        
-        const tests = await ProgressService.getUserTestResults(user.id, courseId);
-        setTestResults(tests);
+      setProgresoDelCurso(progress);
+      
+      const tests = await ProgressService.getUserTestResults(user.id, courseId);
+      setResultadosPruebas(tests);
       } else {
         // Cargar estadísticas generales
         const stats = await ProgressService.getUserProgressStats(user.id);
-        setUserStats(stats);
-        setCourseProgress(stats.courseProgress);
-        setTestResults(stats.recentTests);
+        setEstadisticasUsuario(stats);
+      setProgresoDelCurso(stats.courseProgress);
+      setResultadosPruebas(stats.recentTests);
       }
     } catch (err) {
       console.error('Error loading progress data:', err);
@@ -195,14 +195,17 @@ export const useProgress = (courseId?: string): UseProgressReturn => {
   };
 
   return {
-    courseProgress: courseProgress,
-    userStats: userStats,
-    testResults: testResults,
-    loading: loading,
+    // Propiedades de estado (español)
+    progresoDelCurso,
+    estadisticasUsuario,
+    resultadosPruebas,
+    cargando: loading,
     error: error,
-    updateChapterProgress: updateChapterProgress,
-    markChapterCompleted: markChapterCompleted,
-    trackStudyTime: trackStudyTime,
+    
+    // Funciones (español)
+    actualizarProgresoCapitulo: updateChapterProgress,
+    marcarCapituloCompletado: markChapterCompleted,
+    registrarTiempoEstudio: trackStudyTime,
     saveTestResults: saveTestResults,
     refreshProgress: refreshProgress,
     getCourseProgress: getCourseProgress,

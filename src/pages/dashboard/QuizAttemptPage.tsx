@@ -67,7 +67,10 @@ const QuizAttemptPage: React.FC = () => {
       // Fetch quiz questions
       const { data: questionsData, error: questionsError } = await supabase
         .from('preguntas')
-        .select('*')
+        .select(`
+          *,
+          opciones_respuesta (*)
+        `)
         .eq('cuestionario_id', quizId)
         .order('orden');
 
@@ -79,16 +82,16 @@ const QuizAttemptPage: React.FC = () => {
 
       const formattedQuiz: Quiz = {
         id: quizData.id,
-        title: quizData.title,
-        description: quizData.description,
+        title: quizData.titulo,
+        description: quizData.descripcion || '',
         curso_id: quizData.curso_id,
         leccion_id: quizData.leccion_id,
         questions: (questionsData || []).map(q => ({
           id: q.id,
-          question: q.question,
-          options: q.options || [],
-          correct_answer: q.correct_answer,
-          explanation: q.explanation
+          question: q.pregunta,
+          options: q.opciones_respuesta || [],
+          correct_answer: q.respuesta_correcta,
+          explanation: q.explicacion
         }))
       };
 

@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../contexts/AuthContext';
-import { ChevronLeft, Clock, CheckCircle } from 'lucide-react';
+import { ChevronLeft, Clock, CheckCircle, AlertCircle } from 'lucide-react';
 
 type Question = {
   id: string;
@@ -35,6 +35,8 @@ const QuizAttemptPage: React.FC = () => {
   const [score, setScore] = useState(0);
   const [startTime] = useState(Date.now());
   const [timeElapsed, setTimeElapsed] = useState(0);
+  const [error, setError] = useState<string | null>(null);
+  const [retryCount, setRetryCount] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -56,81 +58,90 @@ const QuizAttemptPage: React.FC = () => {
     }
   }, [quizId, user, authLoading, navigate]);
 
-  const fetchQuiz = async () => {
-    try {
-      setIsLoading(true);
-      
-      // Fetch quiz data
-      const { data: quizData, error: quizError } = await supabase
-        .from('cuestionarios')
-        .select('*')
-        .eq('id', quizId)
-        .single();
+  const fetchQuiz = useCallback(async () => {
+    setIsLoading(true);
+    setError(null);
+    
+    // Fetch quiz data
+    const { data: quizData, error: quizError } = await supabase
+      .from('cuestionarios')
+      .select('*')
+      .eq('id', quizId)
+      .single();
 
-      if (quizError) {
-        console.error('Error fetching quiz:', quizError);
-        toast.error('Error al cargar el cuestionario');
-        return;
-      }
-
-      // Fetch quiz questions
-      const { data: questionsData, error: questionsError } = await supabase
-        .from('preguntas')
-        .select(`
-          *,
-          opciones_respuesta (*)
-        `)
-        .eq('cuestionario_id', quizId)
-        .order('orden');
-
-      if (questionsError) {
-        console.error('Error fetching questions:', questionsError);
-        toast.error('Error al cargar las preguntas');
-        return;
-      }
-
-      const formattedQuiz: Quiz = {
-        id: quizData.id,
-        title: quizData.titulo,
-        description: quizData.descripcion || '',
-        curso_id: quizData.curso_id,
-        leccion_id: quizData.leccion_id,
-        questions: (questionsData || []).map(q => {
-          // Ordenar opciones por el campo 'orden' y extraer solo el texto
-          const sortedOptions = (q.opciones_respuesta || [])
-            .sort((a, b) => a.orden - b.orden)
-            .map(opt => opt.opcion);
-          
-          // Encontrar el índice de la respuesta correcta
-          const correctAnswerIndex = (q.opciones_respuesta || [])
-            .sort((a, b) => a.orden - b.orden)
-            .findIndex(opt => opt.es_correcta);
-          
-          return {
-            id: q.id,
-            question: q.pregunta,
-            options: sortedOptions,
-            correct_answer: correctAnswerIndex,
-            explanation: q.explicacion
-          };
-        })
-      };
-
-      setQuiz(formattedQuiz);
-    } catch (error) {
-      console.error('Error:', error);
-      toast.error('Error al cargar el cuestionario');
-    } finally {
+    if (quizError) {
+      console.error('Error fetching quiz:', quizError);
+      const errorMessage = quizError.message || 'Error al cargar el cuestionario';
+      setError(errorMessage);
+      toast.error(errorMessage);
       setIsLoading(false);
+      return;
     }
-  };
 
-  const handleAnswerSelect = (answerIndex: number) => {
+    // Fetch quiz questions
+    const { data: questionsData, error: questionsError } = await supabase
+      .from('preguntas')
+      .select(`
+        *,
+        opciones_respuesta (*)
+      `)
+      .eq('cuestionario_id', quizId)
+      .order('orden');
+
+    if (questionsError) {
+      console.error('Error fetching questions:', questionsError);
+      const errorMessage = questionsError.message || 'Error al cargar las preguntas';
+      setError(errorMessage);
+      toast.error(errorMessage);
+      setIsLoading(false);
+      return;
+    }
+
+    const formattedQuiz: Quiz = {
+      id: quizData.id,
+      title: quizData.titulo,
+      description: quizData.descripcion || '',
+      curso_id: quizData.curso_id,
+      leccion_id: quizData.leccion_id,
+      questions: (questionsData || []).map(q => {
+        // Ordenar opciones por el campo 'orden' y extraer solo el texto
+        const sortedOptions = (q.opciones_respuesta || [])
+          .sort((a, b) => a.orden - b.orden)
+          .map(opt => opt.opcion);
+        
+        // Encontrar el índice de la respuesta correcta
+        const correctAnswerIndex = (q.opciones_respuesta || [])
+          .sort((a, b) => a.orden - b.orden)
+          .findIndex(opt => opt.es_correcta);
+        
+        return {
+          id: q.id,
+          question: q.pregunta,
+          options: sortedOptions,
+          correct_answer: correctAnswerIndex,
+          explanation: q.explicacion
+        };
+      })
+    };
+
+    setQuiz(formattedQuiz);
+    setIsLoading(false);
+    setRetryCount(0); // Reset retry count on success
+  }, [quizId]);
+
+  const retryFetchQuiz = useCallback(() => {
+    if (retryCount < 3) {
+      setRetryCount(prev => prev + 1);
+      setTimeout(() => fetchQuiz(), 1000 * Math.pow(2, retryCount)); // Exponential backoff
+    }
+  }, [fetchQuiz, retryCount]);
+
+  const handleAnswerSelect = useCallback((answerIndex: number) => {
     setSelectedAnswers({
       ...selectedAnswers,
       [currentQuestionIndex]: answerIndex
     });
-  };
+  }, [selectedAnswers, currentQuestionIndex]);
 
   const handleNextQuestion = () => {
     if (quiz && currentQuestionIndex < quiz.questions.length - 1) {
@@ -144,59 +155,56 @@ const QuizAttemptPage: React.FC = () => {
     }
   };
 
-  const handleSubmitQuiz = async () => {
+  const handleSubmitQuiz = useCallback(async () => {
     if (!quiz) return;
 
     setIsSubmitting(true);
     
-    try {
-      // Calculate score
-      let correctAnswers = 0;
-      quiz.questions.forEach((question, index) => {
-        if (selectedAnswers[index] === question.correct_answer) {
-          correctAnswers++;
-        }
-      });
-      
-      const finalScore = Math.round((correctAnswers / quiz.questions.length) * 100);
-      setScore(finalScore);
-
-      // Save quiz attempt to database
-      if (user) {
-        const { error } = await supabase
-          .from('user_test_results')
-          .insert({
-            student_id: user.id,
-            cuestionario_id: quiz.id,
-            user_id: user.id,
-            curso_id: quiz.curso_id,
-            score: finalScore,
-            total_questions: quiz.questions.length,
-            correct_answers: correctAnswers,
-            incorrect_answers: quiz.questions.length - correctAnswers,
-            time_taken_minutes: Math.round(timeElapsed / 60),
-            passed: finalScore >= 70,
-            attempt_number: 1,
-            answers_data: selectedAnswers,
-            completed_at: new Date().toISOString()
-          });
-
-        if (error) {
-          console.error('Error saving quiz attempt:', error);
-          toast.error('Error al guardar el intento');
-        } else {
-          toast.success('Cuestionario completado exitosamente');
-        }
+    // Calculate score
+    let correctAnswers = 0;
+    quiz.questions.forEach((question, index) => {
+      if (selectedAnswers[index] === question.correct_answer) {
+        correctAnswers++;
       }
+    });
+    
+    const finalScore = Math.round((correctAnswers / quiz.questions.length) * 100);
+    setScore(finalScore);
 
-      setShowResults(true);
-    } catch (error) {
-      console.error('Error submitting quiz:', error);
-      toast.error('Error al enviar el cuestionario');
-    } finally {
-      setIsSubmitting(false);
+    // Save quiz attempt to database
+    if (user) {
+      const { error } = await supabase
+        .from('user_test_results')
+        .insert({
+          student_id: user.id,
+          cuestionario_id: quiz.id,
+          user_id: user.id,
+          curso_id: quiz.curso_id,
+          score: finalScore,
+          total_questions: quiz.questions.length,
+          correct_answers: correctAnswers,
+          incorrect_answers: quiz.questions.length - correctAnswers,
+          time_taken_minutes: Math.round(timeElapsed / 60),
+          passed: finalScore >= 70,
+          attempt_number: 1,
+          answers_data: selectedAnswers,
+          completed_at: new Date().toISOString()
+        });
+
+      if (error) {
+        console.error('Error saving quiz attempt:', error);
+        const errorMessage = error.message || 'Error al guardar el intento';
+        toast.error(errorMessage);
+        setIsSubmitting(false);
+        return;
+      } else {
+        toast.success('Cuestionario completado exitosamente');
+      }
     }
-  };
+
+    setShowResults(true);
+    setIsSubmitting(false);
+  }, [quiz, selectedAnswers, user, timeElapsed]);
 
   const handleBackToCourse = () => {
     if (!quiz?.curso_id) {
@@ -215,8 +223,31 @@ const QuizAttemptPage: React.FC = () => {
 
   if (authLoading || isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">
+            {authLoading ? 'Verificando autenticación...' : 'Cargando cuestionario...'}
+          </p>
+          {error && (
+            <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+              <div className="flex items-center justify-center text-red-600 mb-2">
+                <AlertCircle className="h-5 w-5 mr-2" />
+                <span className="font-medium">Error</span>
+              </div>
+              <p className="text-red-700 text-sm mb-3">{error}</p>
+              {retryCount < 3 && (
+                <button
+                  onClick={retryFetchQuiz}
+                  className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                  disabled={isLoading}
+                >
+                  {isLoading ? 'Reintentando...' : `Reintentar (${retryCount + 1}/3)`}
+                </button>
+              )}
+            </div>
+          )}
+        </div>
       </div>
     );
   }
@@ -299,8 +330,13 @@ const QuizAttemptPage: React.FC = () => {
     );
   }
 
-  const currentQuestion = quiz.questions[currentQuestionIndex];
-  const progress = ((currentQuestionIndex + 1) / quiz.questions.length) * 100;
+  const currentQuestion = useMemo(() => quiz?.questions[currentQuestionIndex], [quiz, currentQuestionIndex]);
+  const isLastQuestion = useMemo(() => currentQuestionIndex === (quiz?.questions.length || 0) - 1, [currentQuestionIndex, quiz]);
+  const progress = useMemo(() => quiz ? ((currentQuestionIndex + 1) / quiz.questions.length) * 100 : 0, [currentQuestionIndex, quiz]);
+  const canSubmit = useMemo(() => {
+    if (!quiz) return false;
+    return quiz.questions.every((_, index) => selectedAnswers[index] !== undefined);
+  }, [quiz, selectedAnswers]);
 
   return (
     <div className="max-w-4xl mx-auto p-6">
@@ -369,13 +405,28 @@ const QuizAttemptPage: React.FC = () => {
           {Object.keys(selectedAnswers).length} de {quiz.questions.length} respondidas
         </div>
         
-        {currentQuestionIndex === quiz.questions.length - 1 ? (
+        {isLastQuestion ? (
           <button
             onClick={handleSubmitQuiz}
-            disabled={isSubmitting || Object.keys(selectedAnswers).length !== quiz.questions.length}
-            className="px-6 py-3 bg-green-600 text-white rounded-md hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            disabled={isSubmitting || !canSubmit}
+            className="px-6 py-3 bg-green-600 text-white rounded-md hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center"
           >
-            {isSubmitting ? 'Enviando...' : 'Finalizar cuestionario'}
+            {isSubmitting ? (
+              <>
+                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                Enviando...
+              </>
+            ) : !canSubmit ? (
+              <>
+                <AlertCircle className="h-5 w-5 mr-2" />
+                Responde todas las preguntas
+              </>
+            ) : (
+              <>
+                <CheckCircle className="h-5 w-5 mr-2" />
+                Finalizar cuestionario
+              </>
+            )}
           </button>
         ) : (
           <button

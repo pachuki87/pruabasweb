@@ -328,6 +328,7 @@ export interface Database {
           user_id: string
           cuestionario_id: string
           curso_id: string
+          leccion_id: string | null
           numero_intento: number
           puntuacion: number | null
           puntuacion_maxima: number | null
@@ -345,6 +346,7 @@ export interface Database {
           user_id: string
           cuestionario_id: string
           curso_id: string
+          leccion_id?: string | null
           numero_intento?: number
           puntuacion?: number | null
           puntuacion_maxima?: number | null
@@ -362,6 +364,7 @@ export interface Database {
           user_id?: string
           cuestionario_id?: string
           curso_id?: string
+          leccion_id?: string | null
           numero_intento?: number
           puntuacion?: number | null
           puntuacion_maxima?: number | null

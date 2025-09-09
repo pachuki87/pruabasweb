@@ -35,13 +35,15 @@ const QuizProgress: React.FC<QuizProgressProps> = ({
 
         // Guardar resultado del test
         await saveTestResults({
-          lessonId,
           quizId,
+          courseId,
           score,
           totalQuestions,
-          percentage,
-          timeSpent,
-          passed
+          correctAnswers: score,
+          incorrectAnswers: totalQuestions - score,
+          timeTakenMinutes: Math.round(timeSpent / 60),
+          passed,
+          completedAt: new Date().toISOString()
         });
 
         // Si aprobó, marcar la lección como completada

@@ -24,6 +24,7 @@ CREATE TABLE IF NOT EXISTS intentos_cuestionario (
     puntuacion_maxima INTEGER,
     tiempo_transcurrido INTEGER, -- en segundos
     respuestas_guardadas JSONB DEFAULT '{}',
+    aprobado BOOLEAN DEFAULT FALSE,
     creado_en TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     actualizado_en TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );

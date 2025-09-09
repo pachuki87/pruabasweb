@@ -262,12 +262,11 @@ const QuizComponent = ({ leccionId, courseId, onQuizComplete }) => {
         const { error: updateError } = await supabase
           .from('intentos_cuestionario')
           .update({
-            puntuacion_obtenida: puntuacionObtenida,
-            porcentaje_acierto: porcentajeAcierto,
-            tiempo_total_segundos: tiempoTotal,
+            puntuacion: puntuacionObtenida,
+            porcentaje: porcentajeAcierto,
+            tiempo_completado: Math.round(tiempoTotal / 60), // convertir a minutos
             completado: true,
-            aprobado: aprobado,
-            completed_at: new Date().toISOString()
+            fecha_completado: new Date().toISOString()
           })
           .eq('id', intentoId);
 

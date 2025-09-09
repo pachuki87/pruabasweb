@@ -131,8 +131,8 @@ interface RecentTestItemProps {
 }
 
 const RecentTestItem: React.FC<RecentTestItemProps> = ({ test }) => {
-  const passed = test.passed;
-  const score = Math.round(test.score);
+  const passed = test.aprobado; // Usar la columna correcta de la base de datos
+  const score = Math.round(test.porcentaje); // Usar porcentaje en lugar de score
   
   return (
     <div className="bg-white rounded-lg shadow-sm border p-4">
@@ -157,8 +157,8 @@ const RecentTestItem: React.FC<RecentTestItemProps> = ({ test }) => {
       </div>
       
       <div className="flex justify-between text-sm text-gray-600">
-        <span>{test.correct_answers}/{test.total_questions} correctas</span>
-        <span>Intento #{test.attempt_number}</span>
+        <span>{test.puntuacion}/{test.puntuacion_maxima} correctas</span>
+        <span>Completado</span>
       </div>
       
       {test.completed_at && (

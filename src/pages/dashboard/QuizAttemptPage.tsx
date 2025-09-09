@@ -31,12 +31,28 @@ const QuizAttemptPage: React.FC = () => {
   const [selectedAnswers, setSelectedAnswers] = useState<{ [key: number]: number }>({});
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [isLoadingQuestion, setIsLoadingQuestion] = useState(false);
+  const [isSavingAnswer, setIsSavingAnswer] = useState(false);
+  const [isNavigating, setIsNavigating] = useState(false);
   const [showResults, setShowResults] = useState(false);
   const [score, setScore] = useState(0);
   const [startTime] = useState(Date.now());
   const [timeElapsed, setTimeElapsed] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [retryCount, setRetryCount] = useState(0);
+
+  // Memoized calculations for performance
+  const progress = useMemo(() => {
+    if (!quiz) return 0;
+    return Math.round(((currentQuestionIndex + 1) / quiz.questions.length) * 100);
+  }, [currentQuestionIndex, quiz]);
+
+
+
+  const currentQuestion = useMemo(() => {
+    return quiz?.questions[currentQuestionIndex] || null;
+  }, [quiz, currentQuestionIndex]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -136,24 +152,37 @@ const QuizAttemptPage: React.FC = () => {
     }
   }, [fetchQuiz, retryCount]);
 
-  const handleAnswerSelect = useCallback((answerIndex: number) => {
+  const handleAnswerSelect = useCallback(async (answerIndex: number) => {
+    setIsSavingAnswer(true);
+    
+    // Simular pequeña carga para feedback visual
+    await new Promise(resolve => setTimeout(resolve, 100));
+    
     setSelectedAnswers({
       ...selectedAnswers,
       [currentQuestionIndex]: answerIndex
     });
+    
+    setIsSavingAnswer(false);
   }, [selectedAnswers, currentQuestionIndex]);
 
-  const handleNextQuestion = () => {
+  const handleNextQuestion = useCallback(async () => {
     if (quiz && currentQuestionIndex < quiz.questions.length - 1) {
+      setIsLoadingQuestion(true);
+      // Simular pequeña carga para transición suave
+      await new Promise(resolve => setTimeout(resolve, 200));
       setCurrentQuestionIndex(currentQuestionIndex + 1);
+      setIsLoadingQuestion(false);
+    } else {
+      await handleSubmitQuiz();
     }
-  };
+  }, [quiz, currentQuestionIndex, handleSubmitQuiz]);
 
-  const handlePreviousQuestion = () => {
+  const handlePreviousQuestion = useCallback(() => {
     if (currentQuestionIndex > 0) {
       setCurrentQuestionIndex(currentQuestionIndex - 1);
     }
-  };
+  }, [currentQuestionIndex]);
 
   const handleSubmitQuiz = useCallback(async () => {
     if (!quiz) return;
@@ -176,37 +205,47 @@ const QuizAttemptPage: React.FC = () => {
       const { error } = await supabase
         .from('user_test_results')
         .insert({
-          student_id: user.id,
+          usuario_id: user.id,
           cuestionario_id: quiz.id,
-          user_id: user.id,
           curso_id: quiz.curso_id,
           score: finalScore,
           total_questions: quiz.questions.length,
           correct_answers: correctAnswers,
           incorrect_answers: quiz.questions.length - correctAnswers,
           time_taken_minutes: Math.round(timeElapsed / 60),
+          answers_data: selectedAnswers,
           passed: finalScore >= 70,
           attempt_number: 1,
-          answers_data: selectedAnswers,
+          started_at: new Date().toISOString(),
           completed_at: new Date().toISOString()
         });
 
       if (error) {
         console.error('Error saving quiz attempt:', error);
-        const errorMessage = error.message || 'Error al guardar el intento';
+        // Provide more specific error messages based on error details
+        let errorMessage = 'Error al guardar el intento';
+        if (error.code === 'PGRST116') {
+          errorMessage = 'Error de conexión con la base de datos';
+        } else if (error.code === '23505') {
+          errorMessage = 'Ya existe un intento para este cuestionario';
+        } else if (error.message) {
+          errorMessage = error.message;
+        }
         toast.error(errorMessage);
         setIsSubmitting(false);
         return;
-      } else {
-        toast.success('Cuestionario completado exitosamente');
       }
+      
+      toast.success('Cuestionario completado exitosamente');
     }
 
     setShowResults(true);
     setIsSubmitting(false);
   }, [quiz, selectedAnswers, user, timeElapsed]);
 
-  const handleBackToCourse = () => {
+  const handleBackToCourse = useCallback(async () => {
+    setIsNavigating(true);
+    
     if (!quiz?.curso_id) {
       console.error('Error: curso_id is undefined in quiz data:', quiz);
       toast.error('Error: ID de curso no disponible');
@@ -214,12 +253,15 @@ const QuizAttemptPage: React.FC = () => {
       return;
     }
     
+    // Pequeña pausa para mostrar el estado de carga
+    await new Promise(resolve => setTimeout(resolve, 300));
+    
     if (quiz?.leccion_id) {
       navigate(`/student/courses/${quiz.curso_id}/lessons/${quiz.leccion_id}`);
     } else {
       navigate(`/student/courses/${quiz.curso_id}`);
     }
-  };
+  }, [quiz, navigate]);
 
   if (authLoading || isLoading) {
     return (
@@ -298,13 +340,22 @@ const QuizAttemptPage: React.FC = () => {
           <div className="flex justify-center space-x-4">
             <button
               onClick={handleBackToCourse}
-              className="bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 transition-colors"
+              disabled={isNavigating}
+              className="bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 transition-colors flex items-center disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Volver al curso
+              {isNavigating ? (
+                <>
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                  Navegando...
+                </>
+              ) : (
+                'Volver al curso'
+              )}
             </button>
             <button
               onClick={() => navigate('/student/quizzes')}
-              className="bg-gray-600 text-white px-6 py-3 rounded-md hover:bg-gray-700 transition-colors"
+              disabled={isNavigating}
+              className="bg-gray-600 text-white px-6 py-3 rounded-md hover:bg-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Ver todos los cuestionarios
             </button>
@@ -330,12 +381,16 @@ const QuizAttemptPage: React.FC = () => {
     );
   }
 
-  const currentQuestion = useMemo(() => quiz?.questions[currentQuestionIndex], [quiz, currentQuestionIndex]);
   const isLastQuestion = useMemo(() => currentQuestionIndex === (quiz?.questions.length || 0) - 1, [currentQuestionIndex, quiz]);
-  const progress = useMemo(() => quiz ? ((currentQuestionIndex + 1) / quiz.questions.length) * 100 : 0, [currentQuestionIndex, quiz]);
+  
   const canSubmit = useMemo(() => {
     if (!quiz) return false;
     return quiz.questions.every((_, index) => selectedAnswers[index] !== undefined);
+  }, [quiz, selectedAnswers]);
+
+  const correctAnswersCount = useMemo(() => {
+    if (!quiz?.questions) return 0;
+    return quiz.questions.filter((_, index) => selectedAnswers[index] === quiz.questions[index].correct_answer).length;
   }, [quiz, selectedAnswers]);
 
   return (
@@ -378,14 +433,18 @@ const QuizAttemptPage: React.FC = () => {
             <button
               key={index}
               onClick={() => handleAnswerSelect(index)}
-              className={`w-full text-left p-4 rounded-lg border-2 transition-colors ${
+              disabled={isSavingAnswer}
+              className={`w-full text-left p-4 rounded-lg border-2 transition-colors flex items-center ${
                 selectedAnswers[currentQuestionIndex] === index
                   ? 'border-blue-500 bg-blue-50 text-blue-900'
                   : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
-              }`}
+              } ${isSavingAnswer ? 'opacity-50 cursor-not-allowed' : ''}`}
             >
               <span className="font-medium mr-3">{String.fromCharCode(65 + index)}.</span>
               {option}
+              {isSavingAnswer && selectedAnswers[currentQuestionIndex] === index && (
+                <div className="ml-auto animate-spin rounded-full h-4 w-4 border-b-2 border-blue-500"></div>
+              )}
             </button>
           ))}
         </div>
@@ -431,9 +490,17 @@ const QuizAttemptPage: React.FC = () => {
         ) : (
           <button
             onClick={handleNextQuestion}
-            className="px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+            disabled={selectedAnswers[currentQuestionIndex] === undefined || isLoadingQuestion}
+            className="px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center"
           >
-            Siguiente
+            {isLoadingQuestion ? (
+              <>
+                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                Cargando...
+              </>
+            ) : (
+              'Siguiente'
+            )}
           </button>
         )}
       </div>

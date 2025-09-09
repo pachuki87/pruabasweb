@@ -283,6 +283,7 @@ export interface Database {
           respuestas_detalle: Json | null
           aprobado: boolean
           fecha_completado: string
+          completed_at: string | null
           creado_en: string
           actualizado_en: string
         }
@@ -299,6 +300,7 @@ export interface Database {
           respuestas_detalle?: Json | null
           aprobado?: boolean
           fecha_completado?: string
+          completed_at?: string | null
           creado_en?: string
           actualizado_en?: string
         }
@@ -315,6 +317,60 @@ export interface Database {
           respuestas_detalle?: Json | null
           aprobado?: boolean
           fecha_completado?: string
+          completed_at?: string | null
+          creado_en?: string
+          actualizado_en?: string
+        }
+      }
+      intentos_cuestionario: {
+        Row: {
+          id: string
+          user_id: string
+          cuestionario_id: string
+          curso_id: string
+          numero_intento: number
+          puntuacion: number | null
+          puntuacion_maxima: number | null
+          porcentaje: number | null
+          tiempo_completado: number | null
+          respuestas_detalle: Json | null
+          completado: boolean
+          fecha_inicio: string
+          fecha_completado: string | null
+          creado_en: string
+          actualizado_en: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          cuestionario_id: string
+          curso_id: string
+          numero_intento?: number
+          puntuacion?: number | null
+          puntuacion_maxima?: number | null
+          porcentaje?: number | null
+          tiempo_completado?: number | null
+          respuestas_detalle?: Json | null
+          completado?: boolean
+          fecha_inicio?: string
+          fecha_completado?: string | null
+          creado_en?: string
+          actualizado_en?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          cuestionario_id?: string
+          curso_id?: string
+          numero_intento?: number
+          puntuacion?: number | null
+          puntuacion_maxima?: number | null
+          porcentaje?: number | null
+          tiempo_completado?: number | null
+          respuestas_detalle?: Json | null
+          completado?: boolean
+          fecha_inicio?: string
+          fecha_completado?: string | null
           creado_en?: string
           actualizado_en?: string
         }

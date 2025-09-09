@@ -616,6 +616,7 @@ const LessonPage: React.FC = () => {
             <LessonNavigation
               lessons={lessons}
               currentLessonId={currentLesson.id}
+              courseId={courseId!}
               onLessonSelect={handleLessonSelect}
             />
           </div>

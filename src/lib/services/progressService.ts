@@ -160,34 +160,17 @@ export class ProgressService {
     completedAt?: string;
   }) {
     try {
-      // Obtener el número de intento
-      const { data: previousAttempts, error: countError } = await supabase
-        .from('user_test_results')
-        .select('attempt_number')
-        .eq('user_id', userId)
-        .eq('cuestionario_id', quizId)
-        .order('attempt_number', { ascending: false })
-        .limit(1);
-
-      if (countError) throw countError;
-
-      const attemptNumber = previousAttempts && previousAttempts.length > 0 
-        ? previousAttempts[0].attempt_number + 1 
-        : 1;
-
       const insertData: UserTestResultsInsert = {
         user_id: userId,
         cuestionario_id: quizId,
         curso_id: courseId,
-        score,
-        total_questions: totalQuestions,
-        correct_answers: correctAnswers,
-        incorrect_answers: incorrectAnswers,
-        time_taken_minutes: timeTakenMinutes,
-        passed,
-        attempt_number: attemptNumber,
-        answers_data: answersData,
-        started_at: startedAt,
+        puntuacion: score,
+        puntuacion_maxima: totalQuestions,
+        porcentaje: Math.round((correctAnswers / totalQuestions) * 100),
+        tiempo_completado: timeTakenMinutes,
+        respuestas_detalle: answersData,
+        aprobado: passed,
+        fecha_completado: completedAt || new Date().toISOString(),
         completed_at: completedAt || new Date().toISOString()
       };
 
@@ -224,7 +207,7 @@ export class ProgressService {
           )
         `)
         .eq('user_id', userId)
-        .order('completed_at', { ascending: false });
+        .order('fecha_completado', { ascending: false });
 
       if (courseId) {
         query = query.eq('curso_id', courseId);
@@ -266,17 +249,17 @@ export class ProgressService {
           )
         `)
         .eq('user_id', userId)
-        .order('completed_at', { ascending: false })
+        .order('fecha_completado', { ascending: false })
         .limit(10);
 
       if (testsError) throw testsError;
 
       // Calcular estadísticas generales
       const totalCourses = courseProgress?.length || 0;
-      const completedCourses = courseProgress?.filter(c => c.overall_progress === 100).length || 0;
-      const averageProgress = courseProgress?.reduce((acc, c) => acc + (c.overall_progress || 0), 0) / totalCourses || 0;
-      const totalTimeSpent = courseProgress?.reduce((acc, c) => acc + (c.total_time_spent || 0), 0) || 0;
-      const averageTestScore = courseProgress?.reduce((acc, c) => acc + (c.average_test_score || 0), 0) / totalCourses || 0;
+      const completedCourses = courseProgress?.filter(c => c.porcentaje_progreso === 100).length || 0;
+      const averageProgress = courseProgress?.reduce((acc, c) => acc + (c.porcentaje_progreso || 0), 0) / totalCourses || 0;
+      const totalTimeSpent = courseProgress?.reduce((acc, c) => acc + (c.tiempo_total_gastado || 0), 0) || 0;
+      const averageTestScore = 0; // No hay campo de puntuación promedio en user_course_summary
 
       return {
         courseProgress,
@@ -286,7 +269,7 @@ export class ProgressService {
           completedCourses,
           averageProgress: Math.round(averageProgress * 100) / 100,
           totalTimeSpent,
-          averageTestScore: Math.round(averageTestScore * 100) / 100
+          averageTestScore: averageTestScore
         }
       };
     } catch (error) {

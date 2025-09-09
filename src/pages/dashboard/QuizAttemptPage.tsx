@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { supabase } from '../../lib/supabase';
+import { useAuth } from '../../contexts/AuthContext';
 import { ChevronLeft, Clock, CheckCircle } from 'lucide-react';
 
 type Question = {
@@ -24,6 +25,7 @@ type Quiz = {
 const QuizAttemptPage: React.FC = () => {
   const { quizId } = useParams<{ quizId: string }>();
   const navigate = useNavigate();
+  const { user, loading: authLoading } = useAuth();
   const [quiz, setQuiz] = useState<Quiz | null>(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState<{ [key: number]: number }>({});
@@ -38,14 +40,21 @@ const QuizAttemptPage: React.FC = () => {
     const interval = setInterval(() => {
       setTimeElapsed(Math.floor((Date.now() - startTime) / 1000));
     }, 1000);
+
     return () => clearInterval(interval);
   }, [startTime]);
 
   useEffect(() => {
-    if (quizId) {
+    if (!authLoading && !user) {
+      toast.error('Debes iniciar sesión para acceder al cuestionario');
+      navigate('/login/student');
+      return;
+    }
+    
+    if (quizId && user) {
       fetchQuiz();
     }
-  }, [quizId]);
+  }, [quizId, user, authLoading, navigate]);
 
   const fetchQuiz = async () => {
     try {
@@ -86,13 +95,25 @@ const QuizAttemptPage: React.FC = () => {
         description: quizData.descripcion || '',
         curso_id: quizData.curso_id,
         leccion_id: quizData.leccion_id,
-        questions: (questionsData || []).map(q => ({
-          id: q.id,
-          question: q.pregunta,
-          options: q.opciones_respuesta || [],
-          correct_answer: q.respuesta_correcta,
-          explanation: q.explicacion
-        }))
+        questions: (questionsData || []).map(q => {
+          // Ordenar opciones por el campo 'orden' y extraer solo el texto
+          const sortedOptions = (q.opciones_respuesta || [])
+            .sort((a, b) => a.orden - b.orden)
+            .map(opt => opt.opcion);
+          
+          // Encontrar el índice de la respuesta correcta
+          const correctAnswerIndex = (q.opciones_respuesta || [])
+            .sort((a, b) => a.orden - b.orden)
+            .findIndex(opt => opt.es_correcta);
+          
+          return {
+            id: q.id,
+            question: q.pregunta,
+            options: sortedOptions,
+            correct_answer: correctAnswerIndex,
+            explanation: q.explicacion
+          };
+        })
       };
 
       setQuiz(formattedQuiz);
@@ -141,7 +162,6 @@ const QuizAttemptPage: React.FC = () => {
       setScore(finalScore);
 
       // Save quiz attempt to database
-      const { data: { user } } = await supabase.auth.getUser();
       if (user) {
         const { error } = await supabase
           .from('user_test_results')
@@ -193,10 +213,27 @@ const QuizAttemptPage: React.FC = () => {
     }
   };
 
-  if (isLoading) {
+  if (authLoading || isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">Acceso no autorizado</h2>
+          <p className="text-gray-600 mb-4">Debes iniciar sesión para acceder al cuestionario</p>
+          <button
+            onClick={() => navigate('/login/student')}
+            className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
+          >
+            Iniciar sesión
+          </button>
+        </div>
       </div>
     );
   }

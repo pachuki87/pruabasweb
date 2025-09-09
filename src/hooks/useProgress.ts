@@ -88,9 +88,12 @@ export const useProgress = (courseId?: string): UseProgressReturn => {
       setLoading(true);
       setError(null);
       
-      // Validar courseId si se proporciona
+      // Validar courseId si se proporciona - no lanzar error, solo log y return
       if (courseId && !isValidUUID(courseId)) {
-        throw new Error(`ID de curso inválido: ${courseId}`);
+        console.warn(`⚠️ ID de curso inválido proporcionado: ${courseId}`);
+        console.warn('⚠️ Saltando carga de datos hasta que se proporcione un courseId válido');
+        setLoading(false);
+        return;
       }
       
       // Cargar progreso del curso específico o general
@@ -141,14 +144,19 @@ export const useProgress = (courseId?: string): UseProgressReturn => {
     timeSpentMinutes?: number;
     isCompleted?: boolean;
   }) => {
-    if (!user?.id) throw new Error('Usuario no autenticado');
+    if (!user?.id) {
+      console.warn('⚠️ Usuario no autenticado para actualizar progreso');
+      return;
+    }
     
-    // Validar UUIDs
+    // Validar UUIDs - no lanzar error, solo log y return
     if (!isValidUUID(params.courseId)) {
-      throw new Error(`ID de curso inválido: ${params.courseId}`);
+      console.warn(`⚠️ ID de curso inválido en updateChapterProgress: ${params.courseId}`);
+      return;
     }
     if (!isValidUUID(params.chapterId)) {
-      throw new Error(`ID de capítulo inválido: ${params.chapterId}`);
+      console.warn(`⚠️ ID de capítulo inválido en updateChapterProgress: ${params.chapterId}`);
+      return;
     }
     
     try {
@@ -172,14 +180,19 @@ export const useProgress = (courseId?: string): UseProgressReturn => {
   };
 
   const markChapterCompleted = async (courseId: string, chapterId: string) => {
-    if (!user?.id) throw new Error('Usuario no autenticado');
+    if (!user?.id) {
+      console.warn('⚠️ Usuario no autenticado para marcar capítulo completado');
+      return;
+    }
     
-    // Validar UUIDs
+    // Validar UUIDs - no lanzar error, solo log y return
     if (!isValidUUID(courseId)) {
-      throw new Error(`ID de curso inválido: ${courseId}`);
+      console.warn(`⚠️ ID de curso inválido en markChapterCompleted: ${courseId}`);
+      return;
     }
     if (!isValidUUID(chapterId)) {
-      throw new Error(`ID de capítulo inválido: ${chapterId}`);
+      console.warn(`⚠️ ID de capítulo inválido en markChapterCompleted: ${chapterId}`);
+      return;
     }
     
     try {
@@ -197,14 +210,19 @@ export const useProgress = (courseId?: string): UseProgressReturn => {
   };
 
   const trackStudyTime = async (courseId: string, chapterId: string, minutes: number) => {
-    if (!user?.id) throw new Error('Usuario no autenticado');
+    if (!user?.id) {
+      console.warn('⚠️ Usuario no autenticado para registrar tiempo de estudio');
+      return;
+    }
     
-    // Validar UUIDs
+    // Validar UUIDs - no lanzar error, solo log y return
     if (!isValidUUID(courseId)) {
-      throw new Error(`ID de curso inválido: ${courseId}`);
+      console.warn(`⚠️ ID de curso inválido en trackStudyTime: ${courseId}`);
+      return;
     }
     if (!isValidUUID(chapterId)) {
-      throw new Error(`ID de capítulo inválido: ${chapterId}`);
+      console.warn(`⚠️ ID de capítulo inválido en trackStudyTime: ${chapterId}`);
+      return;
     }
     
     try {
@@ -233,14 +251,19 @@ export const useProgress = (courseId?: string): UseProgressReturn => {
     startedAt?: string;
     completedAt?: string;
   }) => {
-    if (!user?.id) throw new Error('Usuario no autenticado');
+    if (!user?.id) {
+      console.warn('⚠️ Usuario no autenticado para guardar resultados de test');
+      return;
+    }
     
-    // Validar UUIDs
+    // Validar UUIDs - no lanzar error, solo log y return
     if (!isValidUUID(params.courseId)) {
-      throw new Error(`ID de curso inválido: ${params.courseId}`);
+      console.warn(`⚠️ ID de curso inválido en saveTestResults: ${params.courseId}`);
+      return;
     }
     if (!isValidUUID(params.quizId)) {
-      throw new Error(`ID de cuestionario inválido: ${params.quizId}`);
+      console.warn(`⚠️ ID de cuestionario inválido en saveTestResults: ${params.quizId}`);
+      return;
     }
     
     try {
@@ -266,10 +289,15 @@ export const useProgress = (courseId?: string): UseProgressReturn => {
   };
 
   const getCourseProgress = async (courseId: string): Promise<UserCourseProgress[] | null> => {
-    if (!user?.id) throw new Error('Usuario no autenticado');
+    if (!user?.id) {
+      console.warn('⚠️ Usuario no autenticado para obtener progreso del curso');
+      return null;
+    }
     
+    // Validar UUID - no lanzar error, solo log y return
     if (!isValidUUID(courseId)) {
-      throw new Error(`ID de curso inválido: ${courseId}`);
+      console.warn(`⚠️ ID de curso inválido en getCourseProgress: ${courseId}`);
+      return null;
     }
     
     try {
@@ -281,10 +309,15 @@ export const useProgress = (courseId?: string): UseProgressReturn => {
   };
 
   const getUserTestResults = async (courseId?: string): Promise<UserTestResults[] | null> => {
-    if (!user?.id) throw new Error('Usuario no autenticado');
+    if (!user?.id) {
+      console.warn('⚠️ Usuario no autenticado para obtener resultados de tests');
+      return null;
+    }
     
+    // Validar UUID - no lanzar error, solo log y return
     if (courseId && !isValidUUID(courseId)) {
-      throw new Error(`ID de curso inválido: ${courseId}`);
+      console.warn(`⚠️ ID de curso inválido en getUserTestResults: ${courseId}`);
+      return null;
     }
     
     try {

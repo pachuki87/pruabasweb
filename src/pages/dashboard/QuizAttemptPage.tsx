@@ -179,10 +179,17 @@ const QuizAttemptPage: React.FC = () => {
   };
 
   const handleBackToCourse = () => {
+    if (!quiz?.curso_id) {
+      console.error('Error: curso_id is undefined in quiz data:', quiz);
+      toast.error('Error: ID de curso no disponible');
+      navigate('/student/quizzes');
+      return;
+    }
+    
     if (quiz?.leccion_id) {
       navigate(`/student/courses/${quiz.curso_id}/lessons/${quiz.leccion_id}`);
     } else {
-      navigate(`/student/courses/${quiz?.curso_id}`);
+      navigate(`/student/courses/${quiz.curso_id}`);
     }
   };
 

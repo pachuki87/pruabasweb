@@ -3,7 +3,7 @@ import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
 import './QuizComponent.css';
 
-const QuizComponent = ({ leccionId, onQuizComplete }) => {
+const QuizComponent = ({ leccionId, courseId, onQuizComplete }) => {
   const { user } = useAuth();
   const [cuestionarios, setCuestionarios] = useState([]);
   const [currentQuiz, setCurrentQuiz] = useState(null);
@@ -87,7 +87,11 @@ const QuizComponent = ({ leccionId, onQuizComplete }) => {
   };
 
   const startQuiz = async () => {
-    if (!user || !currentQuiz) return;
+    if (!user || !currentQuiz || !courseId) {
+      console.error('Missing required data:', { user: !!user, currentQuiz: !!currentQuiz, courseId });
+      alert('Error: Faltan datos necesarios para iniciar el cuestionario.');
+      return;
+    }
 
     try {
       // Crear un nuevo intento
@@ -97,6 +101,7 @@ const QuizComponent = ({ leccionId, onQuizComplete }) => {
           user_id: user.id,
           cuestionario_id: currentQuiz.id,
           leccion_id: leccionId,
+          curso_id: courseId,
           puntuacion_maxima: preguntas.length,
           started_at: new Date().toISOString()
         })

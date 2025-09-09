@@ -322,7 +322,14 @@ const CourseDetailsPage: React.FC<CourseDetailsPageProps> = ({ role }) => {
               {lessons.length > 0 && (
                 <div className="mb-6">
                   <button
-                    onClick={() => navigate(`/${role}/courses/${courseId}/lessons/${lessons[0].id}`)}
+                    onClick={() => {
+                      if (!courseId) {
+                        console.error('Error: courseId is undefined');
+                        toast.error('Error: ID de curso no disponible');
+                        return;
+                      }
+                      navigate(`/${role}/courses/${courseId}/lessons/${lessons[0].id}`);
+                    }}
                     className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center font-medium max-w-full w-fit overflow-hidden text-ellipsis whitespace-nowrap"
                   >
                     <Play className="w-5 h-5 mr-2" />
@@ -401,7 +408,14 @@ const CourseDetailsPage: React.FC<CourseDetailsPageProps> = ({ role }) => {
                             {lesson.titulo}
                           </h3>
                           <button
-                            onClick={() => navigate(`/${role}/courses/${courseId}/lessons/${lesson.id}`)}
+                            onClick={() => {
+                              if (!courseId) {
+                                console.error('Error: courseId is undefined');
+                                toast.error('Error: ID de curso no disponible');
+                                return;
+                              }
+                              navigate(`/${role}/courses/${courseId}/lessons/${lesson.id}`);
+                            }}
                             className="bg-blue-100 text-blue-700 px-3 py-1 rounded-md hover:bg-blue-200 transition-colors text-sm flex items-center"
                           >
                             <Play className="w-4 h-4 mr-1" />

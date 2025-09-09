@@ -411,7 +411,8 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
                 ) : (
                   <div className="mt-4">
                     <QuizComponent 
-                      leccionId={lesson.id} 
+                      leccionId={lesson.id}
+                      courseId={courseId}
                       onQuizComplete={handleQuizComplete}
                     />
                   </div>

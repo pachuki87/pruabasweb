@@ -52,7 +52,14 @@ const NewLessonPage: React.FC = () => {
   const courseId = mapCourseSlugToId(rawCourseId || '');
   console.log('✅ CURSO MAPEADO - rawCourseId:', rawCourseId, '-> courseId:', courseId);
   
-  const { actualizarProgresoCapitulo, registrarTiempoEstudio } = useProgress(courseId);
+  // Validar que courseId no sea undefined o vacío antes de usar useProgress
+  if (!courseId || courseId === 'undefined' || courseId === '') {
+    console.error('❌ Error: courseId is invalid:', { rawCourseId, courseId });
+    console.error('❌ URL actual:', window.location.pathname);
+    console.error('❌ useParams result:', { rawCourseId, lessonId });
+  }
+  
+  const { actualizarProgresoCapitulo, registrarTiempoEstudio } = useProgress(courseId || '');
   
   // Estado para tracking de tiempo
   const [startTime, setStartTime] = useState<Date | null>(null);
@@ -443,6 +450,12 @@ const NewLessonPage: React.FC = () => {
             const isStudent = currentPath.includes('/student/');
             const isTeacher = currentPath.includes('/teacher/');
             
+            if (!rawCourseId) {
+              console.error('Error: rawCourseId is undefined');
+              setError('ID de curso no disponible');
+              return;
+            }
+            
             if (isStudent) {
               navigate(`/student/courses/${rawCourseId}/lessons/${processedLessons[0].id}`, { replace: true });
             } else if (isTeacher) {
@@ -527,6 +540,11 @@ const NewLessonPage: React.FC = () => {
     const isStudent = currentPath.includes('/student/');
     const isTeacher = currentPath.includes('/teacher/');
     
+    if (!rawCourseId) {
+      console.error('Error: rawCourseId is undefined');
+      return;
+    }
+    
     if (isStudent) {
       navigate(`/student/courses/${rawCourseId}/lessons/${lesson.id}`);
     } else if (isTeacher) {
@@ -558,6 +576,12 @@ const NewLessonPage: React.FC = () => {
     const currentPath = window.location.pathname;
     const isStudent = currentPath.includes('/student/');
     const isTeacher = currentPath.includes('/teacher/');
+    
+    if (!rawCourseId) {
+      console.error('Error: rawCourseId is undefined');
+      navigate('/dashboard');
+      return;
+    }
     
     if (isStudent) {
       navigate(`/student/courses/${rawCourseId}`);

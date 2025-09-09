@@ -338,6 +338,7 @@ export interface Database {
           completado: boolean
           fecha_inicio: string
           fecha_completado: string | null
+          started_at: string | null
           creado_en: string
           actualizado_en: string
         }
@@ -356,6 +357,7 @@ export interface Database {
           completado?: boolean
           fecha_inicio?: string
           fecha_completado?: string | null
+          started_at?: string | null
           creado_en?: string
           actualizado_en?: string
         }
@@ -374,6 +376,7 @@ export interface Database {
           completado?: boolean
           fecha_inicio?: string
           fecha_completado?: string | null
+          started_at?: string | null
           creado_en?: string
           actualizado_en?: string
         }

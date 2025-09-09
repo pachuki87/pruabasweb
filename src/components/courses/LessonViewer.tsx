@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { ChevronLeft, ChevronRight, FileText, Download, ExternalLink, BookOpen, Clock, User } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -45,7 +45,16 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
   const lessonTitle = lesson.titulo;
   const lessonContent = lesson.contenido;
   const lessonFileUrl = lesson.archivo_url;
-  const pdfs = lesson.pdfs || [];
+  
+  // Memoizar PDFs para evitar duplicados en re-renders
+  const pdfs = useMemo(() => {
+    const pdfList = lesson.pdfs || [];
+    // Eliminar duplicados usando Set
+    const uniquePdfs = [...new Set(pdfList)];
+    console.log('🔍 PDFs memoizados:', uniquePdfs.length, 'únicos de', pdfList.length, 'totales');
+    return uniquePdfs;
+  }, [lesson.pdfs]);
+  
   const externalLinks = lesson.enlaces_externos || [];
   const hasQuiz = lesson.tiene_cuestionario || false;
   const navigate = useNavigate();
@@ -345,7 +354,7 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
                 <h3 className="text-lg font-semibold text-gray-900 mb-3">📄 Materiales de la Lección</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   {pdfs.map((pdf, index) => {
-                    const pdfPath = `/pdfs/master-adicciones/${pdf}`;
+                    const pdfPath = `/pdfs/master-adicciones/${encodeURIComponent(pdf)}`;
                     return (
                       <div key={index} className="bg-red-50 border border-red-200 rounded-lg p-4">
                         <div className="flex items-center mb-2">

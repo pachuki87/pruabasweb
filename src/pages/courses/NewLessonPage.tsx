@@ -142,6 +142,8 @@ const NewLessonPage: React.FC = () => {
         return;
       }
       
+      // Eliminada redirección hardcodeada al PDF - ahora se maneja dinámicamente
+      
       try {
         setLoading(true);
         setError(null);
@@ -223,6 +225,18 @@ const NewLessonPage: React.FC = () => {
         
         console.log('📝 Quiz data loaded:', quizData);
         
+        // Obtener materiales reales de la base de datos
+        const { data: materialsData, error: materialsError } = await supabase
+          .from('materiales')
+          .select('leccion_id, titulo, url_archivo')
+          .eq('curso_id', courseId);
+        
+        if (materialsError) {
+          console.error('❌ Materials data error:', materialsError);
+        }
+        
+        console.log('📄 Materials data loaded:', materialsData);
+        
         // Crear un mapa de lección ID a quiz ID
         const quizMap = new Map();
         if (quizData) {
@@ -234,44 +248,67 @@ const NewLessonPage: React.FC = () => {
           });
         }
         
+        // Crear un mapa de lección ID a materiales
+        const materialsMap = new Map();
+        if (materialsData) {
+          materialsData.forEach(material => {
+            if (material.leccion_id) { // Solo incluir materiales asignados a lecciones
+              if (!materialsMap.has(material.leccion_id)) {
+                materialsMap.set(material.leccion_id, []);
+              }
+              materialsMap.get(material.leccion_id).push(material);
+            }
+          });
+        }
+        
+        console.log('🗂️ Materials map:', materialsMap);
+        
         // Procesar lecciones para extraer información de PDFs y cuestionarios
         const processedLessons = lessonsData.map(lesson => {
           const generatedSlug = mapTitleToSlug(lesson.titulo);
           console.log('🔄 Processing lesson:', lesson.titulo, 'generated slug:', generatedSlug);
           
-          // Extraer PDFs basado en el slug generado
+          // Extraer PDFs desde la base de datos
           const pdfs: string[] = [];
           const hasQuiz = quizMap.has(lesson.id) && quizMap.get(lesson.id).length > 0;
           
           console.log('🎯 Lesson', lesson.titulo, 'has quiz:', hasQuiz, 'quiz IDs:', quizMap.get(lesson.id));
           
-          // Verificar si es el curso Master en Adicciones
+          // Obtener materiales reales asignados a esta lección
+          const lessonMaterials = materialsMap.get(lesson.id) || [];
+          console.log('📄 Materials for lesson', lesson.titulo, ':', lessonMaterials);
+          
+          // Mapear títulos de materiales a nombres de archivos PDF
+          const materialToPdfMap: { [key: string]: string } = {
+            'Manual MATRIX para Terapeutas': 'MATRIX-manual_terapeuta.pdf',
+            'BLOQUE 2 TÉCNICO EN ADICCIONES': 'BLOQUE-2-TECNICO-EN-ADICCIONES.pdf',
+            'Bloque 1: Técnico en Adicciones': 'BLOQUE 1 TECNICO EN ADICIONES.pdf',
+            'Bloque 3: Familia y Trabajo en Equipo': 'BLOQUE III - FAMILIA Y TRABAJO EN EQUIPO.pdf',
+            'Recovery Coach': 'Recovery Coach reinservida.pdf',
+            'Intervención Familiar en Adicciones y Recovery Mentoring': 'intervencion-Familiar-en-Adicciones-y.-Recovery-Mentoring-1.pdf',
+            'Cuaderno de Ejercicios: Inteligencia Emocional': 'Cuaderno-de-ejercicios-de-inteligencia-emocional.pdf',
+            'Terapias de Tercera Generación': 'MATRIX-manual_terapeuta.pdf'
+          };
+          
+          // Agregar PDFs basados en los materiales reales asignados
+          lessonMaterials.forEach(material => {
+            const pdfName = materialToPdfMap[material.titulo];
+            if (pdfName && !pdfs.includes(pdfName)) {
+              pdfs.push(pdfName);
+            }
+          });
+          
+          // Verificar si es el curso Master en Adicciones para fallback de PDFs específicos
           const isMasterCourse = courseId === 'b5ef8c64-fe26-4f20-8221-80a1bf475b05';
           
-          if (isMasterCourse) {
-            // PDFs para el Master en Adicciones (nombres corregidos según archivos reales)
-            if (lesson.titulo.includes('FUNDAMENTOS P TERAPEUTICO')) {
-              pdfs.push('Bloque-1-Tecnico-en-Adicciones.pdf', 'Manual-MATRIX-para-Terapeutas.pdf');
-            }
-            if (lesson.titulo.includes('TERAPIA COGNITIVA DROGODEPENDENENCIAS')) {
-              pdfs.push('BLOQUE 2 TÉCNICO EN ADICCIONES.pdf', 'bloque-2-tecnico-adicciones.pdf', 'Manual-MATRIX-para-Terapeutas.pdf');
-            }
-            if (lesson.titulo.includes('FAMILIA Y TRABAJO EQUIPO')) {
-              pdfs.push('BLOQUE III - FAMILIA Y TRABAJO EN EQUIPO.pdf', 'Manual-MATRIX-para-Terapeutas.pdf');
-            }
-            if (lesson.titulo.includes('RECOVERY COACHING')) {
-              pdfs.push('Recovery Coach reinservida.pdf', 'Manual-MATRIX-para-Terapeutas.pdf');
-            }
-            if (lesson.titulo.includes('INTERVENCION FAMILIAR Y RECOVERY MENTORING')) {
-              pdfs.push('intervencion-Familiar-en-Adicciones-y.-Recovery-Mentoring-1.pdf', 'Manual-MATRIX-para-Terapeutas.pdf');
-            }
-            if (lesson.titulo.includes('NUEVOS MODELOS TERAPEUTICOS')) {
-              pdfs.push('Manual-MATRIX-para-Terapeutas.pdf');
-            }
+          // Solo usar fallback si no hay materiales asignados en la base de datos
+          if (isMasterCourse && lessonMaterials.length === 0) {
+            console.log('⚠️ No materials found in DB for lesson', lesson.titulo, '- using fallback');
+            // Mantener algunos fallbacks solo para lecciones sin materiales asignados
             if (lesson.titulo.includes('INTELIGENCIA EMOCIONAL')) {
-              pdfs.push('Cuaderno-de-ejercicios-de-inteligencia-emocional.pdf', 'PPT INTELIGENCIA EMOCIONAL.pdf', 'Manual-MATRIX-para-Terapeutas.pdf');
+              pdfs.push('PPT INTELIGENCIA EMOCIONAL.pdf');
             }
-          } else {
+          } else if (!isMasterCourse) {
             // PDFs para el curso Experto en Conductas Adictivas
             if (generatedSlug.includes('Material Complementario')) {
               pdfs.push('Clasificacion-de-sustancias.pdf', 'Fundamentos-de-la-conducta-adictiva.pdf', 'Informe-europeo-sobre-drogas-2020.pdf', 'Programa-Ibiza.pdf');

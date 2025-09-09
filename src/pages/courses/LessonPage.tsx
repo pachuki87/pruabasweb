@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import LessonViewer from '../../components/courses/LessonViewer';
@@ -6,6 +6,13 @@ import LessonNavigation from '../../components/courses/LessonNavigation';
 import { supabase } from '../../lib/supabase';
 import { useProgress } from '../../hooks/useProgress';
 import { useAuth } from '../../contexts/AuthContext';
+
+// Declaración de tipo para window
+declare global {
+  interface Window {
+    lessonLoadTracker?: Set<string>;
+  }
+}
 
 interface Lesson {
   id: string;
@@ -34,6 +41,8 @@ const LessonPage: React.FC = () => {
   // Estado para tracking de tiempo
   const [startTime, setStartTime] = useState<Date | null>(null);
   const [lastActivityTime, setLastActivityTime] = useState<Date>(new Date());
+  
+  // Eliminamos los useRef ya que usamos sessionStorage
 
   // Función para obtener el quiz ID asociado a una lección
   const getQuizIdForLesson = async (lessonId: string): Promise<string | null> => {
@@ -111,6 +120,23 @@ const LessonPage: React.FC = () => {
   useEffect(() => {
     console.log('🔄 useEffect triggered - courseId:', courseId, 'lessonId:', lessonId);
     
+    // Crear clave única para esta combinación curso/lección
+    const loadKey = `${courseId}_${lessonId}`;
+    
+    // Usar window global para evitar múltiples cargas
+    if (!window.lessonLoadTracker) {
+      window.lessonLoadTracker = new Set();
+    }
+    
+    if (window.lessonLoadTracker.has(loadKey)) {
+      console.log('⏭️ Skipping load - already loaded for this session:', loadKey);
+      return;
+    }
+    
+    // Marcar como cargado
+    window.lessonLoadTracker.add(loadKey);
+    console.log('🔄 Loading course data - load key:', loadKey);
+    
     const loadCourseData = async () => {
       console.log('🔍 LessonPage - courseId:', courseId, 'lessonId:', lessonId);
       if (!courseId) {
@@ -118,6 +144,8 @@ const LessonPage: React.FC = () => {
         setLoading(false);
         return;
       }
+      
+      // Carga iniciada correctamente
       
       try {
         setLoading(true);
@@ -200,6 +228,18 @@ const LessonPage: React.FC = () => {
         
         console.log('📝 Quiz data loaded:', quizData);
         
+        // Obtener materiales (PDFs) para todas las lecciones
+        const { data: materialesData, error: materialesError } = await supabase
+          .from('materiales')
+          .select('leccion_id, titulo, url_archivo')
+          .in('leccion_id', lessonsData.map(l => l.id));
+        
+        if (materialesError) {
+          console.error('❌ Materials data error:', materialesError);
+        }
+        
+        console.log('📄 Materials data loaded:', materialesData);
+        
         // Crear un mapa de lección ID a quiz ID
         const quizMap = new Map();
         if (quizData) {
@@ -211,61 +251,34 @@ const LessonPage: React.FC = () => {
           });
         }
         
+        // Crear un mapa de lección ID a materiales (PDFs)
+        const materialesMap = new Map();
+        if (materialesData) {
+          materialesData.forEach(material => {
+            if (!materialesMap.has(material.leccion_id)) {
+              materialesMap.set(material.leccion_id, []);
+            }
+            // Extraer solo el nombre del archivo de la URL y decodificar caracteres URL
+        const fileName = material.url_archivo.split('/').pop() || material.url_archivo;
+        const decodedFileName = decodeURIComponent(fileName);
+        materialesMap.get(material.leccion_id).push(decodedFileName);
+          });
+        }
+        
+        console.log('📋 Materials map created:', materialesMap);
+        
         // Procesar lecciones para extraer información de PDFs y cuestionarios
         const processedLessons = lessonsData.map(lesson => {
           const generatedSlug = mapTitleToSlug(lesson.titulo);
           console.log('🔄 Processing lesson:', lesson.titulo, 'generated slug:', generatedSlug);
           
-          // Extraer PDFs basado en el slug generado
-          const pdfs: string[] = [];
+          // Obtener PDFs desde la base de datos
+          const pdfs: string[] = materialesMap.get(lesson.id) || [];
           const hasQuiz = quizMap.has(lesson.id) && quizMap.get(lesson.id).length > 0;
           
           console.log('🎯 Lesson', lesson.titulo, 'has quiz:', hasQuiz, 'quiz IDs:', quizMap.get(lesson.id));
-          
-          // Verificar si es el curso Master en Adicciones
-          const isMasterCourse = courseId === 'b5ef8c64-fe26-4f20-8221-80a1bf475b05';
-          
-          if (isMasterCourse) {
-            // PDFs para el Master en Adicciones
-            if (lesson.titulo.includes('FUNDAMENTOS P TERAPEUTICO')) {
-              pdfs.push('Bloque-1-Tecnico-en-Adicciones.pdf', 'Manual-MATRIX-para-Terapeutas.pdf');
-            }
-            if (lesson.titulo.includes('TERAPIA COGNITIVA DROGODEPENDENENCIAS')) {
-              pdfs.push('BLOQUE 2 TÉCNICO EN ADICCIONES.pdf', 'bloque-2-tecnico-adicciones.pdf', 'Manual-MATRIX-para-Terapeutas.pdf');
-            }
-            if (lesson.titulo.includes('FAMILIA Y TRABAJO EQUIPO')) {
-              pdfs.push('BLOQUE III - FAMILIA Y TRABAJO EN EQUIPO.pdf', 'Manual-MATRIX-para-Terapeutas.pdf');
-            }
-            if (lesson.titulo.includes('RECOVERY COACHING')) {
-              pdfs.push('Recovery Coach reinservida.pdf', 'Manual-MATRIX-para-Terapeutas.pdf');
-            }
-            if (lesson.titulo.includes('INTERVENCION FAMILIAR Y RECOVERY MENTORING')) {
-              pdfs.push('intervencion-Familiar-en-Adicciones-y.-Recovery-Mentoring-1.pdf', 'Manual-MATRIX-para-Terapeutas.pdf');
-            }
-            if (lesson.titulo.includes('NUEVOS MODELOS TERAPEUTICOS')) {
-              pdfs.push('Manual-MATRIX-para-Terapeutas.pdf');
-            }
-            if (lesson.titulo.includes('INTELIGENCIA EMOCIONAL')) {
-              pdfs.push('Cuaderno-de-ejercicios-de-inteligencia-emocional.pdf', 'PPT INTELIGENCIA EMOCIONAL.pdf', 'Manual-MATRIX-para-Terapeutas.pdf');
-            }
-          } else {
-            // PDFs para el curso Experto en Conductas Adictivas
-            if (generatedSlug.includes('Material Complementario')) {
-              pdfs.push('Clasificacion-de-sustancias.pdf', 'Fundamentos-de-la-conducta-adictiva.pdf', 'Informe-europeo-sobre-drogas-2020.pdf', 'Programa-Ibiza.pdf');
-            }
-            // Archivo no disponible: Actividad-casos-clinicos.pdf
-            // if (generatedSlug.includes('Criterios para diagnosticar') || generatedSlug.includes('DSM')) {
-            //   pdfs.push('Actividad-casos-clinicos.pdf');
-            // }
-            // Archivo no disponible: Articilo-Terapia-Integral-de-Pareja.pdf
-            // if (generatedSlug.includes('Terapia integral')) {
-            //   pdfs.push('Articilo-Terapia-Integral-de-Pareja.pdf');
-            // }
-            // Archivos no disponibles: Psicolgia-positiva-introduccion.pdf, Psicologia-positiva-la-investigacion-sobre-los-efectos-de-las-emociones-positivas.pdf
-            // if (generatedSlug.includes('Psicología positiva')) {
-            //   pdfs.push('Psicolgia-positiva-introduccion.pdf', 'Psicologia-positiva-la-investigacion-sobre-los-efectos-de-las-emociones-positivas.pdf');
-            // }
-          }
+          console.log('📄 Lesson', lesson.titulo, 'PDFs from database:', pdfs);
+          console.log('🚨 DEBUG: useEffect ejecutándose para lección:', lesson.titulo, 'PDFs count:', pdfs.length);
           
           // Enlaces externos para Adicciones Comportamentales2 Cuestionarios y Psicología positiva
           const externalLinks: any[] = [];

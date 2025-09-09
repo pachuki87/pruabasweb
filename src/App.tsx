@@ -48,7 +48,7 @@ import NewLessonPage from './pages/courses/NewLessonPage';
 import StudentList from './components/students/StudentList';
 import AddStudentForm from './components/students/AddStudentForm'; // Import AddStudentForm
 import AssignCoursesToStudent from './components/students/AssignCoursesToStudent'; // Import AssignCoursesToStudent
-import QuizAttemptPage from './pages/courses/QuizAttemptPage'; // Import QuizAttemptPage
+import QuizAttemptPage from './pages/dashboard/QuizAttemptPage'; // Import QuizAttemptPage
 
 // Type definitions
 type User = {
@@ -118,7 +118,12 @@ function App() {
       <CartProvider>
         <Toaster position="top-right" />
         
-        <BrowserRouter>
+        <BrowserRouter
+          future={{
+            v7_startTransition: true,
+            v7_relativeSplatPath: true,
+          }}
+        >
         <Routes>
           {/* Public routes */}
           <Route path="/" element={<HomePage currentRole={currentRole} onRoleChange={handleRoleChange} />} />

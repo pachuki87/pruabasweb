@@ -69,7 +69,7 @@ const QuizComponent = ({ leccionId, onQuizComplete }) => {
           )
         `)
         .eq('leccion_id', leccionId)
-        .order('created_at');
+        .order('creado_en');
 
       if (error) throw error;
 

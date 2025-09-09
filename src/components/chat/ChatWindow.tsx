@@ -6,7 +6,7 @@ type Message = {
   id: string;
   sender_id: string;
   message: string;
-  created_at: string;
+  creado_en: string;
 };
 
 type ChatWindowProps = {
@@ -41,7 +41,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ studentId, teacherId, onClose }
         .select('*')
         .or(`sender_id.eq.${studentId},receiver_id.eq.${studentId}`)
         .or(`sender_id.eq.${teacherId},receiver_id.eq.${teacherId}`)
-        .order('created_at', { ascending: true });
+        .order('creado_en', { ascending: true });
 
       if (error) throw error;
       setMessages(data || []);
@@ -120,7 +120,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ studentId, teacherId, onClose }
             >
               <p className="text-sm">{message.message}</p>
               <span className="text-xs opacity-75">
-                {new Date(message.created_at).toLocaleTimeString()}
+                {new Date(message.creado_en).toLocaleTimeString()}
               </span>
             </div>
           </div>

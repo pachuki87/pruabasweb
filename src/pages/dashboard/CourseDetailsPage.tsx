@@ -10,7 +10,7 @@ type Course = {
   titulo: string;
   descripcion: string;
   profesor_nombre: string;
-  created_at: string;
+  creado_en: string;
   tecnologias: string[];
 };
 
@@ -341,7 +341,7 @@ const CourseDetailsPage: React.FC<CourseDetailsPageProps> = ({ role }) => {
                   <div className="bg-gray-50 p-4 rounded-lg">
                     <h4 className="font-medium text-gray-900 mb-2">Fecha de Creación</h4>
                     <p className="text-gray-700">
-                      {course.created_at ? new Date(course.created_at).toLocaleDateString('es-ES') : 'No disponible'}
+                      {course.creado_en ? new Date(course.creado_en).toLocaleDateString('es-ES') : 'No disponible'}
                     </p>
                   </div>
                   <div className="bg-gray-50 p-4 rounded-lg">

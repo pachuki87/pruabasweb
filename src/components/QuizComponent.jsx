@@ -71,6 +71,19 @@ const QuizComponent = ({ leccionId, courseId, onQuizComplete }) => {
         .eq('leccion_id', leccionId)
         .order('creado_en');
 
+      // Ordenar las opciones de respuesta por el campo 'orden'
+      if (cuestionariosData) {
+        cuestionariosData.forEach(cuestionario => {
+          if (cuestionario.preguntas) {
+            cuestionario.preguntas.forEach(pregunta => {
+              if (pregunta.opciones_respuesta) {
+                pregunta.opciones_respuesta.sort((a, b) => a.orden - b.orden);
+              }
+            });
+          }
+        });
+      }
+
       if (error) throw error;
 
       setCuestionarios(cuestionariosData || []);
@@ -456,7 +469,7 @@ const QuizComponent = ({ leccionId, courseId, onQuizComplete }) => {
           <h3 className="question-text">{preguntaActual.texto}</h3>
           
           <div className="options-container">
-            {preguntaActual.opciones_respuesta?.map((opcion) => (
+            {preguntaActual.opciones_respuesta?.map((opcion, index) => (
               <button
                 key={opcion.id}
                 className={`option-button ${
@@ -468,8 +481,8 @@ const QuizComponent = ({ leccionId, courseId, onQuizComplete }) => {
                   opcion.es_correcta
                 )}
               >
-                <span className="option-letter">{opcion.letra}</span>
-                <span className="option-text">{opcion.texto}</span>
+                <span className="option-letter">{String.fromCharCode(65 + index)}</span>
+                <span className="option-text">{opcion.opcion}</span>
               </button>
             ))}
           </div>

@@ -34,6 +34,7 @@ import PaymentPage from './pages/PaymentPage'; // Import the payment page
 import Formacion from './components/Formacion';
 import TestimoniosPage from './pages/TestimoniosPage';
 import ViajesYTalleresPage from './pages/ViajesYTalleresPage';
+import StripeTest from './components/StripeTest';
 
 // Dashboard Pages
 import DashboardPage from './pages/dashboard/DashboardPage';
@@ -65,7 +66,7 @@ type User = {
 
 function App() {
   const [user, setUser] = useState<User | null>(null);
-  const [currentRole, setCurrentRole] = useState<string>('student');
+  const [currentRole, setCurrentRole] = useState<string>('visitor');
 
   const handleLogin = async (userData: User) => {
     // Set Supabase session after successful login
@@ -141,6 +142,7 @@ function App() {
           <Route path="/master-adicciones-intervencion" element={<MasterAdiccionesPage />} />
           <Route path="/experto-conductas-adictivas" element={<ExpertoConductasPage />} />
           <Route path="/payment" element={<PaymentPage />} />
+          <Route path="/stripe-test" element={<StripeTest />} />
           
           {/* Auth routes */}
           <Route path="/login/:role" element={<LoginPage onLogin={handleLogin} />} />

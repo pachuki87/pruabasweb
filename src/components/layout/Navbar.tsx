@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 // Importamos los iconos necesarios
 import { Menu, X, Search } from 'lucide-react';
-import CartIcon from '../CartIcon';
+import CartIcon from '../cart/CartIcon';
+import Cart from '../cart/Cart';
 
 type NavbarProps = {
   onRoleChange?: (role: string) => void;
@@ -13,6 +14,7 @@ const Navbar: React.FC<NavbarProps> = ({ onRoleChange, currentRole = 'student' }
   const location = useLocation();
   const [searchQuery, setSearchQuery] = useState('');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isCartOpen, setIsCartOpen] = useState(false);
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -100,7 +102,7 @@ const Navbar: React.FC<NavbarProps> = ({ onRoleChange, currentRole = 'student' }
             <div className="mt-4 md:mt-0 flex flex-col md:flex-row md:items-center md:space-x-2 space-y-2 md:space-y-0">
               {/* Cart Icon */}
               <div className="flex justify-center md:justify-start">
-                <CartIcon />
+                <CartIcon onClick={() => setIsCartOpen(true)} className="text-white hover:text-yellow-200" />
               </div>
               
               <Link
@@ -121,6 +123,9 @@ const Navbar: React.FC<NavbarProps> = ({ onRoleChange, currentRole = 'student' }
           </div>
         </nav>
       </div>
+      
+      {/* Cart Sidebar */}
+      <Cart isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
     </header>
   );
 };

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Search, Menu, X, ChevronDown } from 'lucide-react';
-import CartIcon from '../CartIcon';
+import CartIcon from '../cart/CartIcon';
+import Cart from '../cart/Cart';
 import logo2 from '../../assets/logo 2.png';
 
 interface HeaderProps {
@@ -11,6 +12,7 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ currentRole, onRoleChange }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isCartOpen, setIsCartOpen] = useState(false);
 
   return (
     <header className="bg-white shadow-sm relative z-50">
@@ -41,7 +43,7 @@ const Header: React.FC<HeaderProps> = ({ currentRole, onRoleChange }) => {
             </button>
             
             {/* Cart Icon */}
-            <CartIcon />
+            <CartIcon onClick={() => setIsCartOpen(true)} className="text-gray-600 hover:text-blue-600" />
             
             {/* Login Buttons */}
             <div className="hidden md:flex items-center space-x-2">
@@ -117,6 +119,9 @@ const Header: React.FC<HeaderProps> = ({ currentRole, onRoleChange }) => {
           </div>
         )}
       </div>
+      
+      {/* Cart Sidebar */}
+      <Cart isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
     </header>
   );
 };

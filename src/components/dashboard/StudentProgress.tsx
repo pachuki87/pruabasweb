@@ -150,12 +150,15 @@ const StudentProgress: React.FC = () => {
         let progressPercentage = 0;
         let completedChapters = 0;
         
-        if (estadisticasUsuario && estadisticasUsuario.courses) {
-           const courseStats = estadisticasUsuario.courses.find(c => c.curso_id === courseId);
+        if (estadisticasUsuario && estadisticasUsuario.courseProgress) {
+           const courseStats = estadisticasUsuario.courseProgress.find(c => c.curso_id === courseId);
           if (courseStats) {
-            progressPercentage = Math.round(courseStats.overall_progress || 0);
+            // Use porcentaje_progreso from user_course_summary, handle NaN values
+            const rawProgress = courseStats.porcentaje_progreso;
+            progressPercentage = (rawProgress && !isNaN(rawProgress)) ? Math.round(rawProgress) : 0;
             // Estimate completed chapters based on progress
             completedChapters = Math.round((progressPercentage / 100) * (totalChapters || 0));
+            console.log(`📊 Datos de progreso desde DB: ${rawProgress}% -> ${progressPercentage}%`);
           }
         }
         

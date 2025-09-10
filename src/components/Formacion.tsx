@@ -310,8 +310,7 @@ const Formacion = () => {
                       <figcaption className="employee-card__description bg-lidera-light-blue p-8 h-full flex flex-col justify-center">
                         <div className="titleone">
                           <h1 className="title text-3xl font-bold text-white mb-4">
-                            {profesor.nombre.split(' ').slice(0, -1).join(' ')}<br/>
-                            <span className="subtitle text-2xl font-light">{profesor.nombre.split(' ').slice(-1)[0]}</span>
+                            {profesor.nombre}
                           </h1>
                         </div>
                         <div className="employee-jobs">

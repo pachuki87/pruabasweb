@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { supabase } from '../../lib/supabase';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
-import useProgress from '../../hooks/useProgress';
+import { supabase } from '../../lib/supabase';
+import { useProgress } from '../../hooks/useProgress';
 
 type CourseProgress = {
   id: string;
@@ -19,11 +19,19 @@ const StudentProgress: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const { estadisticasUsuario, cargando: progressLoading, error: progressError } = useProgress();
 
-  useEffect(() => {
-    fetchStudentProgress();
-  }, [user, estadisticasUsuario]);
+  // AbortController para cancelar requests anteriores
+  const abortControllerRef = useRef<AbortController | null>(null);
 
-  const fetchStudentProgress = async () => {
+  const fetchStudentProgress = useCallback(async () => {
+    // Cancelar request anterior si existe
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+    
+    // Crear nuevo AbortController
+    abortControllerRef.current = new AbortController();
+    const signal = abortControllerRef.current.signal;
+    
     setIsLoading(true);
     
     try {
@@ -34,7 +42,10 @@ const StudentProgress: React.FC = () => {
         return;
       }
 
-      // Fetch enrolled courses
+      // Verificar si fue cancelado
+      if (signal.aborted) return;
+
+      // Fetch enrolled courses con AbortSignal
       const { data: enrollments, error: enrollmentsError } = await supabase
         .from('inscripciones')
         .select(`
@@ -44,7 +55,8 @@ const StudentProgress: React.FC = () => {
             titulo
           )
         `)
-        .eq('user_id', user.id);
+        .eq('user_id', user.id)
+        .abortSignal(signal);
 
       if (enrollmentsError) throw enrollmentsError;
 
@@ -54,49 +66,82 @@ const StudentProgress: React.FC = () => {
         return;
       }
 
+      // Verificar si fue cancelado
+      if (signal.aborted) return;
+
       const progressData: CourseProgress[] = [];
 
       for (const enrollment of enrollments) {
+        // Verificar cancelación en cada iteración
+        if (signal.aborted) return;
+        
         const courseId = enrollment.curso_id;
         const courseTitle = enrollment.cursos?.titulo || 'Curso sin título';
 
-        // Count total chapters
+        // Delay entre requests para evitar cancelaciones
+        await new Promise(resolve => setTimeout(resolve, 100));
+        if (signal.aborted) return;
+
+        // Count total chapters con AbortSignal
         const { count: totalChapters, error: chaptersError } = await supabase
           .from('lecciones')
           .select('*', { count: 'exact', head: true })
-          .eq('curso_id', courseId);
+          .eq('curso_id', courseId)
+          .abortSignal(signal);
 
         if (chaptersError) {
           console.error('Error fetching chapters:', chaptersError);
           continue;
         }
 
-        // Count total quizzes
+        // Delay y verificación de cancelación
+        await new Promise(resolve => setTimeout(resolve, 100));
+        if (signal.aborted) return;
+
+        // Count total quizzes con AbortSignal
         const { count: totalQuizzes, error: quizzesError } = await supabase
           .from('cuestionarios')
           .select('*', { count: 'exact', head: true })
-          .eq('curso_id', courseId);
+          .eq('curso_id', courseId)
+          .abortSignal(signal);
 
         if (quizzesError) {
           console.error('Error fetching quizzes:', quizzesError);
           continue;
         }
 
-        // Count completed quizzes (quiz attempts by this student)
-        const { count: completedQuizzes, error: attemptsError } = await supabase
-          .from('respuestas_texto_libre')
-          .select('pregunta_id', { count: 'exact', head: true })
-          .or(`user_id.eq.${user.id},user_id.eq.anonymous`)
-          .in('pregunta_id', 
-            await supabase
-              .from('cuestionarios')
-              .select('id')
-              .eq('curso_id', courseId)
-              .then(({ data }) => data?.map(q => q.id) || [])
-          );
+        // Delay y verificación de cancelación
+        await new Promise(resolve => setTimeout(resolve, 100));
+        if (signal.aborted) return;
 
-        if (attemptsError) {
-          console.error('Error fetching quiz attempts:', attemptsError);
+        // Obtener IDs de cuestionarios primero
+        const { data: quizIds } = await supabase
+          .from('cuestionarios')
+          .select('id')
+          .eq('curso_id', courseId)
+          .abortSignal(signal);
+
+        const questionIds = quizIds?.map(q => q.id) || [];
+        
+        // Delay y verificación de cancelación
+        await new Promise(resolve => setTimeout(resolve, 100));
+        if (signal.aborted) return;
+
+        // Count completed quizzes con AbortSignal
+        let completedQuizzes = 0;
+        if (questionIds.length > 0) {
+          const { count, error: attemptsError } = await supabase
+            .from('respuestas_texto_libre')
+            .select('pregunta_id', { count: 'exact', head: true })
+            .or(`user_id.eq.${user.id},user_id.eq.anonymous`)
+            .in('pregunta_id', questionIds)
+            .abortSignal(signal);
+
+          if (attemptsError) {
+            console.error('Error fetching quiz attempts:', attemptsError);
+          } else {
+            completedQuizzes = count || 0;
+          }
         }
 
         // Use progress from useProgress hook if available
@@ -104,7 +149,7 @@ const StudentProgress: React.FC = () => {
         let completedChapters = 0;
         
         if (estadisticasUsuario && estadisticasUsuario.courses) {
-      const courseStats = estadisticasUsuario.courses.find(c => c.curso_id === courseId);
+           const courseStats = estadisticasUsuario.courses.find(c => c.curso_id === courseId);
           if (courseStats) {
             progressPercentage = Math.round(courseStats.overall_progress || 0);
             // Estimate completed chapters based on progress
@@ -131,18 +176,35 @@ const StudentProgress: React.FC = () => {
         });
       }
 
-      setCourseProgress(progressData);
-      setIsLoading(false);
+      // Verificar cancelación antes de actualizar estado
+      if (!signal.aborted) {
+        setCourseProgress(progressData);
+        setIsLoading(false);
+      }
     } catch (error) {
+      // No mostrar error si fue cancelado intencionalmente
+      if (error instanceof Error && error.name === 'AbortError') {
+        console.log('Request cancelled - this is normal');
+        return;
+      }
+      
       console.error('Error fetching student progress:', error);
-      setIsLoading(false);
+      if (!signal.aborted) {
+        setIsLoading(false);
+      }
     }
-  };
+  }, [user, estadisticasUsuario]);
+
+  useEffect(() => {
+    fetchStudentProgress();
+  }, [fetchStudentProgress]);
+
+
 
   // Show loading if either local loading or progress loading
   const showLoading = isLoading || progressLoading;
 
-  // Debug information
+  // Debug information - consolidated into single useEffect
   useEffect(() => {
     if (progressError) {
       console.error('Progress hook error:', progressError);

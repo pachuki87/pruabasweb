@@ -27,6 +27,37 @@ const Formacion = () => {
     }
   ];
 
+  const profesores = [
+    {
+      nombre: "José Manuel Zaldúa Mellado",
+      cargo: "Fundador del proyecto Reinservida y Director terapéutico",
+      especialidad: "Experto en Detección e Intervención en la adicción a las nuevas tecnologías",
+      descripcion: "Fundador del proyecto Reinservida y Director terapéutico. Experto en Detección e Intervención en la adicción a las nuevas tecnologías",
+      imagen: "/jose-manuel.jpg"
+    },
+    {
+      nombre: "Javier Carbonell Lledó",
+      cargo: "Psicoterapeuta con más de 25 años de experiencia",
+      especialidad: "Director del Instituto Lídera y conferenciante en el ámbito de las adicciones",
+      descripcion: "Psicoterapeuta con más de 25 años de experiencia, Director del Instituto Lídera y conferenciante en el ámbito de las adicciones.",
+      imagen: "/javier.jpg"
+    },
+    {
+      nombre: "Lidia de Ramón",
+      cargo: "Terapeuta especializada en conductas adictivas",
+      especialidad: "Directora del área terapéutica de adicciones comportamentales",
+      descripcion: "Terapeuta especializada en conductas adictivas y directora del área terapéutica de adicciones comportamentales.",
+      imagen: "/lidia.jpg"
+    },
+    {
+      nombre: "Montserrat Pintado Gellida",
+      cargo: "Asesora terapéutica",
+      especialidad: "Responsable de la gestión comercial y de expansión",
+      descripcion: "Asesora terapéutica, responsable de la gestión comercial y de expansión. Experta en coordinación de programas terapéuticos.",
+      imagen: "/montse.jpg"
+    }
+  ];
+
   const testimonios = [
     {
       nombre: "María González",
@@ -140,17 +171,17 @@ const Formacion = () => {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid md:grid-cols-2 gap-12">
             {programas.map((programa) => (
-              <div key={programa.id} className={`bg-white shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 ${
-                programa.destacado ? 'border-l-4 border-slate-700' : 'border border-gray-200'
+              <div key={programa.id} className={`bg-white border hover:border-gray-300 transition-colors ${
+                programa.destacado ? 'border-l-4 border-slate-700' : 'border-gray-200'
               }`}>
                 {programa.destacado && (
                   <div className="bg-white text-gray-800 text-center py-3 text-sm font-medium tracking-wide uppercase border-b border-gray-200">
                     Programa Destacado
                   </div>
                 )}
-                <div className="p-6">
+                <div className="p-8">
                   <div className="flex items-center justify-between mb-4">
                     <span className={`px-4 py-2 text-xs font-medium uppercase tracking-wider ${
                       programa.nivel === 'Máster' ? 'bg-gray-100 text-gray-700 border border-gray-300' :
@@ -161,26 +192,26 @@ const Formacion = () => {
                     </span>
                   </div>
                   
-                  <h3 className="text-xl font-bold text-gray-900 mb-3">
+                  <h3 className="text-lg font-medium text-gray-900 mb-4">
                     {programa.titulo}
                   </h3>
                   
-                  <p className="text-gray-600 mb-4">
+                  <p className="text-gray-600 mb-6 leading-relaxed font-light">
                     {programa.descripcion}
                   </p>
                   
-                  <div className="space-y-2 mb-6">
+                  <div className="space-y-3 mb-8">
                     <div className="flex items-center text-sm text-gray-500">
-                      <BookOpen className="h-4 w-4 mr-2" />
-                      Duración: {programa.duracion}
+                      <BookOpen className="h-4 w-4 mr-3" />
+                      <span className="font-light">Duración: {programa.duracion}</span>
                     </div>
                     <div className="flex items-center text-sm text-gray-500">
-                      <Users className="h-4 w-4 mr-2" />
-                      Modalidad: {programa.modalidad}
+                      <Users className="h-4 w-4 mr-3" />
+                      <span className="font-light">Modalidad: {programa.modalidad}</span>
                     </div>
                   </div>
                   
-                  <button className="w-full bg-lidera-light-blue hover:bg-[#6a96c0] text-white py-3 rounded-lg font-semibold transition-colors flex items-center justify-center">
+                  <button className="w-full bg-gray-900 hover:bg-gray-800 text-white py-3 font-medium transition-colors flex items-center justify-center">
                     Más Información
                     <ChevronRight className="h-4 w-4 ml-2" />
                   </button>
@@ -203,9 +234,9 @@ const Formacion = () => {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-12">
             {videos.map((video) => (
-              <div key={video.id} className="bg-gray-100 rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
+              <div key={video.id} className="bg-white border border-gray-200 hover:border-gray-300 transition-colors">
                 <div className="relative aspect-video bg-gray-900">
                   {activeVideo === video.archivo ? (
                     <video 
@@ -221,19 +252,82 @@ const Formacion = () => {
                       className="w-full h-full flex items-center justify-center cursor-pointer group"
                       onClick={() => setActiveVideo(video.archivo)}
                     >
-                      <div className="bg-lidera-light-blue rounded-full p-4 group-hover:bg-[#6a96c0] transition-colors">
+                      <div className="bg-gray-900 p-4 group-hover:bg-gray-800 transition-colors">
                         <Play className="h-8 w-8 text-white ml-1" />
                       </div>
                     </div>
                   )}
                 </div>
-                <div className="p-6">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                <div className="p-8">
+                  <h3 className="text-lg font-medium text-gray-900 mb-2">
                     {video.titulo}
                   </h3>
-                  <p className="text-gray-600 text-sm">
+                  <p className="text-gray-600 text-sm font-light">
                     {video.descripcion}
                   </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Profesores Section */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              Nuestro Equipo Docente
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Profesionales especializados con amplia experiencia en el tratamiento de adicciones
+            </p>
+          </div>
+
+          <div className="space-y-8">
+            {profesores.map((profesor, index) => (
+              <div key={index} className="col-12 col-md-6 employee-card-box">
+                <div className="employee-card-link">
+                  <figure className="row employee-card employee-card--subdirector bg-white border border-gray-200 hover:border-gray-300 transition-colors overflow-hidden flex">
+                    <div className="col-12 col-lg-4 col-xl-4 employee-card__picture">
+                      {profesor.imagen ? (
+                        <img 
+                          src={profesor.imagen} 
+                          alt={profesor.nombre}
+                          className="w-full h-full object-cover aspect-square"
+                        />
+                      ) : (
+                        <div className="w-full aspect-square bg-gray-200 flex items-center justify-center">
+                          <div className="w-20 h-20 bg-lidera-light-blue rounded-full flex items-center justify-center">
+                            <svg className="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+                            </svg>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                    <div className="col-12 col-lg-8 col-xl-8 col-employee-card flex items-center">
+                      <figcaption className="employee-card__description bg-lidera-light-blue p-8 h-full flex flex-col justify-center">
+                        <div className="titleone">
+                          <h1 className="title text-3xl font-bold text-white mb-4">
+                            {profesor.nombre.split(' ').slice(0, -1).join(' ')}<br/>
+                            <span className="subtitle text-2xl font-light">{profesor.nombre.split(' ').slice(-1)[0]}</span>
+                          </h1>
+                        </div>
+                        <div className="employee-jobs">
+                          <p className="employee-card__description__job text-lg text-white font-medium mb-4">
+                            {profesor.cargo}
+                          </p>
+                        </div>
+                        <p className="text-base text-white mb-4">
+                          • {profesor.especialidad}
+                        </p>
+                        <p className="text-base text-white leading-relaxed">
+                          {profesor.descripcion}
+                        </p>
+                      </figcaption>
+                    </div>
+                  </figure>
                 </div>
               </div>
             ))}
@@ -250,20 +344,20 @@ const Formacion = () => {
             </h2>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid md:grid-cols-2 gap-12">
             {testimonios.map((testimonio, index) => (
-              <div key={index} className="bg-white rounded-xl p-8 shadow-lg">
-                <div className="flex items-center mb-4">
+              <div key={index} className="bg-white border border-gray-200 p-12">
+                <div className="flex items-center mb-6">
                   {[...Array(testimonio.rating)].map((_, i) => (
-                    <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
+                    <Star key={i} className="h-4 w-4 text-gray-400 fill-current" />
                   ))}
                 </div>
-                <p className="text-gray-700 mb-6 italic">
+                <p className="text-gray-600 mb-8 font-light text-lg leading-relaxed">
                   "{testimonio.testimonio}"
                 </p>
                 <div>
-                  <div className="font-semibold text-gray-900">{testimonio.nombre}</div>
-                  <div className="text-sm text-gray-500">{testimonio.programa}</div>
+                  <div className="font-medium text-gray-900">{testimonio.nombre}</div>
+                  <div className="text-sm text-gray-500 font-light">{testimonio.programa}</div>
                 </div>
               </div>
             ))}

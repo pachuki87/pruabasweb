@@ -127,14 +127,14 @@ const StudentProgress: React.FC = () => {
         await new Promise(resolve => setTimeout(resolve, 100));
         if (signal.aborted) return;
 
-        // Count completed quizzes con AbortSignal
+        // Count completed quizzes from user_test_results
         let completedQuizzes = 0;
         if (questionIds.length > 0) {
           const { count, error: attemptsError } = await supabase
-            .from('respuestas_texto_libre')
-            .select('pregunta_id', { count: 'exact', head: true })
-            .or(`user_id.eq.${user.id},user_id.eq.anonymous`)
-            .in('pregunta_id', questionIds)
+            .from('user_test_results')
+            .select('cuestionario_id', { count: 'exact', head: true })
+            .eq('user_id', user.id)
+            .in('cuestionario_id', questionIds)
             .abortSignal(signal);
 
           if (attemptsError) {
@@ -143,6 +143,8 @@ const StudentProgress: React.FC = () => {
             completedQuizzes = count || 0;
           }
         }
+        
+        console.log(`📊 Curso ${courseTitle}: ${completedQuizzes}/${totalQuizzes} cuestionarios completados`);
 
         // Use progress from useProgress hook if available
         let progressPercentage = 0;
@@ -159,11 +161,21 @@ const StudentProgress: React.FC = () => {
         
         // Fallback to manual calculation if no stats available
         if (progressPercentage === 0) {
-          completedChapters = Math.min(completedQuizzes || 0, totalChapters || 0);
-          const totalItems = (totalChapters || 0) + (totalQuizzes || 0);
-          const completedItems = completedChapters + (completedQuizzes || 0);
-          progressPercentage = totalItems > 0 ? Math.round((completedItems / totalItems) * 100) : 0;
+          // Si hay cuestionarios completados, calcular progreso basado en eso
+          if (totalQuizzes > 0 && completedQuizzes > 0) {
+            progressPercentage = Math.round((completedQuizzes / totalQuizzes) * 100);
+            // Estimar capítulos completados basado en cuestionarios
+            completedChapters = Math.round((progressPercentage / 100) * (totalChapters || 0));
+          } else {
+            // Cálculo tradicional si no hay datos de cuestionarios
+            completedChapters = Math.min(completedQuizzes || 0, totalChapters || 0);
+            const totalItems = (totalChapters || 0) + (totalQuizzes || 0);
+            const completedItems = completedChapters + (completedQuizzes || 0);
+            progressPercentage = totalItems > 0 ? Math.round((completedItems / totalItems) * 100) : 0;
+          }
         }
+        
+        console.log(`📈 Progreso calculado para ${courseTitle}: ${progressPercentage}%`);
 
         progressData.push({
           id: courseId,

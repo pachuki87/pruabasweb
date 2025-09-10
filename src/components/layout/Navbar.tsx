@@ -79,6 +79,12 @@ const Navbar: React.FC<NavbarProps> = ({ onRoleChange, currentRole = 'student' }
               Cursos
             </Link>
             <Link 
+              to="/formacion" 
+              className={`text-sm font-medium py-2 md:py-0 ${location.pathname === '/formacion' ? 'text-yellow-400' : 'text-white hover:text-yellow-200'}`}
+            >
+              Formación
+            </Link>
+            <Link 
               to="/about" 
               className={`text-sm font-medium py-2 md:py-0 ${location.pathname === '/about' ? 'text-yellow-400' : 'text-white hover:text-yellow-200'}`}
             >

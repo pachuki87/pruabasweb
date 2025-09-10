@@ -1,17 +1,79 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import lideraLogo from '../assets/WhatsApp Image 2025-06-30 at 18.03.49.png';
 
 const Hero = () => {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  
+  // Array de imágenes relacionadas con terapias y psicología
+  const backgroundImages = [
+    {
+      url: "/pexels-shvets-production-7176026.jpg",
+      alt: "Sesión de terapia psicológica con terapeuta tomando notas"
+    },
+    {
+      url: "/pexels-airamdphoto-15189548.jpg",
+      alt: "Consulta de psicología en ambiente relajado"
+    },
+    {
+      url: "/pexels-bertellifotografia-3321791.jpg",
+      alt: "Terapia de pareja y familiar"
+    },
+    {
+      url: "/pexels-canvastudio-3153199.jpg",
+      alt: "Sesión de terapia grupal y apoyo psicológico"
+    },
+    {
+      url: "/pexels-hillaryfox-1595385.jpg",
+      alt: "Consulta psicológica profesional"
+    }
+  ];
+
+  // Efecto para cambiar automáticamente las imágenes cada 5 segundos
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prevIndex) => 
+        (prevIndex + 1) % backgroundImages.length
+      );
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [backgroundImages.length]);
+
   return (
     <section className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white py-20 overflow-hidden">
-      {/* Background Image */}
+      {/* Background Images with Transition */}
       <div className="absolute inset-0">
-        <img 
-          src="https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop"
-          alt="Formación en adicciones"
-          className="w-full h-full object-cover opacity-20"
-        />
-        <div className="absolute inset-0 bg-gradient-to-br from-gray-900/80 via-gray-800/80 to-gray-900/80"></div>
+        {backgroundImages.map((image, index) => (
+          <div
+            key={index}
+            className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
+               index === currentImageIndex ? 'opacity-60' : 'opacity-0'
+             }`}
+          >
+            <img 
+              src={image.url}
+              alt={image.alt}
+              className="w-full h-full object-cover"
+            />
+          </div>
+        ))}
+        <div className="absolute inset-0 bg-gradient-to-br from-gray-900/40 via-gray-800/40 to-gray-900/40"></div>
+        
+        {/* Indicadores de imagen */}
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-2 z-10">
+          {backgroundImages.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentImageIndex(index)}
+              className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                index === currentImageIndex 
+                  ? 'bg-lidera-light-blue scale-110' 
+                  : 'bg-white/50 hover:bg-white/70'
+              }`}
+              aria-label={`Cambiar a imagen ${index + 1}`}
+            />
+          ))}
+        </div>
       </div>
       
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

@@ -30,6 +30,7 @@ import NotFoundPage from './pages/NotFoundPage';
 import MasterAdiccionesPage from './pages/MasterAdiccionesPage'; // Import the new page
 import ExpertoConductasPage from './pages/ExpertoConductasPage'; // Import the experto page
 import PaymentPage from './pages/PaymentPage'; // Import the payment page
+import Formacion from './components/Formacion';
 
 // Dashboard Pages
 import DashboardPage from './pages/dashboard/DashboardPage';
@@ -130,6 +131,7 @@ function App() {
           <Route path="/about" element={<AboutPage currentRole={currentRole} onRoleChange={handleRoleChange} />} />
           <Route path="/faqs" element={<FaqsPage currentRole={currentRole} onRoleChange={handleRoleChange} />} />
           <Route path="/courses" element={<CoursesPage currentRole={currentRole} onRoleChange={handleRoleChange} />} />
+          <Route path="/formacion" element={<Formacion />} />
           <Route path="/master-adicciones-intervencion" element={<MasterAdiccionesPage />} />
           <Route path="/experto-conductas-adictivas" element={<ExpertoConductasPage />} />
           <Route path="/payment" element={<PaymentPage />} />

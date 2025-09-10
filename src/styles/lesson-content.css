@@ -219,29 +219,29 @@
 /* Estilos para videos e iframes */
 .lesson-content iframe {
   width: 100%;
-  min-height: 500px;
   height: auto;
   aspect-ratio: 16/9;
   border-radius: 0.5rem;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   margin: 1.5rem 0;
+  min-height: 200px;
 }
 
 .lesson-content .elementor-video iframe {
   width: 100%;
-  min-height: 500px;
   height: auto;
   aspect-ratio: 16/9;
+  min-height: 200px;
 }
 
 .lesson-content video {
   width: 100%;
-  min-height: 500px;
   height: auto;
   aspect-ratio: 16/9;
   border-radius: 0.5rem;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   margin: 1.5rem 0;
+  min-height: 200px;
 }
 
 /* Contenedor de video responsivo */
@@ -262,10 +262,34 @@
   min-height: unset;
 }
 
+/* Sobrescribir atributos inline de height en iframes */
+.lesson-content iframe[height="360"] {
+  height: auto !important;
+  aspect-ratio: 16/9;
+  min-height: 200px;
+}
+
+.lesson-content .elementor-video iframe[height="360"] {
+  height: auto !important;
+  aspect-ratio: 16/9;
+  min-height: 200px;
+}
+
 /* Responsive design */
+/* Tablets y pantallas medianas */
+@media (max-width: 1024px) {
+  .lesson-content iframe,
+  .lesson-content .elementor-video iframe,
+  .lesson-content video {
+    min-height: 250px;
+  }
+}
+
+/* Móviles grandes */
 @media (max-width: 768px) {
   .lesson-content {
     font-size: 0.9rem;
+    padding: 1rem;
   }
   
   .lesson-content h1 {
@@ -289,11 +313,38 @@
     padding: 0.5rem;
   }
   
-  .lesson-content iframe {
-    min-height: 300px;
+  .lesson-content iframe,
+  .lesson-content .elementor-video iframe,
+  .lesson-content video {
+    min-height: 200px;
+    margin: 1rem 0;
+  }
+}
+
+/* Móviles pequeños */
+@media (max-width: 480px) {
+  .lesson-content {
+    padding: 0.75rem;
   }
   
+  .lesson-content iframe,
+  .lesson-content .elementor-video iframe,
   .lesson-content video {
-    min-height: 300px;
+    min-height: 180px;
+    margin: 0.75rem 0;
+    border-radius: 0.25rem;
+  }
+  
+  .lesson-content .video-container {
+    margin: 0.75rem 0;
+  }
+}
+
+/* Móviles muy pequeños */
+@media (max-width: 360px) {
+  .lesson-content iframe,
+  .lesson-content .elementor-video iframe,
+  .lesson-content video {
+    min-height: 160px;
   }
 }

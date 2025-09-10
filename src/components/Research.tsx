@@ -3,9 +3,9 @@ import { ArrowRight, TrendingUp, Users, Globe, Brain } from 'lucide-react';
 const Research = () => {
   const articles = [
     {
-      category: "LIDERAZGO",
-      titulo: "El futuro del liderazgo en la era digital",
-      excerpt: "Un análisis sobre cómo los líderes deben adaptarse a las nuevas tecnologías y modelos de trabajo híbrido para mantener la efectividad organizacional.",
+      category: "PSICOLOGÍA",
+      titulo: "Neuropsicología de las adicciones: Nuevos enfoques terapéuticos",
+      excerpt: "Investigación sobre los mecanismos neurobiológicos de las adicciones y cómo los avances en neurociencia están revolucionando los tratamientos.",
       author: "Equipo Instituto Lidera",
       icon: <Brain className="h-6 w-6" />,
       image: "https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=400&h=250&fit=crop"

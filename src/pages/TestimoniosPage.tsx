@@ -25,6 +25,76 @@ const TestimoniosPage: React.FC<TestimoniosPageProps> = ({ currentRole, onRoleCh
           </div>
         </section>
 
+        {/* IESE Style Testimonials Section */}
+        <section className="py-20 bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                Nuestros Programas
+              </h2>
+              <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+                Formación especializada diseñada por expertos para profesionales que buscan la excelencia
+              </p>
+            </div>
+            
+            <div className="grid md:grid-cols-2 gap-12 lg:gap-16">
+              {/* Testimonio 1 - Andrea Christenson Style */}
+              <div className="flex flex-col">
+                <div className="relative mb-8">
+                   <div 
+                     className="w-full h-80 bg-gradient-to-br from-gray-300 to-gray-400 rounded-lg shadow-lg flex items-center justify-center"
+                   >
+                     <div className="text-gray-600 text-lg font-medium">Andrea Christenson</div>
+                   </div>
+                  <div className="absolute top-4 left-4 w-16 h-16 bg-red-500 rounded-full opacity-80"></div>
+                  <div className="absolute bottom-4 right-4 w-20 h-20 bg-red-500 rounded-full opacity-80"></div>
+                </div>
+                <blockquote className="text-gray-700 text-lg italic mb-6 leading-relaxed">
+                  "To me, being a Member is about belonging to an outstanding group of people, growing with them, giving back by sharing my experience and knowledge, but most important, learning from others."
+                </blockquote>
+                <div>
+                  <h3 className="text-2xl font-bold text-red-600 mb-2">
+                    Andrea 'Ginka' Christenson
+                  </h3>
+                  <p className="text-sm font-semibold text-gray-900 mb-1">
+                    AMP Munich-14/MBA-83
+                  </p>
+                  <p className="text-sm text-gray-600">
+                    International Advisory Board of IESE. Non-executive director of different firms, Business Family Advisor
+                  </p>
+                </div>
+              </div>
+
+              {/* Testimonio 2 - Igor de la Sota Style */}
+              <div className="flex flex-col">
+                <div className="relative mb-8">
+                   <div 
+                     className="w-full h-80 bg-gradient-to-br from-blue-300 to-blue-400 rounded-lg shadow-lg flex items-center justify-center"
+                   >
+                     <div className="text-white text-lg font-medium">Igor de la Sota</div>
+                   </div>
+                  <div className="absolute top-4 right-4 w-16 h-16 bg-red-500 rounded-full opacity-80"></div>
+                  <div className="absolute bottom-4 left-4 w-20 h-20 bg-red-500 rounded-full opacity-80"></div>
+                </div>
+                <blockquote className="text-gray-700 text-lg italic mb-6 leading-relaxed">
+                  "At the core of IESE Alumni community lies a profound commitment to give back. Being a member entails a deep-rooted commitment to contribute, support others, and foster positive change. Joining this community means seizing the opportunity to be catalysts for change, in a way that resonates deeply with the essence of IESE."
+                </blockquote>
+                <div>
+                  <h3 className="text-2xl font-bold text-red-600 mb-2">
+                    Igor de la Sota
+                  </h3>
+                  <p className="text-sm font-semibold text-gray-900 mb-1">
+                    MBA-11
+                  </p>
+                  <p className="text-sm text-gray-600">
+                    Founder and General Partner at Cardumen Capital
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Video Testimonials Section */}
         <section className="py-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

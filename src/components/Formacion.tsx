@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Play, Users, Award, BookOpen, ChevronRight, Star } from 'lucide-react';
+import Header from './layout/Header';
+import Footer from './layout/Footer';
 
 const Formacion = () => {
   const [activeVideo, setActiveVideo] = useState<string | null>(null);
@@ -22,15 +24,6 @@ const Formacion = () => {
       modalidad: "Híbrida",
       nivel: "Máster",
       destacado: true
-    },
-    {
-      id: 3,
-      titulo: "Recovery Coaching Certificado",
-      descripcion: "Especialización en técnicas de coaching para procesos de recuperación.",
-      duracion: "4 meses",
-      modalidad: "Online",
-      nivel: "Certificación",
-      destacado: false
     }
   ];
 
@@ -72,6 +65,7 @@ const Formacion = () => {
 
   return (
     <div className="min-h-screen bg-white">
+      <Header />
       {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white py-20 overflow-hidden">
         {/* Background Video */}
@@ -146,26 +140,25 @@ const Formacion = () => {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 gap-8">
             {programas.map((programa) => (
-              <div key={programa.id} className={`bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow ${
-                programa.destacado ? 'ring-2 ring-lidera-light-blue' : ''
+              <div key={programa.id} className={`bg-white shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 ${
+                programa.destacado ? 'border-l-4 border-slate-700' : 'border border-gray-200'
               }`}>
                 {programa.destacado && (
-                  <div className="bg-lidera-light-blue text-white text-center py-2 text-sm font-semibold">
-                    ⭐ Programa Destacado
+                  <div className="bg-white text-gray-800 text-center py-3 text-sm font-medium tracking-wide uppercase border-b border-gray-200">
+                    Programa Destacado
                   </div>
                 )}
                 <div className="p-6">
                   <div className="flex items-center justify-between mb-4">
-                    <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-                      programa.nivel === 'Máster' ? 'bg-lidera-light-blue/10 text-lidera-light-blue' :
-                      programa.nivel === 'Experto' ? 'bg-green-100 text-green-800' :
-                      'bg-purple-100 text-purple-800'
+                    <span className={`px-4 py-2 text-xs font-medium uppercase tracking-wider ${
+                      programa.nivel === 'Máster' ? 'bg-gray-100 text-gray-700 border border-gray-300' :
+                      programa.nivel === 'Experto' ? 'bg-slate-100 text-slate-700 border border-slate-300' :
+                      'bg-stone-100 text-stone-700 border border-stone-300'
                     }`}>
                       {programa.nivel}
                     </span>
-                    <Award className="h-6 w-6 text-lidera-light-blue" />
                   </div>
                   
                   <h3 className="text-xl font-bold text-gray-900 mb-3">
@@ -279,7 +272,7 @@ const Formacion = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-gray-900 to-gray-800 text-white">
+      <section className="py-20 bg-gradient-to-r from-blue-900 to-indigo-900 text-white">
         <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl md:text-4xl font-bold mb-6">
             ¿Listo para Transformar tu Carrera?
@@ -297,6 +290,7 @@ const Formacion = () => {
           </div>
         </div>
       </section>
+      <Footer />
     </div>
   );
 };

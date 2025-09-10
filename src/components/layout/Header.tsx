@@ -25,7 +25,7 @@ const Header: React.FC<HeaderProps> = ({ currentRole, onRoleChange }) => {
               <span>Inicio</span>
             </a>
             <a href="/courses" className="text-gray-700 hover:text-blue-600 transition-colors">Cursos</a>
-            <a href="#" className="text-gray-700 hover:text-blue-600 transition-colors">Formación</a>
+            <a href="/formacion" className="text-gray-700 hover:text-blue-600 transition-colors">Formación</a>
             <a href="/viajes-y-talleres" className="text-gray-700 hover:text-blue-600 transition-colors">Viajes y Talleres</a>
             <a href="/testimonios" className="text-gray-700 hover:text-blue-600 transition-colors">Testimonios</a>
             <a href="/contact" className="text-gray-700 hover:text-blue-600 transition-colors">Contacto</a>
@@ -93,7 +93,7 @@ const Header: React.FC<HeaderProps> = ({ currentRole, onRoleChange }) => {
                 Inicio
               </a>
               <a href="/courses" className="block text-gray-700 hover:text-lidera-light-blue transition-colors">Cursos</a>
-              <a href="#" className="block text-gray-700 hover:text-lidera-light-blue transition-colors">Formación</a>
+              <a href="/formacion" className="block text-gray-700 hover:text-lidera-light-blue transition-colors">Formación</a>
               <a href="/viajes-y-talleres" className="block text-gray-700 hover:text-lidera-light-blue transition-colors">Viajes y Talleres</a>
               <a href="/testimonios" className="block text-gray-700 hover:text-lidera-light-blue transition-colors">Testimonios</a>
               <a href="/contact" className="block text-gray-700 hover:text-lidera-light-blue transition-colors">Contacto</a>

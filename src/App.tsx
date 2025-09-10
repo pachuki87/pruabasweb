@@ -31,6 +31,8 @@ import MasterAdiccionesPage from './pages/MasterAdiccionesPage'; // Import the n
 import ExpertoConductasPage from './pages/ExpertoConductasPage'; // Import the experto page
 import PaymentPage from './pages/PaymentPage'; // Import the payment page
 import Formacion from './components/Formacion';
+import TestimoniosPage from './pages/TestimoniosPage';
+import ViajesYTalleresPage from './pages/ViajesYTalleresPage';
 
 // Dashboard Pages
 import DashboardPage from './pages/dashboard/DashboardPage';
@@ -132,6 +134,8 @@ function App() {
           <Route path="/faqs" element={<FaqsPage currentRole={currentRole} onRoleChange={handleRoleChange} />} />
           <Route path="/courses" element={<CoursesPage currentRole={currentRole} onRoleChange={handleRoleChange} />} />
           <Route path="/formacion" element={<Formacion />} />
+          <Route path="/testimonios" element={<TestimoniosPage />} />
+          <Route path="/viajes-talleres" element={<ViajesYTalleresPage />} />
           <Route path="/master-adicciones-intervencion" element={<MasterAdiccionesPage />} />
           <Route path="/experto-conductas-adictivas" element={<ExpertoConductasPage />} />
           <Route path="/payment" element={<PaymentPage />} />

@@ -15,18 +15,39 @@ interface CourseData {
 const PaymentPage: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { emptyCart } = useCart();
+  const { emptyCart, items, cartTotal, totalUniqueItems } = useCart();
   const [paymentCompleted, setPaymentCompleted] = useState(false);
   const [paymentData, setPaymentData] = useState<any>(null);
+
+  // Determinar si es checkout del carrito o curso individual
+  const isCartCheckout = location.state?.isCartCheckout || false;
 
   // Datos del curso (normalmente vendrían de la navegación o API)
   const courseData: CourseData = location.state?.courseData || {
     id: 'master-adicciones',
     name: 'Máster en Adicciones e Intervención Familiar',
-    price: 2500,
+    price: 29700, // precio en centavos
     duration: '12 meses',
     description: 'Formación especializada en tratamiento y prevención de adicciones'
   };
+
+  // Datos del carrito
+  const cartData = {
+    items: items,
+    total: cartTotal,
+    itemCount: totalUniqueItems
+  };
+
+  // Datos a mostrar según el tipo de checkout
+  const displayData = isCartCheckout ? {
+    name: `${cartData.itemCount} curso(s)`,
+    price: cartData.total,
+    duration: 'Varios',
+    description: 'Cursos seleccionados del carrito'
+  } : courseData;
+
+  // Monto total para el pago
+  const totalAmount = isCartCheckout ? cartData.total : courseData.price;
 
   const handlePaymentSuccess = (data: any) => {
     setPaymentData(data);

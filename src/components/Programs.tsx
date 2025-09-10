@@ -8,7 +8,7 @@ const Programs = () => {
       subtitle: "82 ESTUDIANTES",
       programs: ["Neurobiología de las Adicciones", "Intervención Psicosocial", "Terapias Especializadas", "Prevención y Rehabilitación"],
       color: "bg-lidera-light-blue",
-      link: "/master-adicciones-intervencion",
+      link: "https://academialidera.es",
       image: "https://images.pexels.com/photos/1438072/pexels-photo-1438072.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop"
     },
     {
@@ -47,6 +47,8 @@ const Programs = () => {
                 <a
                   key={index}
                   href={program.link}
+                  target={program.link.startsWith('http') ? '_blank' : '_self'}
+                  rel={program.link.startsWith('http') ? 'noopener noreferrer' : undefined}
                   className={`${program.color} text-white rounded-2xl overflow-hidden hover:scale-105 transition-transform cursor-pointer group block`}
                 >
                   <div className="relative h-32 overflow-hidden">

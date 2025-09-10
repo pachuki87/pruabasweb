@@ -5,6 +5,7 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { CartProvider } from 'react-use-cart';
 import { supabase, getUserById, getUsers } from './lib/supabase'; // Import supabase, getUsers
 import { AuthProvider } from './contexts/AuthContext';
+import CookieConsent from './components/CookieConsent';
 
 // Layouts
 import DashboardLayout from './components/layout/DashboardLayout';
@@ -120,6 +121,7 @@ function App() {
     <AuthProvider>
       <CartProvider>
         <Toaster position="top-right" />
+        <CookieConsent />
         
         <BrowserRouter
           future={{

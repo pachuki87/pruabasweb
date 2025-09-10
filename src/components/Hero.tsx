@@ -79,11 +79,18 @@ const Hero = () => {
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Logo grande */}
         <div className="text-center mb-12">
-          <img 
-            src={lideraLogo}
-            alt="Instituto Lidera"
-            className="h-64 w-auto mx-auto mb-4"
-          />
+          <a 
+            href="https://academialidera.es" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="inline-block cursor-pointer hover:opacity-80 transition-opacity"
+          >
+            <img 
+              src={lideraLogo}
+              alt="Instituto Lidera"
+              className="h-64 w-auto mx-auto mb-4"
+            />
+          </a>
         </div>
         
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">

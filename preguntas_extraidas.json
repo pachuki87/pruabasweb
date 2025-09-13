@@ -1,0 +1,362 @@
+{
+  "modulo_1": {
+    "nombre": "– Fundamentos del programa",
+    "numero": 1,
+    "preguntas_abiertas": [
+      {
+        "texto": "Cómo afecta la farmacoterapia en el proceso de recuperación?",
+        "tipo": "texto_libre",
+        "modulo": "– Fundamentos del programa",
+        "pagina_aproximada": 0
+      },
+      {
+        "texto": "Cuáles son las fases principales de un programa terapéutico en adicciones?",
+        "tipo": "texto_libre",
+        "modulo": "– Fundamentos del programa",
+        "pagina_aproximada": 0
+      },
+      {
+        "texto": "Qué papel cumple el entorno en el proceso de recuperación del paciente?",
+        "tipo": "texto_libre",
+        "modulo": "– Fundamentos del programa",
+        "pagina_aproximada": 0
+      }
+    ],
+    "preguntas_cuestionario": [
+      {
+        "texto": "s Abiertas",
+        "tipo": "multiple_choice",
+        "modulo": "– Fundamentos del programa",
+        "pagina_aproximada": 0
+      }
+    ]
+  },
+  "modulo_2": {
+    "nombre": "– Terapia cognitiva de las",
+    "numero": 2,
+    "preguntas_abiertas": [
+      {
+        "texto": "Qué beneficios aporta Mindfulness en el tratamiento de adicciones?",
+        "tipo": "texto_libre",
+        "modulo": "– Terapia cognitiva de las",
+        "pagina_aproximada": 1
+      }
+    ],
+    "preguntas_cuestionario": [
+      {
+        "texto": "es un enfoque central en adicciones. (V/F)",
+        "tipo": "multiple_choice",
+        "modulo": "– Terapia cognitiva de las",
+        "pagina_aproximada": 1
+      },
+      {
+        "texto": "no se aplica en adicciones. (V/F)",
+        "tipo": "multiple_choice",
+        "modulo": "– Terapia cognitiva de las",
+        "pagina_aproximada": 1
+      },
+      {
+        "texto": "s Abiertas",
+        "tipo": "multiple_choice",
+        "modulo": "– Terapia cognitiva de las",
+        "pagina_aproximada": 0
+      },
+      {
+        "texto": "aplicados a las adicciones.",
+        "tipo": "multiple_choice",
+        "modulo": "– Terapia cognitiva de las",
+        "pagina_aproximada": 1
+      },
+      {
+        "texto": "En qué consiste la Terapia de Aceptación y Compromiso (ACT)?",
+        "tipo": "multiple_choice",
+        "modulo": "– Terapia cognitiva de las",
+        "pagina_aproximada": 1
+      },
+      {
+        "texto": "?",
+        "tipo": "multiple_choice",
+        "modulo": "– Terapia cognitiva de las",
+        "pagina_aproximada": 1
+      },
+      {
+        "texto": "Qué es el modelo transteórico del cambio y cómo se aplica en adicciones?",
+        "tipo": "multiple_choice",
+        "modulo": "– Terapia cognitiva de las",
+        "pagina_aproximada": 1
+      },
+      {
+        "texto": "Reducir impulsividad b) Aumentar la conciencia",
+        "tipo": "multiple_choice",
+        "modulo": "– Terapia cognitiva de las",
+        "pagina_aproximada": 1
+      },
+      {
+        "texto": "Incrementar el estrés d) Favorecer la autorregulación emocional",
+        "tipo": "multiple_choice",
+        "modulo": "– Terapia cognitiva de las",
+        "pagina_aproximada": 1
+      }
+    ]
+  },
+  "modulo_3": {
+    "nombre": "– Familia y trabajo en equipo",
+    "numero": 3,
+    "preguntas_abiertas": [
+      {
+        "texto": "Qué papel juegan las lealtades familiares en la adicción?",
+        "tipo": "texto_libre",
+        "modulo": "– Familia y trabajo en equipo",
+        "pagina_aproximada": 2
+      },
+      {
+        "texto": "Qué aportes tiene el enfoque sistémico al tratamiento de las adicciones?",
+        "tipo": "texto_libre",
+        "modulo": "– Familia y trabajo en equipo",
+        "pagina_aproximada": 2
+      },
+      {
+        "texto": "Qué importancia tienen los roles y reglas familiares en el proceso de recuperación?",
+        "tipo": "texto_libre",
+        "modulo": "– Familia y trabajo en equipo",
+        "pagina_aproximada": 2
+      }
+    ],
+    "preguntas_cuestionario": [
+      {
+        "texto": "s Abiertas",
+        "tipo": "multiple_choice",
+        "modulo": "– Familia y trabajo en equipo",
+        "pagina_aproximada": 0
+      }
+    ]
+  },
+  "modulo_4": {
+    "nombre": "– Recovery Coaching en adicciones",
+    "numero": 4,
+    "preguntas_abiertas": [
+      {
+        "texto": "Qué técnicas se pueden aplicar para prevenir el burnout en profesionales de la salud?",
+        "tipo": "texto_libre",
+        "modulo": "– Recovery Coaching en adicciones",
+        "pagina_aproximada": 3
+      },
+      {
+        "texto": "Cómo se maneja la contratransferencia en la práctica clínica?",
+        "tipo": "texto_libre",
+        "modulo": "– Recovery Coaching en adicciones",
+        "pagina_aproximada": 3
+      },
+      {
+        "texto": "Qué principios éticos debe cumplir el Recovery Coaching?",
+        "tipo": "texto_libre",
+        "modulo": "– Recovery Coaching en adicciones",
+        "pagina_aproximada": 3
+      },
+      {
+        "texto": "Qué diferencia hay entre supervisión clínica y coaching emocional?",
+        "tipo": "texto_libre",
+        "modulo": "– Recovery Coaching en adicciones",
+        "pagina_aproximada": 3
+      }
+    ],
+    "preguntas_cuestionario": [
+      {
+        "texto": "s Abiertas",
+        "tipo": "multiple_choice",
+        "modulo": "– Recovery Coaching en adicciones",
+        "pagina_aproximada": 0
+      }
+    ]
+  },
+  "modulo_5": {
+    "nombre": "– Psicología aplicada a las adicciones",
+    "numero": 5,
+    "preguntas_abiertas": [
+      {
+        "texto": "Qué importancia tiene la psicoeducación en el acompañamiento a pacientes y familias?",
+        "tipo": "texto_libre",
+        "modulo": "– Psicología aplicada a las adicciones",
+        "pagina_aproximada": 4
+      },
+      {
+        "texto": "Qué es la psicoeducación y cómo beneficia al paciente y su familia?",
+        "tipo": "texto_libre",
+        "modulo": "– Psicología aplicada a las adicciones",
+        "pagina_aproximada": 4
+      },
+      {
+        "texto": "Por qué es importante evaluar comorbilidades psicológicas en el tratamiento?",
+        "tipo": "texto_libre",
+        "modulo": "– Psicología aplicada a las adicciones",
+        "pagina_aproximada": 4
+      }
+    ],
+    "preguntas_cuestionario": [
+      {
+        "texto": "s Abiertas",
+        "tipo": "multiple_choice",
+        "modulo": "– Psicología aplicada a las adicciones",
+        "pagina_aproximada": 0
+      }
+    ]
+  },
+  "modulo_6": {
+    "nombre": "– Intervención familiar y Recovery",
+    "numero": 6,
+    "preguntas_abiertas": [
+      {
+        "texto": "Qué papel puede tener la familia como soporte en la recuperación?",
+        "tipo": "texto_libre",
+        "modulo": "– Intervención familiar y Recovery",
+        "pagina_aproximada": 5
+      },
+      {
+        "texto": "Qué beneficios aporta el Recovery Mentoring al acompañamiento terapéutico?",
+        "tipo": "texto_libre",
+        "modulo": "– Intervención familiar y Recovery",
+        "pagina_aproximada": 5
+      },
+      {
+        "texto": "Qué rol cumplen los mentores o pares en la recuperación?",
+        "tipo": "texto_libre",
+        "modulo": "– Intervención familiar y Recovery",
+        "pagina_aproximada": 5
+      }
+    ],
+    "preguntas_cuestionario": [
+      {
+        "texto": "avorece la recuperación. (V/F)",
+        "tipo": "multiple_choice",
+        "modulo": "– Intervención familiar y Recovery",
+        "pagina_aproximada": 5
+      },
+      {
+        "texto": "s Abiertas",
+        "tipo": "multiple_choice",
+        "modulo": "– Intervención familiar y Recovery",
+        "pagina_aproximada": 0
+      }
+    ]
+  },
+  "modulo_7": {
+    "nombre": "– Nuevos modelos terapéuticos",
+    "numero": 7,
+    "preguntas_abiertas": [
+      {
+        "texto": "Qué utilidad tiene la técnica de la ventana de Johari en el tratamiento de adicciones?",
+        "tipo": "texto_libre",
+        "modulo": "– Nuevos modelos terapéuticos",
+        "pagina_aproximada": 6
+      },
+      {
+        "texto": "Cómo pueden las técnicas de integración emocional favorecer la recuperación?",
+        "tipo": "texto_libre",
+        "modulo": "– Nuevos modelos terapéuticos",
+        "pagina_aproximada": 6
+      },
+      {
+        "texto": "Cómo se aplica la ventana de Johari en el proceso de autoconocimiento del paciente?",
+        "tipo": "texto_libre",
+        "modulo": "– Nuevos modelos terapéuticos",
+        "pagina_aproximada": 6
+      },
+      {
+        "texto": "Qué relación tiene el 'niño interior' con el trabajo terapéutico del trauma?",
+        "tipo": "texto_libre",
+        "modulo": "– Nuevos modelos terapéuticos",
+        "pagina_aproximada": 6
+      }
+    ],
+    "preguntas_cuestionario": [
+      {
+        "texto": "s Abiertas",
+        "tipo": "multiple_choice",
+        "modulo": "– Nuevos modelos terapéuticos",
+        "pagina_aproximada": 0
+      }
+    ]
+  },
+  "modulo_8": {
+    "nombre": "– Gestión de las adicciones desde la",
+    "numero": 8,
+    "preguntas_abiertas": [
+      {
+        "texto": "Qué impacto tienen las violencias asociadas en la recuperación de mujeres?",
+        "tipo": "texto_libre",
+        "modulo": "– Gestión de las adicciones desde la",
+        "pagina_aproximada": 7
+      },
+      {
+        "texto": "Qué diferencias existen en el consumo de sustancias entre hombres y mujeres?",
+        "tipo": "texto_libre",
+        "modulo": "– Gestión de las adicciones desde la",
+        "pagina_aproximada": 7
+      },
+      {
+        "texto": "Qué entendemos por masculinidades y adicción?",
+        "tipo": "texto_libre",
+        "modulo": "– Gestión de las adicciones desde la",
+        "pagina_aproximada": 7
+      }
+    ],
+    "preguntas_cuestionario": [
+      {
+        "texto": "s Abiertas",
+        "tipo": "multiple_choice",
+        "modulo": "– Gestión de las adicciones desde la",
+        "pagina_aproximada": 0
+      },
+      {
+        "texto": "Violencia doméstica b) Redes de apoyo",
+        "tipo": "multiple_choice",
+        "modulo": "– Gestión de las adicciones desde la",
+        "pagina_aproximada": 7
+      },
+      {
+        "texto": "Estigmatización social d) Acceso a tratamiento especializado",
+        "tipo": "multiple_choice",
+        "modulo": "– Gestión de las adicciones desde la",
+        "pagina_aproximada": 7
+      }
+    ]
+  },
+  "modulo_9": {
+    "nombre": "– Inteligencia emocional",
+    "numero": 9,
+    "preguntas_abiertas": [
+      {
+        "texto": "Qué cambios emocionales pueden observarse en personas con adicciones?",
+        "tipo": "texto_libre",
+        "modulo": "– Inteligencia emocional",
+        "pagina_aproximada": 8
+      },
+      {
+        "texto": "Qué estructuras cerebrales están implicadas en la adicción?",
+        "tipo": "texto_libre",
+        "modulo": "– Inteligencia emocional",
+        "pagina_aproximada": 8
+      },
+      {
+        "texto": "De qué manera la gestión emocional influye en la conducta de una persona con adicciones?",
+        "tipo": "texto_libre",
+        "modulo": "– Inteligencia emocional",
+        "pagina_aproximada": 8
+      },
+      {
+        "texto": "Qué relación existe entre los cambios en la personalidad y el aprendizaje en este contexto?",
+        "tipo": "texto_libre",
+        "modulo": "– Inteligencia emocional",
+        "pagina_aproximada": 8
+      }
+    ],
+    "preguntas_cuestionario": [
+      {
+        "texto": "s Abiertas",
+        "tipo": "multiple_choice",
+        "modulo": "– Inteligencia emocional",
+        "pagina_aproximada": 0
+      }
+    ]
+  }
+}

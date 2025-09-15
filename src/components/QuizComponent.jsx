@@ -64,20 +64,50 @@ const QuizComponent = ({ leccionId, courseId, onQuizComplete }) => {
         .select(`
           *,
           preguntas (
-            *,
-            opciones_respuesta (*)
+            *
           )
         `)
         .eq('leccion_id', leccionId)
         .order('creado_en');
 
-      // Ordenar las opciones de respuesta por el campo 'orden'
+      // Convertir las columnas de opciones a formato de opciones_respuesta
       if (cuestionariosData) {
         cuestionariosData.forEach(cuestionario => {
           if (cuestionario.preguntas) {
             cuestionario.preguntas.forEach(pregunta => {
-              if (pregunta.opciones_respuesta) {
-                pregunta.opciones_respuesta.sort((a, b) => a.orden - b.orden);
+              // Crear opciones_respuesta desde las columnas opcion_a, opcion_b, etc.
+              pregunta.opciones_respuesta = [];
+              
+              if (pregunta.opcion_a) {
+                pregunta.opciones_respuesta.push({
+                  id: `${pregunta.id}_a`,
+                  opcion: pregunta.opcion_a,
+                  es_correcta: pregunta.respuesta_correcta === 'a'
+                });
+              }
+              
+              if (pregunta.opcion_b) {
+                pregunta.opciones_respuesta.push({
+                  id: `${pregunta.id}_b`,
+                  opcion: pregunta.opcion_b,
+                  es_correcta: pregunta.respuesta_correcta === 'b'
+                });
+              }
+              
+              if (pregunta.opcion_c) {
+                pregunta.opciones_respuesta.push({
+                  id: `${pregunta.id}_c`,
+                  opcion: pregunta.opcion_c,
+                  es_correcta: pregunta.respuesta_correcta === 'c'
+                });
+              }
+              
+              if (pregunta.opcion_d) {
+                pregunta.opciones_respuesta.push({
+                  id: `${pregunta.id}_d`,
+                  opcion: pregunta.opcion_d,
+                  es_correcta: pregunta.respuesta_correcta === 'd'
+                });
               }
             });
           }
@@ -465,7 +495,7 @@ const QuizComponent = ({ leccionId, courseId, onQuizComplete }) => {
 
       {preguntaActual && (
         <div className="question-container">
-          <h3 className="question-text">{preguntaActual.texto}</h3>
+          <h3 className="question-text">{preguntaActual.pregunta}</h3>
           
           <div className="options-container">
             {preguntaActual.opciones_respuesta?.map((opcion, index) => (

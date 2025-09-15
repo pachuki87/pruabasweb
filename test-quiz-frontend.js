@@ -50,7 +50,7 @@ async function testQuizAttemptPage() {
       .from('preguntas')
       .select(`
         *,
-        opciones_respuesta (*)
+        opciones_respuesta (id, opcion, es_correcta, pregunta_id)
       `)
       .eq('cuestionario_id', quizId)
       .order('orden');
@@ -67,6 +67,9 @@ async function testQuizAttemptPage() {
       if (questionsData && questionsData.length > 0) {
         console.log('Primera pregunta:', questionsData[0].pregunta);
         console.log('Opciones de la primera pregunta:', questionsData[0].opciones_respuesta?.length || 0);
+        if (questionsData[0].opciones_respuesta && questionsData[0].opciones_respuesta.length > 0) {
+          console.log('Texto de la primera opción:', questionsData[0].opciones_respuesta[0].opcion);
+        }
       }
     }
 

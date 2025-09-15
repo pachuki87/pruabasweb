@@ -99,7 +99,7 @@ const QuizAttemptPage: React.FC = () => {
       .from('preguntas')
       .select(`
         *,
-        opciones_respuesta (*)
+        opciones_respuesta (id, opcion, es_correcta, orden, pregunta_id)
       `)
       .eq('cuestionario_id', quizId)
       .order('orden');

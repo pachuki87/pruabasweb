@@ -97,7 +97,7 @@ const AssignCoursesToStudent: React.FC = () => {
 
       // Insert new assignments
       if (assignedCourseIds.length > 0) {
-        const assignmentsToInsert = selectedCourseIds.map(courseId => ({
+        const assignmentsToInsert = assignedCourseIds.map(courseId => ({
           user_id: studentId,
           curso_id: courseId
         }));

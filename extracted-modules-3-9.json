@@ -1,0 +1,373 @@
+{
+  "3": {
+    "title": "EVALUACIÓN Y DIAGNÓSTICO EN ADICCIONES",
+    "questions": [
+      {
+        "number": 1,
+        "text": "¿Cuál es el primer paso en la evaluación de un paciente con problemas de adicción?",
+        "type": "multiple_choice",
+        "options": [
+          {
+            "letter": "a",
+            "text": "Realizar pruebas de laboratorio"
+          },
+          {
+            "letter": "b",
+            "text": "Establecer una relación terapéutica"
+          },
+          {
+            "letter": "c",
+            "text": "Aplicar cuestionarios estandarizados"
+          },
+          {
+            "letter": "d",
+            "text": "Derivar a otros especialistas"
+          }
+        ],
+        "correctAnswer": "a"
+      },
+      {
+        "number": 2,
+        "text": "El DSM-5 clasifica los trastornos por uso de sustancias en:\na) Leve, moderado y grave\nb) Agudo y crónico\nc) Primario y secundario\nd) Físico y psicológico\n\n3. ¿Qué instrumento es más utilizado para evaluar la gravedad de la dependencia alcohólica?",
+        "type": "multiple_choice",
+        "options": [
+          {
+            "letter": "a",
+            "text": "CAGE"
+          },
+          {
+            "letter": "b",
+            "text": "AUDIT"
+          },
+          {
+            "letter": "c",
+            "text": "MAST"
+          },
+          {
+            "letter": "d",
+            "text": "Todos los anteriores"
+          }
+        ],
+        "correctAnswer": "a"
+      }
+    ]
+  },
+  "4": {
+    "title": "NEUROBIOLOGÍA DE LAS ADICCIONES",
+    "questions": [
+      {
+        "number": 1,
+        "text": "¿Qué neurotransmisor está más implicado en el sistema de recompensa cerebral?",
+        "type": "multiple_choice",
+        "options": [
+          {
+            "letter": "a",
+            "text": "Serotonina"
+          },
+          {
+            "letter": "b",
+            "text": "Dopamina"
+          },
+          {
+            "letter": "c",
+            "text": "GABA"
+          },
+          {
+            "letter": "d",
+            "text": "Acetilcolina"
+          }
+        ],
+        "correctAnswer": "a"
+      },
+      {
+        "number": 2,
+        "text": "El circuito de recompensa cerebral incluye principalmente:\na) Área tegmental ventral y núcleo accumbens\nb) Hipocampo y amígdala\nc) Corteza prefrontal y cerebelo\nd) Tálamo y hipotálamo\n\n3. La tolerancia a una sustancia se debe a:\na) Cambios en los receptores cerebrales\nb) Aumento del metabolismo\nc) Adaptación neuronal\nd) Todas las anteriores\n\n4. ¿Qué área cerebral está más afectada en la toma de decisiones en personas con adicción?",
+        "type": "multiple_choice",
+        "options": [
+          {
+            "letter": "a",
+            "text": "Corteza prefrontal"
+          },
+          {
+            "letter": "b",
+            "text": "Cerebelo"
+          },
+          {
+            "letter": "c",
+            "text": "Tronco encefálico"
+          },
+          {
+            "letter": "d",
+            "text": "Lóbulo temporal"
+          }
+        ],
+        "correctAnswer": "a"
+      }
+    ]
+  },
+  "5": {
+    "title": "TRATAMIENTO FARMACOLÓGICO",
+    "questions": [
+      {
+        "number": 1,
+        "text": "¿Cuál es el fármaco de primera elección para el tratamiento de mantenimiento en la dependencia de opiáceos?",
+        "type": "multiple_choice",
+        "options": [
+          {
+            "letter": "a",
+            "text": "Naloxona"
+          },
+          {
+            "letter": "b",
+            "text": "Metadona"
+          },
+          {
+            "letter": "c",
+            "text": "Buprenorfina"
+          },
+          {
+            "letter": "d",
+            "text": "B y C son correctas"
+          }
+        ],
+        "correctAnswer": "a"
+      },
+      {
+        "number": 2,
+        "text": "El disulfiram actúa:\na) Bloqueando receptores de dopamina\nb) Inhibiendo la aldehído deshidrogenasa\nc) Aumentando la serotonina\nd) Reduciendo la ansiedad\n\n3. ¿Qué medicamento se utiliza para prevenir recaídas en alcoholismo?",
+        "type": "multiple_choice",
+        "options": [
+          {
+            "letter": "a",
+            "text": "Naltrexona"
+          },
+          {
+            "letter": "b",
+            "text": "Acamprosato"
+          },
+          {
+            "letter": "c",
+            "text": "Disulfiram"
+          },
+          {
+            "letter": "d",
+            "text": "Todas las anteriores"
+          }
+        ],
+        "correctAnswer": "a"
+      }
+    ]
+  },
+  "6": {
+    "title": "PREVENCIÓN DE RECAÍDAS",
+    "questions": [
+      {
+        "number": 1,
+        "text": "El modelo de prevención de recaídas de Marlatt se basa en:\na) Identificar situaciones de alto riesgo\nb) Desarrollar estrategias de afrontamiento\nc) Modificar expectativas sobre el consumo\nd) Todas las anteriores\n\n2. ¿Qué es el \"efecto de violación de la abstinencia\"?",
+        "type": "multiple_choice",
+        "options": [
+          {
+            "letter": "a",
+            "text": "Una recaída completa tras un consumo puntual"
+          },
+          {
+            "letter": "b",
+            "text": "La culpa que siente el paciente tras consumir"
+          },
+          {
+            "letter": "c",
+            "text": "El proceso cognitivo que lleva de un lapsus a una recaída"
+          },
+          {
+            "letter": "d",
+            "text": "La pérdida de motivación para el tratamiento"
+          }
+        ],
+        "correctAnswer": "a"
+      },
+      {
+        "number": 3,
+        "text": "Las situaciones de alto riesgo más comunes incluyen:\na) Estados emocionales negativos\nb) Presión social\nc) Estados emocionales positivos\nd) Todas las anteriores\n\n4. ¿Cuál es la diferencia entre un lapsus y una recaída?",
+        "type": "multiple_choice",
+        "options": [
+          {
+            "letter": "a",
+            "text": "No hay diferencia, son sinónimos"
+          },
+          {
+            "letter": "b",
+            "text": "El lapsus es un consumo puntual, la recaída es volver al patrón anterior"
+          },
+          {
+            "letter": "c",
+            "text": "El lapsus es más grave que la recaída"
+          },
+          {
+            "letter": "d",
+            "text": "Depende de la sustancia consumida"
+          }
+        ],
+        "correctAnswer": "a"
+      }
+    ]
+  },
+  "7": {
+    "title": "ADICCIONES COMPORTAMENTALES",
+    "questions": [
+      {
+        "number": 1,
+        "text": "¿Cuál de las siguientes NO es considerada una adicción comportamental en el DSM-5?",
+        "type": "multiple_choice",
+        "options": [
+          {
+            "letter": "a",
+            "text": "Juego patológico"
+          },
+          {
+            "letter": "b",
+            "text": "Adicción a internet"
+          },
+          {
+            "letter": "c",
+            "text": "Trastorno por atracón"
+          },
+          {
+            "letter": "d",
+            "text": "Adicción al sexo"
+          }
+        ],
+        "correctAnswer": "a"
+      },
+      {
+        "number": 2,
+        "text": "El juego patológico se caracteriza por:\na) Necesidad de apostar cantidades crecientes\nb) Irritabilidad al intentar reducir el juego\nc) Mentir sobre la extensión del juego\nd) Todas las anteriores\n\n3. ¿Qué neurotransmisor está más implicado en las adicciones comportamentales?",
+        "type": "multiple_choice",
+        "options": [
+          {
+            "letter": "a",
+            "text": "Dopamina"
+          },
+          {
+            "letter": "b",
+            "text": "Serotonina"
+          },
+          {
+            "letter": "c",
+            "text": "Noradrenalina"
+          },
+          {
+            "letter": "d",
+            "text": "GABA"
+          }
+        ],
+        "correctAnswer": "a"
+      }
+    ]
+  },
+  "8": {
+    "title": "ADICCIONES EN POBLACIONES ESPECIALES",
+    "questions": [
+      {
+        "number": 1,
+        "text": "¿Cuál es la principal diferencia en el tratamiento de adicciones en adolescentes?",
+        "type": "multiple_choice",
+        "options": [
+          {
+            "letter": "a",
+            "text": "Mayor duración del tratamiento"
+          },
+          {
+            "letter": "b",
+            "text": "Enfoque más familiar y sistémico"
+          },
+          {
+            "letter": "c",
+            "text": "Uso de medicación específica"
+          },
+          {
+            "letter": "d",
+            "text": "Internamiento obligatorio"
+          }
+        ],
+        "correctAnswer": "a"
+      },
+      {
+        "number": 2,
+        "text": "En mujeres embarazadas con dependencia de opiáceos, el tratamiento recomendado es:\na) Desintoxicación inmediata\nb) Tratamiento de mantenimiento con metadona\nc) Abstinencia completa\nd) Esperar al parto para iniciar tratamiento\n\n3. ¿Qué factor es más importante en el desarrollo de adicciones en adolescentes?",
+        "type": "multiple_choice",
+        "options": [
+          {
+            "letter": "a",
+            "text": "Factores genéticos"
+          },
+          {
+            "letter": "b",
+            "text": "Presión de pares"
+          },
+          {
+            "letter": "c",
+            "text": "Disponibilidad de sustancias"
+          },
+          {
+            "letter": "d",
+            "text": "Problemas familiares"
+          }
+        ],
+        "correctAnswer": "a"
+      }
+    ]
+  },
+  "9": {
+    "title": "ASPECTOS LEGALES Y ÉTICOS",
+    "questions": [
+      {
+        "number": 1,
+        "text": "¿Cuál es el principio ético fundamental en el tratamiento de adicciones?",
+        "type": "multiple_choice",
+        "options": [
+          {
+            "letter": "a",
+            "text": "Beneficencia"
+          },
+          {
+            "letter": "b",
+            "text": "Autonomía"
+          },
+          {
+            "letter": "c",
+            "text": "Justicia"
+          },
+          {
+            "letter": "d",
+            "text": "No maleficencia"
+          }
+        ],
+        "correctAnswer": "a"
+      },
+      {
+        "number": 2,
+        "text": "La confidencialidad en el tratamiento de adicciones:\na) Es absoluta en todos los casos\nb) Puede romperse si hay riesgo para terceros\nc) No aplica en casos de menores\nd) Depende del tipo de sustancia\n\n3. ¿En qué casos es obligatorio el tratamiento de adicciones?",
+        "type": "multiple_choice",
+        "options": [
+          {
+            "letter": "a",
+            "text": "Nunca, siempre es voluntario"
+          },
+          {
+            "letter": "b",
+            "text": "Cuando hay orden judicial"
+          },
+          {
+            "letter": "c",
+            "text": "En casos de violencia doméstica"
+          },
+          {
+            "letter": "d",
+            "text": "B y C son correctas"
+          }
+        ],
+        "correctAnswer": "a"
+      }
+    ]
+  }
+}

@@ -518,10 +518,12 @@ const QuizComponent = ({ leccionId, courseId, onQuizComplete }) => {
           .from('intentos_cuestionario')
           .update({
             puntuacion: puntuacionObtenida,
-            porcentaje: porcentajeAcierto,
-            tiempo_completado: Math.round(tiempoTotal / 60), // convertir a minutos
-            completado: true,
-            fecha_completado: new Date().toISOString()
+            puntuacion_maxima: preguntas.length * 100, // puntuación máxima posible
+            tiempo_transcurrido: Math.round(tiempoTotal), // tiempo en segundos
+            estado: 'completado',
+            aprobado: aprobado,
+            fecha_completado: new Date().toISOString(),
+            respuestas_guardadas: respuestasDetalladas || {}
           })
           .eq('id', intentoId);
 

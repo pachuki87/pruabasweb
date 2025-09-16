@@ -6,10 +6,28 @@ const supabase = createClient(
   process.env.VITE_SUPABASE_ANON_KEY
 );
 
-async function completeQuizOptions() {
-  console.log('🔍 Analizando preguntas de opción múltiple sin opciones...');
-  
+async function completeQuizOptions(convertTextFree = false, specificQuizIds = null) {
   try {
+    console.log('🔍 Analizando cuestionarios...');
+    
+    // Obtener cuestionarios específicos o todos
+    let query = supabase
+      .from('cuestionarios')
+      .select('id, titulo, curso_id');
+    
+    if (specificQuizIds) {
+      query = query.in('id', specificQuizIds);
+    }
+    
+    const { data: cuestionarios, error: quizError } = await query;
+    
+    if (quizError) {
+      console.error('❌ Error al obtener cuestionarios:', quizError);
+      return;
+    }
+
+    console.log(`📊 Encontrados ${cuestionarios.length} cuestionarios`);
+
     // Obtener todas las preguntas de opción múltiple sin opciones válidas
     const { data: preguntas, error } = await supabase
       .from('preguntas')
@@ -151,12 +169,21 @@ async function convertTextToMultiple() {
 async function main() {
   console.log('🚀 Iniciando proceso de completar opciones de cuestionarios...');
   
-  // Primero completar opciones faltantes
-  await completeQuizOptions();
+  // Ejecutar el script
+  const convertTextFree = process.argv.includes('--convert-text');
+  const masterOnly = process.argv.includes('--master-only');
+
+  if (masterOnly) {
+    // IDs específicos del Máster en Adicciones
+    const masterQuizIds = ['7a52daad-db71-4cb5-8701-967fffbb6966', '73571904-d8e5-41ee-9485-60d4996819a8'];
+    console.log('🎯 Modo específico: Solo cuestionarios del Máster en Adicciones');
+    await completeQuizOptions(convertTextFree, masterQuizIds);
+  } else {
+    await completeQuizOptions(convertTextFree);
+  }
   
   // Luego convertir preguntas de texto libre (opcional)
-  const convertir = process.argv.includes('--convert-text');
-  if (convertir) {
+  if (convertTextFree) {
     await convertTextToMultiple();
   } else {
     console.log('\n💡 Para convertir preguntas de texto libre a opción múltiple, ejecuta:');

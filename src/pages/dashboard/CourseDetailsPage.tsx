@@ -26,6 +26,7 @@ type Lesson = {
 type Material = {
   name: string;
   url: string;
+  url_archivo: string;
 };
 
 type CourseDetailsPageProps = {
@@ -114,6 +115,7 @@ const CourseDetailsPage: React.FC<CourseDetailsPageProps> = ({ role }) => {
       // Transform materials data to match expected format
       const transformedMaterials = (data || []).map(material => ({
         name: material.titulo || 'Material sin nombre',
+        url: material.url_archivo || '#',
         url_archivo: material.url_archivo || '#'
       }));
 

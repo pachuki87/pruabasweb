@@ -451,7 +451,7 @@ const QuizComponent = ({ leccionId, courseId, onQuizComplete }) => {
         puntuacion: puntuacion,
         total_preguntas: totalPreguntas,
         respuestas_correctas: respuestasCorrectas,
-        completado: true,
+        estado: 'completado',
         iniciado_en: startTime,
         completado_en: new Date().toISOString()
       };

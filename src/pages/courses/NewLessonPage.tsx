@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import LessonViewer from '../../components/courses/LessonViewer';
@@ -31,32 +31,28 @@ interface Course {
 }
 
 const NewLessonPage: React.FC = () => {
-  console.log('🚀🚀🚀 NUEVO LESSONPAGE FUNCIONANDO CORRECTAMENTE 🚀🚀🚀');
-  
   const { courseId: rawCourseId, lessonId } = useParams<{ courseId: string; lessonId: string }>();
-  console.log('📥 RAW PARAMS - rawCourseId:', rawCourseId, 'lessonId:', lessonId);
-  
   const navigate = useNavigate();
   const { user } = useAuth();
   
-  // Mapear slug de curso a UUID real
-  const mapCourseSlugToId = (slug: string): string => {
-    const courseMapping: { [key: string]: string } = {
-      'master-adicciones': 'b5ef8c64-fe26-4f20-8221-80a1bf475b05',
-      'experto-conductas-adictivas': 'd7c3e503-ed61-4d7a-9e5f-aedc407d4836'
+  // Mapear slug de curso a UUID real - OPTIMIZADO con useMemo
+  const courseId = useMemo(() => {
+    const mapCourseSlugToId = (slug: string): string => {
+      const courseMapping: { [key: string]: string } = {
+        'master-adicciones': 'b5ef8c64-fe26-4f20-8221-80a1bf475b05',
+        'experto-conductas-adictivas': 'd7c3e503-ed61-4d7a-9e5f-aedc407d4836'
+      };
+      return courseMapping[slug] || slug;
     };
-    console.log('🔄 MAPEO DE CURSO - slug:', slug, '-> UUID:', courseMapping[slug] || slug);
-    return courseMapping[slug] || slug;
-  };
-  
-  const courseId = mapCourseSlugToId(rawCourseId || '');
-  console.log('✅ CURSO MAPEADO - rawCourseId:', rawCourseId, '-> courseId:', courseId);
+    
+    const mappedId = mapCourseSlugToId(rawCourseId || '');
+    console.log('📚 Course mapped:', rawCourseId, '->', mappedId);
+    return mappedId;
+  }, [rawCourseId]);
   
   // Validar que courseId no sea undefined o vacío antes de usar useProgress
   if (!courseId || courseId === 'undefined' || courseId === '') {
-    console.error('❌ Error: courseId is invalid:', { rawCourseId, courseId });
-    console.error('❌ URL actual:', window.location.pathname);
-    console.error('❌ useParams result:', { rawCourseId, lessonId });
+    console.error('❌ Invalid courseId:', { rawCourseId, courseId, url: window.location.pathname });
   }
   
   const { actualizarProgresoCapitulo, registrarTiempoEstudio } = useProgress(courseId || '');
@@ -139,351 +135,12 @@ const NewLessonPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    console.log('🔄 useEffect triggered - courseId:', courseId, 'lessonId:', lessonId);
+    console.log('🔄 NewLessonPage useEffect triggered - courseId:', courseId, 'lessonId:', lessonId);
     
-    const loadCourseData = async () => {
-      console.log('🔍 NewLessonPage - courseId:', courseId, 'lessonId:', lessonId);
-      if (!courseId) {
-        console.log('❌ No courseId provided');
-        setLoading(false);
-        return;
-      }
-      
-      // Eliminada redirección hardcodeada al PDF - ahora se maneja dinámicamente
-      
-      try {
-        setLoading(true);
-        setError(null);
-
-        console.log('📚 Loading course data for courseId:', courseId);
-        // Cargar información del curso
-        const { data: courseData, error: courseError } = await supabase
-          .from('cursos')
-          .select('*')
-          .eq('id', courseId)
-          .single();
-
-        if (courseError) {
-          console.error('❌ Course error:', courseError);
-          throw courseError;
-        }
-        console.log('✅ Course data loaded:', courseData);
-        setCourse(courseData);
-
-        // Cargar lecciones del curso
-        console.log('📖 Loading lessons for courseId:', courseId);
-        const { data: lessonsData, error: lessonsError } = await supabase
-          .from('lecciones')
-          .select('id, titulo, descripcion, orden, duracion_estimada, imagen_url, video_url, tiene_cuestionario, archivo_url, leccion_anterior_id, leccion_siguiente_id')
-          .eq('curso_id', courseId)
-          .order('orden', { ascending: true });
-
-        if (lessonsError) {
-          console.error('❌ Lessons error:', lessonsError);
-          throw lessonsError;
-        }
-        console.log('✅ Lessons data loaded:', lessonsData, 'Count:', lessonsData?.length || 0);
-        
-        // Función para mapear títulos de lecciones a nombres de carpetas
-        const mapTitleToSlug = (titulo: string): string => {
-          const titleMappings: { [key: string]: string } = {
-            '¿Qué significa ser adicto?': '01_¿Qué significa ser adicto_',
-            '¿Qué es una adicción 1 Cuestionario': '02_¿Qué es una adicción_1 Cuestionario',
-            'Consecuencias de las adicciones': '03_Consecuencias de las adicciones',
-            'Criterios para diagnosticar una conducta adictiva según DSM 51 Cuestionario': '04_Criterios para diagnosticar una conducta adictiva según DSM 51 Cuestionario',
-            'Criterios para diagnosticar una conducta adictiva (DSM-5) Cuestionario': '04_Criterios para diagnosticar una conducta adictiva según DSM 51 Cuestionario',
-            'Material Complementario y Ejercicios2 Cuestionarios': '05_Material Complementario y Ejercicios2 Cuestionarios',
-            'Adicciones Comportamentales2 Cuestionarios': '06_Adicciones Comportamentales2 Cuestionarios',
-            'La familia': '07_La familia',
-            'La recaída': '08_La recaída',
-            'Nuevas terapias psicológicas': '09_Nuevas terapias psicológicas',
-            'Terapia integral de pareja1 Cuestionario': '10_Terapia integral de pareja1 Cuestionario',
-            'Psicología positiva1 Cuestionario': '11_Psicología positiva1 Cuestionario',
-            'Mindfulness aplicado a la Conducta Adictiva1 Cuestionario': '12_Mindfulness aplicado a la Conducta Adictiva1 Cuestionario',
-            'Material complementario Mindfulness y ejercicio1 Cuestionario': '13_Material complementario Mindfulness y ejercicio1 Cuestionario',
-            'FUNDAMENTOS P TERAPEUTICO': '01_¿Qué significa ser adicto_'
-          };
-          
-          // Buscar coincidencia exacta primero
-          if (titleMappings[titulo]) {
-            return titleMappings[titulo];
-          }
-          
-          // Buscar coincidencia parcial
-          for (const [key, value] of Object.entries(titleMappings)) {
-            if (titulo.includes(key.split(' ')[0]) || key.includes(titulo.split(' ')[0])) {
-              return value;
-            }
-          }
-          
-          // Fallback: crear slug básico desde el título
-          return titulo.replace(/[^a-zA-Z0-9\s]/g, '').replace(/\s+/g, '_');
-        };
-
-        // Obtener información de cuestionarios para todas las lecciones
-        const { data: quizData, error: quizError } = await supabase
-          .from('cuestionarios')
-          .select('leccion_id, id')
-          .in('leccion_id', lessonsData.map(l => l.id));
-        
-        if (quizError) {
-          console.error('❌ Quiz data error:', quizError);
-        }
-        
-        console.log('📝 Quiz data loaded:', quizData);
-        
-        // Obtener materiales reales de la base de datos
-        const { data: materialsData, error: materialsError } = await supabase
-          .from('materiales')
-          .select('leccion_id, titulo, url_archivo')
-          .eq('curso_id', courseId);
-        
-        if (materialsError) {
-          console.error('❌ Materials data error:', materialsError);
-        }
-        
-        console.log('📄 Materials data loaded:', materialsData);
-        
-        // Crear un mapa de lección ID a quiz ID
-        const quizMap = new Map();
-        if (quizData) {
-          quizData.forEach(quiz => {
-            if (!quizMap.has(quiz.leccion_id)) {
-              quizMap.set(quiz.leccion_id, []);
-            }
-            quizMap.get(quiz.leccion_id).push(quiz.id);
-          });
-        }
-        
-        // Crear un mapa de lección ID a materiales
-        const materialsMap = new Map();
-        if (materialsData) {
-          materialsData.forEach(material => {
-            if (material.leccion_id) { // Solo incluir materiales asignados a lecciones
-              if (!materialsMap.has(material.leccion_id)) {
-                materialsMap.set(material.leccion_id, []);
-              }
-              materialsMap.get(material.leccion_id).push(material);
-            }
-          });
-        }
-        
-        console.log('🗂️ Materials map:', materialsMap);
-        
-        // Procesar lecciones para extraer información de PDFs y cuestionarios
-        const processedLessons = lessonsData.map(lesson => {
-          const generatedSlug = mapTitleToSlug(lesson.titulo);
-          console.log('🔄 Processing lesson:', lesson.titulo, 'generated slug:', generatedSlug);
-          
-          // Extraer PDFs desde la base de datos
-          const pdfs: string[] = [];
-          const hasQuiz = quizMap.has(lesson.id) && quizMap.get(lesson.id).length > 0;
-          
-          console.log('🎯 Lesson', lesson.titulo, 'has quiz:', hasQuiz, 'quiz IDs:', quizMap.get(lesson.id));
-          
-          // Obtener materiales reales asignados a esta lección
-          const lessonMaterials = materialsMap.get(lesson.id) || [];
-          console.log('📄 Materials for lesson', lesson.titulo, ':', lessonMaterials);
-          
-          // Mapear títulos de materiales a nombres de archivos PDF
-          const materialToPdfMap: { [key: string]: string } = {
-            'Manual MATRIX para Terapeutas': 'MATRIX-manual_terapeuta.pdf',
-            'BLOQUE 2 TÉCNICO EN ADICCIONES': 'BLOQUE-2-TECNICO-EN-ADICCIONES.pdf',
-            'Bloque 1: Técnico en Adicciones': 'BLOQUE 1 TECNICO EN ADICIONES.pdf',
-            'Bloque 3: Familia y Trabajo en Equipo': 'BLOQUE III - FAMILIA Y TRABAJO EN EQUIPO.pdf',
-            'Recovery Coach': 'Recovery Coach reinservida.pdf',
-            'Intervención Familiar en Adicciones y Recovery Mentoring': 'intervencion-Familiar-en-Adicciones-y.-Recovery-Mentoring-1.pdf',
-            'Cuaderno de Ejercicios: Inteligencia Emocional': 'Cuaderno-de-ejercicios-de-inteligencia-emocional.pdf',
-            'Terapias de Tercera Generación': 'MATRIX-manual_terapeuta.pdf'
-          };
-          
-          // Agregar PDFs basados en los materiales reales asignados
-          lessonMaterials.forEach(material => {
-            const pdfName = materialToPdfMap[material.titulo];
-            if (pdfName && !pdfs.includes(pdfName)) {
-              pdfs.push(pdfName);
-            }
-          });
-          
-          // Verificar si es el curso Master en Adicciones para fallback de PDFs específicos
-          const isMasterCourse = courseId === 'b5ef8c64-fe26-4f20-8221-80a1bf475b05';
-          
-          // Solo usar fallback si no hay materiales asignados en la base de datos
-          if (isMasterCourse && lessonMaterials.length === 0) {
-            console.log('⚠️ No materials found in DB for lesson', lesson.titulo, '- using fallback');
-            // Mantener algunos fallbacks solo para lecciones sin materiales asignados
-            if (lesson.titulo.includes('INTELIGENCIA EMOCIONAL')) {
-              pdfs.push('PPT INTELIGENCIA EMOCIONAL.pdf');
-            }
-          } else if (!isMasterCourse) {
-            // PDFs para el curso Experto en Conductas Adictivas
-            if (generatedSlug.includes('Material Complementario')) {
-              pdfs.push('Clasificacion-de-sustancias.pdf', 'Fundamentos-de-la-conducta-adictiva.pdf', 'Informe-europeo-sobre-drogas-2020.pdf', 'Programa-Ibiza.pdf');
-            }
-            // Archivo no disponible: Actividad-casos-clinicos.pdf
-            // if (generatedSlug.includes('Criterios para diagnosticar') || generatedSlug.includes('DSM')) {
-            //   pdfs.push('Actividad-casos-clinicos.pdf');
-            // }
-            // Archivo no disponible: Articilo-Terapia-Integral-de-Pareja.pdf
-            // if (generatedSlug.includes('Terapia integral')) {
-            //   pdfs.push('Articilo-Terapia-Integral-de-Pareja.pdf');
-            // }
-            // Archivos no disponibles: Psicolgia-positiva-introduccion.pdf, Psicologia-positiva-la-investigacion-sobre-los-efectos-de-las-emociones-positivas.pdf
-            // if (generatedSlug.includes('Psicología positiva')) {
-            //   pdfs.push('Psicolgia-positiva-introduccion.pdf', 'Psicologia-positiva-la-investigacion-sobre-los-efectos-de-las-emociones-positivas.pdf');
-            // }
-          }
-          
-          // Enlaces externos para Adicciones Comportamentales2 Cuestionarios y Psicología positiva
-          const externalLinks: any[] = [];
-          if (generatedSlug.includes('Adicciones Comportamentales2 Cuestionarios')) {
-            externalLinks.push(
-              {
-                title: 'Aquí tienes un artículo sobre el tratamiento de las adicciones a las TIC',
-                url: 'https://sindrome-adicciones.es/adiccion-a-las-nuevas-tecnologias/',
-                isExternal: true
-              },
-              {
-                title: 'Test',
-                url: 'https://www.ocu.org/tecnologia/telefono/noticias/test-adiccion-movil',
-                isExternal: true
-              },
-              {
-                title: 'Artículo sobre el juego y cómo dejarlo',
-                url: 'https://sindrome-adicciones.es/adiccion-al-juego/',
-                isExternal: true
-              },
-              {
-                title: 'Artículo sobre la adicción al móvil',
-                url: 'https://www.nuestropsicologoenmadrid.com/adiccion-movil/',
-                isExternal: true
-              },
-              {
-                title: 'Artículo sobre la adicción al porno',
-                url: 'https://www.abc.es/familia/parejas/daniel-adicto-porno-pensaba-fundido-genitales-20221103163535-nt.html',
-                isExternal: true
-              },
-              {
-                title: 'Test',
-                url: 'https://www.psicologosonline.cl/articulos/aprende-a-eliminar-la-dependencia-emocional',
-                isExternal: true
-              }
-            );
-          }
-          
-          // Video de YouTube para Psicología positiva
-          if (generatedSlug.includes('Psicología positiva')) {
-            externalLinks.push(
-              {
-                title: 'Video: Victor Küppers - El valor de tu actitud',
-                url: 'https://www.youtube.com/watch?v=Z3_f6a-YrY8',
-                isExternal: true
-              }
-            );
-          }
-          
-          return {
-            ...lesson,
-            slug: generatedSlug,
-            pdfs,
-            externalLinks,
-            tiene_cuestionario: hasQuiz
-          };
-        });
-        
-        console.log('✅ Processed lessons:', processedLessons);
-        setLessons(processedLessons);
-
-        // Verificar que hay lecciones disponibles
-        if (processedLessons.length === 0) {
-          console.log('❌ No lessons found for this course');
-          setError('No se encontraron lecciones para este curso');
-          setLoading(false);
-          return;
-        }
-
-        // Establecer lección actual
-        if (lessonId) {
-          console.log('🎯 Looking for specific lesson with ID:', lessonId, 'type:', typeof lessonId);
-          console.log('📋 Available lesson IDs:', processedLessons.map(l => ({ id: l.id, titulo: l.titulo })));
-          
-          const lesson = processedLessons.find(l => l.id === lessonId);
-          if (lesson) {
-            console.log('✅ Found target lesson:', lesson);
-            setCurrentLesson(lesson);
-            // Obtener el quiz ID para esta lección
-            const quizId = await getQuizIdForLesson(lesson.id);
-            setCurrentQuizId(quizId);
-            
-            // Registrar progreso del usuario si está autenticado
-            if (user && courseId) {
-              await actualizarProgresoCapitulo({
-                cursoId: courseId,
-                capituloId: lesson.id,
-                porcentajeProgreso: 0,
-                estaCompletado: false
-              });
-              setStartTime(new Date());
-              setLastActivityTime(new Date());
-            }
-          } else {
-            console.log('❌ Target lesson not found, using first lesson');
-            console.log('🎯 Setting first lesson as current:', processedLessons[0]);
-            setCurrentLesson(processedLessons[0]);
-            // Obtener el quiz ID para la primera lección
-            const quizId = await getQuizIdForLesson(processedLessons[0].id);
-            setCurrentQuizId(quizId);
-            
-            // Registrar progreso del usuario si está autenticado
-            if (user && courseId) {
-              await actualizarProgresoCapitulo({
-                cursoId: courseId,
-                capituloId: processedLessons[0].id,
-                porcentajeProgreso: 0,
-                estaCompletado: false
-              });
-              setStartTime(new Date());
-              setLastActivityTime(new Date());
-            }
-            // Actualizar la URL para reflejar la lección actual
-            const currentPath = window.location.pathname;
-            const isStudent = currentPath.includes('/student/');
-            const isTeacher = currentPath.includes('/teacher/');
-            
-            if (!rawCourseId) {
-              console.error('Error: rawCourseId is undefined');
-              setError('ID de curso no disponible');
-              return;
-            }
-            
-            if (isStudent) {
-              navigate(`/student/courses/${rawCourseId}/lessons/${processedLessons[0].id}`, { replace: true });
-            } else if (isTeacher) {
-              navigate(`/teacher/courses/${rawCourseId}/lessons/${processedLessons[0].id}`, { replace: true });
-            }
-          }
-        } else {
-          console.log('📝 No specific lessonId, selecting first lesson');
-          console.log('🎯 Setting first lesson as current:', processedLessons[0]);
-          setCurrentLesson(processedLessons[0]);
-          // Obtener el quiz ID para la primera lección
-          const quizId = await getQuizIdForLesson(processedLessons[0].id);
-          setCurrentQuizId(quizId);
-        }
-
-      } catch (err) {
-        console.error('❌ Error loading course data:', err);
-        setError(err instanceof Error ? err.message : 'Error desconocido');
-      } finally {
-        console.log('🏁 Loading finished');
-        setLoading(false);
-      }
-    };
-
     if (courseId) {
       loadCourseData();
     } else {
-      console.log('⏭️ Skipping load - no courseId');
+      console.warn('⏭️ Skipping load - no courseId');
       setLoading(false);
     }
   }, [courseId, lessonId]);

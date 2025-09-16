@@ -62,7 +62,7 @@ const QuizComponent = ({ leccionId, courseId, onQuizComplete }) => {
       // Si es la lección del MÓDULO 1, usar preguntas hardcodeadas
        if (leccionId === '5cc8702c-45ab-4ae4-8e9a-df1d5c2c6e44') {
          const modulo1Quiz = {
-           id: 'modulo1-quiz',
+           id: '1e9291a8-cc44-4d8c-bfbf-3aea525ed4fe',
            titulo: 'MÓDULO 1 – Fundamentos del programa terapéutico en adicciones',
            leccion_id: leccionId,
            preguntas: [

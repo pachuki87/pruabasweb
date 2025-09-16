@@ -54,6 +54,7 @@ import StudentList from './components/students/StudentList';
 import AddStudentForm from './components/students/AddStudentForm'; // Import AddStudentForm
 import AssignCoursesToStudent from './components/students/AssignCoursesToStudent'; // Import AssignCoursesToStudent
 import QuizAttemptPage from './pages/dashboard/QuizAttemptPage'; // Import QuizAttemptPage
+import UpdateLesson1 from './components/UpdateLesson1'; // Temporary component for database update
 
 // Type definitions
 type User = {
@@ -143,6 +144,7 @@ function App() {
           <Route path="/experto-conductas-adictivas" element={<ExpertoConductasPage />} />
           <Route path="/payment" element={<PaymentPage />} />
           <Route path="/stripe-test" element={<StripeTest />} />
+          <Route path="/update-lesson1" element={<UpdateLesson1 />} /> {/* Temporary route for database update */}
           
           {/* Auth routes */}
           <Route path="/login/:role" element={<LoginPage onLogin={handleLogin} />} />

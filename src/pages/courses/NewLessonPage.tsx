@@ -145,6 +145,293 @@ const NewLessonPage: React.FC = () => {
     }
   }, [courseId, lessonId]);
 
+  // Función para cargar datos del curso y lecciones
+  const loadCourseData = async () => {
+    console.log('🔍 NewLessonPage - courseId:', courseId, 'lessonId:', lessonId);
+    if (!courseId) {
+      console.log('❌ No courseId provided');
+      setLoading(false);
+      return;
+    }
+    
+    try {
+      setLoading(true);
+      setError(null);
+
+      console.log('📚 Loading course data for courseId:', courseId);
+      // Cargar información del curso
+      const { data: courseData, error: courseError } = await supabase
+        .from('cursos')
+        .select('*')
+        .eq('id', courseId)
+        .single();
+
+      if (courseError) {
+        console.error('❌ Course error:', courseError);
+        throw courseError;
+      }
+      console.log('✅ Course data loaded:', courseData);
+      setCourse(courseData);
+
+      // Cargar lecciones del curso
+      console.log('📖 Loading lessons for courseId:', courseId);
+      const { data: lessonsData, error: lessonsError } = await supabase
+        .from('lecciones')
+        .select('*')
+        .eq('curso_id', courseId)
+        .order('orden', { ascending: true });
+
+      if (lessonsError) {
+        console.error('❌ Lessons error:', lessonsError);
+        throw lessonsError;
+      }
+      console.log('✅ Lessons data loaded:', lessonsData, 'Count:', lessonsData?.length || 0);
+      
+      // Función para mapear títulos de lecciones a nombres de carpetas
+      const mapTitleToSlug = (titulo: string): string => {
+        const titleMappings: { [key: string]: string } = {
+          '¿Qué significa ser adicto?': '01_¿Qué significa ser adicto_',
+          '¿Qué es una adicción 1 Cuestionario': '02_¿Qué es una adicción_1 Cuestionario',
+          'Consecuencias de las adicciones': '03_Consecuencias de las adicciones',
+          'Criterios para diagnosticar una conducta adictiva según DSM 51 Cuestionario': '04_Criterios para diagnosticar una conducta adictiva según DSM 51 Cuestionario',
+          'Criterios para diagnosticar una conducta adictiva (DSM-5) Cuestionario': '04_Criterios para diagnosticar una conducta adictiva según DSM 51 Cuestionario',
+          'Material Complementario y Ejercicios2 Cuestionarios': '05_Material Complementario y Ejercicios2 Cuestionarios',
+          'Adicciones Comportamentales2 Cuestionarios': '06_Adicciones Comportamentales2 Cuestionarios',
+          'La familia': '07_La familia',
+          'La recaída': '08_La recaída',
+          'Nuevas terapias psicológicas': '09_Nuevas terapias psicológicas',
+          'Terapia integral de pareja1 Cuestionario': '10_Terapia integral de pareja1 Cuestionario',
+          'Psicología positiva1 Cuestionario': '11_Psicología positiva1 Cuestionario',
+          'Mindfulness aplicado a la Conducta Adictiva1 Cuestionario': '12_Mindfulness aplicado a la Conducta Adictiva1 Cuestionario',
+          'Material complementario Mindfulness y ejercicio1 Cuestionario': '13_Material complementario Mindfulness y ejercicio1 Cuestionario',
+          'FUNDAMENTOS P TERAPEUTICO': '01_¿Qué significa ser adicto_'
+        };
+        
+        // Buscar coincidencia exacta primero
+        if (titleMappings[titulo]) {
+          return titleMappings[titulo];
+        }
+        
+        // Buscar coincidencia parcial
+        for (const [key, value] of Object.entries(titleMappings)) {
+          if (titulo.includes(key.split(' ')[0]) || key.includes(titulo.split(' ')[0])) {
+            return value;
+          }
+        }
+        
+        // Fallback: crear slug básico desde el título
+        return titulo.replace(/[^a-zA-Z0-9\s]/g, '').replace(/\s+/g, '_');
+      };
+
+      // Obtener información de cuestionarios para todas las lecciones
+      const { data: quizData, error: quizError } = await supabase
+        .from('cuestionarios')
+        .select('leccion_id, id')
+        .in('leccion_id', lessonsData.map(l => l.id));
+      
+      if (quizError) {
+        console.error('❌ Quiz data error:', quizError);
+      }
+      
+      console.log('📝 Quiz data loaded:', quizData);
+      
+      // Obtener materiales (PDFs) para todas las lecciones
+      const { data: materialesData, error: materialesError } = await supabase
+        .from('materiales')
+        .select('leccion_id, titulo, url_archivo')
+        .in('leccion_id', lessonsData.map(l => l.id));
+      
+      if (materialesError) {
+        console.error('❌ Materials data error:', materialesError);
+      }
+      
+      console.log('📄 Materials data loaded:', materialesData);
+      
+      // Crear un mapa de lección ID a quiz ID
+      const quizMap = new Map();
+      if (quizData) {
+        quizData.forEach(quiz => {
+          if (!quizMap.has(quiz.leccion_id)) {
+            quizMap.set(quiz.leccion_id, []);
+          }
+          quizMap.get(quiz.leccion_id).push(quiz.id);
+        });
+      }
+      
+      // Crear un mapa de lección ID a materiales (PDFs)
+      const materialesMap = new Map();
+      if (materialesData) {
+        materialesData.forEach(material => {
+          if (!materialesMap.has(material.leccion_id)) {
+            materialesMap.set(material.leccion_id, []);
+          }
+          // Extraer solo el nombre del archivo de la URL y decodificar caracteres URL
+          const fileName = material.url_archivo.split('/').pop() || material.url_archivo;
+          const decodedFileName = decodeURIComponent(fileName);
+          materialesMap.get(material.leccion_id).push(decodedFileName);
+        });
+      }
+      
+      console.log('📋 Materials map created:', materialesMap);
+      
+      // Procesar lecciones para extraer información de PDFs y cuestionarios
+      const processedLessons = lessonsData.map(lesson => {
+        const generatedSlug = mapTitleToSlug(lesson.titulo);
+        console.log('🔄 Processing lesson:', lesson.titulo, 'generated slug:', generatedSlug);
+        
+        // Obtener PDFs desde la base de datos
+        const pdfs: string[] = materialesMap.get(lesson.id) || [];
+        const hasQuiz = quizMap.has(lesson.id) && quizMap.get(lesson.id).length > 0;
+        
+        console.log('🎯 Lesson', lesson.titulo, 'has quiz:', hasQuiz, 'quiz IDs:', quizMap.get(lesson.id));
+        console.log('📄 Lesson', lesson.titulo, 'PDFs from database:', pdfs);
+        
+        // Enlaces externos para Adicciones Comportamentales2 Cuestionarios y Psicología positiva
+        const externalLinks: any[] = [];
+        if (generatedSlug.includes('Adicciones Comportamentales2 Cuestionarios')) {
+          externalLinks.push(
+            {
+              title: 'Aquí tienes un artículo sobre el tratamiento de las adicciones a las TIC',
+              url: 'https://sindrome-adicciones.es/adiccion-a-las-nuevas-tecnologias/',
+              isExternal: true
+            },
+            {
+              title: 'Test',
+              url: 'https://www.ocu.org/tecnologia/telefono/noticias/test-adiccion-movil',
+              isExternal: true
+            },
+            {
+              title: 'Artículo sobre el juego y cómo dejarlo',
+              url: 'https://sindrome-adicciones.es/adiccion-al-juego/',
+              isExternal: true
+            },
+            {
+              title: 'Artículo sobre la adicción al móvil',
+              url: 'https://www.nuestropsicologoenmadrid.com/adiccion-movil/',
+              isExternal: true
+            },
+            {
+              title: 'Artículo sobre la adicción al porno',
+              url: 'https://www.abc.es/familia/parejas/daniel-adicto-porno-pensaba-fundido-genitales-20221103163535-nt.html',
+              isExternal: true
+            },
+            {
+              title: 'Test',
+              url: 'https://www.psicologosonline.cl/articulos/aprende-a-eliminar-la-dependencia-emocional',
+              isExternal: true
+            }
+          );
+        }
+        
+        // Video de YouTube para Psicología positiva
+        if (generatedSlug.includes('Psicología positiva')) {
+          externalLinks.push(
+            {
+              title: 'Video: Victor Küppers - El valor de tu actitud',
+              url: 'https://www.youtube.com/watch?v=Z3_f6a-YrY8',
+              isExternal: true
+            }
+          );
+        }
+        
+        return {
+          ...lesson,
+          slug: generatedSlug,
+          pdfs,
+          externalLinks,
+          tiene_cuestionario: hasQuiz
+        };
+      });
+      
+      console.log('✅ Processed lessons:', processedLessons);
+      setLessons(processedLessons);
+
+      // Verificar que hay lecciones disponibles
+      if (processedLessons.length === 0) {
+        console.log('❌ No lessons found for this course');
+        setError('No se encontraron lecciones para este curso');
+        setLoading(false);
+        return;
+      }
+
+      // Establecer lección actual
+      if (lessonId) {
+        console.log('🎯 Looking for specific lesson with ID:', lessonId, 'type:', typeof lessonId);
+        console.log('📋 Available lesson IDs:', processedLessons.map(l => ({ id: l.id, titulo: l.titulo })));
+        
+        const lesson = processedLessons.find(l => l.id === lessonId);
+        if (lesson) {
+          console.log('✅ Found target lesson:', lesson);
+          setCurrentLesson(lesson);
+          // Obtener el quiz ID para esta lección
+          const quizId = await getQuizIdForLesson(lesson.id);
+          setCurrentQuizId(quizId);
+          
+          // Registrar progreso del usuario si está autenticado
+          if (user && courseId) {
+            await updateProgress({
+              cursoId: courseId,
+              capituloId: lesson.id,
+              porcentajeProgreso: 0,
+              estaCompletado: false
+            });
+            setStartTime(new Date());
+            setLastActivityTime(new Date());
+          }
+        } else {
+          console.log('❌ Target lesson not found, using first lesson');
+          console.log('🎯 Setting first lesson as current:', processedLessons[0]);
+          setCurrentLesson(processedLessons[0]);
+          // Obtener el quiz ID para la primera lección
+          const quizId = await getQuizIdForLesson(processedLessons[0].id);
+          setCurrentQuizId(quizId);
+          
+          // Registrar progreso del usuario si está autenticado
+          if (user && courseId) {
+            await updateProgress({
+              cursoId: courseId,
+              capituloId: processedLessons[0].id,
+              porcentajeProgreso: 0,
+              estaCompletado: false
+            });
+            setStartTime(new Date());
+            setLastActivityTime(new Date());
+          }
+          // Actualizar la URL para reflejar la lección actual
+          const currentPath = window.location.pathname;
+          const isStudent = currentPath.includes('/student/');
+          const isTeacher = currentPath.includes('/teacher/');
+          
+          if (!courseId) {
+            console.error('Error: courseId is undefined');
+            setError('ID de curso no disponible');
+            return;
+          }
+          
+          if (isStudent) {
+            navigate(`/student/courses/${courseId}/lessons/${processedLessons[0].id}`, { replace: true });
+          } else if (isTeacher) {
+            navigate(`/teacher/courses/${courseId}/lessons/${processedLessons[0].id}`, { replace: true });
+          }
+        }
+      } else {
+        console.log('📝 No specific lessonId, selecting first lesson');
+        console.log('🎯 Setting first lesson as current:', processedLessons[0]);
+        setCurrentLesson(processedLessons[0]);
+        // Obtener el quiz ID para la primera lección
+        const quizId = await getQuizIdForLesson(processedLessons[0].id);
+        setCurrentQuizId(quizId);
+      }
+
+    } catch (err) {
+      console.error('❌ Error loading course data:', err);
+      setError(err instanceof Error ? err.message : 'Error desconocido');
+    } finally {
+      console.log('🏁 Loading finished');
+      setLoading(false);
+    }
+  };
+
   // Efecto para rastrear tiempo de estudio al salir de la página
   useEffect(() => {
     const handleBeforeUnload = async () => {

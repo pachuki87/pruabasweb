@@ -173,7 +173,22 @@ const QuizComponent = ({ leccionId, courseId, onQuizComplete }) => {
       [preguntaId]: {
         opcionId,
         esCorrecta,
-        tiempoRespuesta
+        tiempoRespuesta,
+        tipo: 'multiple_choice'
+      }
+    }));
+  };
+
+  const handleTextAnswerChange = (preguntaId, textoRespuesta) => {
+    const tiempoRespuesta = Math.floor((Date.now() - questionStartTime) / 1000);
+    
+    setRespuestas(prev => ({
+      ...prev,
+      [preguntaId]: {
+        textoRespuesta,
+        tiempoRespuesta,
+        tipo: 'texto_libre',
+        esCorrecta: true // Para texto libre, consideramos válida cualquier respuesta no vacía
       }
     }));
   };
@@ -183,7 +198,13 @@ const QuizComponent = ({ leccionId, courseId, onQuizComplete }) => {
     const respuestaActual = respuestas[preguntaActual.id];
 
     if (!respuestaActual) {
-      alert('Por favor selecciona una respuesta antes de continuar.');
+      alert('Por favor proporciona una respuesta antes de continuar.');
+      return;
+    }
+
+    // Validar respuesta de texto libre
+    if (preguntaActual.tipo === 'texto_libre' && (!respuestaActual.textoRespuesta || respuestaActual.textoRespuesta.trim() === '')) {
+      alert('Por favor escribe una respuesta antes de continuar.');
       return;
     }
 
@@ -497,24 +518,40 @@ const QuizComponent = ({ leccionId, courseId, onQuizComplete }) => {
         <div className="question-container">
           <h3 className="question-text">{preguntaActual.pregunta}</h3>
           
-          <div className="options-container">
-            {preguntaActual.opciones_respuesta?.map((opcion, index) => (
-              <button
-                key={opcion.id}
-                className={`option-button ${
-                  respuestaSeleccionada?.opcionId === opcion.id ? 'selected' : ''
-                }`}
-                onClick={() => handleAnswerSelect(
-                  preguntaActual.id, 
-                  opcion.id, 
-                  opcion.es_correcta
-                )}
-              >
-                <span className="option-letter">{String.fromCharCode(65 + index)}</span>
-                <span className="option-text">{opcion.opcion}</span>
-              </button>
-            ))}
-          </div>
+          {preguntaActual.tipo === 'texto_libre' ? (
+            <div className="text-answer-container">
+              <textarea
+                className="text-answer-input"
+                placeholder="Escribe tu respuesta aquí..."
+                value={respuestaSeleccionada?.textoRespuesta || ''}
+                onChange={(e) => handleTextAnswerChange(preguntaActual.id, e.target.value)}
+                rows={6}
+                maxLength={1000}
+              />
+              <div className="character-count">
+                {(respuestaSeleccionada?.textoRespuesta || '').length}/1000 caracteres
+              </div>
+            </div>
+          ) : (
+            <div className="options-container">
+              {preguntaActual.opciones_respuesta?.map((opcion, index) => (
+                <button
+                  key={opcion.id}
+                  className={`option-button ${
+                    respuestaSeleccionada?.opcionId === opcion.id ? 'selected' : ''
+                  }`}
+                  onClick={() => handleAnswerSelect(
+                    preguntaActual.id, 
+                    opcion.id, 
+                    opcion.es_correcta
+                  )}
+                >
+                  <span className="option-letter">{String.fromCharCode(65 + index)}</span>
+                  <span className="option-text">{opcion.opcion}</span>
+                </button>
+              ))}
+            </div>
+          )}
           
           <div className="question-actions">
             <button 

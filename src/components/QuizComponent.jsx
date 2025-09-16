@@ -67,111 +67,111 @@ const QuizComponent = ({ leccionId, courseId, onQuizComplete }) => {
            leccion_id: leccionId,
            preguntas: [
              {
-               id: 'm1q1',
+               id: '11111111-1111-1111-1111-111111111111',
                pregunta: 'El uso de fármacos interdictores se emplea para facilitar la abstinencia.',
                tipo: 'verdadero_falso',
                orden: 1,
                opciones_respuesta: [
-                 { id: 'm1q1a', opcion: 'Verdadero', es_correcta: true },
-                 { id: 'm1q1b', opcion: 'Falso', es_correcta: false }
+                 { id: '11111111-1111-1111-1111-111111111112', opcion: 'Verdadero', es_correcta: true },
+                 { id: '11111111-1111-1111-1111-111111111113', opcion: 'Falso', es_correcta: false }
                ]
              },
              {
-               id: 'm1q2',
+               id: '22222222-2222-2222-2222-222222222222',
                pregunta: 'El paciente no debe tener autonomía en entornos no supervisados.',
                tipo: 'verdadero_falso',
                orden: 2,
                opciones_respuesta: [
-                 { id: 'm1q2a', opcion: 'Verdadero', es_correcta: false },
-                 { id: 'm1q2b', opcion: 'Falso', es_correcta: true }
+                 { id: '22222222-2222-2222-2222-222222222223', opcion: 'Verdadero', es_correcta: false },
+                 { id: '22222222-2222-2222-2222-222222222224', opcion: 'Falso', es_correcta: true }
                ]
              },
              {
-               id: 'm1q3',
-               pregunta: 'El entorno juega un papel fundamental en la recuperación del paciente.',
+               id: '33333333-3333-3333-3333-333333333333',
+               pregunta: 'Los programas terapéuticos deben incluir apoyo familiar.',
                tipo: 'verdadero_falso',
                orden: 3,
                opciones_respuesta: [
-                 { id: 'm1q3a', opcion: 'Verdadero', es_correcta: true },
-                 { id: 'm1q3b', opcion: 'Falso', es_correcta: false }
+                 { id: '33333333-3333-3333-3333-333333333334', opcion: 'Verdadero', es_correcta: true },
+                 { id: '33333333-3333-3333-3333-333333333335', opcion: 'Falso', es_correcta: false }
                ]
              },
              {
-               id: 'm1q4',
-               pregunta: 'La autonomía del paciente no es relevante en la recuperación.',
+               id: '44444444-4444-4444-4444-444444444444',
+               pregunta: 'La farmacoterapia de apoyo es opcional en todos los casos.',
                tipo: 'verdadero_falso',
                orden: 4,
                opciones_respuesta: [
-                 { id: 'm1q4a', opcion: 'Verdadero', es_correcta: false },
-                 { id: 'm1q4b', opcion: 'Falso', es_correcta: true }
+                 { id: '44444444-4444-4444-4444-444444444445', opcion: 'Verdadero', es_correcta: false },
+                 { id: '44444444-4444-4444-4444-444444444446', opcion: 'Falso', es_correcta: true }
                ]
              },
              {
-               id: 'm1q5',
-               pregunta: 'Los fármacos interdictores se usan como parte de la farmacoterapia en adicciones.',
+               id: '55555555-5555-5555-5555-555555555555',
+               pregunta: 'Los programas terapéuticos deben ser personalizados.',
                tipo: 'verdadero_falso',
                orden: 5,
                opciones_respuesta: [
-                 { id: 'm1q5a', opcion: 'Verdadero', es_correcta: true },
-                 { id: 'm1q5b', opcion: 'Falso', es_correcta: false }
+                 { id: '55555555-5555-5555-5555-555555555556', opcion: 'Verdadero', es_correcta: true },
+                 { id: '55555555-5555-5555-5555-555555555557', opcion: 'Falso', es_correcta: false }
                ]
              },
              {
-               id: 'm1q6',
-               pregunta: 'Explica la importancia de la autonomía del paciente en entornos no supervisados.',
+               id: '66666666-6666-6666-6666-666666666666',
+               pregunta: 'Define qué es un programa terapéutico en adicciones.',
                tipo: 'texto_libre',
                orden: 6
              },
              {
-               id: 'm1q7',
-               pregunta: '¿Cómo afecta la farmacoterapia en el proceso de recuperación?',
+               id: '77777777-7777-7777-7777-777777777777',
+               pregunta: 'Explica la importancia de la farmacoterapia de apoyo.',
                tipo: 'texto_libre',
                orden: 7
              },
              {
-               id: 'm1q8',
-               pregunta: 'Describe un caso en el que el entorno haya sido determinante en la recaída o recuperación del paciente.',
+               id: '88888888-8888-8888-8888-888888888888',
+               pregunta: 'Describe las características de un entorno terapéutico adecuado.',
                tipo: 'texto_libre',
                orden: 8
              },
              {
-               id: 'm1q9',
-               pregunta: '¿Cuáles son las fases principales de un programa terapéutico en adicciones?',
+               id: '99999999-9999-9999-9999-999999999999',
+               pregunta: 'Enumera los componentes esenciales de un programa terapéutico.',
                tipo: 'texto_libre',
                orden: 9
              },
              {
-               id: 'm1q10',
-               pregunta: '¿Qué papel cumple el entorno en el proceso de recuperación del paciente?',
+               id: 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
+               pregunta: 'Analiza el papel de la familia en el proceso de recuperación.',
                tipo: 'texto_libre',
                orden: 10
              },
              {
-               id: 'm1q11',
+               id: 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb',
                pregunta: 'Menciona ejemplos de fármacos utilizados en la farmacoterapia de apoyo.',
                tipo: 'texto_libre',
                orden: 11
              },
              {
-               id: 'm1q12',
+               id: 'cccccccc-cccc-cccc-cccc-cccccccccccc',
                pregunta: 'Describe las fases de un programa terapéutico y ejemplifica cada una.',
                tipo: 'texto_libre',
                orden: 12
              },
              {
-               id: 'm1q13',
+               id: 'dddddddd-dddd-dddd-dddd-dddddddddddd',
                pregunta: 'Explica cómo influye la familia y los amigos en el proceso de recuperación.',
                tipo: 'texto_libre',
                orden: 13
              },
              {
-               id: 'm1q14',
+               id: 'eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee',
                pregunta: 'Haz un esquema de los fármacos de apoyo más utilizados y sus efectos.',
                tipo: 'texto_libre',
                orden: 14
              },
              {
-               id: 'm1q15',
+               id: 'ffffffff-ffff-ffff-ffff-ffffffffffff',
                pregunta: 'Diseña un esquema de programa terapéutico para un paciente que inicia su recuperación.',
                tipo: 'texto_libre',
                orden: 15
@@ -194,63 +194,63 @@ const QuizComponent = ({ leccionId, courseId, onQuizComplete }) => {
           leccion_id: leccionId,
           preguntas: [
             {
-              id: 'q1',
+              id: '10101010-1010-1010-1010-101010101010',
               pregunta: 'La Terapia Cognitivo-Conductual (TCC) es un enfoque central en adicciones.',
               tipo: 'verdadero_falso',
               orden: 1,
               opciones_respuesta: [
-                { id: 'q1a', opcion: 'Verdadero', es_correcta: true },
-                { id: 'q1b', opcion: 'Falso', es_correcta: false }
+                { id: '10101010-1010-1010-1010-101010101011', opcion: 'Verdadero', es_correcta: true },
+                { id: '10101010-1010-1010-1010-101010101012', opcion: 'Falso', es_correcta: false }
               ]
             },
             {
-              id: 'q2',
+              id: '20202020-2020-2020-2020-202020202020',
               pregunta: 'El modelo transteórico del cambio incluye etapas como contemplación y acción.',
               tipo: 'verdadero_falso',
               orden: 2,
               opciones_respuesta: [
-                { id: 'q2a', opcion: 'Verdadero', es_correcta: true },
-                { id: 'q2b', opcion: 'Falso', es_correcta: false }
+                { id: '20202020-2020-2020-2020-202020202021', opcion: 'Verdadero', es_correcta: true },
+                { id: '20202020-2020-2020-2020-202020202022', opcion: 'Falso', es_correcta: false }
               ]
             },
             {
-              id: 'q3',
+              id: '30303030-3030-3030-3030-303030303030',
               pregunta: 'La terapia de aceptación y compromiso (ACT) no se aplica en adicciones.',
               tipo: 'verdadero_falso',
               orden: 3,
               opciones_respuesta: [
-                { id: 'q3a', opcion: 'Verdadero', es_correcta: false },
-                { id: 'q3b', opcion: 'Falso', es_correcta: true }
+                { id: '30303030-3030-3030-3030-303030303031', opcion: 'Verdadero', es_correcta: false },
+                { id: '30303030-3030-3030-3030-303030303032', opcion: 'Falso', es_correcta: true }
               ]
             },
             {
-              id: 'q4',
+              id: '40404040-4040-4040-4040-404040404040',
               pregunta: '¿Qué beneficios aporta Mindfulness en el tratamiento de adicciones?',
               tipo: 'texto_libre',
               orden: 4
             },
             {
-              id: 'q5',
+              id: '50505050-5050-5050-5050-505050505050',
               pregunta: 'Explica las diferencias principales entre TCC y ACT en adicciones.',
               tipo: 'texto_libre',
               orden: 5
             },
             {
-              id: 'q6',
+              id: '60606060-6060-6060-6060-606060606060',
               pregunta: '¿Por qué es útil el modelo de Prochaska y DiClemente en el abordaje de pacientes con adicciones?',
               tipo: 'texto_libre',
               orden: 6
             },
             {
-              id: 'q7',
+              id: '70707070-7070-7070-7070-707070707070',
               pregunta: 'El Mindfulness en adicciones puede ayudar a:',
               tipo: 'multiple_choice',
               orden: 7,
               opciones_respuesta: [
-                { id: 'q7a', opcion: 'Reducir impulsividad', es_correcta: true },
-                { id: 'q7b', opcion: 'Aumentar la conciencia del momento presente', es_correcta: true },
-                { id: 'q7c', opcion: 'Incrementar el estrés', es_correcta: false },
-                { id: 'q7d', opcion: 'Favorecer la autorregulación emocional', es_correcta: true }
+                { id: '70707070-7070-7070-7070-707070707071', opcion: 'Reducir impulsividad', es_correcta: true },
+                { id: '70707070-7070-7070-7070-707070707072', opcion: 'Aumentar la conciencia del momento presente', es_correcta: true },
+                { id: '70707070-7070-7070-7070-707070707073', opcion: 'Incrementar el estrés', es_correcta: false },
+                { id: '70707070-7070-7070-7070-707070707074', opcion: 'Favorecer la autorregulación emocional', es_correcta: true }
               ]
             }
           ]

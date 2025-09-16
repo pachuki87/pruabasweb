@@ -59,6 +59,210 @@ const QuizComponent = ({ leccionId, courseId, onQuizComplete }) => {
     try {
       setLoading(true);
       
+      // Si es la lección del MÓDULO 1, usar preguntas hardcodeadas
+       if (leccionId === '5cc8702c-45ab-4ae4-8e9a-df1d5c2c6e44') {
+         const modulo1Quiz = {
+           id: 'modulo1-quiz',
+           titulo: 'MÓDULO 1 – Fundamentos del programa terapéutico en adicciones',
+           leccion_id: leccionId,
+           preguntas: [
+             {
+               id: 'm1q1',
+               pregunta: 'El uso de fármacos interdictores se emplea para facilitar la abstinencia.',
+               tipo: 'verdadero_falso',
+               orden: 1,
+               opciones_respuesta: [
+                 { id: 'm1q1a', opcion: 'Verdadero', es_correcta: true },
+                 { id: 'm1q1b', opcion: 'Falso', es_correcta: false }
+               ]
+             },
+             {
+               id: 'm1q2',
+               pregunta: 'El paciente no debe tener autonomía en entornos no supervisados.',
+               tipo: 'verdadero_falso',
+               orden: 2,
+               opciones_respuesta: [
+                 { id: 'm1q2a', opcion: 'Verdadero', es_correcta: false },
+                 { id: 'm1q2b', opcion: 'Falso', es_correcta: true }
+               ]
+             },
+             {
+               id: 'm1q3',
+               pregunta: 'El entorno juega un papel fundamental en la recuperación del paciente.',
+               tipo: 'verdadero_falso',
+               orden: 3,
+               opciones_respuesta: [
+                 { id: 'm1q3a', opcion: 'Verdadero', es_correcta: true },
+                 { id: 'm1q3b', opcion: 'Falso', es_correcta: false }
+               ]
+             },
+             {
+               id: 'm1q4',
+               pregunta: 'La autonomía del paciente no es relevante en la recuperación.',
+               tipo: 'verdadero_falso',
+               orden: 4,
+               opciones_respuesta: [
+                 { id: 'm1q4a', opcion: 'Verdadero', es_correcta: false },
+                 { id: 'm1q4b', opcion: 'Falso', es_correcta: true }
+               ]
+             },
+             {
+               id: 'm1q5',
+               pregunta: 'Los fármacos interdictores se usan como parte de la farmacoterapia en adicciones.',
+               tipo: 'verdadero_falso',
+               orden: 5,
+               opciones_respuesta: [
+                 { id: 'm1q5a', opcion: 'Verdadero', es_correcta: true },
+                 { id: 'm1q5b', opcion: 'Falso', es_correcta: false }
+               ]
+             },
+             {
+               id: 'm1q6',
+               pregunta: 'Explica la importancia de la autonomía del paciente en entornos no supervisados.',
+               tipo: 'texto_libre',
+               orden: 6
+             },
+             {
+               id: 'm1q7',
+               pregunta: '¿Cómo afecta la farmacoterapia en el proceso de recuperación?',
+               tipo: 'texto_libre',
+               orden: 7
+             },
+             {
+               id: 'm1q8',
+               pregunta: 'Describe un caso en el que el entorno haya sido determinante en la recaída o recuperación del paciente.',
+               tipo: 'texto_libre',
+               orden: 8
+             },
+             {
+               id: 'm1q9',
+               pregunta: '¿Cuáles son las fases principales de un programa terapéutico en adicciones?',
+               tipo: 'texto_libre',
+               orden: 9
+             },
+             {
+               id: 'm1q10',
+               pregunta: '¿Qué papel cumple el entorno en el proceso de recuperación del paciente?',
+               tipo: 'texto_libre',
+               orden: 10
+             },
+             {
+               id: 'm1q11',
+               pregunta: 'Menciona ejemplos de fármacos utilizados en la farmacoterapia de apoyo.',
+               tipo: 'texto_libre',
+               orden: 11
+             },
+             {
+               id: 'm1q12',
+               pregunta: 'Describe las fases de un programa terapéutico y ejemplifica cada una.',
+               tipo: 'texto_libre',
+               orden: 12
+             },
+             {
+               id: 'm1q13',
+               pregunta: 'Explica cómo influye la familia y los amigos en el proceso de recuperación.',
+               tipo: 'texto_libre',
+               orden: 13
+             },
+             {
+               id: 'm1q14',
+               pregunta: 'Haz un esquema de los fármacos de apoyo más utilizados y sus efectos.',
+               tipo: 'texto_libre',
+               orden: 14
+             },
+             {
+               id: 'm1q15',
+               pregunta: 'Diseña un esquema de programa terapéutico para un paciente que inicia su recuperación.',
+               tipo: 'texto_libre',
+               orden: 15
+             }
+           ]
+         };
+        
+        setCuestionarios([modulo1Quiz]);
+        setCurrentQuiz(modulo1Quiz);
+        setPreguntas(modulo1Quiz.preguntas);
+        setLoading(false);
+        return;
+      }
+      
+      // Si es la lección del MÓDULO 2, usar preguntas hardcodeadas
+      if (leccionId === 'e4546103-526d-42ff-a98b-0db4828caa44') {
+        const modulo2Quiz = {
+          id: '8bf3b75d-b048-4748-aa36-80896e7f6e5b',
+          titulo: 'MÓDULO 2 – Terapia cognitiva de las drogodependencias',
+          leccion_id: leccionId,
+          preguntas: [
+            {
+              id: 'q1',
+              pregunta: 'La Terapia Cognitivo-Conductual (TCC) es un enfoque central en adicciones.',
+              tipo: 'verdadero_falso',
+              orden: 1,
+              opciones_respuesta: [
+                { id: 'q1a', opcion: 'Verdadero', es_correcta: true },
+                { id: 'q1b', opcion: 'Falso', es_correcta: false }
+              ]
+            },
+            {
+              id: 'q2',
+              pregunta: 'El modelo transteórico del cambio incluye etapas como contemplación y acción.',
+              tipo: 'verdadero_falso',
+              orden: 2,
+              opciones_respuesta: [
+                { id: 'q2a', opcion: 'Verdadero', es_correcta: true },
+                { id: 'q2b', opcion: 'Falso', es_correcta: false }
+              ]
+            },
+            {
+              id: 'q3',
+              pregunta: 'La terapia de aceptación y compromiso (ACT) no se aplica en adicciones.',
+              tipo: 'verdadero_falso',
+              orden: 3,
+              opciones_respuesta: [
+                { id: 'q3a', opcion: 'Verdadero', es_correcta: false },
+                { id: 'q3b', opcion: 'Falso', es_correcta: true }
+              ]
+            },
+            {
+              id: 'q4',
+              pregunta: '¿Qué beneficios aporta Mindfulness en el tratamiento de adicciones?',
+              tipo: 'texto_libre',
+              orden: 4
+            },
+            {
+              id: 'q5',
+              pregunta: 'Explica las diferencias principales entre TCC y ACT en adicciones.',
+              tipo: 'texto_libre',
+              orden: 5
+            },
+            {
+              id: 'q6',
+              pregunta: '¿Por qué es útil el modelo de Prochaska y DiClemente en el abordaje de pacientes con adicciones?',
+              tipo: 'texto_libre',
+              orden: 6
+            },
+            {
+              id: 'q7',
+              pregunta: 'El Mindfulness en adicciones puede ayudar a:',
+              tipo: 'multiple_choice',
+              orden: 7,
+              opciones_respuesta: [
+                { id: 'q7a', opcion: 'Reducir impulsividad', es_correcta: true },
+                { id: 'q7b', opcion: 'Aumentar la conciencia del momento presente', es_correcta: true },
+                { id: 'q7c', opcion: 'Incrementar el estrés', es_correcta: false },
+                { id: 'q7d', opcion: 'Favorecer la autorregulación emocional', es_correcta: true }
+              ]
+            }
+          ]
+        };
+        
+        setCuestionarios([modulo2Quiz]);
+        setCurrentQuiz(modulo2Quiz);
+        setPreguntas(modulo2Quiz.preguntas);
+        setLoading(false);
+        return;
+      }
+      
       const { data: cuestionariosData, error } = await supabase
         .from('cuestionarios')
         .select(`

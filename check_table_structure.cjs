@@ -1,61 +1,66 @@
-require('dotenv').config();
 const { createClient } = require('@supabase/supabase-js');
+require('dotenv').config();
 
-const supabase = createClient(
-  process.env.VITE_SUPABASE_URL,
-  process.env.VITE_SUPABASE_ANON_KEY
-);
+const supabaseUrl = process.env.VITE_SUPABASE_URL;
+const supabaseKey = process.env.VITE_SUPABASE_ANON_KEY;
 
-(async () => {
-  try {
-    console.log('🔍 Verificando estructura de la tabla lecciones...');
+if (!supabaseUrl || !supabaseKey) {
+  console.error('❌ Variables de entorno de Supabase no encontradas');
+  process.exit(1);
+}
+
+const supabase = createClient(supabaseUrl, supabaseKey);
+
+async function checkTableStructure() {
+  console.log('🔍 Verificando estructura de las tablas...');
+  
+  // Verificar tabla preguntas
+  console.log('\n📋 Tabla PREGUNTAS:');
+  const { data: preguntas, error: preguntasError } = await supabase
+    .from('preguntas')
+    .select('*')
+    .limit(1);
     
-    // Intentar obtener cualquier registro de lecciones para ver las columnas
-    const { data: lecciones, error } = await supabase
-      .from('lecciones')
-      .select('*')
-      .limit(1);
-    
-    if (error) {
-      console.log('❌ Error al consultar lecciones:', error);
-      return;
-    }
-    
-    if (lecciones && lecciones.length > 0) {
-      console.log('✅ Columnas disponibles en la tabla lecciones:');
-      console.log(Object.keys(lecciones[0]));
-      console.log('\n📋 Ejemplo de registro:');
-      console.log(lecciones[0]);
-    } else {
-      console.log('⚠️ No hay registros en la tabla lecciones');
-      
-      // Intentar insertar un registro de prueba para ver la estructura
-      console.log('\n🧪 Intentando insertar registro de prueba...');
-      const { data: testInsert, error: insertError } = await supabase
-        .from('lecciones')
-        .insert({
-          titulo: 'TEST',
-          orden: 999
-        })
-        .select()
-        .single();
-      
-      if (insertError) {
-        console.log('❌ Error al insertar registro de prueba:', insertError);
-      } else {
-        console.log('✅ Registro de prueba insertado. Columnas disponibles:');
-        console.log(Object.keys(testInsert));
-        
-        // Eliminar el registro de prueba
-        await supabase
-          .from('lecciones')
-          .delete()
-          .eq('id', testInsert.id);
-        console.log('🗑️ Registro de prueba eliminado');
-      }
-    }
-    
-  } catch (error) {
-    console.error('❌ Error:', error);
+  if (preguntasError) {
+    console.error('❌ Error consultando preguntas:', preguntasError);
+  } else if (preguntas && preguntas.length > 0) {
+    console.log('✅ Columnas encontradas:', Object.keys(preguntas[0]));
+    console.log('📄 Ejemplo:', preguntas[0]);
+  } else {
+    console.log('⚠️ No hay datos en la tabla preguntas');
   }
-})();
+  
+  // Verificar tabla opciones_respuesta
+  console.log('\n🎯 Tabla OPCIONES_RESPUESTA:');
+  const { data: opciones, error: opcionesError } = await supabase
+    .from('opciones_respuesta')
+    .select('*')
+    .limit(1);
+    
+  if (opcionesError) {
+    console.error('❌ Error consultando opciones:', opcionesError);
+  } else if (opciones && opciones.length > 0) {
+    console.log('✅ Columnas encontradas:', Object.keys(opciones[0]));
+    console.log('📄 Ejemplo:', opciones[0]);
+  } else {
+    console.log('⚠️ No hay datos en la tabla opciones_respuesta');
+  }
+  
+  // Verificar tabla cuestionarios
+  console.log('\n📝 Tabla CUESTIONARIOS:');
+  const { data: cuestionarios, error: cuestionariosError } = await supabase
+    .from('cuestionarios')
+    .select('*')
+    .limit(1);
+    
+  if (cuestionariosError) {
+    console.error('❌ Error consultando cuestionarios:', cuestionariosError);
+  } else if (cuestionarios && cuestionarios.length > 0) {
+    console.log('✅ Columnas encontradas:', Object.keys(cuestionarios[0]));
+    console.log('📄 Ejemplo:', cuestionarios[0]);
+  } else {
+    console.log('⚠️ No hay datos en la tabla cuestionarios');
+  }
+}
+
+checkTableStructure().catch(console.error);

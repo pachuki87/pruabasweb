@@ -509,6 +509,17 @@ const QuizComponent = ({ leccionId, courseId, onQuizComplete }) => {
       
       const aprobado = porcentajeAcierto >= 70; // 70% para aprobar
 
+      // Crear objeto con respuestas detalladas para guardar en Supabase
+      const respuestasDetalladas = Object.keys(respuestas).reduce((acc, preguntaId) => {
+        const respuesta = respuestas[preguntaId];
+        acc[preguntaId] = {
+          respuesta_seleccionada: respuesta.respuestaSeleccionada,
+          es_correcta: respuesta.esCorrecta,
+          tiempo_respuesta: respuesta.tiempoRespuesta || 0
+        };
+        return acc;
+      }, {});
+
       // Guardar intento usando localStorage
       await guardarIntento(currentQuiz.id, puntuacionObtenida, preguntas.length, respuestasCorrectas);
 

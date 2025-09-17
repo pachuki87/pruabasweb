@@ -348,7 +348,11 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
                 <h3 className="text-lg font-semibold text-gray-900 mb-3">📄 Materiales de la Lección</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   {pdfs.map((pdf, index) => {
-                    const pdfPath = `/pdfs/master-adicciones/${encodeURIComponent(pdf)}`;
+                    // Determinar la ruta del PDF basado en el curso
+                    const isMasterCourse = course.id === 'b5ef8c64-fe26-4f20-8221-80a1bf475b05';
+                    const pdfPath = isMasterCourse 
+                      ? `/pdfs/master-adicciones/${encodeURIComponent(pdf)}`
+                      : `/pdfs/experto-conductas-adictivas/${encodeURIComponent(pdf)}`;
                     return (
                       <div key={index} className="bg-red-50 border border-red-200 rounded-lg p-4">
                         <div className="flex items-center mb-2">

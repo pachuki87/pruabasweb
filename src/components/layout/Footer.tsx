@@ -39,11 +39,11 @@ const Footer = () => {
   const footerSections = [
     {
       titulo: "Programas",
-      links: ["Master en Adicciones e Intervención", "Master en Adicciones", "Experto en Conductas Adictivas"]
+      links: ["MÁSTER EN ADICCIONES E INTERVENCIÓN PSICOSOCIAL", "Experto en Conductas Adictivas"]
     },
     {
       titulo: "Cursos",
-      links: ["Master en Adicciones e Intervención", "Master en Adicciones", "Experto en Conductas Adictivas"]
+      links: ["MÁSTER EN ADICCIONES E INTERVENCIÓN PSICOSOCIAL", "Experto en Conductas Adictivas"]
     },
     {
       titulo: "Alumni",

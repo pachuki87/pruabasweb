@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { User, Mail, Lock, Phone, Briefcase, Award } from 'lucide-react';
-import { supabase } from '../../lib/supabase';
+import { supabase, supabaseAdmin } from '../../lib/supabase';
 
 // Define GoogleIcon component
 const GoogleIcon = () => (
@@ -65,8 +65,8 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ role, onRegister }) => {
           .single();
 
         if (!existingUser) {
-          // Create user record for Google OAuth users
-          await supabase.from('usuarios').insert({
+          // Crear registro de usuario para usuarios de Google OAuth usando supabaseAdmin
+          await supabaseAdmin.from('usuarios').insert({
             id: session.user.id,
             email: session.user.email,
             rol: role,
@@ -108,7 +108,8 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ role, onRegister }) => {
       
       if (error) throw error;
       
-      await supabase.from('usuarios').insert({
+      // Usar supabaseAdmin para bypasear RLS durante la creación inicial del perfil
+      await supabaseAdmin.from('usuarios').insert({
         id: data.user?.id,
         email: formData.email,
         rol: role,

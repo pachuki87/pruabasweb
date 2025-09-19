@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { supabase } from '../../lib/supabase';
 import { useProgress } from '../../hooks/useProgress';
@@ -15,6 +16,7 @@ type CourseProgress = {
 
 const StudentProgress: React.FC = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [courseProgress, setCourseProgress] = useState<CourseProgress[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const { estadisticasUsuario, cargando: progressLoading, error: progressError } = useProgress();
@@ -258,8 +260,12 @@ const StudentProgress: React.FC = () => {
         Tienes <span className="font-bold text-blue-600">{courseProgress.length}</span> curso{courseProgress.length !== 1 ? 's' : ''} inscrito{courseProgress.length !== 1 ? 's' : ''}
       </p>
       {courseProgress.map((course) => (
-        <div key={course.id} className="border-b border-gray-100 pb-4 last:border-b-0">
-          <h3 className="text-md font-medium mb-3">{course.titulo}</h3>
+        <div 
+          key={course.id} 
+          className="border-b border-gray-100 pb-4 last:border-b-0 cursor-pointer hover:bg-gray-50 transition-colors duration-200 p-4 rounded-lg -m-4 mb-2"
+          onClick={() => navigate(`/courses/${course.id}`)}
+        >
+          <h3 className="text-md font-medium mb-3 hover:text-blue-600 transition-colors">{course.titulo}</h3>
           
           <div className="w-full bg-gray-200 rounded-full h-2.5 mb-2">
             <div 

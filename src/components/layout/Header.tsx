@@ -92,12 +92,18 @@ const Header: React.FC<HeaderProps> = ({ currentRole, onRoleChange }) => {
                 <div className="text-sm text-gray-500">Cargando...</div>
               ) : user && userData ? (
                 <div className="flex items-center space-x-3">
-                  <div className="flex items-center space-x-2">
-                    <User className="h-4 w-4 text-blue-600" />
-                    <span className="text-sm text-gray-700">
+                  <button
+                    onClick={() => {
+                      const userRole = userData.email?.includes('profesor') || userData.email?.includes('teacher') ? 'teacher' : 'student';
+                      navigate(`/${userRole}/dashboard`);
+                    }}
+                    className="flex items-center space-x-2 px-3 py-2 text-sm text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-lg transition-colors cursor-pointer"
+                  >
+                    <User className="h-4 w-4" />
+                    <span>
                       Bienvenido, {userData.nombre || userData.name || userData.email || 'Usuario'}
                     </span>
-                  </div>
+                  </button>
                   <button
                     onClick={async () => {
                       await signOut();
@@ -172,10 +178,16 @@ const Header: React.FC<HeaderProps> = ({ currentRole, onRoleChange }) => {
                   <div className="text-sm text-gray-500 text-center">Cargando...</div>
                 ) : user && userData ? (
                   <div className="space-y-3">
-                    <div className="flex items-center justify-center space-x-2 text-sm text-gray-700">
-                      <User className="h-4 w-4 text-blue-600" />
+                    <button
+                      onClick={() => {
+                        const userRole = userData.email?.includes('profesor') || userData.email?.includes('teacher') ? 'teacher' : 'student';
+                        navigate(`/${userRole}/dashboard`);
+                      }}
+                      className="flex items-center justify-center space-x-2 w-full px-4 py-2 text-sm text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-lg transition-colors border border-blue-200 cursor-pointer"
+                    >
+                      <User className="h-4 w-4" />
                       <span>Bienvenido, {userData.nombre || userData.name || userData.email || 'Usuario'}</span>
-                    </div>
+                    </button>
                     <button
                       onClick={async () => {
                         await signOut();

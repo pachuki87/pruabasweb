@@ -254,13 +254,42 @@ const StudentProgress: React.FC = () => {
     );
   }
 
-  return (
-    <div className="space-y-6">
-      <p className="text-lg font-medium text-gray-700 mb-4">
-        Tienes <span className="font-bold text-blue-600">{courseProgress.length}</span> curso{courseProgress.length !== 1 ? 's' : ''} inscrito{courseProgress.length !== 1 ? 's' : ''}
-      </p>
-      {courseProgress.map((course) => {
-        const handleClick = () => navigate(`/student/courses/${course.id}`);
+      return (
+        <div className="space-y-6">
+          <p className="text-lg font-medium text-gray-700 mb-4">
+            Tienes <span className="font-bold text-blue-600">{courseProgress.length}</span> curso{courseProgress.length !== 1 ? 's' : ''} inscrito{courseProgress.length !== 1 ? 's' : ''}
+          </p>
+          {courseProgress.map((course) => {
+            const handleClick = async () => {
+              try {
+                // Obtener la primera lección del curso
+                const { data: lessons, error } = await supabase
+                  .from('lecciones')
+                  .select('id')
+                  .eq('curso_id', course.id)
+                  .order('orden', { ascending: true })
+                  .limit(1);
+
+                if (error) {
+                  console.error('Error al obtener lecciones:', error);
+                  // Fallback a la página de detalles del curso
+                  navigate(`/student/courses/${course.id}`);
+                  return;
+                }
+
+                if (lessons && lessons.length > 0) {
+                  // Navegar directamente a la primera lección
+                  navigate(`/student/courses/${course.id}/lessons/${lessons[0].id}`);
+                } else {
+                  // Si no hay lecciones, ir a la página de detalles
+                  navigate(`/student/courses/${course.id}`);
+                }
+              } catch (error) {
+                console.error('Error al navegar a la lección:', error);
+                // Fallback a la página de detalles del curso
+                navigate(`/student/courses/${course.id}`);
+              }
+            };
         const handleKeyDown = (e: React.KeyboardEvent) => {
           if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();

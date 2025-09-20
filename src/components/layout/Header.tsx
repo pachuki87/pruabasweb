@@ -1,18 +1,59 @@
-import React, { useState } from 'react';
-import { Search, Menu, X, ChevronDown } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Search, Menu, X, ChevronDown, User, LogOut } from 'lucide-react';
 import CartIcon from '../cart/CartIcon';
 import Cart from '../cart/Cart';
 import logo2 from '../../assets/logo 2.png';
+import { useAuth } from '../../contexts/AuthContext';
+import { getUserById } from '../../lib/supabase';
+import { useNavigate } from 'react-router-dom';
 
 interface HeaderProps {
   currentRole: string;
   onRoleChange: (role: string) => void;
 }
 
+interface UserData {
+  nombre?: string;
+  name?: string;
+  email?: string;
+}
+
 const Header: React.FC<HeaderProps> = ({ currentRole, onRoleChange }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [userData, setUserData] = useState<UserData | null>(null);
+  const [loadingUserData, setLoadingUserData] = useState(false);
+  
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
+
+  // Obtener datos del usuario desde la base de datos
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (user) {
+        setLoadingUserData(true);
+        try {
+          const userDataFromDb = await getUserById(user.id);
+          if (userDataFromDb) {
+            setUserData({
+              nombre: userDataFromDb.nombre,
+              name: userDataFromDb.name,
+              email: userDataFromDb.email
+            });
+          }
+        } catch (error) {
+          console.error('Error al obtener datos del usuario:', error);
+        } finally {
+          setLoadingUserData(false);
+        }
+      } else {
+        setUserData(null);
+      }
+    };
+
+    fetchUserData();
+  }, [user]);
 
   return (
     <header className="bg-white shadow-sm relative z-50">
@@ -45,20 +86,45 @@ const Header: React.FC<HeaderProps> = ({ currentRole, onRoleChange }) => {
             {/* Cart Icon */}
             <CartIcon onClick={() => setIsCartOpen(true)} className="text-gray-600 hover:text-blue-600" />
             
-            {/* Login Buttons */}
+            {/* User Authentication Section */}
             <div className="hidden md:flex items-center space-x-2">
-              <a
-                href="/login/student"
-                className="px-4 py-2 text-sm text-gray-700 hover:text-blue-600 transition-colors"
-              >
-                Estudiante
-              </a>
-              <a
-                href="/login/teacher"
-                className="px-4 py-2 text-sm bg-lidera-light-blue text-white rounded-lg hover:bg-[#6a96c0] transition-colors"
-              >
-                Profesor
-              </a>
+              {loadingUserData ? (
+                <div className="text-sm text-gray-500">Cargando...</div>
+              ) : user && userData ? (
+                <div className="flex items-center space-x-3">
+                  <div className="flex items-center space-x-2">
+                    <User className="h-4 w-4 text-blue-600" />
+                    <span className="text-sm text-gray-700">
+                      Bienvenido, {userData.nombre || userData.name || userData.email || 'Usuario'}
+                    </span>
+                  </div>
+                  <button
+                    onClick={async () => {
+                      await signOut();
+                      navigate('/');
+                    }}
+                    className="flex items-center space-x-1 px-3 py-2 text-sm text-red-600 hover:text-red-800 hover:bg-red-50 rounded-lg transition-colors"
+                  >
+                    <LogOut className="h-4 w-4" />
+                    <span>Cerrar sesión</span>
+                  </button>
+                </div>
+              ) : (
+                <div className="flex items-center space-x-2">
+                  <a
+                    href="/login/student"
+                    className="px-4 py-2 text-sm text-gray-700 hover:text-blue-600 transition-colors"
+                  >
+                    Estudiante
+                  </a>
+                  <a
+                    href="/login/teacher"
+                    className="px-4 py-2 text-sm bg-lidera-light-blue text-white rounded-lg hover:bg-[#6a96c0] transition-colors"
+                  >
+                    Profesor
+                  </a>
+                </div>
+              )}
             </div>
             
             <button
@@ -100,20 +166,43 @@ const Header: React.FC<HeaderProps> = ({ currentRole, onRoleChange }) => {
               <a href="/testimonios" className="block text-gray-700 hover:text-lidera-light-blue transition-colors">Testimonios</a>
               <a href="/contact" className="block text-gray-700 hover:text-lidera-light-blue transition-colors">Contacto</a>
               
-              {/* Mobile Login Buttons */}
+              {/* Mobile Authentication Section */}
               <div className="pt-4 border-t border-gray-200 space-y-2">
-                <a
-                  href="/login/student"
-                  className="block w-full px-4 py-2 text-center text-gray-700 border border-gray-300 rounded-lg hover:text-lidera-light-blue hover:border-lidera-light-blue transition-colors"
-                >
-                  Acceso Estudiante
-                </a>
-                <a
-                  href="/login/teacher"
-                  className="block w-full px-4 py-2 text-center bg-lidera-light-blue text-white rounded-lg hover:bg-[#6a96c0] transition-colors"
-                >
-                  Acceso Profesor
-                </a>
+                {loadingUserData ? (
+                  <div className="text-sm text-gray-500 text-center">Cargando...</div>
+                ) : user && userData ? (
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-center space-x-2 text-sm text-gray-700">
+                      <User className="h-4 w-4 text-blue-600" />
+                      <span>Bienvenido, {userData.nombre || userData.name || userData.email || 'Usuario'}</span>
+                    </div>
+                    <button
+                      onClick={async () => {
+                        await signOut();
+                        navigate('/');
+                      }}
+                      className="flex items-center justify-center space-x-1 w-full px-4 py-2 text-sm text-red-600 hover:text-red-800 hover:bg-red-50 rounded-lg transition-colors border border-red-200"
+                    >
+                      <LogOut className="h-4 w-4" />
+                      <span>Cerrar sesión</span>
+                    </button>
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    <a
+                      href="/login/student"
+                      className="block w-full px-4 py-2 text-center text-gray-700 border border-gray-300 rounded-lg hover:text-lidera-light-blue hover:border-lidera-light-blue transition-colors"
+                    >
+                      Acceso Estudiante
+                    </a>
+                    <a
+                      href="/login/teacher"
+                      className="block w-full px-4 py-2 text-center bg-lidera-light-blue text-white rounded-lg hover:bg-[#6a96c0] transition-colors"
+                    >
+                      Acceso Profesor
+                    </a>
+                  </div>
+                )}
               </div>
             </nav>
           </div>

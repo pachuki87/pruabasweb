@@ -27,6 +27,7 @@ import RegisterPage from './pages/auth/RegisterPage';
 import AboutPage from './pages/AboutPage';
 import FaqsPage from './pages/FaqsPage';
 import CoursesPage from './pages/CoursesPage';
+import CoursePage from './pages/courses/CoursePage'; // Import the course page component
 import NotFoundPage from './pages/NotFoundPage';
 import MasterAdiccionesPage from './pages/MasterAdiccionesPage'; // Import the new page
 import ExpertoConductasPage from './pages/ExpertoConductasPage'; // Import the experto page
@@ -137,9 +138,10 @@ function App() {
           <Route path="/about" element={<AboutPage currentRole={currentRole} onRoleChange={handleRoleChange} />} />
           <Route path="/faqs" element={<FaqsPage currentRole={currentRole} onRoleChange={handleRoleChange} />} />
           <Route path="/courses" element={<CoursesPage currentRole={currentRole} onRoleChange={handleRoleChange} />} />
+          <Route path="/courses/:courseId" element={<CoursePage />} />
           <Route path="/formacion" element={<Formacion />} />
-          <Route path="/testimonios" element={<TestimoniosPage />} />
-          <Route path="/viajes-talleres" element={<ViajesYTalleresPage />} />
+          <Route path="/testimonios" element={<TestimoniosPage currentRole={currentRole} onRoleChange={handleRoleChange} />} />
+          <Route path="/viajes-talleres" element={<ViajesYTalleresPage currentRole={currentRole} onRoleChange={handleRoleChange} />} />
           <Route path="/master-adicciones-intervencion" element={<MasterAdiccionesPage />} />
           <Route path="/experto-conductas-adictivas" element={<ExpertoConductasPage />} />
           <Route path="/payment" element={<PaymentPage />} />

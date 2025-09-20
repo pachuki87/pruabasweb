@@ -17,8 +17,8 @@ const MasterAdiccionesContent: React.FC = () => {
               <FaBrain className="text-2xl" />
             </div>
             <div>
-              <h1 className="text-3xl font-bold bg-gradient-to-r from-white to-gray-100 bg-clip-text text-transparent">Máster en Adicciones e Intervención Psicosocial</h1>
-              <p className="text-gray-100 text-sm mt-1">Formación especializada en tratamiento de adicciones</p>
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-white to-gray-100 bg-clip-text text-transparent">Máster en Inteligencia Emocional Aplicada a Adicciones</h1>
+              <p className="text-gray-100 text-sm mt-1">Formación especializada en inteligencia emocional y tratamiento de adicciones</p>
             </div>
           </div>
           <nav className="space-x-4 hidden md:flex">
@@ -71,7 +71,7 @@ const MasterAdiccionesContent: React.FC = () => {
       {/* Footer */}
       <footer className="bg-gray-800 text-white py-6">
         <div className="container mx-auto px-4 text-center">
-          <p>© 2025 Máster en Adicciones e Intervención Psicosocial. Todos los derechos reservados.</p>
+          <p>© 2025 Máster en Inteligencia Emocional Aplicada a Adicciones. Todos los derechos reservados.</p>
         </div>
       </footer>
     </div>
@@ -157,11 +157,12 @@ function HomeSection() {
         <div className="relative z-10 px-8 py-16 text-white">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
-              Transforma Vidas a Través de la 
-              <span className="bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent">Intervención Especializada</span>
+              Máster en Inteligencia Emocional Aplicada a 
+              <span className="bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent"> Adicciones</span>
             </h2>
             <p className="text-xl md:text-2xl mb-8 text-gray-100 leading-relaxed">
-              Máster orientado a la práctica, centrado en el diseño y aplicación de intervenciones terapéuticas eficaces frente a las adicciones y conductas autodestructivas.
+              Un programa integral que combina la inteligencia emocional con técnicas especializadas para el tratamiento de adicciones, 
+              formando profesionales capaces de diseñar intervenciones terapéuticas eficaces.
             </p>
             <div className="flex flex-wrap justify-center gap-4 mb-8">
               <div className="flex items-center bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full">
@@ -181,14 +182,71 @@ function HomeSection() {
         </div>
       </section>
 
+      {/* Descripción del programa */}
+      <section className="mb-12 bg-gradient-to-r from-blue-50 to-indigo-50 p-8 rounded-2xl">
+        <div className="max-w-4xl mx-auto">
+          <h3 className="text-3xl font-bold text-gray-800 mb-6 text-center">¿Qué aprenderás?</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="space-y-4">
+              <div className="flex items-start">
+                <FaBrain className="text-blue-500 text-xl mr-3 mt-1" />
+                <div>
+                  <h4 className="font-semibold text-gray-800 mb-2">Inteligencia Emocional</h4>
+                  <p className="text-gray-600 text-sm">Desarrollo de competencias emocionales para la intervención terapéutica</p>
+                </div>
+              </div>
+              <div className="flex items-start">
+                <FaHeart className="text-red-500 text-xl mr-3 mt-1" />
+                <div>
+                  <h4 className="font-semibold text-gray-800 mb-2">Terapia Cognitiva</h4>
+                  <p className="text-gray-600 text-sm">Técnicas cognitivo-conductuales aplicadas al tratamiento de adicciones</p>
+                </div>
+              </div>
+              <div className="flex items-start">
+                <FaUserFriends className="text-green-500 text-xl mr-3 mt-1" />
+                <div>
+                  <h4 className="font-semibold text-gray-800 mb-2">Intervención Familiar</h4>
+                  <p className="text-gray-600 text-sm">Estrategias para involucrar a la familia en el proceso de recuperación</p>
+                </div>
+              </div>
+            </div>
+            <div className="space-y-4">
+              <div className="flex items-start">
+                <FaHandsHelping className="text-purple-500 text-xl mr-3 mt-1" />
+                <div>
+                  <h4 className="font-semibold text-gray-800 mb-2">Recovery Coaching</h4>
+                  <p className="text-gray-600 text-sm">Técnicas de coaching especializadas en procesos de recuperación</p>
+                </div>
+              </div>
+              <div className="flex items-start">
+                <FaUserTie className="text-indigo-500 text-xl mr-3 mt-1" />
+                <div>
+                  <h4 className="font-semibold text-gray-800 mb-2">Perspectiva de Género</h4>
+                  <p className="text-gray-600 text-sm">Enfoque diferencial en el tratamiento según género</p>
+                </div>
+              </div>
+              <div className="flex items-start">
+                <FaBriefcase className="text-orange-500 text-xl mr-3 mt-1" />
+                <div>
+                  <h4 className="font-semibold text-gray-800 mb-2">Trabajo Final</h4>
+                  <p className="text-gray-600 text-sm">Proyecto integrador que consolida todos los aprendizajes</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Stats Section */}
       <section className="mb-12">
         <div className="text-center mb-8">
           <h3 className="text-3xl font-bold text-gray-800 mb-4">Información del Programa</h3>
-          <p className="text-gray-600 max-w-2xl mx-auto">Un programa integral diseñado para formar profesionales especializados en el tratamiento de adicciones</p>
+          <p className="text-gray-600 max-w-2xl mx-auto">Un programa integral de 10 módulos diseñado para formar profesionales especializados en el tratamiento de adicciones</p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-1 gap-8 mt-8 max-w-md mx-auto">
-          <StatCard titulo="Duración" value="Octubre 2025 - Junio 2026" icon={<FaClock />} />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
+          <StatCard titulo="Duración" value="9 meses" icon={<FaClock />} />
+          <StatCard titulo="Modalidad" value="Blended Learning" icon={<FaLaptop />} />
+          <StatCard titulo="Módulos" value="10 módulos" icon={<FaBook />} />
         </div>
         <div className="mt-12 text-center">
           <button className="bg-lidera-light-blue hover:bg-[#6a96c0] text-white px-8 py-4 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl font-semibold text-lg">
@@ -217,17 +275,75 @@ function MetodologiaSection() {
         <div className="relative z-10 px-8 py-12 text-white text-center">
           <h2 className="text-4xl font-bold mb-4">Metodología Innovadora</h2>
           <p className="text-xl text-gray-100 max-w-3xl mx-auto leading-relaxed">
-            Modalidad <strong className="text-yellow-400">blended learning</strong> que combina la flexibilidad del aprendizaje online 
-            con la experiencia práctica de talleres presenciales especializados.
+            El Máster sigue una modalidad <strong className="text-yellow-400">blended learning</strong>, que combina clases teóricas online 
+            con talleres prácticos presenciales. Esta metodología permite una mayor flexibilidad a los alumnos, quienes podrán organizar 
+            su tiempo de estudio y aplicar los conocimientos en entornos controlados durante las prácticas.
           </p>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      {/* Fechas de inicio */}
+      <div className="bg-gradient-to-r from-lidera-light-blue to-gray-600 text-white p-6 rounded-2xl mb-8 text-center">
+        <h3 className="text-2xl font-bold mb-4">Próximas Ediciones</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="bg-white/20 backdrop-blur-sm p-4 rounded-xl">
+            <FaCalendarAlt className="text-3xl mb-2 mx-auto" />
+            <h4 className="font-bold text-lg">Primera Edición</h4>
+            <p className="text-yellow-200">Octubre 2025</p>
+          </div>
+          <div className="bg-white/20 backdrop-blur-sm p-4 rounded-xl">
+            <FaCalendarAlt className="text-3xl mb-2 mx-auto" />
+            <h4 className="font-bold text-lg">Segunda Edición</h4>
+            <p className="text-yellow-200">Febrero 2026</p>
+          </div>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+        <ClasesOnline />
         <TalleresPresenciales />
         <PracticasOnline />
       </div>
     </section>
+  );
+}
+
+function ClasesOnline() {
+  return (
+    <div className="bg-white p-8 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100">
+      <div className="flex items-center mb-6">
+        <div className="bg-gradient-to-r from-blue-500 to-purple-600 p-3 rounded-full mr-4">
+          <FaLaptop className="text-white text-xl" />
+        </div>
+        <h3 className="text-2xl font-bold text-gray-800">Clases Online</h3>
+      </div>
+      
+      <div className="mb-6">
+        <img 
+          src="https://images.unsplash.com/photo-1588196749597-9ff075ee6b5b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" 
+          alt="Plataforma virtual" 
+          className="w-full h-32 object-cover rounded-xl mb-4"
+        />
+        <p className="text-gray-700 leading-relaxed">
+          Los estudiantes tendrán acceso a una plataforma virtual donde se desarrollará la teoría del programa académico.
+        </p>
+      </div>
+      
+      <div className="space-y-3">
+        <div className="flex items-center text-gray-700">
+          <FaBook className="text-blue-500 mr-3" />
+          <span className="text-sm">Contenido teórico completo</span>
+        </div>
+        <div className="flex items-center text-gray-700">
+          <FaClock className="text-green-500 mr-3" />
+          <span className="text-sm">Acceso 24/7 a la plataforma</span>
+        </div>
+        <div className="flex items-center text-gray-700">
+          <FaChalkboardTeacher className="text-purple-500 mr-3" />
+          <span className="text-sm">Material didáctico especializado</span>
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -339,9 +455,10 @@ function ModulosSection() {
         "Autonomía del paciente en entornos no supervisados",
         "Rol del entorno en el proceso de recuperación",
         "Farmacoterapia: uso de fármacos interdictores y de apoyo",
+        "Diseño de planes terapéuticos personalizados"
       ],
       resumen:
-        "Se enseñan los elementos esenciales de un tratamiento integral, desde la desintoxicación hasta el mantenimiento de la abstinencia, incluyendo el abordaje en contextos abiertos.",
+        "Se enseñan los elementos esenciales de un tratamiento integral, desde la desintoxicación hasta el mantenimiento de la abstinencia, incluyendo el abordaje en contextos abiertos. Este módulo prepara al profesional para diseñar y acompañar planes terapéuticos personalizados.",
     },
     {
       numero: 2,
@@ -351,9 +468,10 @@ function ModulosSection() {
         "Principios de la Terapia de Aceptación y Compromiso (ACT)",
         "Introducción a Mindfulness como herramienta terapéutica",
         "Modelo transteórico del cambio (Prochaska y DiClemente)",
+        "Aplicación práctica de los modelos en adicciones"
       ],
       resumen:
-        "Brinda una base teórica y práctica sobre la terapia cognitiva utilizada en el tratamiento de las adicciones.",
+        "Este módulo brinda una base teórica y práctica sobre la terapia cognitiva utilizada en el tratamiento de las adicciones. Permite al estudiante comprender y aplicar distintas estrategias según el momento del proceso de cambio del paciente.",
     },
     {
       numero: 3,
@@ -362,16 +480,22 @@ function ModulosSection() {
         "Principios del enfoque sistémico",
         "Ciclos vitales familiares y crisis",
         "Roles, reglas y lealtades familiares",
+        "Técnicas de intervención familiar desde la terapia sistémica"
       ],
       resumen:
-        "Capacita al estudiante en el análisis y abordaje de las dinámicas familiares como sistema.",
+        "Capacita al estudiante en el análisis y abordaje de las dinámicas familiares como sistema, proporcionando herramientas para la intervención familiar efectiva.",
     },
     {
       numero: 4,
       nombre: "Recovery Coaching en Adicciones",
-      temas: ["Burnout y estrategias de prevención", "Relación terapéutica y contratransferencia"],
+      temas: [
+        "Burnout y estrategias de prevención", 
+        "Relación terapéutica y contratransferencia",
+        "Técnicas de coaching aplicadas a la recuperación",
+        "Acompañamiento en el proceso de cambio"
+      ],
       resumen:
-        "Ofrece un espacio de reflexión y formación sobre la práctica profesional, con énfasis en el Recovery Coaching.",
+        "Ofrece un espacio de reflexión y formación sobre la práctica profesional, con énfasis en el Recovery Coaching como herramienta de acompañamiento en el proceso de recuperación.",
     },
     {
       numero: 5,
@@ -379,56 +503,71 @@ function ModulosSection() {
       temas: [
         "Negación y ambivalencia frente al cambio",
         "Psicoeducación para pacientes y familias",
+        "Mecanismos psicológicos de la adicción",
+        "Técnicas de facilitación del insight"
       ],
       resumen:
-        "Profundiza en las dinámicas psicológicas de la persona adicta y su entorno, ofreciendo herramientas para facilitar el insight.",
+        "Profundiza en las dinámicas psicológicas de la persona adicta y su entorno, ofreciendo herramientas para facilitar el insight y la comprensión del proceso adictivo.",
     },
     {
       numero: 6,
       nombre: "Intervención Familiar y Recovery Mentoring",
       temas: [
         "Impacto de la adicción en la estructura familiar",
+        "Comunicación no violenta y vínculos funcionales",
         "Rol del mentor en recuperación",
+        "Dinámicas emocionales y autocuidado familiar"
       ],
       resumen:
-        "Capacita al estudiante para trabajar con la familia como parte del proceso de recuperación.",
+        "Se capacita al estudiante para trabajar con la familia como parte del proceso de recuperación, promoviendo un enfoque colaborativo y emocionalmente consciente. Además, se introducen figuras clave como los mentores o pares en recuperación.",
     },
     {
       numero: 7,
       nombre: "Nuevos Modelos Terapéuticos Aplicados a las Adicciones",
       temas: [
         "Técnica de los cinco pasos",
+        "La ventana de Johari como herramienta de autoconocimiento",
         "Reencuentro con el niño interior y trabajo con el trauma",
+        "Técnicas de integración emocional"
       ],
       resumen:
-        "Ofrece enfoques contemporáneos e integradores para abordar las raíces emocionales de la adicción.",
+        "Este módulo ofrece enfoques contemporáneos e integradores para abordar las raíces emocionales de la adicción. Se explorarán nuevas herramientas terapéuticas centradas en el crecimiento personal, la conciencia y la reconstrucción de la identidad.",
     },
     {
       numero: 8,
       nombre: "Gestión de las Adicciones desde la Perspectiva de Género",
       temas: [
+        "Género y consumo de sustancias",
         "Violencias asociadas y consumo en mujeres",
         "Masculinidades y adicción",
+        "Interseccionalidad y vulnerabilidades específicas"
       ],
       resumen:
-        "Profundiza en cómo las cuestiones de género atraviesan la experiencia adictiva y su tratamiento.",
+        "El módulo profundiza en cómo las cuestiones de género atraviesan la experiencia adictiva y su tratamiento. Favorece una mirada inclusiva, crítica y contextualizada, capaz de dar respuesta a necesidades específicas.",
     },
     {
       numero: 9,
       nombre: "Inteligencia Emocional",
       temas: [
         "Estructuras cerebrales implicadas en la adicción",
-        "Gestión de las emociones disfuncionales",
+        "Circuitos de recompensa y dopamina",
+        "Gestión de las emociones en la conducta",
+        "Cambios en la personalidad y el aprendizaje",
+        "Gestión de las emociones disfuncionales"
       ],
       resumen:
-        "Brinda fundamentos científicos para entender cómo las adicciones afectan nuestras emociones.",
+        "Brinda fundamentos científicos para entender cómo las adicciones afectan nuestras emociones y proporciona herramientas prácticas para la gestión emocional en el proceso terapéutico.",
     },
     {
       numero: 10,
       nombre: "Trabajo Final de Máster",
-      temas: [],
+      temas: [
+        "Metodología de investigación aplicada",
+        "Diseño de proyectos innovadores",
+        "Presentación y defensa del trabajo"
+      ],
       resumen:
-        "Elaboración de un proyecto inédito e innovador sobre cualquier aspecto metodológico relacionado con las adicciones.",
+        "Elaboración de un proyecto inédito e innovador sobre cualquier aspecto metodológico relacionado con las adicciones, aplicando los conocimientos adquiridos durante el programa.",
     },
   ];
 

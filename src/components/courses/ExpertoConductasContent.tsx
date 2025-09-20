@@ -147,33 +147,33 @@ function HomeSection() {
       <section className="relative mb-16 rounded-2xl overflow-hidden shadow-2xl">
         <div className="absolute inset-0">
           <img 
-            src="https://institutolidera.com/wp-content/uploads/2022/10/que-es-adiccion.jpg" 
-            alt="Conductas Adictivas" 
+            src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1931&q=80" 
+            alt="Experto en Conductas Adictivas" 
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-gray-900/80 via-gray-800/70 to-gray-900/80"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-purple-900/85 via-blue-800/75 to-purple-900/85"></div>
         </div>
         <div className="relative z-10 px-8 py-16 text-white">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
-              Especialízate en el 
-              <span className="bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent">Tratamiento de Adicciones</span>
+              Conviértete en 
+              <span className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">Experto en Conductas Adictivas</span>
             </h2>
             <p className="text-xl md:text-2xl mb-8 text-gray-100 leading-relaxed">
-              Curso completo sobre el tratamiento y comprensión de las conductas adictivas. Incluye fundamentos teóricos, criterios diagnósticos según DSM-5, terapias psicológicas innovadoras y mindfulness aplicado.
+              Curso especializado en el diagnóstico y tratamiento de adicciones según DSM-5. Aprende terapias innovadoras, mindfulness aplicado y técnicas de intervención específicas para conductas adictivas.
             </p>
             <div className="flex flex-wrap justify-center gap-4 mb-8">
               <div className="flex items-center bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full">
-                <FaAward className="mr-2 text-yellow-400" />
-                <span className="text-sm font-medium">Certificación Especializada</span>
+                <FaBrain className="mr-2 text-cyan-400" />
+                <span className="text-sm font-medium">Criterios DSM-5</span>
               </div>
               <div className="flex items-center bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full">
-                <FaBrain className="mr-2 text-green-400" />
-                <span className="text-sm font-medium">Enfoque DSM-5</span>
+                <FaHeart className="mr-2 text-pink-400" />
+                <span className="text-sm font-medium">Mindfulness Aplicado</span>
               </div>
               <div className="flex items-center bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full">
-                <FaLaptop className="mr-2 text-lidera-light-blue" />
-                <span className="text-sm font-medium">Modalidad Online</span>
+                <FaUserFriends className="mr-2 text-green-400" />
+                <span className="text-sm font-medium">Terapia Integral</span>
               </div>
             </div>
           </div>
@@ -184,17 +184,72 @@ function HomeSection() {
       <section className="mb-12">
         <div className="text-center mb-8">
           <h3 className="text-3xl font-bold text-gray-800 mb-4">Información del Curso</h3>
-          <p className="text-gray-600 max-w-2xl mx-auto">Un programa integral diseñado para profesionales de la salud mental que deseen especializarse en el campo de las adicciones</p>
+          <p className="text-gray-600 max-w-2xl mx-auto">Programa especializado en conductas adictivas con enfoque práctico y basado en evidencia científica</p>
         </div>
+        
+        {/* ¿Qué aprenderás? Section */}
+        <div className="mb-12">
+          <h4 className="text-2xl font-bold text-gray-800 mb-8 text-center">¿Qué aprenderás?</h4>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
+              <div className="bg-purple-100 w-12 h-12 rounded-full flex items-center justify-center mb-4">
+                <FaBrain className="text-purple-600 text-xl" />
+              </div>
+              <h5 className="font-semibold text-gray-800 mb-2">Criterios Diagnósticos DSM-5</h5>
+              <p className="text-gray-600 text-sm">Domina los criterios oficiales para el diagnóstico de trastornos adictivos</p>
+            </div>
+            
+            <div className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
+              <div className="bg-blue-100 w-12 h-12 rounded-full flex items-center justify-center mb-4">
+                <FaHeart className="text-blue-600 text-xl" />
+              </div>
+              <h5 className="font-semibold text-gray-800 mb-2">Mindfulness Aplicado</h5>
+              <p className="text-gray-600 text-sm">Técnicas de mindfulness específicas para el tratamiento de adicciones</p>
+            </div>
+            
+            <div className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
+              <div className="bg-green-100 w-12 h-12 rounded-full flex items-center justify-center mb-4">
+                <FaUserFriends className="text-green-600 text-xl" />
+              </div>
+              <h5 className="font-semibold text-gray-800 mb-2">Terapia Integral de Pareja</h5>
+              <p className="text-gray-600 text-sm">Intervención familiar y de pareja en contextos de adicción</p>
+            </div>
+            
+            <div className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
+              <div className="bg-yellow-100 w-12 h-12 rounded-full flex items-center justify-center mb-4">
+                <FaStar className="text-yellow-600 text-xl" />
+              </div>
+              <h5 className="font-semibold text-gray-800 mb-2">Psicología Positiva</h5>
+              <p className="text-gray-600 text-sm">Enfoque en fortalezas y recursos para la recuperación</p>
+            </div>
+            
+            <div className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
+              <div className="bg-red-100 w-12 h-12 rounded-full flex items-center justify-center mb-4">
+                <FaCheckCircle className="text-red-600 text-xl" />
+              </div>
+              <h5 className="font-semibold text-gray-800 mb-2">Prevención de Recaídas</h5>
+              <p className="text-gray-600 text-sm">Estrategias efectivas para mantener la abstinencia</p>
+            </div>
+            
+            <div className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
+              <div className="bg-indigo-100 w-12 h-12 rounded-full flex items-center justify-center mb-4">
+                <FaBriefcase className="text-indigo-600 text-xl" />
+              </div>
+              <h5 className="font-semibold text-gray-800 mb-2">Adicciones Comportamentales</h5>
+              <p className="text-gray-600 text-sm">Tratamiento de adicciones sin sustancias (juego, internet, etc.)</p>
+            </div>
+          </div>
+        </div>
+        
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
           <StatCard titulo="Lecciones" value="13 Lecciones" icon={<FaBook />} />
           <StatCard titulo="Cuestionarios" value="9 Evaluaciones" icon={<FaCheckCircle />} />
           <StatCard titulo="Material" value="8 PDFs Complementarios" icon={<FaGraduationCap />} />
         </div>
         <div className="mt-12 text-center">
-          <button className="bg-lidera-light-blue hover:bg-[#6a96c0] text-white px-8 py-4 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl font-semibold text-lg">
+          <button className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-8 py-4 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl font-semibold text-lg">
             <FaStar className="inline mr-2" />
-            Acceder al Curso
+            Comenzar Especialización
           </button>
         </div>
       </section>

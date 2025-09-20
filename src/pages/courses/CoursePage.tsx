@@ -24,7 +24,6 @@ interface Lesson {
 }
 
 const CoursePage: React.FC = () => {
-  const { courseId } = useParams<{ courseId: string }>();
   const navigate = useNavigate();
   
   const [course, setCourse] = useState<Course | null>(null);
@@ -34,41 +33,109 @@ const CoursePage: React.FC = () => {
 
   useEffect(() => {
     const loadCourseData = async () => {
-      if (!courseId) {
-        setError('ID de curso no proporcionado');
-        setLoading(false);
-        return;
-      }
-
       try {
         setLoading(true);
         setError(null);
 
-        // Cargar información del curso
-        const { data: courseData, error: courseError } = await supabase
-          .from('cursos')
-          .select('*')
-          .eq('id', courseId)
-          .single();
-
-        if (courseError) {
-          throw courseError;
-        }
+        // Datos estáticos del curso de adicciones
+        const courseData: Course = {
+          id: 'master-adicciones-intervencion',
+          titulo: 'Máster en Adicciones e Intervención Psicosocial',
+          descripcion: 'Especialízate en el tratamiento de adicciones y la intervención psicosocial con las últimas técnicas y metodologías.',
+          imagen_url: '/images/brain-addiction.jpg',
+          precio: 1299,
+          estado: 'activo',
+          duracion: '40 horas',
+          nivel: 'Avanzado'
+        };
         
         setCourse(courseData);
 
-        // Cargar lecciones del curso
-        const { data: lessonsData, error: lessonsError } = await supabase
-          .from('lecciones')
-          .select('id, titulo, orden, descripcion, duracion_estimada, tiene_cuestionario')
-          .eq('curso_id', courseId)
-          .order('orden', { ascending: true });
-
-        if (lessonsError) {
-          console.error('Error al cargar lecciones:', lessonsError);
-        } else {
-          setLessons(lessonsData || []);
-        }
+        // Datos estáticos de lecciones
+        const lessonsData: Lesson[] = [
+          {
+            id: '1',
+            titulo: 'FUNDAMENTOS Y TERAPÉUTICO',
+            orden: 1,
+            descripcion: 'Bases fundamentales y enfoques terapéuticos en adicciones',
+            duracion_estimada: 120,
+            tiene_cuestionario: true
+          },
+          {
+            id: '2',
+            titulo: 'TERAPIA COGNITIVA DROGODEPENDENCIAS',
+            orden: 2,
+            descripcion: 'Aplicación de terapia cognitiva en el tratamiento de drogodependencias',
+            duracion_estimada: 90,
+            tiene_cuestionario: true
+          },
+          {
+            id: '3',
+            titulo: 'FAMILIA Y TRABAJO EQUIPO',
+            orden: 3,
+            descripcion: 'Intervención familiar y trabajo en equipo multidisciplinar',
+            duracion_estimada: 105,
+            tiene_cuestionario: false
+          },
+          {
+            id: '4',
+            titulo: 'RECURSOS COACHING',
+            orden: 4,
+            descripcion: 'Herramientas de coaching aplicadas a la intervención en adicciones',
+            duracion_estimada: 85,
+            tiene_cuestionario: true
+          },
+          {
+            id: '5',
+            titulo: 'INTERVENCIÓN FAMILIAR Y RECURSOS MENTORINNG',
+            orden: 5,
+            descripcion: 'Estrategias de intervención familiar y técnicas de mentoring',
+            duracion_estimada: 95,
+            tiene_cuestionario: false
+          },
+          {
+            id: '6',
+            titulo: 'NUEVOS MODELOS TERAPÉUTICOS',
+            orden: 6,
+            descripcion: 'Modelos terapéuticos innovadores en el tratamiento de adicciones',
+            duracion_estimada: 110,
+            tiene_cuestionario: true
+          },
+          {
+            id: '7',
+            titulo: 'INTELIGENCIA EMOCIONAL',
+            orden: 7,
+            descripcion: 'Desarrollo de la inteligencia emocional en procesos terapéuticos',
+            duracion_estimada: 100,
+            tiene_cuestionario: false
+          },
+          {
+            id: '8',
+            titulo: 'GESTIÓN DE LAS ADICCIONES DESDE LA PERSPECTIVA DE GÉNERO',
+            orden: 8,
+            descripcion: 'Enfoque de género en la gestión y tratamiento de adicciones',
+            duracion_estimada: 115,
+            tiene_cuestionario: true
+          },
+          {
+            id: '9',
+            titulo: 'INTELIGENCIA EMOCIONAL',
+            orden: 9,
+            descripcion: 'Profundización en inteligencia emocional aplicada',
+            duracion_estimada: 90,
+            tiene_cuestionario: false
+          },
+          {
+            id: '10',
+            titulo: 'TRABAJO FINAL DE MÁSTER',
+            orden: 10,
+            descripcion: 'Desarrollo y presentación del proyecto final de máster',
+            duracion_estimada: 200,
+            tiene_cuestionario: true
+          }
+        ];
+        
+        setLessons(lessonsData);
 
       } catch (err) {
         console.error('Error al cargar datos del curso:', err);
@@ -79,7 +146,7 @@ const CoursePage: React.FC = () => {
     };
 
     loadCourseData();
-  }, [courseId]);
+  }, []);
 
   const handleBackToCourses = () => {
     navigate('/courses');

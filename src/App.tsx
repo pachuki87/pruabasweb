@@ -139,10 +139,11 @@ function App() {
           <Route path="/faqs" element={<FaqsPage currentRole={currentRole} onRoleChange={handleRoleChange} />} />
           <Route path="/courses" element={<CoursesPage currentRole={currentRole} onRoleChange={handleRoleChange} />} />
           <Route path="/courses/:courseId" element={<CoursePage />} />
+          <Route path="/visitor/courses/:courseId" element={<CoursePage />} />
           <Route path="/formacion" element={<Formacion />} />
           <Route path="/testimonios" element={<TestimoniosPage currentRole={currentRole} onRoleChange={handleRoleChange} />} />
           <Route path="/viajes-talleres" element={<ViajesYTalleresPage currentRole={currentRole} onRoleChange={handleRoleChange} />} />
-          <Route path="/master-adicciones-intervencion" element={<MasterAdiccionesPage />} />
+          <Route path="/master-adicciones-intervencion" element={<CoursePage />} />
           <Route path="/experto-conductas-adictivas" element={<ExpertoConductasPage />} />
           <Route path="/payment" element={<PaymentPage />} />
           <Route path="/stripe-test" element={<StripeTest />} />

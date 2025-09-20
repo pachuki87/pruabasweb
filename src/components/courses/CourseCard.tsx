@@ -93,8 +93,33 @@ const CourseCard: React.FC<CourseCardProps> = ({
     return 'https://images.pexels.com/photos/3769021/pexels-photo-3769021.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1';
   };
 
+  // Función para manejar clic en el div principal (ir al curso directo)
+  const handleDivClick = () => {
+    if (role && role !== 'visitor') {
+      navigate(`/${role}/courses/${id}`);
+    } else {
+      // Si es visitante, redirigir al login
+      navigate('/login/student');
+    }
+  };
+
+  // Función para manejar clic en el SVG (ir a página informativa)
+  const handleSvgClick = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Evitar que se propague al div padre
+    // Para el Master de Adicciones, ir a la página informativa
+    if (titulo.toLowerCase().includes('adicciones') || titulo.toLowerCase().includes('master')) {
+      navigate('/master-adicciones-intervencion');
+    } else {
+      // Para otros cursos, mantener comportamiento actual
+      navigate(`/${role}/courses/${id}`);
+    }
+  };
+
   return (
-    <div className="bg-gray-800 border border-gray-700 rounded-lg overflow-hidden shadow-xl hover:border-blue-400 transition-all hover:shadow-2xl">
+    <div 
+      className="bg-gray-800 border border-gray-700 rounded-lg overflow-hidden shadow-xl hover:border-blue-400 transition-all hover:shadow-2xl cursor-pointer"
+      onClick={handleDivClick}
+    >
       <div className="h-40 bg-gray-700 flex items-center justify-center overflow-hidden">
         <img 
           src={getImageUrl()} 
@@ -193,13 +218,13 @@ const CourseCard: React.FC<CourseCardProps> = ({
               </>
             )}
             
-            <Link 
-              to={`/${role}/courses/${id}`}
+            <button
               className="p-1 text-gray-300 bg-gray-700 rounded hover:bg-gray-600 transition-colors"
               title="View course"
+              onClick={handleSvgClick}
             >
               <Eye size={18} />
-            </Link>
+            </button>
           </div>
         </div>
       </div>

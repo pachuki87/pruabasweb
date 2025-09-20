@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../contexts/AuthContext';
+import React, { useEffect, useState, useCallback } from 'react';
 import { supabase } from '../../lib/supabase';
+import { useAuth } from '../../contexts/AuthContext';
 import { useProgress } from '../../hooks/useProgress';
+import { useNavigate } from 'react-router-dom';
 
 type CourseProgress = {
   id: string;
@@ -259,22 +259,45 @@ const StudentProgress: React.FC = () => {
       <p className="text-lg font-medium text-gray-700 mb-4">
         Tienes <span className="font-bold text-blue-600">{courseProgress.length}</span> curso{courseProgress.length !== 1 ? 's' : ''} inscrito{courseProgress.length !== 1 ? 's' : ''}
       </p>
-      {courseProgress.map((course) => (
-        <div 
-          key={course.id} 
-          className="border-b border-gray-100 pb-4 last:border-b-0 cursor-pointer hover:bg-gray-50 transition-colors duration-200 p-4 rounded-lg -m-4 mb-2"
-          onClick={() => navigate(`/courses/${course.id}`)}
-        >
-          <h3 className="text-md font-medium mb-3 hover:text-blue-600 transition-colors">{course.titulo}</h3>
+      {courseProgress.map((course) => {
+        const handleClick = () => navigate(`/courses/${course.id}`);
+        const handleKeyDown = (e: React.KeyboardEvent) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            handleClick();
+          }
+        };
+
+        return (
+          <div 
+            key={course.id} 
+            className="
+              group relative
+              border border-gray-200 rounded-lg p-4 mb-4
+              cursor-pointer select-none
+              bg-white hover:bg-gray-50 active:bg-gray-100
+              hover:border-blue-300 focus:border-blue-500
+              hover:shadow-md focus:shadow-lg active:shadow-sm
+              transition-all duration-200 ease-in-out
+              focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50
+              transform hover:scale-[1.01] active:scale-[0.99]
+            "
+            onClick={handleClick}
+            onKeyDown={handleKeyDown}
+            role="button"
+            tabIndex={0}
+            aria-label={`Acceder al curso ${course.titulo}`}
+          >
+          <h3 className="text-md font-medium mb-3 text-gray-800 group-hover:text-blue-600 transition-colors duration-200">{course.titulo}</h3>
           
-          <div className="w-full bg-gray-200 rounded-full h-2.5 mb-2">
+          <div className="w-full bg-gray-200 rounded-full h-2.5 mb-2 group-hover:bg-gray-300 transition-colors duration-200">
             <div 
-              className="bg-red-600 h-2.5 rounded-full transition-all duration-300" 
+              className="bg-red-600 group-hover:bg-red-500 h-2.5 rounded-full transition-all duration-300" 
               style={{ width: `${course.progressPercentage}%` }}
             ></div>
           </div>
           
-          <div className="flex justify-between text-sm text-gray-500">
+          <div className="flex justify-between text-sm text-gray-500 group-hover:text-gray-600 transition-colors duration-200">
             <span>Progreso: {course.progressPercentage}%</span>
             <span>
               {course.completedChapters}/{course.totalChapters} lecciones • {' '}
@@ -289,8 +312,16 @@ const StudentProgress: React.FC = () => {
               </span>
             </div>
           )}
+          
+          {/* Indicador visual de que es clickeable */}
+          <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+            <svg className="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </div>
         </div>
-      ))}
+        );
+      })}
     </div>
   );
 };

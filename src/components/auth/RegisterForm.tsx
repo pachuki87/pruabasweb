@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { User, Mail, Lock, Phone, Briefcase, Award } from 'lucide-react';
 import { supabase, supabaseAdmin } from '../../lib/supabase';
+import { toast } from 'sonner';
 
 // Define GoogleIcon component
 const GoogleIcon = () => (
@@ -98,32 +99,99 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ role, onRegister }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    setError(null);
-    
+    setError('');
+
+    console.log('🚀 Iniciando proceso de registro...');
+
     try {
-      const { data, error } = await supabase.auth.signUp({
+      // Registrar usuario en Auth
+      console.log('📧 Registrando usuario en Auth con email:', formData.email);
+      const { data: authData, error: authError } = await supabase.auth.signUp({
         email: formData.email,
         password: formData.password,
       });
+
+      if (authError) {
+        console.error('❌ Error en Auth:', authError);
+        setError(`Error de autenticación: ${authError.message}`);
+        toast.error(`Error de autenticación: ${authError.message}`);
+        return;
+      }
+
+      if (!authData.user) {
+        console.error('❌ No se creó el usuario en Auth');
+        setError('No se pudo crear el usuario');
+        toast.error('No se pudo crear el usuario');
+        return;
+      }
+
+      console.log('✅ Usuario creado en Auth:', authData.user.id);
+      toast.success('Usuario registrado en el sistema de autenticación');
+
+      // Insertar usuario en la tabla usuarios
+      console.log('👤 Insertando usuario en tabla usuarios...');
+      const { error: insertError } = await supabaseAdmin
+        .from('usuarios')
+        .insert([
+          {
+            id: authData.user.id,
+            email: formData.email,
+            nombre: formData.nombre,
+            apellido: formData.apellido,
+            rol: 'estudiante',
+          },
+        ]);
+
+      if (insertError) {
+        console.error('❌ Error al insertar en tabla usuarios:', insertError);
+        
+        // Limpiar usuario de Auth si falla la inserción
+        console.log('🧹 Limpiando usuario de Auth...');
+        await supabaseAdmin.auth.admin.deleteUser(authData.user.id);
+        
+        setError(`Error al crear perfil de usuario: ${insertError.message}`);
+        toast.error(`Error al crear perfil de usuario: ${insertError.message}`);
+        return;
+      }
+
+      console.log('✅ Usuario insertado correctamente en tabla usuarios');
+      toast.success('Perfil de usuario creado exitosamente');
       
-      if (error) throw error;
+      setRegistrationSuccess(true);
+      toast.success('¡Registro completado exitosamente! Puedes iniciar sesión ahora.');
       
-      // Usar supabaseAdmin para bypasear RLS durante la creación inicial del perfil
-      await supabaseAdmin.from('usuarios').insert({
-        id: data.user?.id,
-        email: formData.email,
-        rol: role,
-        mobile: formData.mobile || null,
-        skills: formData.skills || null,
-        qualification: formData.qualification || null,
+    } catch (error: any) {
+      console.error('❌ Error inesperado:', error);
+      setError(`Error inesperado: ${error.message}`);
+      toast.error(`Error inesperado: ${error.message}`);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleGoogleAuth = async () => {
+    console.log('🔍 Iniciando autenticación con Google...');
+    
+    try {
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/dashboard`,
+        },
       });
 
-      setRegistrationSuccess(true);
-      setIsLoading(false);
+      if (error) {
+        console.error('❌ Error en Google Auth:', error);
+        toast.error(`Error con Google: ${error.message}`);
+        return;
+      }
+
+      console.log('✅ Redirigiendo a Google...');
+      toast.success('Redirigiendo a Google para autenticación...');
       
-    } catch (err: any) {
-      setError(err.message || 'Failed to register');
-      setIsLoading(false);
+    } catch (error: any) {
+      console.error('❌ Error inesperado en Google Auth:', error);
+      toast.error(`Error inesperado: ${error.message}`);
     }
   };
 

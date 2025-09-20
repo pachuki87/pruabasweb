@@ -78,7 +78,7 @@ const StudentProgress: React.FC = () => {
         if (signal.aborted) return;
         
         const courseId = enrollment.curso_id;
-        const courseTitle = enrollment.cursos?.titulo || 'Curso sin título';
+        const courseTitle = (enrollment.cursos as any)?.titulo || 'Curso sin título';
 
         // Delay entre requests para evitar cancelaciones
         await new Promise(resolve => setTimeout(resolve, 100));
@@ -146,14 +146,14 @@ const StudentProgress: React.FC = () => {
           }
         }
         
-        console.log(`📊 Curso ${courseTitle}: ${completedQuizzes}/${totalQuizzes} cuestionarios completados`);
+        console.log(`📊 Curso ${courseTitle}: ${completedQuizzes}/${totalQuizzes || 0} cuestionarios completados`);
 
         // Use progress from useProgress hook if available
         let progressPercentage = 0;
         let completedChapters = 0;
         
         if (estadisticasUsuario && estadisticasUsuario.courseProgress) {
-           const courseStats = estadisticasUsuario.courseProgress.find(c => c.curso_id === courseId);
+           const courseStats = estadisticasUsuario.courseProgress.find((c: any) => c.curso_id === courseId);
           if (courseStats) {
             // Use porcentaje_progreso from user_course_summary, handle NaN values
             const rawProgress = courseStats.porcentaje_progreso;
@@ -260,7 +260,7 @@ const StudentProgress: React.FC = () => {
         Tienes <span className="font-bold text-blue-600">{courseProgress.length}</span> curso{courseProgress.length !== 1 ? 's' : ''} inscrito{courseProgress.length !== 1 ? 's' : ''}
       </p>
       {courseProgress.map((course) => {
-        const handleClick = () => navigate(`/courses/${course.id}`);
+        const handleClick = () => navigate(`/student/courses/${course.id}`);
         const handleKeyDown = (e: React.KeyboardEvent) => {
           if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();

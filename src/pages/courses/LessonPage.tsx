@@ -17,7 +17,7 @@ declare global {
 interface Lesson {
   id: string;
   titulo: string;
-  slug?: string; // Opcional porque lo generamos dinámicamente
+  slug: string; // Ahora es requerido, no opcional
   orden: number;
   archivo_url?: string; // URL del archivo HTML migrado
   contenido_html?: string; // Mantenemos por compatibilidad, pero será null después de la migración
@@ -288,6 +288,30 @@ const LessonPage: React.FC = () => {
           console.log('📄 Lesson', lesson.titulo, 'PDFs from database:', pdfs);
           console.log('🚨 DEBUG: useEffect ejecutándose para lección:', lesson.titulo, 'PDFs count:', pdfs.length);
           
+          // Mapeo de títulos de lecciones del master a nombres de archivos HTML
+          const masterLessonFileMap: { [key: string]: string } = {
+            'FUNDAMENTOS Y TERAPÉUTICO': '/lessons/leccion-1-fundamentos-p-terapeutico.html',
+            'TERAPIA COGNITIVA DROGODEPENDENCIAS': '/lessons/leccion-2-terapia-cognitiva-drogodependencias.html',
+            'FAMILIA Y TRABAJO EQUIPO': '/lessons/leccion-3-familia-y-trabajo-equipo.html',
+            'RECURSOS COACHING': '/lessons/leccion-4-recovery-coaching.html',
+            'INTERVENCIÓN FAMILIAR Y RECURSOS MENTORINNG': '/lessons/leccion-6-intervencion-familiar-y-recovery-mentoring.html',
+            'NUEVOS MODELOS TERAPÉUTICOS': '/lessons/leccion-7-nuevos-modelos-terapeuticos.html',
+            'INTELIGENCIA EMOCIONAL': '/lessons/leccion-9-inteligencia-emocional.html',
+            'GESTIÓN DE LAS ADICCIONES DESDE LA PERSPECTIVA DE GÉNERO': '/lessons/leccion-8-gestion-perspectiva-genero.html',
+            'TRABAJO FINAL DE MÁSTER': '/lessons/leccion-10-trabajo-final-master.html'
+          };
+          
+          // Determinar si es un curso master y establecer archivo_url
+          let archivo_url = lesson.archivo_url;
+          if (courseId === 'b5ef8c64-fe26-4f20-8221-80a1bf475b05') {
+            // Es el curso master
+            const lessonTitle = lesson.titulo.toUpperCase();
+            if (masterLessonFileMap[lessonTitle]) {
+              archivo_url = masterLessonFileMap[lessonTitle];
+              console.log('🎯 Master lesson file URL set:', archivo_url, 'for lesson:', lesson.titulo);
+            }
+          }
+          
           // Enlaces externos para Adicciones Comportamentales2 Cuestionarios y Psicología positiva
           const externalLinks: any[] = [];
           if (generatedSlug.includes('Adicciones Comportamentales2 Cuestionarios')) {
@@ -339,6 +363,7 @@ const LessonPage: React.FC = () => {
           return {
             ...lesson,
             slug: generatedSlug,
+            archivo_url,
             pdfs,
             externalLinks,
             tiene_cuestionario: hasQuiz
@@ -372,10 +397,10 @@ const LessonPage: React.FC = () => {
             // Registrar progreso del usuario si está autenticado
             if (user && courseId) {
               await actualizarProgresoCapitulo({
-                cursoId: courseId,
-                capituloId: lesson.id,
-                porcentajeProgreso: 0,
-                estaCompletado: false
+                courseId: courseId,
+                chapterId: lesson.id,
+                progressPercentage: 0,
+                isCompleted: false
               });
               setStartTime(new Date());
               setLastActivityTime(new Date());
@@ -391,10 +416,10 @@ const LessonPage: React.FC = () => {
             // Registrar progreso del usuario si está autenticado
             if (user && courseId) {
               await actualizarProgresoCapitulo({
-                cursoId: courseId,
-                capituloId: processedLessons[0].id,
-                porcentajeProgreso: 0,
-                estaCompletado: false
+                courseId: courseId,
+                chapterId: processedLessons[0].id,
+                progressPercentage: 0,
+                isCompleted: false
               });
               setStartTime(new Date());
               setLastActivityTime(new Date());
@@ -489,10 +514,10 @@ const LessonPage: React.FC = () => {
     // Registrar progreso de la nueva lección
     if (user && courseId) {
       await actualizarProgresoCapitulo({
-        cursoId: courseId,
-        capituloId: lesson.id,
-        porcentajeProgreso: 0,
-        estaCompletado: false
+        courseId: courseId,
+        chapterId: lesson.id,
+        progressPercentage: 0,
+        isCompleted: false
       });
       setStartTime(new Date());
       setLastActivityTime(new Date());
@@ -649,17 +674,14 @@ const LessonPage: React.FC = () => {
           {/* Main content - Lesson viewer */}
           <div className="lg:col-span-3">
             <LessonViewer
-              lessonSlug={currentLesson.slug || ''}
-              lessonTitle={currentLesson.titulo}
-              lessonContent={currentLesson?.contenido_html}
-              lessonFileUrl={currentLesson?.archivo_url}
-              pdfs={currentLesson.pdfs}
-              externalLinks={currentLesson.externalLinks}
-              hasQuiz={currentLesson.tiene_cuestionario}
+              lesson={currentLesson}
+              course={course}
               quizId={currentQuizId}
               onBackToCourse={handleBackToCourse}
               onNextLesson={handleNextLesson}
               onPreviousLesson={handlePreviousLesson}
+              canGoNext={lessons.findIndex(l => l.id === currentLesson.id) < lessons.length - 1}
+              canGoPrevious={lessons.findIndex(l => l.id === currentLesson.id) > 0}
             />
           </div>
         </div>

@@ -355,13 +355,13 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
                     let pdfPath;
                     if (isMasterCourse && lessonSlug.includes('Material Complementario y Ejercicios2 Cuestionarios')) {
                       // Lección 5 - los PDFs están en la subcarpeta "5) PSICOLOGIA ADICCIONES"
-                      pdfPath = `/pdfs/master-adicciones/5) PSICOLOGIA ADICCIONES/${encodeURIComponent(pdf)}`;
+                      pdfPath = `/pdfs/master-adicciones/5) PSICOLOGIA ADICCIONES/${pdf}`;
                     } else if (isMasterCourse) {
                       // Otras lecciones del máster
-                      pdfPath = `/pdfs/master-adicciones/${encodeURIComponent(pdf)}`;
+                      pdfPath = `/pdfs/master-adicciones/${pdf}`;
                     } else {
                       // Curso experto
-                      pdfPath = `/pdfs/experto-conductas-adictivas/${encodeURIComponent(pdf)}`;
+                      pdfPath = `/pdfs/experto-conductas-adictivas/${pdf}`;
                     }
                     
                     console.log(`📄 PDF path for ${pdf}: ${pdfPath}`);

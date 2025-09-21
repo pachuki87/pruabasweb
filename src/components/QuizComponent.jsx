@@ -392,9 +392,140 @@ const QuizComponent = ({ leccionId, courseId, onQuizComplete }) => {
         textoRespuesta,
         tiempoRespuesta,
         tipo: 'texto_libre',
-        esCorrecta: true // Para texto libre, consideramos válida cualquier respuesta no vacía
+        esCorrecta: true, // Para texto libre, consideramos válida cualquier respuesta no vacía
+        archivos: prev[preguntaId]?.archivos || [] // Mantener archivos existentes
       }
     }));
+  };
+
+  const handleFileUpload = (preguntaId, event) => {
+    const files = Array.from(event.target.files);
+    const tiempoRespuesta = Math.floor((Date.now() - questionStartTime) / 1000);
+    
+    // Validar tipos de archivo permitidos
+    const allowedTypes = [
+      'application/pdf',
+      'application/msword',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      'image/jpeg',
+      'image/jpg'
+    ];
+    
+    const validFiles = files.filter(file => {
+      if (!allowedTypes.includes(file.type)) {
+        alert(`El archivo ${file.name} no es un tipo permitido. Solo se aceptan PDF, Word y JPG.`);
+        return false;
+      }
+      if (file.size > 10 * 1024 * 1024) { // 10MB máximo
+        alert(`El archivo ${file.name} es demasiado grande. El tamaño máximo es 10MB.`);
+        return false;
+      }
+      return true;
+    });
+
+    if (validFiles.length > 0) {
+      setRespuestas(prev => ({
+        ...prev,
+        [preguntaId]: {
+          textoRespuesta: prev[preguntaId]?.textoRespuesta || '',
+          tiempoRespuesta,
+          tipo: 'texto_libre',
+          esCorrecta: true,
+          archivos: [...(prev[preguntaId]?.archivos || []), ...validFiles]
+        }
+      }));
+    }
+    
+    // Limpiar el input para permitir subir el mismo archivo nuevamente
+    event.target.value = '';
+  };
+
+  const removeFile = (preguntaId, fileIndex) => {
+    setRespuestas(prev => {
+      const respuestaActual = prev[preguntaId];
+      if (!respuestaActual || !respuestaActual.archivos) return prev;
+      
+      const nuevosArchivos = respuestaActual.archivos.filter((_, index) => index !== fileIndex);
+      
+      return {
+        ...prev,
+        [preguntaId]: {
+          ...respuestaActual,
+          archivos: nuevosArchivos
+        }
+      };
+    });
+  };
+
+  // Funciones para manejar arrastrar y soltar archivos
+  const handleDragOver = (e, preguntaId) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    // Añadir clase visual de arrastre
+    const uploadArea = document.querySelector(`#file-upload-${preguntaId}`).closest('.file-upload-area');
+    if (uploadArea) {
+      uploadArea.classList.add('drag-active');
+    }
+  };
+
+  const handleDragLeave = (e, preguntaId) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    // Remover clase visual de arrastre
+    const uploadArea = document.querySelector(`#file-upload-${preguntaId}`).closest('.file-upload-area');
+    if (uploadArea) {
+      uploadArea.classList.remove('drag-active');
+    }
+  };
+
+  const handleDrop = (e, preguntaId) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    // Remover clase visual de arrastre
+    const uploadArea = document.querySelector(`#file-upload-${preguntaId}`).closest('.file-upload-area');
+    if (uploadArea) {
+      uploadArea.classList.remove('drag-active');
+    }
+    
+    const files = Array.from(e.dataTransfer.files);
+    const tiempoRespuesta = Math.floor((Date.now() - questionStartTime) / 1000);
+    
+    // Validar tipos de archivo permitidos
+    const allowedTypes = [
+      'application/pdf',
+      'application/msword',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      'image/jpeg',
+      'image/jpg'
+    ];
+    
+    const validFiles = files.filter(file => {
+      if (!allowedTypes.includes(file.type)) {
+        alert(`El archivo ${file.name} no es un tipo permitido. Solo se aceptan PDF, Word y JPG.`);
+        return false;
+      }
+      if (file.size > 10 * 1024 * 1024) { // 10MB máximo
+        alert(`El archivo ${file.name} es demasiado grande. El tamaño máximo es 10MB.`);
+        return false;
+      }
+      return true;
+    });
+
+    if (validFiles.length > 0) {
+      setRespuestas(prev => ({
+        ...prev,
+        [preguntaId]: {
+          textoRespuesta: prev[preguntaId]?.textoRespuesta || '',
+          tiempoRespuesta,
+          tipo: 'texto_libre',
+          esCorrecta: true,
+          archivos: [...(prev[preguntaId]?.archivos || []), ...validFiles]
+        }
+      }));
+    }
   };
 
   const nextQuestion = async () => {
@@ -747,6 +878,70 @@ const QuizComponent = ({ leccionId, courseId, onQuizComplete }) => {
               />
               <div className="character-count">
                 {(respuestaSeleccionada?.textoRespuesta || '').length}/1000 caracteres
+              </div>
+              
+              {/* Componente de subida de archivos */}
+              <div className="file-upload-container">
+                <div className="file-upload-header">
+                  <h4>📎 Adjuntar archivos (opcional)</h4>
+                  <p>Puedes subir archivos PDF, Word (.doc, .docx) o imágenes JPG (máximo 10MB cada uno)</p>
+                </div>
+                
+                <div 
+                  className="file-upload-area"
+                  onDragOver={(e) => handleDragOver(e, preguntaActual.id)}
+                  onDragLeave={(e) => handleDragLeave(e, preguntaActual.id)}
+                  onDrop={(e) => handleDrop(e, preguntaActual.id)}
+                >
+                  <input
+                    type="file"
+                    id={`file-upload-${preguntaActual.id}`}
+                    className="file-upload-input"
+                    multiple
+                    accept=".pdf,.doc,.docx,.jpg,.jpeg"
+                    onChange={(e) => handleFileUpload(preguntaActual.id, e)}
+                  />
+                  <label 
+                    htmlFor={`file-upload-${preguntaActual.id}`}
+                    className="file-upload-label"
+                  >
+                    <div className="upload-icon">📁</div>
+                    <div className="upload-text">
+                      <strong>Seleccionar archivos</strong>
+                      <span>o arrástralos aquí</span>
+                    </div>
+                  </label>
+                </div>
+                
+                {/* Lista de archivos subidos */}
+                {respuestaSeleccionada?.archivos && respuestaSeleccionada.archivos.length > 0 && (
+                  <div className="uploaded-files-list">
+                    <h5>Archivos adjuntos:</h5>
+                    {respuestaSeleccionada.archivos.map((file, index) => (
+                      <div key={index} className="uploaded-file-item">
+                        <div className="file-info">
+                          <span className="file-icon">
+                            {file.type.includes('pdf') ? '📄' : 
+                             file.type.includes('word') ? '📝' : 
+                             '🖼️'}
+                          </span>
+                          <span className="file-name">{file.name}</span>
+                          <span className="file-size">
+                            ({(file.size / 1024 / 1024).toFixed(2)} MB)
+                          </span>
+                        </div>
+                        <button
+                          type="button"
+                          className="remove-file-btn"
+                          onClick={() => removeFile(preguntaActual.id, index)}
+                          title="Eliminar archivo"
+                        >
+                          ✕
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           ) : (

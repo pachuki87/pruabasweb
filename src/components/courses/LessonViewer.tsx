@@ -351,10 +351,12 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
                     // Determinar la ruta del PDF basado en el curso y la lección
                     const isMasterCourse = course.id === 'b5ef8c64-fe26-4f20-8221-80a1bf475b05';
                     
-                    // Para la lección 5, los PDFs están en una subcarpeta
                     let pdfPath;
-                    if (isMasterCourse && lessonSlug.includes('Material Complementario y Ejercicios2 Cuestionarios')) {
-                      // Lección 5 - los PDFs están en la subcarpeta "5) PSICOLOGIA ADICCIONES"
+                    // Si la ruta del PDF ya es absoluta o contiene la estructura completa, usarla directamente
+                    if (pdf.startsWith('/') || pdf.includes('master en adicciones/') || pdf.includes('experto-conductas-adictivas/')) {
+                      pdfPath = `/${pdf}`; // Asegurarse de que siempre empiece con /
+                    } else if (isMasterCourse && lessonSlug.includes('Material Complementario y Ejercicios2 Cuestionarios')) {
+                      // Lección 5 del máster, los PDFs están en la subcarpeta "5) PSICOLOGIA ADICCIONES"
                       pdfPath = `/pdfs/master-adicciones/5) PSICOLOGIA ADICCIONES/${pdf}`;
                     } else if (isMasterCourse) {
                       // Otras lecciones del máster
@@ -370,7 +372,7 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
                       <div key={index} className="bg-red-50 border border-red-200 rounded-lg p-4">
                         <div className="flex items-center mb-2">
                           <FileText className="w-5 h-5 mr-2 text-red-600" />
-                          <span className="text-sm font-medium text-gray-900 truncate">{pdf.replace('.pdf', '')}</span>
+                          <span className="text-sm font-medium text-gray-900 truncate">{pdf}</span>
                         </div>
                         <div className="flex space-x-2">
                           <a
@@ -379,7 +381,7 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
                             rel="noopener noreferrer"
                             className="flex-1 bg-red-600 text-white px-3 py-2 rounded-md hover:bg-red-700 transition-colors text-xs text-center"
                           >
-                            Ver PDF
+                            {pdf.endsWith('.pdf') ? 'Ver PDF' : 'Ver Documento'}
                           </a>
                           <a
                             href={pdfPath}

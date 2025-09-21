@@ -11,7 +11,7 @@ interface Lesson {
   id: string;
   titulo: string;
   descripcion?: string;
-  slug?: string; // Opcional porque lo generamos dinámicamente
+  slug: string; // Ahora es obligatorio
   orden: number;
   duracion_estimada?: number;
   imagen_url?: string;
@@ -60,6 +60,21 @@ const NewLessonPage: React.FC = () => {
   // Estado para tracking de tiempo
   const [startTime, setStartTime] = useState<Date | null>(null);
   const [lastActivityTime, setLastActivityTime] = useState<Date>(new Date());
+
+  // Función para actualizar el tiempo de estudio
+  const updateStudyTime = async (lessonId: string, studyTimeSeconds: number) => {
+    if (!user || !courseId) return;
+    
+    try {
+      await registrarTiempoEstudio({
+        courseId: courseId,
+        chapterId: lessonId,
+        timeSpentMinutes: Math.floor(studyTimeSeconds / 60)
+      });
+    } catch (err) {
+      console.error('Error updating study time:', err);
+    }
+  };
 
   // Función para obtener el quiz ID asociado a una lección
   const getQuizIdForLesson = async (lessonId: string): Promise<string | null> => {
@@ -258,7 +273,7 @@ const NewLessonPage: React.FC = () => {
         });
       }
       
-      // Crear un mapa de lección ID a materiales (PDFs)
+      // Crear un mapa de lección ID a materiales (PDFs) - CORREGIDO
       const materialesMap = new Map();
       if (materialesData) {
         materialesData.forEach(material => {
@@ -274,12 +289,12 @@ const NewLessonPage: React.FC = () => {
       
       console.log('📋 Materials map created:', materialesMap);
       
-      // Procesar lecciones para extraer información de PDFs y cuestionarios
-      const processedLessons = lessonsData.map(lesson => {
+      // Procesar lecciones para extraer información de PDFs y cuestionarios - CORREGIDO
+      const processedLessons: Lesson[] = lessonsData.map(lesson => {
         const generatedSlug = mapTitleToSlug(lesson.titulo);
         console.log('🔄 Processing lesson:', lesson.titulo, 'generated slug:', generatedSlug);
         
-        // Obtener PDFs desde la base de datos
+        // Obtener PDFs desde la base de datos SOLO para esta lección
         const pdfs: string[] = materialesMap.get(lesson.id) || [];
         const hasQuiz = quizMap.has(lesson.id) && quizMap.get(lesson.id).length > 0;
         
@@ -470,10 +485,10 @@ const NewLessonPage: React.FC = () => {
     // Registrar progreso del usuario si está autenticado
     if (user && courseId) {
       await actualizarProgresoCapitulo({
-        cursoId: courseId,
-        capituloId: lesson.id,
-        porcentajeProgreso: 0,
-        estaCompletado: false
+        courseId: courseId,
+        chapterId: lesson.id,
+        progressPercentage: 0,
+        isCompleted: false
       });
       setStartTime(new Date());
       setLastActivityTime(new Date());

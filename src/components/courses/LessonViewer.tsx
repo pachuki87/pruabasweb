@@ -348,11 +348,24 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
                 <h3 className="text-lg font-semibold text-gray-900 mb-3">📄 Materiales de la Lección</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   {pdfs.map((pdf, index) => {
-                    // Determinar la ruta del PDF basado en el curso
+                    // Determinar la ruta del PDF basado en el curso y la lección
                     const isMasterCourse = course.id === 'b5ef8c64-fe26-4f20-8221-80a1bf475b05';
-                    const pdfPath = isMasterCourse 
-                      ? `/pdfs/master-adicciones/${encodeURIComponent(pdf)}`
-                      : `/pdfs/experto-conductas-adictivas/${encodeURIComponent(pdf)}`;
+                    
+                    // Para la lección 5, los PDFs están en una subcarpeta
+                    let pdfPath;
+                    if (isMasterCourse && lessonSlug.includes('Material Complementario y Ejercicios2 Cuestionarios')) {
+                      // Lección 5 - los PDFs están en la subcarpeta "5) PSICOLOGIA ADICCIONES"
+                      pdfPath = `/pdfs/master-adicciones/5) PSICOLOGIA ADICCIONES/${encodeURIComponent(pdf)}`;
+                    } else if (isMasterCourse) {
+                      // Otras lecciones del máster
+                      pdfPath = `/pdfs/master-adicciones/${encodeURIComponent(pdf)}`;
+                    } else {
+                      // Curso experto
+                      pdfPath = `/pdfs/experto-conductas-adictivas/${encodeURIComponent(pdf)}`;
+                    }
+                    
+                    console.log(`📄 PDF path for ${pdf}: ${pdfPath}`);
+                    
                     return (
                       <div key={index} className="bg-red-50 border border-red-200 rounded-lg p-4">
                         <div className="flex items-center mb-2">
@@ -434,7 +447,7 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
           dangerouslySetInnerHTML={{ __html: content }}
         />
         
-        <style jsx="true">{`
+        <style>{`
           .elementor-content .elementor-section {
             margin-bottom: 2rem;
           }
@@ -491,4 +504,4 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
   );
 };
 
-export default LessonViewer
+export default LessonViewer;

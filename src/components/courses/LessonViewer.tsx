@@ -31,6 +31,16 @@ interface LessonViewerProps {
   canGoPrevious?: boolean;
 }
 
+interface QuizResults {
+  puntuacionObtenida: number;
+  puntuacionMaxima: number;
+  porcentajeAcierto: number;
+  tiempoTotal: number;
+  aprobado: boolean;
+  respuestasCorrectas: number;
+  totalPreguntas: number;
+}
+
 const LessonViewer: React.FC<LessonViewerProps> = ({
   lesson,
   course,
@@ -42,6 +52,7 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
   canGoPrevious = false
 }) => {
   const [showQuiz, setShowQuiz] = useState(false);
+  const [quizCompleted, setQuizCompleted] = useState(false);
   // Extraer propiedades del objeto lesson
   const lessonSlug = lesson.slug;
   const lessonTitle = lesson.titulo;
@@ -64,13 +75,28 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
 
   const handleQuizClick = () => {
     setShowQuiz(true);
+    setQuizCompleted(false);
   };
 
-  const handleQuizComplete = () => {
-    setShowQuiz(false);
-    // Opcional: llamar onNextLesson si se desea avanzar automáticamente
-    // onNextLesson && onNextLesson();
+  const handleQuizComplete = (results: QuizResults) => {
+    console.log('📊 Cuestionario completado con resultados:', results);
+    // No ocultar el cuestionario inmediatamente, permitir que el usuario vea los resultados
+    setQuizCompleted(true);
+    
+    // Opcional: avanzar automáticamente a la siguiente lección después de un tiempo
+    // if (results.aprobado) {
+    //   setTimeout(() => {
+    //     setShowQuiz(false);
+    //     onNextLesson && onNextLesson();
+    //   }, 5000); // Esperar 5 segundos para que el usuario vea los resultados
+    // }
   };
+
+  const handleBackToLesson = () => {
+    setShowQuiz(false);
+    setQuizCompleted(false);
+  };
+
   const [content, setContent] = useState<string>('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -433,6 +459,7 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
                       leccionId={lesson.id}
                       courseId={courseId}
                       onQuizComplete={handleQuizComplete}
+                      onBackToLesson={handleBackToLesson}
                     />
                   </div>
                 )}

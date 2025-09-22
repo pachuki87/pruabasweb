@@ -1,15 +1,13 @@
 // @flow
 import React, { useState, useEffect } from 'react';
-import { createClient } from '@supabase/supabase-js';
+import { supabase } from '../../lib/supabase';
 import QuizSummaryGenerator from '../services/QuizSummaryGenerator';
 
 const QuizComponent = ({
   leccionId,
   courseId,
   onQuizComplete,
-  onBackToLesson,
-  supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL,
-  supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  onBackToLesson
 }) => {
   const [quiz, setQuiz] = useState(null);
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -25,7 +23,6 @@ const QuizComponent = ({
   const [debugInfo, setDebugInfo] = useState({
     leccionId: leccionId || 'No proporcionado',
     courseId: courseId || 'No proporcionado',
-    supabaseUrl: supabaseUrl ? 'Configurado' : 'No configurado',
     timestamp: new Date().toISOString()
   });
   const [sendingSummary, setSendingSummary] = useState(false);
@@ -36,7 +33,7 @@ const QuizComponent = ({
     webhook: false
   });
 
-  const supabase = createClient(supabaseUrl, supabaseKey);
+
 
 
   // Efecto para cargar el cuestionario

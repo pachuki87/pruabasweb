@@ -8,7 +8,12 @@ import Research from '../components/Research';
 import Campus from '../components/Campus';
 import Footer from '../components/layout/Footer';
 
-const HomePage = () => {
+interface HomePageProps {
+  currentRole: string;
+  onRoleChange: (role: string) => void;
+}
+
+const HomePage: React.FC<HomePageProps> = ({ currentRole, onRoleChange }) => {
   return (
     <div className="min-h-screen bg-white">
       <Header />

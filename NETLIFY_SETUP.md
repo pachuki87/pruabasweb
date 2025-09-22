@@ -19,8 +19,8 @@ Agrega las siguientes variables de entorno:
 #### Variables Obligatorias:
 
 ```
-VITE_SUPABASE_URL=https://tu-proyecto-id.supabase.co
-VITE_SUPABASE_ANON_KEY=tu-clave-anonima-de-supabase
+VITE_SUPABASE_URL=https://lyojcqiiixkqqtpoejdo.supabase.co
+VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx5b2pjcWlpaXhrcXF0cG9lamRvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc0OTgwMzAsImV4cCI6MjA2MzA3NDAzMH0._7ODHgTZbdP_k3PjYNIcx1j42xKWBRa3lZ-P-0BBBPc
 ```
 
 #### Variables Opcionales:
@@ -31,20 +31,26 @@ VITE_SUPABASE_SERVICE_KEY=tu-service-key (solo si es necesario)
 NODE_ENV=production
 ```
 
-### 3. Obtener las Claves de Supabase
+### 3. Variables Específicas del Proyecto
 
-1. Ve a tu proyecto en [Supabase Dashboard](https://supabase.com/dashboard)
-2. Ve a **Settings** > **API**
-3. Copia:
-   - **Project URL** → `VITE_SUPABASE_URL`
-   - **anon public** → `VITE_SUPABASE_ANON_KEY`
+**⚠️ IMPORTANTE: Usa exactamente estos valores para el proyecto institutolidera-elearning:**
 
-### 4. Configurar en Netlify
+- **VITE_SUPABASE_URL**: `https://lyojcqiiixkqqtpoejdo.supabase.co`
+- **VITE_SUPABASE_ANON_KEY**: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx5b2pjcWlpaXhrcXF0cG9lamRvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc0OTgwMzAsImV4cCI6MjA2MzA3NDAzMH0._7ODHgTZbdP_k3PjYNIcx1j42xKWBRa3lZ-P-0BBBPc`
 
+### 4. Configurar en Netlify (PASOS EXACTOS)
+
+**Variable 1:**
 1. En Netlify, haz clic en **Add variable**
-2. Ingresa el nombre: `VITE_SUPABASE_URL`
-3. Ingresa el valor: tu URL de Supabase
-4. Repite para `VITE_SUPABASE_ANON_KEY`
+2. Key: `VITE_SUPABASE_URL`
+3. Value: `https://lyojcqiiixkqqtpoejdo.supabase.co`
+4. Haz clic en **Create variable**
+
+**Variable 2:**
+1. Haz clic en **Add variable** nuevamente
+2. Key: `VITE_SUPABASE_ANON_KEY`
+3. Value: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx5b2pjcWlpaXhrcXF0cG9lamRvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc0OTgwMzAsImV4cCI6MjA2MzA3NDAzMH0._7ODHgTZbdP_k3PjYNIcx1j42xKWBRa3lZ-P-0BBBPc`
+4. Haz clic en **Create variable**
 
 ### 5. Redesplegar el Sitio
 

@@ -1,8 +1,6 @@
 // @flow
 import React, { useState, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js';
-import EmailService from '../services/EmailService';
-import WebhookService from '../services/WebhookService';
 import QuizSummaryGenerator from '../services/QuizSummaryGenerator';
 
 const QuizComponent = ({
@@ -28,8 +26,8 @@ const QuizComponent = ({
   const [emailStatus, setEmailStatus] = useState('idle');
   const [webhookStatus, setWebhookStatus] = useState('idle');
   const [servicesStatus, setServicesStatus] = useState({
-    email: EmailService.isConfigured(),
-    webhook: WebhookService.isConfigured()
+    email: false,
+    webhook: false
   });
 
   const supabase = createClient(supabaseUrl, supabaseKey);
@@ -341,47 +339,10 @@ const QuizComponent = ({
       // Generar HTML para email
       const htmlContent = QuizSummaryGenerator.generateHTMLSummary(summaryData);
 
-      // Enviar email si está configurado
-      if (servicesStatus.email) {
-        try {
-          const emailResult = await EmailService.sendQuizSummaryEmail(
-            user,
-            quiz,
-            summaryData,
-            htmlContent
-          );
-          
-          if (emailResult.success) {
-            setEmailStatus('success');
-          } else {
-            setEmailStatus('error');
-          }
-        } catch (error) {
-          console.error('Error sending email:', error);
-          setEmailStatus('error');
-        }
-      } else {
-        setEmailStatus('idle');
-      }
-
-      // Enviar webhook si está configurado
-      if (servicesStatus.webhook) {
-        try {
-          const webhookPayload = QuizSummaryGenerator.generateWebhookSummary(summaryData);
-          const webhookResult = await WebhookService.sendQuizWebhook(webhookPayload);
-          
-          if (webhookResult.success) {
-            setWebhookStatus('success');
-          } else {
-            setWebhookStatus('error');
-          }
-        } catch (error) {
-          console.error('Error sending webhook:', error);
-          setWebhookStatus('error');
-        }
-      } else {
-        setWebhookStatus('idle');
-      }
+      // Los servicios de email y webhook están deshabilitados en el frontend
+      // Estas funcionalidades se moverán al backend
+      setEmailStatus('idle');
+      setWebhookStatus('idle');
 
     } catch (error) {
       console.error('Error sending quiz summary:', error);

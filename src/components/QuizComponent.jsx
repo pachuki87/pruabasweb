@@ -8,8 +8,8 @@ const QuizComponent = ({
   courseId,
   onQuizComplete,
   onBackToLesson,
-  supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://xyzxyz.supabase.co',
-  supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'xyz'
+  supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL,
+  supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 }) => {
   const [quiz, setQuiz] = useState(null);
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -329,7 +329,6 @@ const QuizComponent = ({
     }
   };
 
-
   const calculateResults = () => {
     if (!quiz || !quiz.preguntas) {
       console.warn('⚠️ No hay quiz o preguntas para calcular resultados');
@@ -409,62 +408,6 @@ const QuizComponent = ({
     };
   };
 
-    let puntuacionObtenida = 0;
-    let puntuacionMaxima = 0;
-    let respuestasCorrectas = 0;
-    let tiempoTotal = 0;
-
-    const updatedAnswers = { ...userAnswers };
-
-    quiz.preguntas.forEach((question) => {
-      puntuacionMaxima += 1;
-      const userAnswer = userAnswers[question.id];
-      
-      if (userAnswer) {
-        tiempoTotal += userAnswer.tiempoRespuesta;
-
-        let esCorrecta = false;
-        
-        if (question.tipo === 'multiple_choice') {
-          const opcionCorrecta = question.opciones_respuesta?.find(op => op.es_correcta);
-          esCorrecta = userAnswer.opcionId === opcionCorrecta?.id;
-        } else if (question.tipo === 'verdadero_falso') {
-          // Implementar lógica para verdadero/falso
-          esCorrecta = true; // Por ahora, asumir correcto
-        } else if (question.tipo === 'texto_libre') {
-          // Implementar lógica para texto libre
-          esCorrecta = true; // Por ahora, asumir correcto
-        }
-
-        if (esCorrecta) {
-          puntuacionObtenida += 1;
-          respuestasCorrectas += 1;
-        }
-
-        updatedAnswers[question.id] = {
-          ...userAnswer,
-          esCorrecta
-        };
-      }
-    });
-
-    setUserAnswers(updatedAnswers);
-
-    const porcentajeAcierto = puntuacionMaxima > 0 ? Math.round((puntuacionObtenida / puntuacionMaxima) * 100) : 0;
-    const porcentajeAprobacion = quiz?.porcentaje_aprobacion || 70;
-    const aprobado = porcentajeAcierto >= porcentajeAprobacion;
-
-    return {
-      puntuacionObtenida,
-      puntuacionMaxima,
-      porcentajeAcierto,
-      tiempoTotal,
-      aprobado,
-      respuestasCorrectas,
-      totalPreguntas: quiz.preguntas.length
-    };
-  };
-
   const finishQuiz = async () => {
     if (!quiz) return;
 
@@ -480,7 +423,6 @@ const QuizComponent = ({
     // Enviar resumen por email y webhook
     await sendQuizSummary(results);
   };
-
 
   const sendQuizSummary = async (results) => {
     if (!quiz || !selectedQuiz) {
@@ -827,6 +769,7 @@ const QuizComponent = ({
     );
   };
 
+  // Early returns for loading and error states
   if (loading) {
     return (
       <div className="quiz-loading">

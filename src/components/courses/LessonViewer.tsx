@@ -150,28 +150,45 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
     const markLessonAsViewed = async () => {
       if (lesson.id && course.id) {
         try {
-          const { data: { user } } = await supabase.auth.getUser();
+          const { data: { user }, error: authError } = await supabase.auth.getUser();
 
-          if (user) {
-            console.log('👁️ Marcando lección como vista:', lesson.id);
+          if (authError) {
+            console.error('❌ Error de autenticación:', authError);
+            return;
+          }
 
-            // Actualizar progreso de la lección
-            await supabase
-              .from('user_course_progress')
-              .upsert({
-                user_id: user.id,
-                curso_id: course.id,
-                leccion_id: lesson.id,
-                progreso_porcentaje: 50, // 50% por ver la lección
-                tiempo_estudiado: 1, // 1 minuto por defecto
-                estado: 'en_progreso',
-                ultima_actividad: new Date().toISOString(),
-                fecha_inicio: new Date().toISOString()
-              });
+          if (!user) {
+            console.log('❌ No hay usuario autenticado');
+            return;
+          }
+
+          console.log('👁️ Marcando lección como vista:', lesson.id, 'Usuario:', user.id);
+
+          // Actualizar progreso de la lección
+          const { data, error } = await supabase
+            .from('user_course_progress')
+            .upsert({
+              user_id: user.id,
+              curso_id: course.id,
+              leccion_id: lesson.id,
+              progreso_porcentaje: 50, // 50% por ver la lección
+              tiempo_estudiado: 1, // 1 minuto por defecto
+              estado: 'en_progreso',
+              ultima_actividad: new Date().toISOString(),
+              fecha_inicio: new Date().toISOString()
+            })
+            .select();
+
+          if (error) {
+            console.error('❌ Error guardando progreso:', error);
+          } else {
+            console.log('✅ Progreso guardado correctamente:', data);
           }
         } catch (error) {
           console.error('❌ Error marcando lección como vista:', error);
         }
+      } else {
+        console.log('❌ Faltan datos:', { lessonId: lesson.id, courseId: course.id });
       }
     };
 

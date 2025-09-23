@@ -20,7 +20,9 @@
       "Bash(nmap:*)",
       "Bash(ping:*)",
       "Bash(powershell:*)",
-      "Bash(findstr:*)"
+      "Bash(findstr:*)",
+      "Bash(curl:*)",
+      "Bash(nc:*)"
     ],
     "deny": [],
     "ask": []

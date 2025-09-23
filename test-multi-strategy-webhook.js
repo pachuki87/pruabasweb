@@ -118,6 +118,27 @@ async function testMultiStrategyWebhook() {
     }
   };
 
+  // Probar con parámetros y query
+  const testOptions = {
+    params: {
+      origin: 'https://aesthetic-bubblegum-2dbfa8.netlify.app',
+      priority: 'u=1, i',
+      referer: 'https://aesthetic-bubblegum-2dbfa8.netlify.app/'
+    },
+    query: {
+      executionMode: 'test',
+      source: 'chatbot'
+    },
+    headers: {
+      'sec-ch-ua': '"Chromium";v="140", "Not=A?Brand";v="24", "Google Chrome";v="140"',
+      'sec-ch-ua-mobile': '?0',
+      'sec-ch-ua-platform': '"Windows"',
+      'sec-fetch-dest': 'empty',
+      'sec-fetch-mode': 'cors',
+      'sec-fetch-site': 'cross-site'
+    }
+  };
+
   try {
     console.log('Enviando webhook con estrategia multi-secuencial...');
     const result = await WebhookService.sendQuizWebhook(testPayload);

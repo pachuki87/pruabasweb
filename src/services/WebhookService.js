@@ -123,49 +123,79 @@ class WebhookService {
       // Resetear estrategias intentadas
       this.serverOptions.strategiesTried = [];
 
-      // Estrategia 1: Usar hostname original
-      console.log('🔄 Estrategia 1: Intentando con hostname original...');
-      const hostnameResult = await this.tryHostnameStrategy(payload, options);
-      if (hostnameResult.success) {
-        return hostnameResult;
+      // Extraer y preservar parámetros y query de las opciones
+      const { params, query, headers, ...restOptions } = options;
+      
+      // Construir URL final con parámetros y query
+      let finalUrl = this.webhookUrl;
+      
+      // Agregar parámetros a la URL
+      if (params && Object.keys(params).length > 0) {
+        const paramsString = new URLSearchParams(params).toString();
+        finalUrl += (finalUrl.includes('?') ? '&' : '?') + paramsString;
+      }
+      
+      // Agregar query parameters a la URL
+      if (query && Object.keys(query).length > 0) {
+        const queryString = new URLSearchParams(query).toString();
+        finalUrl += (finalUrl.includes('?') ? '&' : '?') + queryString;
       }
 
-      // Estrategia 2: Usar IP directa
-      console.log('🔄 Estrategia 2: Intentando con IP directa...');
-      const ipResult = await this.tryDirectIPStrategy(payload, options);
-      if (ipResult.success) {
-        return ipResult;
-      }
+      // Temporalmente guardar la URL original y establecer la URL final
+      const originalUrl = this.webhookUrl;
+      this.webhookUrl = finalUrl;
 
-      // Estrategia 3: Usar proxy CORS
-      if (this.corsOptions.enabled && this.corsOptions.useProxy) {
-        console.log('🔄 Estrategia 3: Intentando con proxy CORS...');
-        this.metrics.corsErrors++;
-        const proxyResult = await this.tryProxyStrategy(payload, options);
-        if (proxyResult.success) {
-          return proxyResult;
+      try {
+        // Estrategia 1: Usar hostname original
+        console.log('🔄 Estrategia 1: Intentando con hostname original...');
+        const hostnameResult = await this.tryHostnameStrategy(payload, { ...restOptions, headers });
+        if (hostnameResult.success) {
+          return hostnameResult;
         }
-      }
 
-      // Estrategia 4: Usar tunnel n8n (si está configurado)
-      if (this.serverOptions.n8nTunnelUrl) {
-        console.log('🔄 Estrategia 4: Intentando con tunnel n8n...');
-        const tunnelResult = await this.tryTunnelStrategy(payload, options);
-        if (tunnelResult.success) {
-          return tunnelResult;
+        // Estrategia 2: Usar IP directa
+        console.log('🔄 Estrategia 2: Intentando con IP directa...');
+        const ipResult = await this.tryDirectIPStrategy(payload, { ...restOptions, headers });
+        if (ipResult.success) {
+          return ipResult;
         }
-      }
 
-      // Si todas las estrategias fallaron, retornar el último error
-      const lastError = this.serverOptions.strategiesTried[this.serverOptions.strategiesTried.length - 1];
-      return {
-        success: false,
-        error: `Todas las estrategias fallaron. Último error: ${lastError?.error || 'Desconocido'}`,
-        strategiesTried: this.serverOptions.strategiesTried,
-        timestamp: new Date().toISOString(),
-        webhookUrl: this.webhookUrl,
-        metrics: { ...this.metrics }
-      };
+        // Estrategia 3: Usar proxy CORS
+        if (this.corsOptions.enabled && this.corsOptions.useProxy) {
+          console.log('🔄 Estrategia 3: Intentando con proxy CORS...');
+          this.metrics.corsErrors++;
+          const proxyResult = await this.tryProxyStrategy(payload, { ...restOptions, headers });
+          if (proxyResult.success) {
+            return proxyResult;
+          }
+        }
+
+        // Estrategia 4: Usar tunnel n8n (si está configurado)
+        if (this.serverOptions.n8nTunnelUrl) {
+          console.log('🔄 Estrategia 4: Intentando con tunnel n8n...');
+          const tunnelResult = await this.tryTunnelStrategy(payload, { ...restOptions, headers });
+          if (tunnelResult.success) {
+            return tunnelResult;
+          }
+        }
+
+        // Si todas las estrategias fallaron, retornar el último error
+        const lastError = this.serverOptions.strategiesTried[this.serverOptions.strategiesTried.length - 1];
+        return {
+          success: false,
+          error: `Todas las estrategias fallaron. Último error: ${lastError?.error || 'Desconocido'}`,
+          strategiesTried: this.serverOptions.strategiesTried,
+          timestamp: new Date().toISOString(),
+          webhookUrl: finalUrl,
+          metrics: { ...this.metrics },
+          params,
+          query
+        };
+
+      } finally {
+        // Restaurar URL original
+        this.webhookUrl = originalUrl;
+      }
 
     } catch (error) {
       // Actualizar métricas de fallo
@@ -179,7 +209,9 @@ class WebhookService {
         timestamp: new Date().toISOString(),
         webhookUrl: this.webhookUrl,
         details: this.getErrorDetails(error),
-        metrics: { ...this.metrics }
+        metrics: { ...this.metrics },
+        params: options.params,
+        query: options.query
       };
     }
   }

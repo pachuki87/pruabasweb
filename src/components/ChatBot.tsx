@@ -47,7 +47,7 @@ const ChatBot: React.FC<ChatBotProps> = ({
       const response = await axios.post(
         'https://api.zai.ai/v1/chat/completions',
         {
-          model: 'glm[G',
+          model: 'glm-4.5',
           messages: [
             {
               role: 'system',
@@ -98,8 +98,50 @@ const ChatBot: React.FC<ChatBotProps> = ({
       console.error('❌ Error al comunicarse con GLM API:', {
         error: error.message,
         response: error.response?.data,
-        status: error.response?.status
+        status: error.response?.status,
+        config: {
+          url: error.config?.url,
+          headers: error.config?.headers ? 'Headers set' : 'No headers',
+          model: error.config?.data?.model
+        }
       });
+
+      // Si el error es 404, probar con el endpoint alternativo
+      if (error.response?.status === 404) {
+        console.log('🔄 Intentando con endpoint alternativo...');
+        try {
+          const altResponse = await axios.post(
+            'https://api.zai.ai/api/paas/v4/chat/completions',
+            {
+              model: 'glm-4.5',
+              messages: [
+                {
+                  role: 'system',
+                  content: `Eres un asistente virtual del Instituto Lidera, especializado en educación sobre adicciones, psicología y salud mental.`
+                },
+                {
+                  role: 'user',
+                  content: message
+                }
+              ],
+              max_tokens: 1000,
+              temperature: 0.7
+            },
+            {
+              headers: {
+                'Authorization': `Bearer ${glmApiKey}`,
+                'Content-Type': 'application/json'
+              },
+              timeout: 15000
+            }
+          );
+
+          const botResponse = altResponse.data.choices[0].message.content;
+          return typeof botResponse === 'string' ? botResponse : String(botResponse);
+        } catch (altError: any) {
+          console.error('❌ Error con endpoint alternativo:', altError.message);
+        }
+      }
 
       // Determinar tipo de error para mensaje específico
       if (error.code === 'ECONNABORTED' || error.message.includes('timeout')) {
@@ -111,7 +153,7 @@ const ChatBot: React.FC<ChatBotProps> = ({
       } else if (error.response?.status >= 500) {
         return 'Lo siento, hay un problema temporal en nuestro servidor. Por favor, inténtalo de nuevo en unos minutos.';
       } else {
-        return 'Lo siento, hay un problema técnico. Por favor, inténtalo de nuevo más tarde.';
+        return `Lo siento, hay un problema técnico (${error.message}). Por favor, inténtalo de nuevo más tarde.`;
       }
     }
   };

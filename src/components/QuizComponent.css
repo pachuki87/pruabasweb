@@ -1,5 +1,86 @@
 /* QuizComponent.css */
 
+/* File Upload Component Styles */
+.file-upload-container {
+  margin-top: 2rem;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+}
+
+.file-upload-header h4 {
+  color: #495057;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+}
+
+.file-upload-header p {
+  color: #6c757d;
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+}
+
+.uploaded-files-list {
+  margin-top: 1rem;
+}
+
+.uploaded-files-list h5 {
+  color: #495057;
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.uploaded-file-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem;
+  background: white;
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+  border: 1px solid #e9ecef;
+}
+
+.file-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.file-icon {
+  font-size: 1rem;
+}
+
+.file-name {
+  font-weight: 500;
+  color: #495057;
+}
+
+.file-size {
+  color: #6c757d;
+  font-size: 0.75rem;
+}
+
+.remove-file-btn {
+  background: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+}
+
+.remove-file-btn:hover {
+  background: #c82333;
+}
+
 .quiz-loading {
   display: flex;
   flex-direction: column;

@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { supabase } from '../lib/supabase';
 import QuizSummaryGenerator from '../services/QuizSummaryGenerator.js';
+import FileUploadComponent from './FileUploadComponent.jsx';
 import './QuizComponent.css';
 
 const QuizComponent = ({
@@ -520,6 +521,14 @@ const QuizComponent = ({
     setStartTime(Date.now());
   };
 
+  const requiresFileUpload = (questionText) => {
+    if (!questionText) return false;
+    const keywords = ['cuadro', 'esquema', 'dibuja', 'gráfico', 'diagrama'];
+    return keywords.some(keyword =>
+      questionText.toLowerCase().includes(keyword)
+    );
+  };
+
   const renderQuestion = () => {
     if (!quiz || currentQuestion >= quiz.preguntas.length) return null;
 
@@ -551,7 +560,7 @@ const QuizComponent = ({
             </div>
           )}
 
-          {question.tipo === 'texto_libre' && (
+          {(question.tipo === 'texto_libre' || question.tipo === 'archivo_adjunto') && (
             <div className="text-answer-container">
               <textarea
                 className="text-answer-input"
@@ -564,29 +573,29 @@ const QuizComponent = ({
                 {textAnswers[question.id]?.length || 0} caracteres
               </div>
 
-              {question.archivo_requerido && (
+              {(requiresFileUpload(question.pregunta) || question.tipo === 'archivo_adjunto' || question.archivo_requerido) && (
                 <div className="file-upload-container">
                   <div className="file-upload-header">
-                    <h4>Adjuntar archivos (opcional)</h4>
-                    <p>Puedes subir archivos para complementar tu respuesta</p>
+                    <h4>
+                      {question.tipo === 'archivo_adjunto'
+                        ? 'Sube tu archivo'
+                        : 'Sube tu archivo (opcional)'}
+                    </h4>
+                    <p>
+                      {requiresFileUpload(question.pregunta)
+                        ? 'Puedes subir un archivo con tu cuadro, esquema o diagrama para complementar tu respuesta'
+                        : 'Puedes subir archivos para complementar tu respuesta'}
+                    </p>
                   </div>
 
-                  <div className="file-upload-area">
-                    <input
-                      type="file"
-                      id={`file-upload-${question.id}`}
-                      className="file-upload-input"
-                      multiple
-                      onChange={(e) => handleFileUpload(question.id, e.target.files)}
-                    />
-                    <label htmlFor={`file-upload-${question.id}`} className="file-upload-label">
-                      <div className="upload-icon">📎</div>
-                      <div className="upload-text">
-                        <strong>Haz clic para subir archivos</strong>
-                        <span>O arrastra y suelta aquí</span>
-                      </div>
-                    </label>
-                  </div>
+                  <FileUploadComponent
+                    onFileUpload={(files) => handleFileUpload(question.id, files)}
+                    acceptedFileTypes="image/*,.pdf"
+                    maxFiles={3}
+                    placeholder={requiresFileUpload(question.pregunta)
+                      ? 'Arrastra tu esquema o haz clic para seleccionar'
+                      : 'Arrastra tu archivo aquí o haz clic para seleccionar'}
+                  />
 
                   {uploadedFiles[question.id] && uploadedFiles[question.id].length > 0 && (
                     <div className="uploaded-files-list">

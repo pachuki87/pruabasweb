@@ -14,8 +14,22 @@ class WebhookService {
       'User-Agent': 'Instituto-Lidera-Webhook-Client/1.0'
     };
     
-    // Configurar interceptor para logging
+    // Crear instancia dedicada de axios para webhooks
+    this.axiosInstance = axios.create({
+      timeout: 30000,
+      headers: this.defaultHeaders
+    });
+    
+    // Configurar interceptor para logging solo para esta instancia
     this.setupInterceptors();
+    
+    // Métricas básicas
+    this.metrics = {
+      sent: 0,
+      successful: 0,
+      failed: 0,
+      retries: 0
+    };
   }
 
   /**
@@ -23,7 +37,7 @@ class WebhookService {
    */
   setupInterceptors() {
     // Interceptor para request
-    axios.interceptors.request.use(
+    this.axiosInstance.interceptors.request.use(
       (config) => {
         console.log('Enviando webhook:', {
           url: config.url,
@@ -39,7 +53,7 @@ class WebhookService {
     );
 
     // Interceptor para response
-    axios.interceptors.response.use(
+    this.axiosInstance.interceptors.response.use(
       (response) => {
         console.log('Webhook enviado exitosamente:', {
           url: response.config.url,
@@ -72,6 +86,11 @@ class WebhookService {
         throw new Error('La URL del webhook no está configurada');
       }
 
+      // Validar payload
+      if (!this.validatePayload(payload)) {
+        throw new Error('El payload no es válido');
+      }
+
       const config = {
         url: this.webhookUrl,
         method: 'POST',
@@ -81,7 +100,13 @@ class WebhookService {
         ...options.axiosConfig
       };
 
-      const response = await axios(config);
+      // Actualizar métricas
+      this.metrics.sent++;
+
+      const response = await this.axiosInstance(config);
+
+      // Actualizar métricas de éxito
+      this.metrics.successful++;
 
       return {
         success: true,
@@ -89,10 +114,14 @@ class WebhookService {
         statusText: response.statusText,
         data: response.data,
         timestamp: new Date().toISOString(),
-        webhookUrl: this.webhookUrl
+        webhookUrl: this.webhookUrl,
+        metrics: { ...this.metrics }
       };
 
     } catch (error) {
+      // Actualizar métricas de fallo
+      this.metrics.failed++;
+
       return {
         success: false,
         error: error.message,
@@ -100,7 +129,8 @@ class WebhookService {
         statusText: error.response?.statusText,
         timestamp: new Date().toISOString(),
         webhookUrl: this.webhookUrl,
-        details: this.getErrorDetails(error)
+        details: this.getErrorDetails(error),
+        metrics: { ...this.metrics }
       };
     }
   }
@@ -138,8 +168,18 @@ class WebhookService {
         
         lastError = new Error(result.error);
         
+        // Verificar si el error es reintentable
+        if (!this.isRetryableError(result)) {
+          break;
+        }
+        
       } catch (error) {
         lastError = error;
+        
+        // Verificar si el error es reintentable
+        if (!this.isRetryableError(error)) {
+          break;
+        }
       }
 
       // Si no es el último intento, esperar antes de reintentar
@@ -148,6 +188,9 @@ class WebhookService {
         console.log(`Reintentando webhook en ${delay}ms (intento ${attempt} de ${maxRetries})`);
         
         await this.sleep(delay);
+        
+        // Actualizar métricas de reintentos
+        this.metrics.retries++;
       }
     }
 
@@ -157,7 +200,8 @@ class WebhookService {
       attempts: attempt,
       retries: attempt - 1,
       timestamp: new Date().toISOString(),
-      webhookUrl: this.webhookUrl
+      webhookUrl: this.webhookUrl,
+      metrics: { ...this.metrics }
     };
   }
 
@@ -172,12 +216,24 @@ class WebhookService {
     
     for (const url of webhookUrls) {
       try {
+        // Validar URL antes de enviar
+        if (!this.validateWebhookUrl(url)) {
+          results.push({
+            url,
+            success: false,
+            error: 'URL de webhook inválida',
+            timestamp: new Date().toISOString()
+          });
+          continue;
+        }
+        
         const originalUrl = this.webhookUrl;
         this.webhookUrl = url;
         
         const result = await this.sendQuizWebhook(payload);
         results.push({ url, ...result });
         
+        // CORREGIR BUG: Restaurar URL original correctamente
         this.webhookUrl = originalUrl;
         
       } catch (error) {
@@ -188,7 +244,8 @@ class WebhookService {
           timestamp: new Date().toISOString()
         });
         
-        this.webhookUrl = this.webhookUrl; // Restaurar URL original
+        // CORREGIR BUG: Restaurar URL original correctamente
+        this.webhookUrl = originalUrl;
       }
     }
     
@@ -366,13 +423,163 @@ class WebhookService {
    */
   async sendAsync(payload) {
     try {
-      // No esperamos la respuesta, solo enviamos
-      this.sendQuizWebhook(payload).catch(error => {
+      // Validar payload antes de enviar
+      if (!this.validatePayload(payload)) {
+        console.error('Payload inválido para webhook asíncrono');
+        return;
+      }
+
+      // Verdadero asíncrono: no esperamos respuesta
+      this.axiosInstance.post(this.webhookUrl, payload, {
+        headers: this.getHeaders()
+      }).catch(error => {
         console.error('Error en webhook asíncrono:', error);
+        this.metrics.failed++;
       });
+      
     } catch (error) {
       console.error('Error al iniciar webhook asíncrono:', error);
     }
+  }
+
+  /**
+   * Valida el payload del webhook
+   * @param {Object} payload - Payload a validar
+   * @returns {boolean} - True si es válido, false si no
+   */
+  validatePayload(payload) {
+    if (!payload || typeof payload !== 'object') {
+      return false;
+    }
+
+    // Validar que tenga campos básicos para chatbot
+    if (!payload.type && !payload.message && !payload.data) {
+      return false;
+    }
+
+    // Validar que no sea demasiado grande
+    const payloadSize = JSON.stringify(payload).length;
+    if (payloadSize > 1024 * 1024) { // 1MB
+      console.error('Payload demasiado grande:', payloadSize, 'bytes');
+      return false;
+    }
+
+    return true;
+  }
+
+  /**
+   * Determina si un error es reintentable
+   * @param {Object|Error} error - Error a evaluar
+   * @returns {boolean} - True si es reintentable, false si no
+   */
+  isRetryableError(error) {
+    // Errores de red o timeout
+    if (error.code === 'ECONNREFUSED' || 
+        error.code === 'ETIMEDOUT' || 
+        error.code === 'ENOTFOUND' ||
+        error.code === 'ECONNRESET') {
+      return true;
+    }
+
+    // Errores HTTP reintentables
+    if (error.response) {
+      const status = error.response.status;
+      return status === 429 || // Too Many Requests
+             status === 500 || // Internal Server Error
+             status === 502 || // Bad Gateway
+             status === 503 || // Service Unavailable
+             status === 504;   // Gateway Timeout
+    }
+
+    // Errores de resultado
+    if (error.status) {
+      return error.status === 429 || 
+             error.status === 500 || 
+             error.status === 502 || 
+             error.status === 503 || 
+             error.status === 504;
+    }
+
+    // No reintentar errores de autenticación o permisos
+    return false;
+  }
+
+  /**
+   * Métodos específicos para chatbot
+   */
+
+  /**
+   * Envía mensaje de chatbot
+   * @param {string} message - Mensaje a enviar
+   * @param {Object} context - Contexto de la conversación
+   * @returns {Promise<Object>} - Resultado del envío
+   */
+  async sendChatbotMessage(message, context = {}) {
+    const payload = {
+      type: 'chatbot_message',
+      message: message,
+      context: context,
+      timestamp: new Date().toISOString(),
+      service: 'chatbot-webhook'
+    };
+
+    return await this.sendQuizWebhook(payload);
+  }
+
+  /**
+   * Envía evento de conversación de chatbot
+   * @param {string} eventType - Tipo de evento
+   * @param {Object} eventData - Datos del evento
+   * @returns {Promise<Object>} - Resultado del envío
+   */
+  async sendChatbotEvent(eventType, eventData = {}) {
+    const payload = {
+      type: 'chatbot_event',
+      eventType: eventType,
+      eventData: eventData,
+      timestamp: new Date().toISOString(),
+      service: 'chatbot-webhook'
+    };
+
+    return await this.sendQuizWebhook(payload);
+  }
+
+  /**
+   * Envía actualización de estado del chatbot
+   * @param {string} status - Estado del chatbot
+   * @param {Object} statusData - Datos del estado
+   * @returns {Promise<Object>} - Resultado del envío
+   */
+  async sendChatbotStatus(status, statusData = {}) {
+    const payload = {
+      type: 'chatbot_status',
+      status: status,
+      statusData: statusData,
+      timestamp: new Date().toISOString(),
+      service: 'chatbot-webhook'
+    };
+
+    return await this.sendQuizWebhook(payload);
+  }
+
+  /**
+   * Obtiene métricas del servicio
+   * @returns {Object} - Métricas actuales
+   */
+  getMetrics() {
+    return { ...this.metrics };
+  }
+
+  /**
+   * Reinicia métricas
+   */
+  resetMetrics() {
+    this.metrics = {
+      sent: 0,
+      successful: 0,
+      failed: 0,
+      retries: 0
+    };
   }
 }
 

@@ -51,18 +51,19 @@ const QuizComponent = ({
         console.log('🔍 Cargando cuestionario para lección:', leccionId);
 
         // Primero intentar cargar cuestionarios específicos de la lección
-        const { data: quizData, error: quizError } = await supabase
+        const { data: specificQuizzes, error: quizError } = await supabase
           .from('cuestionarios')
           .select('*')
-          .eq('leccion_id', leccionId)
-          .single();
+          .eq('leccion_id', leccionId);
 
-        console.log('📊 Resultado búsqueda específica:', { quizData, quizError });
+        console.log('📊 Resultado búsqueda específica:', { specificQuizzes, quizError });
 
-        if (quizError && quizError.code !== 'PGRST116') {
+        if (quizError) {
           console.warn('⚠️ Error buscando cuestionario específico:', quizError);
           // No lanzar error aquí, intentar con cuestionarios generales
         }
+        
+        const quizData = specificQuizzes && specificQuizzes.length > 0 ? specificQuizzes[0] : null;
 
         if (quizData) {
           console.log('✅ Cuestionario específico encontrado:', quizData.titulo);

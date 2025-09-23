@@ -3,304 +3,398 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestión de las Adicciones desde la Perspectiva de Género - Máster en Adicciones</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <title>Lección 9: Gestión de las Adicciones desde la Perspectiva de Género</title>
     <style>
-        .lesson-header {
-            background: linear-gradient(135deg, #e91e63 0%, #9c27b0 100%);
-            color: white;
-            padding: 3rem 0;
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+            min-height: 100vh;
         }
-        .content-card {
-            border: none;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
-            margin-bottom: 2rem;
-        }
-        .content-card:hover {
-            transform: translateY(-5px);
-        }
-        .pdf-link {
-            display: block;
-            padding: 1rem;
-            margin: 0.5rem 0;
-            background: #f8f9fa;
-            border-left: 4px solid #e91e63;
-            text-decoration: none;
-            color: #333;
-            transition: all 0.3s ease;
-        }
-        .pdf-link:hover {
-            background: #e9ecef;
-            color: #e91e63;
-            transform: translateX(5px);
-        }
-        .objectives-list {
-            background: #f8f9fa;
-            padding: 2rem;
-            border-radius: 10px;
-            margin: 2rem 0;
-        }
-        .gender-topic {
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
             background: white;
-            padding: 2rem;
-            border-radius: 10px;
-            margin: 1rem 0;
-            border-left: 4px solid #9c27b0;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
         }
-        .stats-box {
-            background: linear-gradient(135deg, #fce4ec 0%, #f3e5f5 100%);
-            padding: 2rem;
-            border-radius: 10px;
-            margin: 2rem 0;
+        .header {
+            background: linear-gradient(135deg, #8e44ad 0%, #e91e63 100%);
+            color: white;
+            padding: 40px;
             text-align: center;
         }
-        .protocol-section {
-            background: #fff3e0;
-            padding: 2rem;
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            font-weight: 300;
+        }
+        .header p {
+            margin: 10px 0 0 0;
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        .content {
+            padding: 40px;
+        }
+        .section {
+            margin-bottom: 40px;
+            padding: 30px;
+            background: #f8f9fa;
             border-radius: 10px;
-            margin: 1rem 0;
-            border-left: 4px solid #ff9800;
+            border-left: 5px solid #e91e63;
+        }
+        .section h2 {
+            color: #2c3e50;
+            margin-top: 0;
+            font-size: 1.8em;
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 10px;
+        }
+        .section h3 {
+            color: #34495e;
+            margin-top: 25px;
+            font-size: 1.4em;
+        }
+        .materials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .material-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border: 1px solid #e1e8ed;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .material-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+        }
+        .material-card h4 {
+            color: #2c3e50;
+            margin-top: 0;
+            font-size: 1.2em;
+        }
+        .material-card p {
+            color: #7f8c8d;
+            margin: 10px 0;
+        }
+        .download-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #e91e63, #ad1457);
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .download-btn:hover {
+            background: linear-gradient(135deg, #ad1457, #880e4f);
+            transform: translateY(-2px);
+        }
+        .objectives {
+            background: #fce4ec;
+            border-left-color: #e91e63;
+        }
+        .content-topics {
+            background: #f3e5f5;
+            border-left-color: #9c27b0;
+        }
+        .methodology {
+            background: #fff3e0;
+            border-left-color: #ff9800;
+        }
+        .icon {
+            font-size: 1.5em;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 8px;
+            color: #34495e;
+        }
+        .highlight {
+            background: linear-gradient(120deg, #fce4ec 0%, #f8bbd9 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 1px solid #f48fb1;
+        }
+        .gender-stats {
+            background: linear-gradient(135deg, #e1f5fe 0%, #f3e5f5 100%);
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #e91e63;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .stat-item {
+            text-align: center;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #e91e63;
+        }
+        .lesson-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .info-card {
+            text-align: center;
+            padding: 20px;
+            background: #ecf0f1;
+            border-radius: 8px;
+        }
+        .quiz-section {
+            background: #e8f5e8;
+            border-left-color: #28a745;
+            text-align: center;
+        }
+        .quiz-btn {
+            background: linear-gradient(135deg, #28a745, #1e7e34);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .quiz-btn:hover {
+            background: linear-gradient(135deg, #1e7e34, #155724);
+            transform: translateY(-2px);
+        }
+        .navigation {
+            background: #f8f9fa;
+            border-left-color: #007bff;
+        }
+        .nav-btn {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 5px;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+        .nav-btn:hover {
+            background: linear-gradient(135deg, #0056b3, #004085);
+            transform: translateY(-2px);
         }
     </style>
 </head>
 <body>
-    <div class="lesson-header">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-md-8">
-                    <h1 class="display-4 fw-bold">Lección 9: Gestión de las Adicciones desde la Perspectiva de Género</h1>
-                    <p class="lead">Análisis integral de cómo el género influye en el desarrollo, manifestación y tratamiento de las adicciones</p>
-                    <div class="mt-3">
-                        <span class="badge bg-light text-dark me-2"><i class="fas fa-clock"></i> 150 minutos</span>
-                        <span class="badge bg-light text-dark me-2"><i class="fas fa-file-alt"></i> Contenido Teórico</span>
-                        <span class="badge bg-warning text-dark"><i class="fas fa-question-circle"></i> Cuestionario Incluido</span>
+    <div class="container">
+        <div class="header">
+            <h1>⚖️ Lección 9: Gestión de las Adicciones desde la Perspectiva de Género</h1>
+            <p>Abordaje integral con enfoque de género en el tratamiento de adicciones</p>
+            <div style="margin-top: 20px;">
+                <span style="background: rgba(255,255,255,0.2); padding: 8px 15px; border-radius: 20px; margin: 5px;">
+                    🕒 150 minutos
+                </span>
+                <span style="background: rgba(255,255,255,0.2); padding: 8px 15px; border-radius: 20px; margin: 5px;">
+                    📚 Contenido Teórico
+                </span>
+                <span style="background: rgba(255,255,255,0.2); padding: 8px 15px; border-radius: 20px; margin: 5px;">
+                    ❓ Cuestionario Incluido
+                </span>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="section objectives">
+                <h2><span class="icon">🎯</span>Objetivos de la Lección</h2>
+                <ul>
+                    <li>Comprender las diferencias de género en el desarrollo y manifestación de las adicciones</li>
+                    <li>Analizar los factores socioculturales que influyen en las adicciones según el género</li>
+                    <li>Desarrollar estrategias de intervención específicas con perspectiva de género</li>
+                    <li>Implementar protocolos de inclusión de género en programas de prevención</li>
+                    <li>Promover la equidad de género en el acceso y tratamiento de adicciones</li>
+                </ul>
+            </div>
+
+            <div class="gender-stats">
+                <h3>📊 Datos Relevantes sobre Género y Adicciones</h3>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-number">2:1</div>
+                        <p>Ratio hombre-mujer en adicciones a sustancias</p>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">65%</div>
+                        <p>Mujeres con adicciones que han sufrido violencia</p>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">40%</div>
+                        <p>Menor acceso de mujeres a tratamiento</p>
                     </div>
                 </div>
-                <div class="col-md-4 text-center">
-                    <i class="fas fa-venus-mars" style="font-size: 8rem; opacity: 0.3;"></i>
+            </div>
+
+            <div class="section content-topics">
+                <h2><span class="icon">📚</span>Contenidos Temáticos</h2>
+
+                <h3>1. Fundamentos de la Perspectiva de Género en Adicciones</h3>
+                <ul>
+                    <li>Conceptos básicos: sexo, género, identidad y roles</li>
+                    <li>Diferencias biológicas y psicosociales en adicciones</li>
+                    <li>Estereotipos de género y su impacto en el tratamiento</li>
+                    <li>Interseccionalidad: género, clase social y etnia</li>
+                </ul>
+
+                <h3>2. Epidemiología y Patrones de Consumo por Género</h3>
+                <ul>
+                    <li>Prevalencia de adicciones según género</li>
+                    <li>Sustancias de mayor consumo por género</li>
+                    <li>Edad de inicio y progresión de la adicción</li>
+                    <li>Comorbilidad psiquiátrica diferencial</li>
+                </ul>
+
+                <h3>3. Factores de Riesgo y Protección Específicos</h3>
+                <ul>
+                    <li>Violencia de género y trauma como factores de riesgo</li>
+                    <li>Roles de cuidado y responsabilidades familiares</li>
+                    <li>Presión social y estigma diferencial</li>
+                    <li>Factores protectores específicos por género</li>
+                </ul>
+
+                <h3>4. Barreras de Acceso al Tratamiento</h3>
+                <ul>
+                    <li>Barreras estructurales y organizacionales</li>
+                    <li>Estigma social y autoestigma</li>
+                    <li>Responsabilidades de cuidado infantil</li>
+                    <li>Recursos económicos y dependencia</li>
+                </ul>
+
+                <h3>5. Intervenciones con Perspectiva de Género</h3>
+                <ul>
+                    <li>Programas específicos para mujeres</li>
+                    <li>Abordaje de la violencia de género</li>
+                    <li>Empoderamiento y autonomía personal</li>
+                    <li>Grupos de apoyo diferenciados</li>
+                </ul>
+            </div>
+
+            <div class="section methodology">
+                <h2><span class="icon">🔬</span>Metodología</h2>
+                <p>Esta lección utiliza una metodología participativa e inclusiva:</p>
+                <ul>
+                    <li><strong>Análisis de casos diferenciados por género</strong></li>
+                    <li><strong>Talleres de sensibilización y concienciación</strong></li>
+                    <li><strong>Diseño de protocolos con perspectiva de género</strong></li>
+                    <li><strong>Debates y reflexión crítica</strong></li>
+                    <li><strong>Práctica de intervenciones específicas</strong></li>
+                </ul>
+            </div>
+
+            <div class="highlight">
+                <h3>💡 Enfoque Transformador</h3>
+                <p>Esta lección busca transformar la práctica profesional incorporando la perspectiva de género como elemento transversal en todas las fases del proceso terapéutico, desde la prevención hasta la reinserción social.</p>
+            </div>
+
+            <div class="section">
+                <h2><span class="icon">📁</span>Materiales de Estudio</h2>
+                <div class="materials-grid">
+                    <div class="material-card">
+                        <h4>📋 Protocolo de Inclusión de Género en Prevención</h4>
+                        <p>Documento oficial con directrices y protocolos para la inclusión efectiva de la perspectiva de género en programas de prevención de adicciones.</p>
+                        <a href="/pdfs/master-adicciones/2021_Protocolo_Inclusion_Genero_Prevencion_Adicciones.pdf" class="download-btn" target="_blank">Descargar PDF</a>
+                    </div>
+
+                    <div class="material-card">
+                        <h4>🎯 IV Encuentro Género y Drogas</h4>
+                        <p>Ponencia especializada de Patricia Martínez Redondo sobre las últimas investigaciones y enfoques en género y adicciones.</p>
+                        <a href="/pdfs/master-adicciones/8) GESTIÓN DE LAS ADICCIONES DESDE LA PERSPECTIVA DE GÉNERO/IVEncuentroGeneroDrogas_PatriciaMartinezRedondo.pdf" class="download-btn" target="_blank">Descargar PDF</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2><span class="icon">🔍</span>Áreas de Especialización</h2>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                    <div style="padding: 20px; background: #fce4ec; border-radius: 8px; border-left: 4px solid #e91e63;">
+                        <h4>👩 Mujeres y Adicciones</h4>
+                        <p>Abordaje específico de las necesidades y características de las mujeres con problemas de adicción.</p>
+                    </div>
+                    <div style="padding: 20px; background: #e3f2fd; border-radius: 8px; border-left: 4px solid #2196f3;">
+                        <h4>👨 Masculinidades y Consumo</h4>
+                        <p>Análisis de los roles masculinos tradicionales y su relación con patrones de consumo.</p>
+                    </div>
+                    <div style="padding: 20px; background: #f3e5f5; border-radius: 8px; border-left: 4px solid #9c27b0;">
+                        <h4>🏳️‍🌈 Diversidad Sexual</h4>
+                        <p>Consideraciones específicas para personas LGBTI+ en el tratamiento de adicciones.</p>
+                    </div>
+                    <div style="padding: 20px; background: #fff3e0; border-radius: 8px; border-left: 4px solid #ff9800;">
+                        <h4>⚖️ Políticas Públicas</h4>
+                        <p>Desarrollo e implementación de políticas con perspectiva de género en adicciones.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2><span class="icon">⏱️</span>Información de la Lección</h2>
+                <div class="lesson-info">
+                    <div class="info-card">
+                        <h4>Duración</h4>
+                        <p style="font-size: 1.5em; color: #2c3e50; margin: 0;">150 minutos</p>
+                    </div>
+                    <div class="info-card">
+                        <h4>Modalidad</h4>
+                        <p style="font-size: 1.2em; color: #2c3e50; margin: 0;">Online</p>
+                    </div>
+                    <div class="info-card">
+                        <h4>Evaluación</h4>
+                        <p style="font-size: 1.2em; color: #2c3e50; margin: 0;">Cuestionario</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section quiz-section">
+                <h2><span class="icon">📝</span>Evaluación de la Lección</h2>
+                <p>Evalúa tus conocimientos sobre perspectiva de género en adicciones</p>
+                <button class="quiz-btn" onclick="startQuiz()">
+                    <i class="icon">▶️</i> Comenzar Cuestionario
+                </button>
+            </div>
+
+            <div class="section navigation">
+                <h2><span class="icon">🧭</span>Navegación del Curso</h2>
+                <div style="text-align: center;">
+                    <a href="/lessons/leccion-8-inteligencia-emocional.html" class="nav-btn">
+                        ← Lección Anterior
+                    </a>
+                    <a href="/lessons/leccion-10-trabajo-final-master.html" class="nav-btn">
+                        Siguiente Lección →
+                    </a>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="container my-5">
-        <div class="row">
-            <div class="col-lg-8">
-                <!-- Objetivos de la lección -->
-                <div class="card content-card">
-                    <div class="card-body">
-                        <h3 class="card-title"><i class="fas fa-target text-primary"></i> Objetivos de Aprendizaje</h3>
-                        <div class="objectives-list">
-                            <ul>
-                                <li>Comprender las diferencias de género en el desarrollo de adicciones</li>
-                                <li>Identificar factores de riesgo específicos para mujeres y hombres</li>
-                                <li>Aplicar protocolos de inclusión de género en prevención</li>
-                                <li>Desarrollar estrategias de tratamiento sensibles al género</li>
-                                <li>Reconocer barreras de acceso al tratamiento según género</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Estadísticas y Datos -->
-                <div class="stats-box">
-                    <h3><i class="fas fa-chart-bar text-warning"></i> Datos Relevantes</h3>
-                    <div class="row">
-                        <div class="col-md-4">
-                            <h4 class="text-danger">35%</h4>
-                            <p class="text-muted">Mayor prevalencia de trastornos de ansiedad en mujeres con adicciones</p>
-                        </div>
-                        <div class="col-md-4">
-                            <h4 class="text-info">2-3x</h4>
-                            <p class="text-muted">Mayor probabilidad de comorbilidad psiquiátrica en mujeres</p>
-                        </div>
-                        <div class="col-md-4">
-                            <h4 class="text-success">70%</h4>
-                            <p class="text-muted">Mujeres reportan trauma previo al desarrollo de adicción</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Contenido principal -->
-                <div class="card content-card">
-                    <div class="card-body">
-                        <h3 class="card-title"><i class="fas fa-book text-success"></i> Contenido de la Lección</h3>
-
-                        <div class="gender-topic">
-                            <h4><i class="fas fa-female text-danger"></i> Factores de Especificidad en Mujeres</h4>
-                            <ul>
-                                <li><strong>Violencia y Trauma:</strong> Mayor exposición a violencia doméstica y abuso sexual</li>
-                                <li><strong>Estigmatización:</strong> Doble estigma (mujer + adicción) que dificulta búsqueda de ayuda</li>
-                                <li><strong>Responsabilidades de Cuidado:</strong> Barreras para acceso a tratamiento por responsabilidades familiares</li>
-                                <li><strong>Comorbilidad:</strong> Mayor prevalencia de trastornos del estado de ánimo y ansiedad</li>
-                                <li><strong>Ruta de Inicio:</strong> Frecuentemente a través de pareja o prescripción médica</li>
-                            </ul>
-                        </div>
-
-                        <div class="gender-topic">
-                            <h4><i class="fas fa-male text-primary"></i> Factores de Especificidad en Hombres</h4>
-                            <ul>
-                                <li><strong>Masculinidades Tradicionales:</strong> Expectativas de fortaleza que dificultan pedir ayuda</li>
-                                <li><strong>Conductas de Riesgo:</strong> Mayor exposición a ambientes de consumo</li>
-                                <li><strong>Manifestación Externa:</strong> Tendencia a externalizar problemas (conductas disruptivas)</li>
-                                <li><strong>Barreras Emocionales:</strong> Dificultad para expresar vulnerabilidad</li>
-                                <li><strong>Acceso a Tratamiento:</strong> Mayor acceso inicial pero menor retención</li>
-                            </ul>
-                        </div>
-
-                        <div class="gender-topic">
-                            <h4><i class="fas fa-rainbow text-warning"></i> Perspectiva LGBTQ+</h4>
-                            <ul>
-                                <li><strong>Minorización Estrés:</strong> Estrés crónico relacionado con orientación/identidad</li>
-                                <li><strong>Discriminación:</strong> Barreras adicionales en sistemas de salud</li>
-                                <li><strong>Consumo de Club Drugs:</strong> Mayor exposición en contextos sociales específicos</li>
-                                <li><strong>Falta de Servicios Especializados:</strong> Escasez de programas culturalmente competentes</li>
-                            </ul>
-                        </div>
-
-                        <div class="protocol-section">
-                            <h4><i class="fas fa-clipboard-list text-warning"></i> Protocolos de Inclusión de Género</h4>
-                            <p><strong>Principios Clave:</strong></p>
-                            <ul>
-                                <li>Enfoque trauma-informado en todos los servicios</li>
-                                <li>Espacios seguros y libres de juicio</li>
-                                <li>Personal capacitado en perspectiva de género</li>
-                                <li>Flexible horario para responsabilidades de cuidado</li>
-                                <li>Servicios de guardería integrados</li>
-                                <li>Atención a salud sexual y reproductiva</li>
-                                <li>Grupos de apoyo específicos por género</li>
-                            </ul>
-                        </div>
-
-                        <div class="gender-topic">
-                            <h4><i class="fas fa-shield-alt text-info"></i> Estrategias de Prevención con Enfoque de Género</h4>
-                            <ul>
-                                <li><strong>Para Mujeres:</strong> Programas de empoderamiento, grupos de apoyo entre pares, educación sobre relaciones saludables</li>
-                                <li><strong>Para Hombres:</strong> Revisión de masculinidades tradicionales, espacios de expresión emocional, prevención de violencia</li>
-                                <li><strong>Para Adolescentes:</strong> Educación integral en sexualidad, desarrollo de habilidades sociales, programas escolares sensibles al género</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Material Descargable -->
-                <div class="card content-card">
-                    <div class="card-body">
-                        <h3 class="card-title"><i class="fas fa-download text-info"></i> Material Complementario</h3>
-
-                        <div class="alert alert-info">
-                            <i class="fas fa-info-circle"></i>
-                            Los siguientes materiales están disponibles para descargar y apoyar tu aprendizaje:
-                        </div>
-
-                        <div class="downloads-list">
-                            <a href="/pdfs/master-adicciones/2021_Protocolo_Inclusion_Genero_Prevencion_Adicciones.pdf" class="pdf-link" target="_blank">
-                                <i class="fas fa-file-pdf text-danger"></i>
-                                <strong>Protocolo de Inclusión de Género 2021</strong>
-                                <small class="text-muted d-block">Guía actualizada para la inclusión de género en prevención de adicciones</small>
-                            </a>
-
-                            <a href="/pdfs/master-adicciones/8) GESTIÓN DE LAS ADICCIONES DESDE LA PERSPECTIVA DE GÉNERO/2021_Protocolo_Inclusion_Genero_Prevencion_Adicciones.pdf" class="pdf-link" target="_blank">
-                                <i class="fas fa-file-pdf text-danger"></i>
-                                <strong>Protocolo de Inclusión de Género (Carpeta Específica)</strong>
-                                <small class="text-muted d-block">Versión organizada en la carpeta de perspectiva de género</small>
-                            </a>
-
-                            <a href="/pdfs/master-adicciones/8) GESTIÓN DE LAS ADICCIONES DESDE LA PERSPECTIVA DE GÉNERO/IVEncuentroGeneroDrogas_PatriciaMartinezRedondo.pdf" class="pdf-link" target="_blank">
-                                <i class="fas fa-file-pdf text-danger"></i>
-                                <strong>Encuentro Género y Drogas - Patricia Martínez</strong>
-                                <small class="text-muted d-block">Material especializado sobre género y tratamiento de adicciones</small>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Actividad de Reflexión -->
-                <div class="card content-card">
-                    <div class="card-body">
-                        <h3 class="card-title"><i class="fas fa-lightbulb text-warning"></i> Actividad de Reflexión</h3>
-                        <div class="alert alert-light">
-                            <h5>Para reflexionar...</h5>
-                            <p>Considera cómo los estereotipos de género pueden influir en el acceso y retención de personas en tratamiento. ¿Qué estrategias podrías implementar para hacer tu práctica más inclusiva y sensible a las diferencias de género?</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Estudio de Caso -->
-                <div class="card content-card">
-                    <div class="card-body">
-                        <h3 class="card-title"><i class="fas fa-user-circle text-primary"></i> Estudio de Caso</h3>
-                        <div class="alert alert-secondary">
-                            <h6>Caso: Mujer de 35 años con adicción a opioides</h6>
-                            <p><strong>Contexto:</strong> Madre soltera de dos niños, historia de violencia doméstica, depresión comórbida.</p>
-                            <p><strong>Barreras:</strong> Estigmatización, falta de servicios de guardería, miedo a perder la custodia.</p>
-                            <p><strong>Intervención:</strong> Programa con guardería, grupos de mujeres, enfoque trauma-informado, apoyo en housing.</p>
-                            <p><strong>Resultado:</strong> Retención en tratamiento a 12 meses, reunificación familiar, empleo estable.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Sidebar -->
-            <div class="col-lg-4">
-                <!-- Progreso -->
-                <div class="card content-card">
-                    <div class="card-body">
-                        <h5 class="card-title"><i class="fas fa-chart-line text-primary"></i> Progreso del Máster</h5>
-                        <div class="progress mb-3" style="height: 20px;">
-                            <div class="progress-bar bg-success" role="progressbar" style="width: 90%;">90%</div>
-                        </div>
-                        <p class="text-muted small">Lección 9 de 10 completada</p>
-                    </div>
-                </div>
-
-                <!-- Navegación -->
-                <div class="card content-card">
-                    <div class="card-body">
-                        <h5 class="card-title"><i class="fas fa-compass text-info"></i> Navegación</h5>
-                        <div class="d-grid gap-2">
-                            <a href="/lessons/leccion-8-inteligencia-emocional.html" class="btn btn-outline-secondary">
-                                <i class="fas fa-arrow-left"></i> Lección Anterior
-                            </a>
-                            <a href="/lessons/leccion-10-trabajo-final-master.html" class="btn btn-primary">
-                                Siguiente Lección <i class="fas fa-arrow-right"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Cuestionario -->
-                <div class="card content-card">
-                    <div class="card-body text-center">
-                        <i class="fas fa-clipboard-check text-success" style="font-size: 3rem;"></i>
-                        <h5 class="mt-3">Cuestionario Disponible</h5>
-                        <p class="text-muted">Evalúa tus conocimientos sobre perspectiva de género en adicciones</p>
-                        <button class="btn btn-success" onclick="startQuiz()">
-                            <i class="fas fa-play"></i> Comenzar Cuestionario
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Conceptos Clave -->
-                <div class="card content-card">
-                    <div class="card-body">
-                        <h5 class="card-title"><i class="fas fa-key text-warning"></i> Conceptos Clave</h5>
-                        <ul class="list-unstyled">
-                            <li><i class="fas fa-check text-success"></i> Interseccionalidad</li>
-                            <li><i class="fas fa-check text-success"></i> Trauma-informado</li>
-                            <li><i class="fas fa-check text-success"></i> Empoderamiento</li>
-                            <li><i class="fas fa-check text-success"></i> Inclusión</li>
-                            <li><i class="fas fa-check text-success"></i> Sensibilidad cultural</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         function startQuiz() {
             // Aquí iría la lógica para iniciar el cuestionario

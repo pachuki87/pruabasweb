@@ -30,7 +30,10 @@ class WebhookService {
       failed: 0,
       retries: 0,
       corsErrors: 0,
-      proxyRequests: 0
+      proxyRequests: 0,
+      directIPRequests: 0,
+      tunnelRequests: 0,
+      hostnameRequests: 0
     };
     
     // Configuración CORS
@@ -44,6 +47,17 @@ class WebhookService {
       ],
       currentProxyIndex: 0,
       noCorsMode: false
+    };
+    
+    // Configuración del servidor n8n
+    this.serverOptions = {
+      hostname: 'srv1024767.hstgr.cloud',
+      directIP: '72.60.130.27',
+      useDirectIP: process.env.USE_DIRECT_IP === 'true',
+      n8nTunnelUrl: process.env.N8N_TUNNEL_URL || '',
+      strategyOrder: ['hostname', 'directIP', 'proxy', 'tunnel'],
+      currentStrategy: 'hostname',
+      strategiesTried: []
     };
   }
 
@@ -90,7 +104,7 @@ class WebhookService {
   }
 
   /**
-   * Envía datos de resumen de cuestionario al webhook
+   * Envía datos de resumen de cuestionario al webhook con múltiples estrategias
    * @param {Object} payload - Datos a enviar al webhook
    * @param {Object} options - Opciones adicionales
    * @returns {Promise<Object>} - Resultado del envío
@@ -106,25 +120,52 @@ class WebhookService {
         throw new Error('El payload no es válido');
       }
 
-      // Intentar enviar directamente primero
-      const result = await this.sendDirectWebhook(payload, options);
-      
-      // Si tuvo éxito, retornar el resultado
-      if (result.success) {
-        return result;
+      // Resetear estrategias intentadas
+      this.serverOptions.strategiesTried = [];
+
+      // Estrategia 1: Usar hostname original
+      console.log('🔄 Estrategia 1: Intentando con hostname original...');
+      const hostnameResult = await this.tryHostnameStrategy(payload, options);
+      if (hostnameResult.success) {
+        return hostnameResult;
       }
 
-      // Si falló por CORS y está habilitado el proxy, intentar con proxy
-      if (this.corsOptions.enabled && this.corsOptions.useProxy && this.isCORSError(result)) {
-        console.log('Detectado error de CORS, intentando con proxy...');
+      // Estrategia 2: Usar IP directa
+      console.log('🔄 Estrategia 2: Intentando con IP directa...');
+      const ipResult = await this.tryDirectIPStrategy(payload, options);
+      if (ipResult.success) {
+        return ipResult;
+      }
+
+      // Estrategia 3: Usar proxy CORS
+      if (this.corsOptions.enabled && this.corsOptions.useProxy) {
+        console.log('🔄 Estrategia 3: Intentando con proxy CORS...');
         this.metrics.corsErrors++;
-        
-        const proxyResult = await this.sendProxyWebhook(payload, options);
-        return proxyResult;
+        const proxyResult = await this.tryProxyStrategy(payload, options);
+        if (proxyResult.success) {
+          return proxyResult;
+        }
       }
 
-      // Si no se puede usar proxy o no es error de CORS, retornar el error original
-      return result;
+      // Estrategia 4: Usar tunnel n8n (si está configurado)
+      if (this.serverOptions.n8nTunnelUrl) {
+        console.log('🔄 Estrategia 4: Intentando con tunnel n8n...');
+        const tunnelResult = await this.tryTunnelStrategy(payload, options);
+        if (tunnelResult.success) {
+          return tunnelResult;
+        }
+      }
+
+      // Si todas las estrategias fallaron, retornar el último error
+      const lastError = this.serverOptions.strategiesTried[this.serverOptions.strategiesTried.length - 1];
+      return {
+        success: false,
+        error: `Todas las estrategias fallaron. Último error: ${lastError?.error || 'Desconocido'}`,
+        strategiesTried: this.serverOptions.strategiesTried,
+        timestamp: new Date().toISOString(),
+        webhookUrl: this.webhookUrl,
+        metrics: { ...this.metrics }
+      };
 
     } catch (error) {
       // Actualizar métricas de fallo
@@ -708,7 +749,10 @@ class WebhookService {
       failed: 0,
       retries: 0,
       corsErrors: 0,
-      proxyRequests: 0
+      proxyRequests: 0,
+      directIPRequests: 0,
+      tunnelRequests: 0,
+      hostnameRequests: 0
     };
   }
 
@@ -910,6 +954,429 @@ class WebhookService {
     }
     
     return results;
+  }
+
+  /**
+   * Métodos para estrategias múltiples de conexión
+   */
+
+  /**
+   * Estrategia 1: Usar hostname original
+   * @param {Object} payload - Datos a enviar
+   * @param {Object} options - Opciones adicionales
+   * @returns {Promise<Object>} - Resultado del envío
+   */
+  async tryHostnameStrategy(payload, options = {}) {
+    try {
+      this.serverOptions.currentStrategy = 'hostname';
+      this.metrics.hostnameRequests++;
+      
+      const originalUrl = this.webhookUrl;
+      const result = await this.sendDirectWebhook(payload, options);
+      
+      // Restaurar URL original si fue modificada
+      this.webhookUrl = originalUrl;
+      
+      // Registrar estrategia intentada
+      this.serverOptions.strategiesTried.push({
+        strategy: 'hostname',
+        success: result.success,
+        error: result.error,
+        url: originalUrl
+      });
+
+      if (result.success) {
+        console.log('✅ Estrategia hostname exitosa');
+        return {
+          ...result,
+          strategy: 'hostname',
+          strategyUsed: 'hostname'
+        };
+      }
+
+      console.log('❌ Estrategia hostname fallida:', result.error);
+      return result;
+
+    } catch (error) {
+      console.log('❌ Estrategia hostname con error:', error.message);
+      this.serverOptions.strategiesTried.push({
+        strategy: 'hostname',
+        success: false,
+        error: error.message,
+        url: this.webhookUrl
+      });
+      throw error;
+    }
+  }
+
+  /**
+   * Estrategia 2: Usar IP directa
+   * @param {Object} payload - Datos a enviar
+   * @param {Object} options - Opciones adicionales
+   * @returns {Promise<Object>} - Resultado del envío
+   */
+  async tryDirectIPStrategy(payload, options = {}) {
+    try {
+      this.serverOptions.currentStrategy = 'directIP';
+      this.metrics.directIPRequests++;
+      
+      const originalUrl = this.webhookUrl;
+      
+      // Reemplazar hostname con IP directa
+      const ipUrl = originalUrl.replace(
+        this.serverOptions.hostname, 
+        this.serverOptions.directIP
+      );
+      
+      console.log('🔗 Intentando con IP directa:', ipUrl);
+      this.webhookUrl = ipUrl;
+      
+      const result = await this.sendDirectWebhook(payload, options);
+      
+      // Restaurar URL original
+      this.webhookUrl = originalUrl;
+      
+      // Registrar estrategia intentada
+      this.serverOptions.strategiesTried.push({
+        strategy: 'directIP',
+        success: result.success,
+        error: result.error,
+        url: ipUrl
+      });
+
+      if (result.success) {
+        console.log('✅ Estrategia IP directa exitosa');
+        return {
+          ...result,
+          strategy: 'directIP',
+          strategyUsed: 'directIP',
+          usedDirectIP: true
+        };
+      }
+
+      console.log('❌ Estrategia IP directa fallida:', result.error);
+      return result;
+
+    } catch (error) {
+      console.log('❌ Estrategia IP directa con error:', error.message);
+      this.serverOptions.strategiesTried.push({
+        strategy: 'directIP',
+        success: false,
+        error: error.message,
+        url: this.webhookUrl
+      });
+      throw error;
+    }
+  }
+
+  /**
+   * Estrategia 3: Usar proxy CORS
+   * @param {Object} payload - Datos a enviar
+   * @param {Object} options - Opciones adicionales
+   * @returns {Promise<Object>} - Resultado del envío
+   */
+  async tryProxyStrategy(payload, options = {}) {
+    try {
+      this.serverOptions.currentStrategy = 'proxy';
+      
+      const result = await this.sendProxyWebhook(payload, options);
+      
+      // Registrar estrategia intentada
+      this.serverOptions.strategiesTried.push({
+        strategy: 'proxy',
+        success: result.success,
+        error: result.error,
+        url: this.webhookUrl
+      });
+
+      if (result.success) {
+        console.log('✅ Estrategia proxy exitosa');
+        return {
+          ...result,
+          strategy: 'proxy',
+          strategyUsed: 'proxy'
+        };
+      }
+
+      console.log('❌ Estrategia proxy fallida:', result.error);
+      return result;
+
+    } catch (error) {
+      console.log('❌ Estrategia proxy con error:', error.message);
+      this.serverOptions.strategiesTried.push({
+        strategy: 'proxy',
+        success: false,
+        error: error.message,
+        url: this.webhookUrl
+      });
+      throw error;
+    }
+  }
+
+  /**
+   * Estrategia 4: Usar tunnel n8n
+   * @param {Object} payload - Datos a enviar
+   * @param {Object} options - Opciones adicionales
+   * @returns {Promise<Object>} - Resultado del envío
+   */
+  async tryTunnelStrategy(payload, options = {}) {
+    try {
+      this.serverOptions.currentStrategy = 'tunnel';
+      this.metrics.tunnelRequests++;
+      
+      if (!this.serverOptions.n8nTunnelUrl) {
+        throw new Error('URL de tunnel n8n no configurada');
+      }
+      
+      const originalUrl = this.webhookUrl;
+      const tunnelUrl = this.serverOptions.n8nTunnelUrl;
+      
+      console.log('🚇 Intentando con tunnel n8n:', tunnelUrl);
+      this.webhookUrl = tunnelUrl;
+      
+      const result = await this.sendDirectWebhook(payload, options);
+      
+      // Restaurar URL original
+      this.webhookUrl = originalUrl;
+      
+      // Registrar estrategia intentada
+      this.serverOptions.strategiesTried.push({
+        strategy: 'tunnel',
+        success: result.success,
+        error: result.error,
+        url: tunnelUrl
+      });
+
+      if (result.success) {
+        console.log('✅ Estrategia tunnel exitosa');
+        return {
+          ...result,
+          strategy: 'tunnel',
+          strategyUsed: 'tunnel',
+          usedTunnel: true
+        };
+      }
+
+      console.log('❌ Estrategia tunnel fallida:', result.error);
+      return result;
+
+    } catch (error) {
+      console.log('❌ Estrategia tunnel con error:', error.message);
+      this.serverOptions.strategiesTried.push({
+        strategy: 'tunnel',
+        success: false,
+        error: error.message,
+        url: this.webhookUrl
+      });
+      throw error;
+    }
+  }
+
+  /**
+   * Métodos de configuración del servidor
+   */
+
+  /**
+   * Establece la IP directa del servidor
+   * @param {string} ip - IP del servidor
+   */
+  setServerIP(ip) {
+    this.serverOptions.directIP = ip;
+    console.log('IP del servidor actualizada:', ip);
+  }
+
+  /**
+   * Habilita el uso de IP directa
+   * @param {boolean} enabled - Si se debe usar IP directa
+   */
+  enableDirectIP(enabled = true) {
+    this.serverOptions.useDirectIP = enabled;
+    console.log('Uso de IP directa:', enabled);
+  }
+
+  /**
+   * Establece la URL del tunnel n8n
+   * @param {string} tunnelUrl - URL del tunnel
+   */
+  setN8nTunnelUrl(tunnelUrl) {
+    this.serverOptions.n8nTunnelUrl = tunnelUrl;
+    console.log('URL de tunnel n8n actualizada:', tunnelUrl);
+  }
+
+  /**
+   * Establece el hostname del servidor
+   * @param {string} hostname - Hostname del servidor
+   */
+  setServerHostname(hostname) {
+    this.serverOptions.hostname = hostname;
+    console.log('Hostname del servidor actualizado:', hostname);
+  }
+
+  /**
+   * Obtiene el estado de las estrategias del servidor
+   * @returns {Object} - Estado de las estrategias
+   */
+  getServerStrategyStatus() {
+    return {
+      hostname: this.serverOptions.hostname,
+      directIP: this.serverOptions.directIP,
+      useDirectIP: this.serverOptions.useDirectIP,
+      n8nTunnelUrl: this.serverOptions.n8nTunnelUrl,
+      currentStrategy: this.serverOptions.currentStrategy,
+      strategyOrder: this.serverOptions.strategyOrder,
+      strategiesTried: this.serverOptions.strategiesTried,
+      metrics: {
+        hostnameRequests: this.metrics.hostnameRequests,
+        directIPRequests: this.metrics.directIPRequests,
+        proxyRequests: this.metrics.proxyRequests,
+        tunnelRequests: this.metrics.tunnelRequests
+      }
+    };
+  }
+
+  /**
+   * Diagnóstico completo de conexión
+   * @returns {Promise<Object>} - Resultados del diagnóstico
+   */
+  async diagnoseConnection() {
+    console.log('🔍 Iniciando diagnóstico completo de conexión...');
+    
+    const testPayload = {
+      type: 'diagnosis',
+      message: 'Prueba de diagnóstico de conexión',
+      timestamp: new Date().toISOString(),
+      service: 'webhook-diagnosis'
+    };
+
+    const results = {};
+    
+    // Probar estrategia hostname
+    console.log('📡 Probando estrategia hostname...');
+    try {
+      const hostnameResult = await this.tryHostnameStrategy(testPayload);
+      results.hostname = hostnameResult;
+    } catch (error) {
+      results.hostname = {
+        success: false,
+        error: error.message,
+        strategy: 'hostname'
+      };
+    }
+
+    // Probar estrategia IP directa
+    console.log('📡 Probando estrategia IP directa...');
+    try {
+      const ipResult = await this.tryDirectIPStrategy(testPayload);
+      results.directIP = ipResult;
+    } catch (error) {
+      results.directIP = {
+        success: false,
+        error: error.message,
+        strategy: 'directIP'
+      };
+    }
+
+    // Probar estrategia proxy
+    console.log('📡 Probando estrategia proxy...');
+    try {
+      const proxyResult = await this.tryProxyStrategy(testPayload);
+      results.proxy = proxyResult;
+    } catch (error) {
+      results.proxy = {
+        success: false,
+        error: error.message,
+        strategy: 'proxy'
+      };
+    }
+
+    // Probar estrategia tunnel si está configurada
+    if (this.serverOptions.n8nTunnelUrl) {
+      console.log('📡 Probando estrategia tunnel...');
+      try {
+        const tunnelResult = await this.tryTunnelStrategy(testPayload);
+        results.tunnel = tunnelResult;
+      } catch (error) {
+        results.tunnel = {
+          success: false,
+          error: error.message,
+          strategy: 'tunnel'
+        };
+      }
+    } else {
+      results.tunnel = {
+        success: false,
+        error: 'Tunnel no configurado',
+        strategy: 'tunnel'
+      };
+    }
+
+    // Analizar resultados y dar recomendaciones
+    const successfulStrategies = Object.entries(results)
+      .filter(([_, result]) => result.success)
+      .map(([strategy, _]) => strategy);
+
+    const diagnosis = {
+      timestamp: new Date().toISOString(),
+      webhookUrl: this.webhookUrl,
+      serverConfig: {
+        hostname: this.serverOptions.hostname,
+        directIP: this.serverOptions.directIP,
+        n8nTunnelUrl: this.serverOptions.n8nTunnelUrl
+      },
+      results: results,
+      successfulStrategies: successfulStrategies,
+      recommendation: this.generateDiagnosisRecommendation(results, successfulStrategies),
+      metrics: this.getMetrics()
+    };
+
+    console.log('🔍 Diagnóstico completado');
+    return diagnosis;
+  }
+
+  /**
+   * Genera recomendación basada en resultados del diagnóstico
+   * @param {Object} results - Resultados de las pruebas
+   * @param {Array<string>} successfulStrategies - Estrategias exitosas
+   * @returns {string} - Recomendación
+   */
+  generateDiagnosisRecommendation(results, successfulStrategies) {
+    if (successfulStrategies.length > 0) {
+      return `✅ Conexión exitosa usando estrategia(es): ${successfulStrategies.join(', ')}. 
+Se recomienda usar la estrategia ${successfulStrategies[0]} como principal.`;
+    }
+
+    // Analizar errores para dar recomendaciones específicas
+    const errors = Object.values(results).map(r => r.error || '');
+    
+    if (errors.some(e => e.includes('CORS') || e.includes('cross-origin'))) {
+      return '🔧 Se detectan errores de CORS. Recomendaciones:\n' +
+             '1. Configurar CORS en el servidor n8n\n' +
+             '2. Usar proxy CORS (ya habilitado)\n' +
+             '3. Configurar Nginx como proxy reverso\n' +
+             '4. Habilitar webhook tunneling en n8n';
+    }
+
+    if (errors.some(e => e.includes('ENOTFOUND') || e.includes('ECONNREFUSED'))) {
+      return '🔧 Se detectan errores de red/DNS. Recomendaciones:\n' +
+             '1. Verificar que el servidor n8n está en línea\n' +
+             '2. Comprobar configuración de firewall\n' +
+             '3. Verificar resolución DNS\n' +
+             '4. Probar con IP directa';
+    }
+
+    if (errors.some(e => e.includes('timeout') || e.includes('ETIMEDOUT'))) {
+      return '🔧 Se detectan errores de timeout. Recomendaciones:\n' +
+             '1. Aumentar timeout de la conexión\n' +
+             '2. Verificar rendimiento del servidor\n' +
+             '3. Comprobar carga del servidor n8n\n' +
+             '4. Usar estrategia con timeout más largo';
+    }
+
+    return '🔧 No se pudo determinar la causa exacta. Recomendaciones:\n' +
+           '1. Verificar configuración del servidor n8n\n' +
+           '2. Comprobar conectividad de red\n' +
+           '3. Revisar logs del servidor\n' +
+           '4. Contactar al administrador del servidor';
   }
 }
 

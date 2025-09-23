@@ -50,7 +50,7 @@ const createSupabaseClient = (url: string, key: string, options?: any) => {
 console.log('🔍 DIAGNÓSTICO DE CONFIGURACIÓN SUPABASE:');
 console.log('Variables de entorno VITE_ disponibles:');
 Object.keys(import.meta.env)
-  .filter(key => key.startsWith('VITE_'))
+  .filter(key => key.startsWith('VITE_') || key.startsWith('SUPABASE_'))
   .forEach(key => {
     const value = import.meta.env[key];
     console.log(`  ${key}: ${value ? '✅ CONFIGURADA' : '❌ FALTANTE'}`);
@@ -75,7 +75,7 @@ try {
   console.log('✅ Variables de entorno validadas correctamente');
   console.log(`📡 URL de Supabase: ${supabaseUrl}`);
   console.log(`🔑 Clave anónima: ${supabaseAnonKey ? 'Configurada' : 'Faltante'}`);
-  console.log(`🔐 Clave de servicio: ${supabaseServiceKey ? 'Configurada' : 'Faltante'}`);
+  console.log(`🔐 Clave de servicio (SUPABASE_SERVICE_ROLE_KEY): ${supabaseServiceKey ? 'Configurada' : 'Faltante'}`);
 
   // Crear cliente principal
   supabase = createSupabaseClient(supabaseUrl, supabaseAnonKey);

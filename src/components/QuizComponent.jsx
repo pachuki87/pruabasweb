@@ -550,7 +550,7 @@ const QuizComponent = ({
           <h3 className="question-text">
             Pregunta {currentQuestion + 1} de {quiz.preguntas.length}
           </h3>
-          <p className="question-main-text">{question.pregunta}</p>
+          <div className="question-main-text" dangerouslySetInnerHTML={{ __html: question.pregunta }} />
         </div>
 
         <div className="options-container">

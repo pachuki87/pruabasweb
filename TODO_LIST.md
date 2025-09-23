@@ -32,11 +32,15 @@
 - [x] Crear `tsconfig.json` básico para incluir `src/vite-env.d.ts`
 - [x] Eliminar referencia a `tsconfig.node.json` en `tsconfig.json`
 
-### 6. Verificación final
+### 6. Cargar HTML de las preguntas
+- [x] Modificar `src/components/QuizComponent.jsx` para usar `dangerouslySetInnerHTML` en `question.pregunta`
+
+### 7. Verificación final
 - [x] Probar que el error de Supabase desaparece
 - [x] Verificar que los datos se cargan correctamente
 - [x] Probar que el error de Stripe desaparece (después de configurar la clave)
 - [x] Confirmar que no hay otros errores relacionados
+- [x] Verificar que el HTML de las preguntas se carga correctamente
 
 ## Progreso actual
 - **Estado**: Completado

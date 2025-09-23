@@ -67,31 +67,18 @@ const QuizComponent = ({
         if (quizData) {
           console.log('✅ Cuestionario específico encontrado:', quizData.titulo);
           
-          // Cargar preguntas del cuestionario - con manejo de errores mejorado
+          // Cargar preguntas del cuestionario
           let preguntas = [];
-          let preguntasError = null;
-          
           try {
             const result = await supabase
-              .from('intentos_cuestionario')
+              .from('preguntas')
               .select('*')
               .eq('cuestionario_id', quizData.id);
             
             preguntas = result.data || [];
-            preguntasError = result.error;
             
-            if (preguntasError) {
-              console.warn('⚠️ Error cargando preguntas_cuestionario:', preguntasError);
-              // Intentar con tabla alternativa 'preguntas'
-              const fallbackResult = await supabase
-                .from('preguntas')
-                .select('*')
-                .eq('cuestionario_id', quizData.id);
-              
-              if (!fallbackResult.error) {
-                preguntas = fallbackResult.data || [];
-                console.log('✅ Usando tabla alternativa "preguntas"');
-              }
+            if (result.error) {
+              console.warn('⚠️ Error cargando preguntas desde la tabla "preguntas":', result.error);
             }
           } catch (err) {
             console.warn('⚠️ Excepción cargando preguntas:', err);
@@ -158,25 +145,17 @@ const QuizComponent = ({
               let preguntas = [];
               try {
                 const result = await supabase
-                  .from('intentos_cuestionario')
+                  .from('preguntas')
                   .select('*')
                   .eq('cuestionario_id', selectedQuiz.id);
                 
                 preguntas = result.data || [];
                 
                 if (result.error) {
-                  // Intentar con tabla alternativa
-                  const fallbackResult = await supabase
-                    .from('preguntas')
-                    .select('*')
-                    .eq('cuestionario_id', selectedQuiz.id);
-                  
-                  if (!fallbackResult.error) {
-                    preguntas = fallbackResult.data || [];
-                  }
+                  console.warn('⚠️ Error cargando preguntas desde la tabla "preguntas" (general):', result.error);
                 }
               } catch (err) {
-                console.warn('⚠️ Error cargando preguntas de cuestionario general:', err);
+                console.warn('⚠️ Excepción cargando preguntas de cuestionario general:', err);
               }
 
               console.log('📝 Preguntas cargadas (general):', preguntas.length);

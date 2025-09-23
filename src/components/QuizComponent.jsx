@@ -267,7 +267,7 @@ const QuizComponent = ({
 
     // Solo ejecutar si tenemos leccionId
     if (leccionId) {
-      loadQuiz(leccionID);
+      loadQuiz(leccionId);
     } else {
       console.warn('⚠️ No se proporcionó leccionId');
       setLoading(false);

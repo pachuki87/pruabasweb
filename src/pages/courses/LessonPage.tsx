@@ -189,39 +189,16 @@ const LessonPage: React.FC = () => {
         console.log('✅ Lessons data loaded:', lessonsData, 'Count:', lessonsData?.length || 0);
         
         // Función para mapear títulos de lecciones a nombres de carpetas
-        const mapTitleToSlug = (titulo: string): string => {
-          const titleMappings: { [key: string]: string } = {
-            '¿Qué significa ser adicto?': '01_¿Qué significa ser adicto_',
-            '¿Qué es una adicción 1 Cuestionario': '02_¿Qué es una adicción_1 Cuestionario',
-            'Consecuencias de las adicciones': '03_Consecuencias de las adicciones',
-            'Criterios para diagnosticar una conducta adictiva según DSM 51 Cuestionario': '04_Criterios para diagnosticar una conducta adictiva según DSM 51 Cuestionario',
-            'Criterios para diagnosticar una conducta adictiva (DSM-5) Cuestionario': '04_Criterios para diagnosticar una conducta adictiva según DSM 51 Cuestionario',
-            'Material Complementario y Ejercicios2 Cuestionarios': '05_Material Complementario y Ejercicios2 Cuestionarios',
-            'Adicciones Comportamentales2 Cuestionarios': '06_Adicciones Comportamentales2 Cuestionarios',
-            'La familia': '07_La familia',
-            'La recaída': '08_La recaída',
-            'Nuevas terapias psicológicas': '09_Nuevas terapias psicológicas',
-            'Terapia integral de pareja1 Cuestionario': '10_Terapia integral de pareja1 Cuestionario',
-            'Psicología positiva1 Cuestionario': '11_Psicología positiva1 Cuestionario',
-            'Mindfulness aplicado a la Conducta Adictiva1 Cuestionario': '12_Mindfulness aplicado a la Conducta Adictiva1 Cuestionario',
-            'Material complementario Mindfulness y ejercicio1 Cuestionario': '13_Material complementario Mindfulness y ejercicio1 Cuestionario',
-            'FUNDAMENTOS P TERAPEUTICO': '01_¿Qué significa ser adicto_'
-          };
-          
-          // Buscar coincidencia exacta primero
-          if (titleMappings[titulo]) {
-            return titleMappings[titulo];
-          }
-          
-          // Buscar coincidencia parcial
-          for (const [key, value] of Object.entries(titleMappings)) {
-            if (titulo.includes(key.split(' ')[0]) || key.includes(titulo.split(' ')[0])) {
-              return value;
-            }
-          }
-          
-          // Fallback: crear slug básico desde el título
-          return titulo.replace(/[^a-zA-Z0-9\s]/g, '').replace(/\s+/g, '_');
+        const slugify = (text: string): string => {
+          return text
+            .toString()
+            .normalize('NFD') // Separa letras de sus acentos
+            .replace(/[\u0300-\u036f]/g, '') // Elimina los acentos
+            .toLowerCase()
+            .trim()
+            .replace(/\s+/g, '-') // Reemplaza espacios con -
+            .replace(/[^\w\-]+/g, '') // Elimina caracteres no alfanuméricos (excepto guiones)
+            .replace(/--+/g, '-'); // Reemplaza múltiples guiones con uno solo
         };
 
         // Obtener información de cuestionarios para todas las lecciones
@@ -277,7 +254,7 @@ const LessonPage: React.FC = () => {
         
         // Procesar lecciones para extraer información de PDFs y cuestionarios
         const processedLessons = lessonsData.map(lesson => {
-          const generatedSlug = mapTitleToSlug(lesson.titulo);
+          const generatedSlug = slugify(lesson.titulo);
           console.log('🔄 Processing lesson:', lesson.titulo, 'generated slug:', generatedSlug);
           
           // Obtener PDFs desde la base de datos

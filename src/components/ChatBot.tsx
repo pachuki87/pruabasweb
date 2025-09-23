@@ -13,7 +13,7 @@ interface ChatBotProps {
 }
 
 const ChatBot: React.FC<ChatBotProps> = ({ 
-  webhookUrl = import.meta.env.WEBHOOK_URL || 'https://n8n.srv1024767.hstgr.cloud/webhook-test/fbdc5d15-3435-42f9-8047-891869aa9f7e'
+  webhookUrl = import.meta.env.VITE_WEBHOOK_URL || 'https://n8n.srv1024767.hstgr.cloud/webhook-test/fbdc5d15-3435-42f9-8047-891869aa9f7e'
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
@@ -37,30 +37,109 @@ const ChatBot: React.FC<ChatBotProps> = ({
   }, [messages]);
 
   const sendMessageToWebhook = async (message: string): Promise<string> => {
-    try {
-      const response = await fetch(webhookUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+    const maxRetries = 3;
+    const timeoutMs = 10000; // 10 segundos timeout
+    const retryDelays = [2000, 4000, 8000]; // Exponential backoff: 2s, 4s, 8s
+    
+    for (let attempt = 0; attempt <= maxRetries; attempt++) {
+      try {
+        console.log(`🚀 Enviando mensaje al webhook (intento ${attempt + 1}/${maxRetries + 1}):`, {
+          url: webhookUrl,
           message: message,
           timestamp: new Date().toISOString(),
-          source: 'chatbot',
-          user_context: 'instituto_lidera_student'
-        })
-      });
+          attempt: attempt + 1
+        });
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        // Crear AbortController para timeout
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+
+        const response = await fetch(webhookUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'User-Agent': 'Instituto-Lidera-ChatBot/1.0'
+          },
+          body: JSON.stringify({
+            message: message,
+            timestamp: new Date().toISOString(),
+            source: 'chatbot',
+            user_context: 'instituto_lidera_student',
+            attempt: attempt + 1
+          }),
+          signal: controller.signal
+        });
+
+        clearTimeout(timeoutId);
+
+        console.log('📡 Respuesta del webhook:', {
+          status: response.status,
+          statusText: response.statusText,
+          ok: response.ok,
+          attempt: attempt + 1
+        });
+
+        // Verificar si la respuesta es exitosa (2xx)
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status} - ${response.statusText}`);
+        }
+
+        // Validar que la respuesta sea JSON válido
+        let data;
+        try {
+          data = await response.json();
+        } catch (parseError) {
+          console.warn('⚠️ Respuesta no es JSON válido, usando respuesta por defecto');
+          data = { response: 'Mensaje recibido correctamente.' };
+        }
+
+        console.log('✅ Datos recibidos del webhook:', data);
+        
+        // Validar estructura de respuesta
+        const botResponse = data.response || data.message || data.reply || 'Gracias por tu mensaje. Te responderé pronto.';
+        
+        if (typeof botResponse !== 'string') {
+          console.warn('⚠️ Respuesta del webhook no es string, convirtiendo...');
+          return String(botResponse);
+        }
+        
+        return botResponse;
+
+      } catch (error: any) {
+        console.error(`❌ Error en intento ${attempt + 1}:`, {
+          error: error.message,
+          name: error.name,
+          webhookUrl: webhookUrl,
+          attempt: attempt + 1
+        });
+
+        // Si es el último intento, devolver mensaje de error
+        if (attempt === maxRetries) {
+          console.error('💥 Todos los intentos fallaron, devolviendo mensaje de error');
+          
+          // Determinar tipo de error para mensaje más específico
+          if (error.name === 'AbortError') {
+            return 'Lo siento, el servicio está tardando demasiado en responder. Por favor, inténtalo de nuevo más tarde.';
+          } else if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+            return 'Lo siento, hay un problema de conexión. Verifica tu conexión a internet e inténtalo de nuevo.';
+          } else if (error.message.includes('500')) {
+            return 'Lo siento, hay un problema temporal en nuestro servidor. Por favor, inténtalo de nuevo en unos minutos.';
+          } else {
+            return 'Lo siento, hay un problema técnico. Por favor, inténtalo de nuevo más tarde.';
+          }
+        }
+
+        // Esperar antes del siguiente intento (exponential backoff)
+        if (attempt < maxRetries) {
+          const delay = retryDelays[attempt];
+          console.log(`⏳ Esperando ${delay}ms antes del siguiente intento...`);
+          await new Promise(resolve => setTimeout(resolve, delay));
+        }
       }
-
-      const data = await response.json();
-      return data.response || data.message || 'Gracias por tu mensaje. Te responderé pronto.';
-    } catch (error) {
-      console.error('Error sending message to webhook:', error);
-      return 'Lo siento, hay un problema técnico. Por favor, inténtalo de nuevo más tarde.';
     }
+
+    // Este punto nunca debería alcanzarse, pero por seguridad
+    return 'Lo siento, hay un problema técnico. Por favor, inténtalo de nuevo más tarde.';
   };
 
   const handleSendMessage = async () => {
@@ -74,11 +153,12 @@ const ChatBot: React.FC<ChatBotProps> = ({
     };
 
     setMessages(prev => [...prev, userMessage]);
+    const currentMessage = inputMessage;
     setInputMessage('');
     setIsLoading(true);
 
     try {
-      const botResponse = await sendMessageToWebhook(inputMessage);
+      const botResponse = await sendMessageToWebhook(currentMessage);
       
       const botMessage: Message = {
         id: (Date.now() + 1).toString(),
@@ -88,10 +168,12 @@ const ChatBot: React.FC<ChatBotProps> = ({
       };
 
       setMessages(prev => [...prev, botMessage]);
-    } catch (error) {
+    } catch (error: any) {
+      console.error('❌ Error crítico en handleSendMessage:', error);
+      
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
-        text: 'Lo siento, no pude procesar tu mensaje. Por favor, inténtalo de nuevo.',
+        text: 'Lo siento, ocurrió un error inesperado. Por favor, inténtalo de nuevo o contacta con soporte si el problema persiste.',
         sender: 'bot',
         timestamp: new Date()
       };

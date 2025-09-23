@@ -393,8 +393,9 @@ const QuizComponent = ({
           const opcionCorrecta = question.opciones_respuesta?.find(op => op.es_correcta);
           esCorrecta = userAnswer.opcionId === opcionCorrecta?.id;
         } else if (question.tipo === 'verdadero_falso') {
-          // Para verdadero/falso, asumir correcto por ahora
-          esCorrecta = true;
+          // Para verdadero/falso, verificar contra respuesta_correcta
+          const respuestaUsuario = userAnswer.valorBooleano ? 'V' : 'F';
+          esCorrecta = respuestaUsuario === question.respuesta_correcta;
         } else if (question.tipo === 'texto_libre') {
           // Para texto libre, considerar correcto si hay respuesta
           esCorrecta = !!(userAnswer.textoRespuesta && userAnswer.textoRespuesta.trim());

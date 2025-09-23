@@ -2,7 +2,7 @@
 CREATE TABLE IF NOT EXISTS public.user_course_progress (
     id UUID DEFAULT extensions.uuid_generate_v4() PRIMARY KEY,
     user_id UUID NOT NULL REFERENCES public.usuarios(id) ON DELETE CASCADE,
-    course_id UUID NOT NULL REFERENCES public.cursos(id) ON DELETE CASCADE,
+    curso_id UUID NOT NULL REFERENCES public.cursos(id) ON DELETE CASCADE,
     chapter_id UUID REFERENCES public.lecciones(id) ON DELETE CASCADE,
     progress_percentage DECIMAL(5,2) DEFAULT 0.00 CHECK (progress_percentage >= 0 AND progress_percentage <= 100),
     completed_at TIMESTAMPTZ,
@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS public.user_course_progress (
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     
     -- Índice único para evitar duplicados por usuario, curso y capítulo
-    UNIQUE(user_id, course_id, chapter_id)
+    UNIQUE(user_id, curso_id, chapter_id)
 );
 
 -- Crear tabla para los resultados de exámenes/cuestionarios del usuario
@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS public.user_test_results (
     id UUID DEFAULT extensions.uuid_generate_v4() PRIMARY KEY,
     user_id UUID NOT NULL REFERENCES public.usuarios(id) ON DELETE CASCADE,
     quiz_id UUID NOT NULL REFERENCES public.cuestionarios(id) ON DELETE CASCADE,
-    course_id UUID NOT NULL REFERENCES public.cursos(id) ON DELETE CASCADE,
+    curso_id UUID NOT NULL REFERENCES public.cursos(id) ON DELETE CASCADE,
     score DECIMAL(5,2) NOT NULL CHECK (score >= 0 AND score <= 100),
     total_questions INTEGER NOT NULL,
     correct_answers INTEGER NOT NULL,
@@ -78,14 +78,14 @@ CREATE POLICY "Teachers can view all test results" ON public.user_test_results
 
 -- Crear índices para mejorar el rendimiento
 CREATE INDEX idx_user_course_progress_user_id ON public.user_course_progress(user_id);
-CREATE INDEX idx_user_course_progress_course_id ON public.user_course_progress(course_id);
+CREATE INDEX idx_user_course_progress_curso_id ON public.user_course_progress(curso_id);
 CREATE INDEX idx_user_course_progress_chapter_id ON public.user_course_progress(chapter_id);
 CREATE INDEX idx_user_course_progress_completed ON public.user_course_progress(is_completed);
 CREATE INDEX idx_user_course_progress_last_accessed ON public.user_course_progress(last_accessed_at);
 
 CREATE INDEX idx_user_test_results_user_id ON public.user_test_results(user_id);
 CREATE INDEX idx_user_test_results_quiz_id ON public.user_test_results(quiz_id);
-CREATE INDEX idx_user_test_results_course_id ON public.user_test_results(course_id);
+CREATE INDEX idx_user_test_results_curso_id ON public.user_test_results(curso_id);
 CREATE INDEX idx_user_test_results_passed ON public.user_test_results(passed);
 CREATE INDEX idx_user_test_results_completed_at ON public.user_test_results(completed_at);
 
@@ -112,7 +112,7 @@ CREATE TRIGGER update_user_course_progress_updated_at
     EXECUTE FUNCTION update_updated_at_column();
 
 -- Función para calcular automáticamente el progreso del curso
-CREATE OR REPLACE FUNCTION calculate_course_progress(p_user_id UUID, p_course_id UUID)
+CREATE OR REPLACE FUNCTION calculate_course_progress(p_user_id UUID, p_curso_id UUID)
 RETURNS DECIMAL(5,2) AS $$
 DECLARE
     total_chapters INTEGER;
@@ -122,13 +122,13 @@ BEGIN
     -- Contar total de capítulos en el curso
     SELECT COUNT(*) INTO total_chapters
     FROM public.lecciones
-    WHERE curso_id = p_course_id;
+    WHERE curso_id = p_curso_id;
     
     -- Contar capítulos completados por el usuario
     SELECT COUNT(*) INTO completed_chapters
     FROM public.user_course_progress
     WHERE user_id = p_user_id 
-      AND course_id = p_course_id 
+      AND curso_id = p_curso_id 
       AND is_completed = true;
     
     -- Calcular porcentaje
@@ -148,7 +148,7 @@ SELECT
     u.id as user_id,
     u.nombre as user_name,
     u.email as user_email,
-    c.id as course_id,
+    c.id as curso_id,
     c.titulo as course_title,
     calculate_course_progress(u.id, c.id) as overall_progress,
     COUNT(ucp.id) as chapters_accessed,
@@ -159,8 +159,8 @@ SELECT
     COUNT(utr.id) as total_tests_taken
 FROM public.usuarios u
 CROSS JOIN public.cursos c
-LEFT JOIN public.user_course_progress ucp ON u.id = ucp.user_id AND c.id = ucp.course_id
-LEFT JOIN public.user_test_results utr ON u.id = utr.user_id AND c.id = utr.course_id
+LEFT JOIN public.user_course_progress ucp ON u.id = ucp.user_id AND c.id = ucp.curso_id
+LEFT JOIN public.user_test_results utr ON u.id = utr.user_id AND c.id = utr.curso_id
 WHERE u.rol = 'student'
 GROUP BY u.id, u.nombre, u.email, c.id, c.titulo;
 

@@ -73,7 +73,7 @@ const QuizComponent = ({
           
           try {
             const result = await supabase
-              .from('preguntas_cuestionario')
+              .from('intentos_cuestionario')
               .select('*')
               .eq('cuestionario_id', quizData.id);
             
@@ -158,7 +158,7 @@ const QuizComponent = ({
               let preguntas = [];
               try {
                 const result = await supabase
-                  .from('preguntas_cuestionario')
+                  .from('intentos_cuestionario')
                   .select('*')
                   .eq('cuestionario_id', selectedQuiz.id);
                 
@@ -190,6 +190,54 @@ const QuizComponent = ({
                         .from('opciones_respuesta')
                         .select('*')
                         .eq('pregunta_id', pregunta.id);
+                      
+                      // Si no hay opciones en la tabla opciones_respuesta, 
+                      // intentar cargarlas de las columnas de la tabla preguntas
+                      if (!opciones || opciones.length === 0) {
+                        const opcionesDesdeColumnas = [];
+                        
+                        if (pregunta.opcion_a) {
+                          opcionesDesdeColumnas.push({
+                            id: `${pregunta.id}_a`,
+                            pregunta_id: pregunta.id,
+                            opcion: pregunta.opcion_a,
+                            es_correcta: pregunta.respuesta_correcta === 'a',
+                            orden: 1
+                          });
+                        }
+                        if (pregunta.opcion_b) {
+                          opcionesDesdeColumnas.push({
+                            id: `${pregunta.id}_b`,
+                            pregunta_id: pregunta.id,
+                            opcion: pregunta.opcion_b,
+                            es_correcta: pregunta.respuesta_correcta === 'b',
+                            orden: 2
+                          });
+                        }
+                        if (pregunta.opcion_c) {
+                          opcionesDesdeColumnas.push({
+                            id: `${pregunta.id}_c`,
+                            pregunta_id: pregunta.id,
+                            opcion: pregunta.opcion_c,
+                            es_correcta: pregunta.respuesta_correcta === 'c',
+                            orden: 3
+                          });
+                        }
+                        if (pregunta.opcion_d) {
+                          opcionesDesdeColumnas.push({
+                            id: `${pregunta.id}_d`,
+                            pregunta_id: pregunta.id,
+                            opcion: pregunta.opcion_d,
+                            es_correcta: pregunta.respuesta_correcta === 'd',
+                            orden: 4
+                          });
+                        }
+                        
+                        return {
+                          ...pregunta,
+                          opciones_respuesta: opcionesDesdeColumnas
+                        };
+                      }
                       
                       return {
                         ...pregunta,

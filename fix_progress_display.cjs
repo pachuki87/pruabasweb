@@ -124,7 +124,7 @@ async function fixProgressDisplay() {
         const { data: upsertData, error: upsertError } = await supabase
           .from('user_course_summary')
           .upsert(summaryData, { 
-            onConflict: 'user_id,course_id',
+            onConflict: 'user_id,curso_id',
             ignoreDuplicates: false 
           })
           .select();
@@ -161,7 +161,7 @@ async function fixProgressDisplay() {
     } else {
       console.log(`✅ Registros finales en user_course_summary: ${finalCheck.length}`);
       finalCheck.forEach(record => {
-        console.log(`  - Curso: ${record.course_id}, Progreso: ${record.porcentaje_progreso}%`);
+        console.log(`  - Curso: ${record.curso_id}, Progreso: ${record.porcentaje_progreso}%`);
       });
     }
     

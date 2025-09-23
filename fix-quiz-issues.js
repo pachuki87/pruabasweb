@@ -14,7 +14,7 @@ async function fixQuizIssues() {
   
   const report = {
     timestamp: new Date().toISOString(),
-    course_id: COURSE_ID,
+    curso_id: COURSE_ID,
     actions_performed: [],
     errors: [],
     summary: {

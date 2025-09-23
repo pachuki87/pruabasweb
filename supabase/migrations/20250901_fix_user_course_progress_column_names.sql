@@ -33,7 +33,7 @@ BEGIN
         END IF;
         
         -- Actualizamos las funciones que usan course_id
-        CREATE OR REPLACE FUNCTION calculate_course_progress(p_user_id UUID, p_course_id UUID)
+        CREATE OR REPLACE FUNCTION calculate_course_progress(p_user_id UUID, p_curso_id UUID)
         RETURNS DECIMAL(5,2) AS $$
         DECLARE
             total_chapters INTEGER;
@@ -43,13 +43,13 @@ BEGIN
             -- Contar total de capítulos en el curso
             SELECT COUNT(*) INTO total_chapters
             FROM public.lecciones
-            WHERE curso_id = p_course_id;
+            WHERE curso_id = p_curso_id;
             
             -- Contar capítulos completados por el usuario
             SELECT COUNT(*) INTO completed_chapters
             FROM public.user_course_progress
             WHERE user_id = p_user_id 
-              AND curso_id = p_course_id 
+              AND curso_id = p_curso_id 
               AND is_completed = true;
             
             -- Calcular porcentaje
@@ -74,7 +74,7 @@ BEGIN
                 u.id as user_id,
                 u.nombre as user_name,
                 u.email as user_email,
-                c.id as course_id,
+                c.id as curso_id,
                 c.titulo as course_title,
                 calculate_course_progress(u.id, c.id) as overall_progress,
                 COUNT(ucp.id) as chapters_accessed,
@@ -87,7 +87,7 @@ BEGIN
             CROSS JOIN public.cursos c
             LEFT JOIN public.inscripciones i ON u.id = i.user_id AND c.id = i.curso_id
             LEFT JOIN public.user_course_progress ucp ON u.id = ucp.user_id AND c.id = ucp.curso_id
-            LEFT JOIN public.user_test_results utr ON u.id = utr.user_id AND c.id = utr.course_id
+            LEFT JOIN public.user_test_results utr ON u.id = utr.user_id AND c.id = utr.curso_id
             WHERE u.rol = 'student'
             GROUP BY u.id, u.nombre, u.email, c.id, c.titulo;
             

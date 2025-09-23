@@ -83,7 +83,7 @@ async function applyMigration() {
       CREATE TABLE IF NOT EXISTS public.user_test_results (
         id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
         user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
-        course_id UUID NOT NULL,
+        curso_id UUID NOT NULL,
         chapter_id UUID,
         score DECIMAL(5,2) NOT NULL,
         max_score DECIMAL(5,2) NOT NULL,
@@ -118,7 +118,7 @@ async function applyMigration() {
     
     // Paso 6: Crear función calculate_course_progress
     await executeSQL('Creando función calculate_course_progress', `
-      CREATE OR REPLACE FUNCTION public.calculate_course_progress(p_user_id UUID, p_course_id UUID)
+      CREATE OR REPLACE FUNCTION public.calculate_course_progress(p_user_id UUID, p_curso_id UUID)
       RETURNS DECIMAL(5,2) AS $func$
       DECLARE
         total_chapters INTEGER;
@@ -128,14 +128,14 @@ async function applyMigration() {
         -- Contar total de capítulos del curso
         SELECT COUNT(*) INTO total_chapters
         FROM public.chapters
-        WHERE course_id = p_course_id;
+        WHERE curso_id = p_curso_id;
         
         -- Contar capítulos completados por el usuario
         SELECT COUNT(*) INTO completed_chapters
         FROM public.user_course_progress ucp
         JOIN public.chapters c ON ucp.chapter_id = c.id
         WHERE ucp.user_id = p_user_id 
-          AND c.course_id = p_course_id 
+          AND c.curso_id = p_curso_id 
           AND ucp.is_completed = true;
         
         -- Calcular porcentaje
@@ -155,26 +155,25 @@ async function applyMigration() {
     await executeSQL('Creando vista user_course_summary', `
       CREATE VIEW public.user_course_summary AS
       SELECT 
-        c.id as course_id,
-        c.title,
-        c.description,
-        c.image_url,
-        c.teacher_id,
-        t.name as teacher_name,
-        c.created_at,
-        c.updated_at,
-        COALESCE(ucp.user_id, NULL) as user_id,
-        COALESCE(ucp.is_completed, false) as is_completed,
-        COALESCE(ucp.completion_percentage, 0) as completion_percentage,
-        COALESCE(ucp.last_accessed_at, NULL) as last_accessed_at,
-        COALESCE(AVG(utr.score), 0) as average_test_score,
-        COUNT(utr.id) as total_tests_taken
-      FROM public.courses c
-      LEFT JOIN public.teachers t ON c.teacher_id = t.id
-      LEFT JOIN public.user_course_progress ucp ON c.id = ucp.course_id
-      LEFT JOIN public.user_test_results utr ON c.id = utr.course_id AND ucp.user_id = utr.user_id
-      GROUP BY c.id, c.title, c.description, c.image_url, c.teacher_id, t.name, c.created_at, c.updated_at, 
-               ucp.user_id, ucp.is_completed, ucp.completion_percentage, ucp.last_accessed_at;
+        u.id as user_id,
+        u.email,
+        c.id as curso_id,
+        c.title as course_title,
+        c.description as course_description,
+        COALESCE(calculate_course_progress(u.id, c.id), 0) as progress_percentage,
+        COUNT(DISTINCT ucp.chapter_id) as completed_chapters,
+        COUNT(DISTINCT ch.id) as total_chapters,
+        MAX(ucp.updated_at) as last_activity,
+        CASE 
+          WHEN COALESCE(calculate_course_progress(u.id, c.id), 0) >= 100 THEN 'completed'
+          WHEN COALESCE(calculate_course_progress(u.id, c.id), 0) > 0 THEN 'in_progress'
+          ELSE 'not_started'
+        END as status
+      FROM auth.users u
+      CROSS JOIN public.courses c
+      LEFT JOIN public.chapters ch ON ch.curso_id = c.id
+      LEFT JOIN public.user_course_progress ucp ON ucp.user_id = u.id AND ucp.chapter_id = ch.id AND ucp.is_completed = true
+      GROUP BY u.id, u.email, c.id, c.title, c.description;
     `);
     
     // Paso 8: Otorgar permisos

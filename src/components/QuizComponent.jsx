@@ -38,7 +38,7 @@ const QuizComponent = ({
 
   // Efecto para cargar el cuestionario
   useEffect(() => {
-    const loadQuiz = async () => {
+    const loadQuiz = async (leccionID) => {
       try {
         setLoading(true);
         setError(null);
@@ -288,7 +288,7 @@ const QuizComponent = ({
 
     // Solo ejecutar si tenemos leccionId
     if (leccionId) {
-      loadQuiz();
+      loadQuiz(leccionID);
     } else {
       console.warn('⚠️ No se proporcionó leccionId');
       setLoading(false);

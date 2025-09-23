@@ -28,7 +28,22 @@ class WebhookService {
       sent: 0,
       successful: 0,
       failed: 0,
-      retries: 0
+      retries: 0,
+      corsErrors: 0,
+      proxyRequests: 0
+    };
+    
+    // Configuración CORS
+    this.corsOptions = {
+      enabled: process.env.CORS_ENABLED !== 'false', // Habilitado por defecto
+      useProxy: process.env.CORS_USE_PROXY !== 'false', // Usar proxy por defecto
+      proxyUrls: [
+        'https://api.allorigins.win/raw?url=',
+        'https://corsproxy.io/?',
+        'https://cors-anywhere.herokuapp.com/'
+      ],
+      currentProxyIndex: 0,
+      noCorsMode: false
     };
   }
 
@@ -91,12 +106,57 @@ class WebhookService {
         throw new Error('El payload no es válido');
       }
 
+      // Intentar enviar directamente primero
+      const result = await this.sendDirectWebhook(payload, options);
+      
+      // Si tuvo éxito, retornar el resultado
+      if (result.success) {
+        return result;
+      }
+
+      // Si falló por CORS y está habilitado el proxy, intentar con proxy
+      if (this.corsOptions.enabled && this.corsOptions.useProxy && this.isCORSError(result)) {
+        console.log('Detectado error de CORS, intentando con proxy...');
+        this.metrics.corsErrors++;
+        
+        const proxyResult = await this.sendProxyWebhook(payload, options);
+        return proxyResult;
+      }
+
+      // Si no se puede usar proxy o no es error de CORS, retornar el error original
+      return result;
+
+    } catch (error) {
+      // Actualizar métricas de fallo
+      this.metrics.failed++;
+
+      return {
+        success: false,
+        error: error.message,
+        status: error.response?.status,
+        statusText: error.response?.statusText,
+        timestamp: new Date().toISOString(),
+        webhookUrl: this.webhookUrl,
+        details: this.getErrorDetails(error),
+        metrics: { ...this.metrics }
+      };
+    }
+  }
+
+  /**
+   * Envía webhook directamente (sin proxy)
+   * @param {Object} payload - Datos a enviar
+   * @param {Object} options - Opciones adicionales
+   * @returns {Promise<Object>} - Resultado del envío
+   */
+  async sendDirectWebhook(payload, options = {}) {
+    try {
       const config = {
         url: this.webhookUrl,
         method: 'POST',
         headers: this.getHeaders(options.headers || {}),
         data: payload,
-        timeout: options.timeout || 30000, // 30 segundos timeout
+        timeout: options.timeout || 30000,
         ...options.axiosConfig
       };
 
@@ -115,13 +175,11 @@ class WebhookService {
         data: response.data,
         timestamp: new Date().toISOString(),
         webhookUrl: this.webhookUrl,
-        metrics: { ...this.metrics }
+        metrics: { ...this.metrics },
+        usedProxy: false
       };
 
     } catch (error) {
-      // Actualizar métricas de fallo
-      this.metrics.failed++;
-
       return {
         success: false,
         error: error.message,
@@ -130,9 +188,79 @@ class WebhookService {
         timestamp: new Date().toISOString(),
         webhookUrl: this.webhookUrl,
         details: this.getErrorDetails(error),
-        metrics: { ...this.metrics }
+        metrics: { ...this.metrics },
+        usedProxy: false
       };
     }
+  }
+
+  /**
+   * Envía webhook usando proxy CORS
+   * @param {Object} payload - Datos a enviar
+   * @param {Object} options - Opciones adicionales
+   * @returns {Promise<Object>} - Resultado del envío
+   */
+  async sendProxyWebhook(payload, options = {}) {
+    const proxyUrls = this.corsOptions.proxyUrls;
+    let lastError = null;
+
+    // Intentar con cada proxy disponible
+    for (let i = 0; i < proxyUrls.length; i++) {
+      const proxyUrl = proxyUrls[this.corsOptions.currentProxyIndex];
+      this.corsOptions.currentProxyIndex = (this.corsOptions.currentProxyIndex + 1) % proxyUrls.length;
+
+      try {
+        const fullProxyUrl = this.getProxyUrl(proxyUrl, this.webhookUrl);
+        
+        console.log(`Intentando con proxy: ${proxyUrl}`);
+
+        const config = {
+          url: fullProxyUrl,
+          method: 'POST',
+          headers: this.getHeaders(options.headers || {}),
+          data: payload,
+          timeout: options.timeout || 45000, // Timeout más largo para proxy
+          ...options.axiosConfig
+        };
+
+        const response = await this.axiosInstance(config);
+
+        // Actualizar métricas de proxy
+        this.metrics.proxyRequests++;
+        this.metrics.successful++;
+
+        return {
+          success: true,
+          status: response.status,
+          statusText: response.statusText,
+          data: response.data,
+          timestamp: new Date().toISOString(),
+          webhookUrl: this.webhookUrl,
+          proxyUsed: proxyUrl,
+          metrics: { ...this.metrics },
+          usedProxy: true
+        };
+
+      } catch (error) {
+        lastError = error;
+        console.warn(`Falló proxy ${proxyUrl}:`, error.message);
+        continue;
+      }
+    }
+
+    // Si todos los proxies fallaron
+    this.metrics.failed++;
+    this.metrics.proxyRequests++;
+
+    return {
+      success: false,
+      error: `Todos los proxies CORS fallaron. Último error: ${lastError?.message}`,
+      timestamp: new Date().toISOString(),
+      webhookUrl: this.webhookUrl,
+      metrics: { ...this.metrics },
+      usedProxy: true,
+      proxyError: true
+    };
   }
 
   /**
@@ -578,8 +706,210 @@ class WebhookService {
       sent: 0,
       successful: 0,
       failed: 0,
-      retries: 0
+      retries: 0,
+      corsErrors: 0,
+      proxyRequests: 0
     };
+  }
+
+  /**
+   * Métodos para manejo de CORS
+   */
+
+  /**
+   * Detecta si un error es de CORS
+   * @param {Object} result - Resultado de la petición
+   * @returns {boolean} - True si es error de CORS, false si no
+   */
+  isCORSError(result) {
+    // Errores típicos de CORS en el navegador
+    const corsMessages = [
+      'cors',
+      'cross-origin',
+      'access-control-allow-origin',
+      'blocked by cors policy',
+      'no access-control-allow-origin header'
+    ];
+
+    const errorMessage = (result.error || '').toLowerCase();
+    const errorDetails = result.details;
+    
+    // Verificar mensaje de error
+    if (corsMessages.some(msg => errorMessage.includes(msg))) {
+      return true;
+    }
+
+    // Verificar si es un error de red sin respuesta (típico de CORS)
+    if (errorDetails && !errorDetails.response && errorDetails.request) {
+      return true;
+    }
+
+    // Verificar código de error específico
+    if (errorDetails && errorDetails.code === 'ERR_NETWORK') {
+      return true;
+    }
+
+    return false;
+  }
+
+  /**
+   * Construye URL con proxy CORS
+   * @param {string} proxyUrl - URL base del proxy
+   * @param {string} targetUrl - URL destino
+   * @returns {string} - URL completa con proxy
+   */
+  getProxyUrl(proxyUrl, targetUrl) {
+    // Eliminar trailing slash del proxy si existe
+    const cleanProxyUrl = proxyUrl.endsWith('/') ? proxyUrl.slice(0, -1) : proxyUrl;
+    
+    // Codificar la URL target para uso en proxy
+    const encodedTargetUrl = encodeURIComponent(targetUrl);
+    
+    // Construir URL final según el tipo de proxy
+    if (cleanProxyUrl.includes('allorigins.win')) {
+      return `${cleanProxyUrl}${encodedTargetUrl}`;
+    } else if (cleanProxyUrl.includes('corsproxy.io')) {
+      return `${cleanProxyUrl}${encodedTargetUrl}`;
+    } else if (cleanProxyUrl.includes('cors-anywhere')) {
+      return `${cleanProxyUrl}${targetUrl}`;
+    }
+    
+    // Por defecto, asumir que el proxy espera la URL codificada como parámetro
+    return `${cleanProxyUrl}${encodedTargetUrl}`;
+  }
+
+  /**
+   * Habilita el modo CORS
+   * @param {boolean} useProxy - Si se debe usar proxy (default: true)
+   */
+  enableCORSMode(useProxy = true) {
+    this.corsOptions.enabled = true;
+    this.corsOptions.useProxy = useProxy;
+    console.log('Modo CORS habilitado, uso de proxy:', useProxy);
+  }
+
+  /**
+   * Deshabilita el modo CORS
+   */
+  disableCORSMode() {
+    this.corsOptions.enabled = false;
+    this.corsOptions.useProxy = false;
+    console.log('Modo CORS deshabilitado');
+  }
+
+  /**
+   * Habilita el modo no-CORS
+   */
+  enableNoCorsMode() {
+    this.corsOptions.noCorsMode = true;
+    console.log('Modo no-CORS habilitado');
+  }
+
+  /**
+   * Deshabilita el modo no-CORS
+   */
+  disableNoCorsMode() {
+    this.corsOptions.noCorsMode = false;
+    console.log('Modo no-CORS deshabilitado');
+  }
+
+  /**
+   * Agrega URLs de proxy CORS
+   * @param {Array<string>} proxyUrls - URLs de proxy a agregar
+   */
+  addProxyUrls(proxyUrls) {
+    this.corsOptions.proxyUrls.push(...proxyUrls);
+    console.log('Proxy URLs agregadas:', proxyUrls);
+  }
+
+  /**
+   * Establece URLs de proxy CORS (reemplaza las existentes)
+   * @param {Array<string>} proxyUrls - URLs de proxy a establecer
+   */
+  setProxyUrls(proxyUrls) {
+    this.corsOptions.proxyUrls = proxyUrls;
+    this.corsOptions.currentProxyIndex = 0;
+    console.log('Proxy URLs establecidas:', proxyUrls);
+  }
+
+  /**
+   * Obtiene el estado actual de CORS
+   * @returns {Object} - Estado de CORS
+   */
+  getCORSStatus() {
+    return {
+      enabled: this.corsOptions.enabled,
+      useProxy: this.corsOptions.useProxy,
+      noCorsMode: this.corsOptions.noCorsMode,
+      proxyUrls: this.corsOptions.proxyUrls,
+      currentProxyIndex: this.corsOptions.currentProxyIndex,
+      currentProxy: this.corsOptions.proxyUrls[this.corsOptions.currentProxyIndex],
+      corsErrors: this.metrics.corsErrors,
+      proxyRequests: this.metrics.proxyRequests
+    };
+  }
+
+  /**
+   * Prueba la conexión con un proxy específico
+   * @param {string} proxyUrl - URL del proxy a probar
+   * @param {string} testUrl - URL de prueba (opcional, usa la webhookUrl actual)
+   * @returns {Promise<Object>} - Resultado de la prueba
+   */
+  async testProxy(proxyUrl, testUrl = null) {
+    const targetUrl = testUrl || this.webhookUrl;
+    const testPayload = {
+      type: 'proxy_test',
+      message: 'Prueba de proxy CORS',
+      timestamp: new Date().toISOString(),
+      proxy: proxyUrl
+    };
+
+    try {
+      const fullProxyUrl = this.getProxyUrl(proxyUrl, targetUrl);
+      
+      const config = {
+        url: fullProxyUrl,
+        method: 'POST',
+        headers: this.getHeaders(),
+        data: testPayload,
+        timeout: 30000
+      };
+
+      const response = await this.axiosInstance(config);
+
+      return {
+        success: true,
+        proxy: proxyUrl,
+        status: response.status,
+        statusText: response.statusText,
+        responseTime: response.headers['x-response-time'] || 'N/A',
+        timestamp: new Date().toISOString()
+      };
+
+    } catch (error) {
+      return {
+        success: false,
+        proxy: proxyUrl,
+        error: error.message,
+        timestamp: new Date().toISOString()
+      };
+    }
+  }
+
+  /**
+   * Prueba todos los proxies disponibles
+   * @param {string} testUrl - URL de prueba (opcional)
+   * @returns {Promise<Array>} - Resultados de las pruebas
+   */
+  async testAllProxies(testUrl = null) {
+    const results = [];
+    
+    for (const proxyUrl of this.corsOptions.proxyUrls) {
+      const result = await this.testProxy(proxyUrl, testUrl);
+      results.push(result);
+    }
+    
+    return results;
   }
 }
 

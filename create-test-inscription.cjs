@@ -67,7 +67,7 @@ async function createTestInscription() {
     if (inscripcionesExistentes && inscripcionesExistentes.length > 0) {
       console.log('✅ El usuario ya tiene inscripciones:');
       inscripcionesExistentes.forEach((ins, i) => {
-        console.log(`${i + 1}. Course ID: ${ins.course_id}`);
+        console.log(`${i + 1}. Curso ID: ${ins.curso_id}`);
       });
       return;
     }
@@ -78,8 +78,7 @@ async function createTestInscription() {
       .from('inscripciones')
       .insert({
         user_id: usuario.id,
-        course_id: cursos[0].id,
-        created_at: new Date().toISOString()
+        curso_id: cursos[0].id
       })
       .select();
     

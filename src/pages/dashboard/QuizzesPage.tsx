@@ -29,19 +29,101 @@ const QuizzesPage: React.FC<QuizzesPageProps> = ({ role }) => {
     setIsLoading(true);
     
     try {
-      // In a real implementation, we would fetch from Supabase
-      // For demo purposes, we'll use mock data
-      setTimeout(() => {
-        const mockQuizzes: Quiz[] = [
-          // Keep only quizzes not associated with the courses to be removed.
-          // The courses to remove are: PHP Course Laravel, PHP Course for Beginners, Flask
-        ];
-        
-        setQuizzes(mockQuizzes);
+      // Get current user
+      const { data: { user }, error: userError } = await supabase.auth.getUser();
+      
+      if (userError || !user) {
+        console.error('Error getting user:', userError);
+        setQuizzes([]);
         setIsLoading(false);
-      }, 800);
+        return;
+      }
+
+      if (role === 'student') {
+        // For students: get quizzes from enrolled courses
+        const { data: enrollments, error: enrollmentsError } = await supabase
+          .from('inscripciones')
+          .select('curso_id')
+          .eq('user_id', user.id);
+
+        if (enrollmentsError) {
+          console.error('Error fetching enrollments:', enrollmentsError);
+          setQuizzes([]);
+          setIsLoading(false);
+          return;
+        }
+
+        if (!enrollments || enrollments.length === 0) {
+          setQuizzes([]);
+          setIsLoading(false);
+          return;
+        }
+
+        // Get course IDs from enrollments
+        const courseIds = enrollments.map(enrollment => enrollment.curso_id);
+
+        // Fetch quizzes for enrolled courses with course information
+        const { data: quizzesData, error: quizzesError } = await supabase
+          .from('cuestionarios')
+          .select(`
+            id,
+            titulo,
+            curso_id,
+            cursos!inner(titulo)
+          `)
+          .in('curso_id', courseIds);
+
+        if (quizzesError) {
+          console.error('Error fetching quizzes:', quizzesError);
+          setQuizzes([]);
+          setIsLoading(false);
+          return;
+        }
+
+        // Transform data to match Quiz type
+        const transformedQuizzes: Quiz[] = (quizzesData || []).map(quiz => ({
+          id: quiz.id,
+          titulo: quiz.titulo,
+          curso_id: quiz.curso_id,
+          course_titulo: quiz.cursos?.titulo || 'Unknown Course',
+          assigned: true // For students, all visible quizzes are "assigned"
+        }));
+
+        setQuizzes(transformedQuizzes);
+      } else {
+        // For teachers: get all quizzes they created (simplified - get all quizzes)
+        const { data: quizzesData, error: quizzesError } = await supabase
+          .from('cuestionarios')
+          .select(`
+            id,
+            titulo,
+            curso_id,
+            cursos!inner(titulo)
+          `);
+
+        if (quizzesError) {
+          console.error('Error fetching quizzes:', quizzesError);
+          setQuizzes([]);
+          setIsLoading(false);
+          return;
+        }
+
+        // Transform data to match Quiz type
+        const transformedQuizzes: Quiz[] = (quizzesData || []).map(quiz => ({
+          id: quiz.id,
+          titulo: quiz.titulo,
+          curso_id: quiz.curso_id,
+          course_titulo: quiz.cursos?.titulo || 'Unknown Course',
+          assigned: true // Simplified - assume all are assigned
+        }));
+
+        setQuizzes(transformedQuizzes);
+      }
+      
+      setIsLoading(false);
     } catch (error) {
       console.error('Error fetching quizzes:', error);
+      setQuizzes([]);
       setIsLoading(false);
     }
   };

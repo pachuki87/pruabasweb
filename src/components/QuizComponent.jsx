@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { supabase } from '../lib/supabase';
 import QuizSummaryGenerator from '../services/QuizSummaryGenerator.js';
+import './QuizComponent.css';
 
 const QuizComponent = ({
   leccionId,

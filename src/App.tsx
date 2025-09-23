@@ -6,6 +6,7 @@ import { CartProvider } from 'react-use-cart';
 import { supabase, getUserById, getUsers } from './lib/supabase'; // Import supabase, getUsers
 import { AuthProvider } from './contexts/AuthContext';
 import CookieConsent from './components/CookieConsent';
+import ChatBot from './components/ChatBot';
 
 // Layouts
 import DashboardLayout from './components/layout/DashboardLayout';
@@ -197,6 +198,9 @@ function App() {
           {/* 404 route */}
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
+        <CookieConsent />
+        <ChatBot />
+        <Toaster position="top-right" />
         </BrowserRouter>
       </CartProvider>
     </AuthProvider>

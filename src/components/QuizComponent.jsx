@@ -1,7 +1,7 @@
 // @flow
-import React, { useState, useEffect } from 'react';
-import { supabase } from '../../lib/supabase';
-import QuizSummaryGenerator from '../services/QuizSummaryGenerator';
+import React, { useState, useEffect, useRef } from 'react';
+import { supabase } from '../lib/supabase';
+import QuizSummaryGenerator from '../services/QuizSummaryGenerator.js';
 
 const QuizComponent = ({
   leccionId,
@@ -141,7 +141,7 @@ const QuizComponent = ({
               .from('cuestionarios')
               .select('*')
               .eq('curso_id', courseId)
-              .or('leccion_id.is.null,leccion_id.eq.' + leccionId);
+              .is('leccion_id', null); // Solo cuestionarios generales (sin lección específica)
 
             console.log('📊 Resultado búsqueda general:', { generalQuizzes, generalError });
 
@@ -215,7 +215,11 @@ const QuizComponent = ({
               console.log('✅ Cuestionario general cargado completamente');
             } else {
               console.log('ℹ️ No se encontraron cuestionarios para este curso/lección');
+              setError('No se encontraron cuestionarios disponibles para esta lección o curso.');
             }
+          } else {
+            console.log('⚠️ No se proporcionó courseId para buscar cuestionarios generales');
+            setError('No se puede cargar el cuestionario: falta el ID del curso.');
           }
         }
       } catch (err) {

@@ -457,7 +457,7 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
                   <div className="mt-4">
                     <QuizComponent 
                       leccionId={lesson.id}
-                      courseId={courseId}
+                      courseId={course?.id || courseId}
                       onQuizComplete={handleQuizComplete}
                       onBackToLesson={handleBackToLesson}
                     />

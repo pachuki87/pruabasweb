@@ -12,7 +12,14 @@
       "Bash(npx:*)",
       "Bash(claude-code:*)",
       "Read(//c/Users/pabli/**)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(ipconfig:*)",
+      "Bash(netsh:*)",
+      "Bash(powershell \"Get-NetAdapter | Where-Object {$_Status -eq ''Up''} | Select-Object Name, InterfaceDescription, MediaConnectState\")",
+      "Bash(arp:*)",
+      "Bash(nmap:*)",
+      "Bash(ping:*)",
+      "Bash(powershell:*)"
     ],
     "deny": [],
     "ask": []

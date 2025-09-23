@@ -381,36 +381,53 @@ const QuizComponent = ({
 
     const updatedAnswers = { ...userAnswers };
 
-    quiz.preguntas.forEach((question) => {
+    console.log('🔍 Calculando resultados para', quiz.preguntas.length, 'preguntas');
+    console.log('📝 Respuestas del usuario:', userAnswers);
+
+    quiz.preguntas.forEach((question, index) => {
       puntuacionMaxima += 1;
       const userAnswer = userAnswers[question.id];
-      
+
+      console.log(`❓ Pregunta ${index + 1}:`, question.pregunta?.substring(0, 50) + '...');
+      console.log(`   Tipo: ${question.tipo}`);
+      console.log(`   Respuesta usuario:`, userAnswer);
+
       if (userAnswer) {
         tiempoTotal += userAnswer.tiempoRespuesta || 0;
 
         let esCorrecta = false;
-        
+
         if (question.tipo === 'multiple_choice') {
           const opcionCorrecta = question.opciones_respuesta?.find(op => op.es_correcta);
           esCorrecta = userAnswer.opcionId === opcionCorrecta?.id;
+          console.log(`   Opción correcta: ${opcionCorrecta?.id}, Opción usuario: ${userAnswer.opcionId}, Resultado: ${esCorrecta}`);
         } else if (question.tipo === 'verdadero_falso') {
           // Para verdadero/falso, verificar contra respuesta_correcta
-          const respuestaUsuario = userAnswer.valorBooleano ? 'V' : 'F';
+          const respuestaUsuario = userAnswer.opcionId === 'verdadero' ? 'V' : 'F';
           esCorrecta = respuestaUsuario === question.respuesta_correcta;
-        } else if (question.tipo === 'texto_libre') {
-          // Para texto libre, considerar correcto si hay respuesta
-          esCorrecta = !!(userAnswer.textoRespuesta && userAnswer.textoRespuesta.trim());
+          console.log(`   Respuesta correcta: ${question.respuesta_correcta}, Respuesta usuario: ${respuestaUsuario}, Resultado: ${esCorrecta}`);
+        } else if (question.tipo === 'texto_libre' || question.tipo === 'archivo_adjunto') {
+          // Para texto libre, considerar correcto si hay respuesta significativa
+          const tieneTexto = userAnswer.textoRespuesta && userAnswer.textoRespuesta.trim().length > 3;
+          const tieneArchivos = userAnswer.archivos && userAnswer.archivos.length > 0;
+          esCorrecta = tieneTexto || tieneArchivos;
+          console.log(`   Tiene texto: ${tieneTexto}, Tiene archivos: ${tieneArchivos}, Resultado: ${esCorrecta}`);
         }
 
         if (esCorrecta) {
           puntuacionObtenida += 1;
           respuestasCorrectas += 1;
+          console.log(`   ✅ CORRECTA`);
+        } else {
+          console.log(`   ❌ INCORRECTA`);
         }
 
         updatedAnswers[question.id] = {
           ...userAnswer,
           esCorrecta
         };
+      } else {
+        console.log(`   ⚠️ Sin respuesta`);
       }
     });
 

@@ -26,3 +26,9 @@
 
 [build.processing.images]
   compress = true
+
+# Configuración para SPA (Single Page Application)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

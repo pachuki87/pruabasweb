@@ -19,7 +19,7 @@ async function testMultiStrategyWebhook() {
   console.log('2. Probando configuración de estrategias:');
   
   // Configurar la URL del webhook problemática
-  const problematicWebhookUrl = 'https://n8n.srv1024767.hstgr.cloud/webhook-test/fbdc5d15-3435-42f9-8047-891869aa9f7e';
+  const problematicWebhookUrl = 'https://n8n.srv1024767.hstgr.cloud/webhook/fbdc5d15-3435-42f9-8047-891869aa9f7e';
   WebhookService.setWebhookUrl(problematicWebhookUrl);
   
   console.log('URL del webhook configurada:', WebhookService.webhookUrl);

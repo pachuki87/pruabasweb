@@ -105,24 +105,24 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
     const handleNavigationClick = (event: Event) => {
       const target = event.target as HTMLElement;
       const link = target.closest('a[data-navigation-link="true"]') as HTMLAnchorElement;
-      
+
       if (link) {
         const href = link.getAttribute('data-href') || link.getAttribute('href') || '';
         const linkText = link.textContent?.trim() || '';
-        
+
         // Solo interceptar enlaces de navegación del curso, NO enlaces PDF
         const isPdfLink = href.includes('.pdf') || href.includes('/Experto en Conductas Adictivas/');
-        
+
         if (isPdfLink) {
           // Permitir que los enlaces PDF funcionen normalmente
           console.log('📄 PDF link clicked, allowing normal behavior:', linkText, href);
           return;
         }
-        
+
         // Solo prevenir el comportamiento por defecto para enlaces de navegación
         event.preventDefault();
         console.log('🔗 Navigation link clicked:', linkText, href);
-        
+
         // Detectar tipo de navegación por el texto del enlace
         if (linkText.includes('Volver al Curso') || linkText.includes('Página principal del curso')) {
           console.log('🏠 Back to course clicked');
@@ -136,14 +136,50 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
         }
       }
     };
-    
+
     // Agregar event listener para interceptar clics
     document.addEventListener('click', handleNavigationClick);
-    
+
     return () => {
       document.removeEventListener('click', handleNavigationClick);
     };
   }, [onBackToCourse, onNextLesson, onPreviousLesson]);
+
+  // Efecto para marcar la lección como vista cuando se carga
+  useEffect(() => {
+    const markLessonAsViewed = async () => {
+      if (lesson.id && course.id) {
+        try {
+          const { data: { user } } = await supabase.auth.getUser();
+
+          if (user) {
+            console.log('👁️ Marcando lección como vista:', lesson.id);
+
+            // Actualizar progreso de la lección
+            await supabase
+              .from('user_course_progress')
+              .upsert({
+                user_id: user.id,
+                curso_id: course.id,
+                leccion_id: lesson.id,
+                progreso_porcentaje: 50, // 50% por ver la lección
+                tiempo_estudiado: 1, // 1 minuto por defecto
+                estado: 'en_progreso',
+                ultima_actividad: new Date().toISOString(),
+                fecha_inicio: new Date().toISOString()
+              });
+          }
+        } catch (error) {
+          console.error('❌ Error marcando lección como vista:', error);
+        }
+      }
+    };
+
+    // Esperar un poco antes de marcar como vista para asegurar que es una visita real
+    const timer = setTimeout(markLessonAsViewed, 3000);
+
+    return () => clearTimeout(timer);
+  }, [lesson.id, course.id]);
 
   useEffect(() => {
     console.log('🔄 LessonViewer useEffect triggered - lessonContent available:', !!lessonContent);

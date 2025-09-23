@@ -148,31 +148,46 @@ const StudentProgress: React.FC = () => {
         
         console.log(`📊 Curso ${courseTitle}: ${completedQuizzes}/${totalQuizzes || 0} cuestionarios completados`);
 
-        // Use progress from useProgress hook if available
+        // Calcular progreso basado en datos de user_course_progress y user_test_results
         let progressPercentage = 0;
         let completedChapters = 0;
-        
-        if (estadisticasUsuario && estadisticasUsuario.courseProgress) {
-           const courseStats = estadisticasUsuario.courseProgress.find((c: any) => c.curso_id === courseId);
-          if (courseStats) {
-            // Use porcentaje_progreso from user_course_summary, handle NaN values
-            const rawProgress = courseStats.porcentaje_progreso;
-            progressPercentage = (rawProgress && !isNaN(rawProgress)) ? Math.round(rawProgress) : 0;
-            // Estimate completed chapters based on progress
-            completedChapters = Math.round((progressPercentage / 100) * (totalChapters || 0));
-            console.log(`📊 Datos de progreso desde DB: ${rawProgress}% -> ${progressPercentage}%`);
-          }
-        }
-        
-        // Fallback to manual calculation if no stats available
-        if (progressPercentage === 0) {
-          // Si hay cuestionarios completados, calcular progreso basado en eso
+
+        try {
+          // Obtener progreso de lecciones vistas
+          const { data: lessonProgress } = await supabase
+            .from('user_course_progress')
+            .select('*')
+            .eq('user_id', user.id)
+            .eq('curso_id', courseId);
+
+          const completedLessons = lessonProgress?.filter(p => p.estado === 'completado').length || 0;
+          const inProgressLessons = lessonProgress?.filter(p => p.estado === 'en_progreso').length || 0;
+
+          // Calcular progreso combinado (lecciones + cuestionarios)
+          const lessonWeight = 0.6; // 60% peso para lecciones
+          const quizWeight = 0.4;   // 40% peso para cuestionarios
+
+          const lessonProgressPercentage = totalChapters > 0
+            ? ((completedLessons + (inProgressLessons * 0.5)) / totalChapters) * 100
+            : 0;
+
+          const quizProgressPercentage = totalQuizzes > 0
+            ? (completedQuizzes / totalQuizzes) * 100
+            : 0;
+
+          progressPercentage = Math.round((lessonProgressPercentage * lessonWeight) + (quizProgressPercentage * quizWeight));
+          completedChapters = Math.min(completedLessons + Math.floor(inProgressLessons * 0.5), totalChapters);
+
+          console.log(`📊 Progreso calculado - Lecciones: ${lessonProgressPercentage}%, Cuestionarios: ${quizProgressPercentage}%, Total: ${progressPercentage}%`);
+
+        } catch (error) {
+          console.error('❌ Error calculando progreso:', error);
+
+          // Fallback: cálculo simple basado en cuestionarios
           if (totalQuizzes > 0 && completedQuizzes > 0) {
             progressPercentage = Math.round((completedQuizzes / totalQuizzes) * 100);
-            // Estimar capítulos completados basado en cuestionarios
             completedChapters = Math.round((progressPercentage / 100) * (totalChapters || 0));
           } else {
-            // Cálculo tradicional si no hay datos de cuestionarios
             completedChapters = Math.min(completedQuizzes || 0, totalChapters || 0);
             const totalItems = (totalChapters || 0) + (totalQuizzes || 0);
             const completedItems = completedChapters + (completedQuizzes || 0);

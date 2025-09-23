@@ -464,6 +464,80 @@ const QuizComponent = ({
     setQuizResults(results);
     setQuizCompleted(true);
 
+    // Guardar resultados del test en la base de datos
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+
+      if (user && courseId) {
+        console.log('💾 Guardando resultados del test en la base de datos...');
+
+        const { error: saveError } = await supabase
+          .from('user_test_results')
+          .insert({
+            user_id: user.id,
+            cuestionario_id: quiz.id,
+            curso_id: courseId,
+            puntuacion: results.respuestasCorrectas,
+            puntuacion_maxima: results.totalPreguntas,
+            porcentaje: results.porcentajeAcierto,
+            tiempo_completado: Math.round((Date.now() - startTime) / 1000 / 60), // minutos
+            aprobado: results.aprobado,
+            respuestas_detalle: {
+              respuestas: userAnswers,
+              tiempo_total: results.tiempoTotal
+            },
+            fecha_completado: new Date().toISOString(),
+            completed_at: new Date().toISOString()
+          });
+
+        if (saveError) {
+          console.error('❌ Error guardando resultados:', saveError);
+        } else {
+          console.log('✅ Resultados guardados exitosamente');
+
+          // Actualizar progreso del curso
+          try {
+            // Calcular progreso basado en cuestionarios completados
+            const { data: totalQuizzes } = await supabase
+              .from('cuestionarios')
+              .select('id', { count: 'exact', head: true })
+              .eq('curso_id', courseId);
+
+            const { data: completedQuizzes } = await supabase
+              .from('user_test_results')
+              .select('id', { count: 'exact', head: true })
+              .eq('user_id', user.id)
+              .eq('curso_id', courseId);
+
+            const progressPercentage = totalQuizzes && totalQuizzes.count > 0
+              ? Math.round((completedQuizzes!.count / totalQuizzes.count) * 100)
+              : 0;
+
+            // Actualizar o crear registro de progreso
+            await supabase
+              .from('user_course_progress')
+              .upsert({
+                user_id: user.id,
+                curso_id: courseId,
+                leccion_id: leccionId,
+                progreso_porcentaje: 100, // Lección completada
+                tiempo_estudiado: Math.round((Date.now() - startTime) / 1000 / 60),
+                estado: 'completado',
+                ultima_actividad: new Date().toISOString(),
+                fecha_completado: new Date().toISOString(),
+                fecha_inicio: new Date().toISOString()
+              });
+
+            console.log(`📊 Progreso actualizado: ${progressPercentage}%`);
+          } catch (progressError) {
+            console.error('❌ Error actualizando progreso:', progressError);
+          }
+        }
+      }
+    } catch (error) {
+      console.error('❌ Error en guardado de resultados:', error);
+    }
+
     // Notificar al componente padre
     if (onQuizComplete) {
       onQuizComplete(results);

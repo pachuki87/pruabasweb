@@ -74,7 +74,7 @@ Responde en formato JSON con la siguiente estructura:
                     temperature: 0.3,
                     topK: 40,
                     topP: 0.95,
-                    maxOutputTokens: 3000,
+                    maxOutputTokens: 8000, // Aumentado para permitir respuestas más largas
                     responseMimeType: "application/json"
                 }
             },
@@ -87,6 +87,11 @@ Responde en formato JSON con la siguiente estructura:
 
         console.log('Respuesta recibida de Gemini API');
         console.log('Respuesta completa de Gemini (response.data):', JSON.stringify(response.data, null, 2));
+
+        // Verificar si la respuesta contiene el texto esperado
+        if (!response.data.candidates || !response.data.candidates[0] || !response.data.candidates[0].content || !response.data.candidates[0].content.parts || !response.data.candidates[0].content.parts[0] || !response.data.candidates[0].content.parts[0].text) {
+            throw new Error('La respuesta de Gemini no contiene el campo de texto esperado.');
+        }
 
         // Parsear la respuesta de la API
         const responseText = response.data.candidates[0].content.parts[0].text;

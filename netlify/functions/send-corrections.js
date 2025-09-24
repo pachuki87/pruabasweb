@@ -269,7 +269,7 @@ exports.handler = async (event, context) => {
 
         console.log('Generando correcciones con Gemini API...');
         const corrections = await generateCorrections(quizData, userAnswers);
-        console.log('Correcciones generadas:', corrections);
+        console.log('Correcciones generadas (objeto completo):', JSON.stringify(corrections, null, 2));
 
         console.log('Enviando correo con resultados...');
         const emailResult = await sendCorrectionsEmail(email, nombre, quizData, corrections);

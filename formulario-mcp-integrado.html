@@ -175,14 +175,23 @@
                 try {
                     log('Iniciando procesamiento del formulario...');
 
-                    // 1. Enviar a Netlify Forms (formato correcto)
+                    // 1. Enviar a Netlify Forms (usando el endpoint correcto)
                     log('Enviando datos a Netlify Forms...');
                     updateStatus('Netlify', 'processing', '📤 Enviando a Netlify...');
 
+                    // Para Netlify Forms, necesitamos enviar al formulario específico
+                    const netlifyFormData = new FormData();
+                    netlifyFormData.append('form-name', 'preguntas-abiertas-mcp');
+                    netlifyFormData.append('nombre', data.nombre);
+                    netlifyFormData.append('email', data.email);
+                    netlifyFormData.append('pregunta1', data.pregunta1);
+                    netlifyFormData.append('pregunta2', data.pregunta2);
+                    netlifyFormData.append('pregunta3', data.pregunta3);
+                    netlifyFormData.append('pregunta4', data.pregunta4);
+
                     const netlifyResponse = await fetch('/', {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                        body: new URLSearchParams(formData).toString()
+                        body: netlifyFormData
                     });
 
                     if (!netlifyResponse.ok) {

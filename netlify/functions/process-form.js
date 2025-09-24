@@ -1,4 +1,5 @@
 const axios = require('axios');
+const nodemailer = require('nodemailer');
 
 // Configuración de la API de Google Gemini
 const geminiConfig = {
@@ -16,7 +17,6 @@ async function processWithGemini(quizData, answers) {
             preguntasTexto += `
 Pregunta ${index + 1}: ${pregunta.pregunta}
 Respuesta del estudiante: ${respuesta.textoRespuesta || respuesta || ''}
-
 `;
         });
 
@@ -31,24 +31,14 @@ Por favor, proporciona:
 3. Sugerencias específicas de mejora para cada respuesta
 4. Un resumen general del desempeño
 5. Puntuación total y porcentaje de acierto
+6. Una recomendación final basada en el desempeño general
 
-Responde en formato JSON con la siguiente estructura:
-{
-    "correcciones": [
-        {
-            "numero": 1,
-            "pregunta": "texto de la pregunta",
-            "correccion": "corrección detallada",
-            "puntuacion": 8,
-            "sugerencias": ["sugerencia 1", "sugerencia 2"]
-        }
-    ],
-    "resumen": "resumen general del desempeño",
-    "puntuacionTotal": 32,
-    "puntuacionMaxima": 40,
-    "porcentaje": 80,
-    "recomendacion": "recomendación final"
-}
+La evaluación debe ser justa, constructiva y motivadora. Considera:
+- La claridad y coherencia de las respuestas
+- El uso de ejemplos y evidencias
+- La profundidad del análisis
+- La aplicación práctica de conceptos
+- La estructura y organización de las ideas
 `;
 
         console.log('Enviando solicitud a Gemini API...');
@@ -62,10 +52,36 @@ Responde en formato JSON con la siguiente estructura:
                     }]
                 }],
                 generationConfig: {
-                    temperature: 0.7,
+                    temperature: 0.3, // Reducido para mayor consistencia
                     topK: 40,
                     topP: 0.95,
-                    maxOutputTokens: 2000,
+                    maxOutputTokens: 3000,
+                    responseMimeType: "application/json",
+                    responseSchema: {
+                        type: "object",
+                        properties: {
+                            correcciones: {
+                                type: "array",
+                                items: {
+                                    type: "object",
+                                    properties: {
+                                        numero: { type: "integer" },
+                                        pregunta: { type: "string" },
+                                        correccion: { type: "string" },
+                                        puntuacion: { type: "number", minimum: 0, maximum: 10 },
+                                        sugerencias: { type: "array", items: { type: "string" } }
+                                    },
+                                    required: ["numero", "pregunta", "correccion", "puntuacion", "sugerencias"]
+                                }
+                            },
+                            resumen: { type: "string" },
+                            puntuacionTotal: { type: "number" },
+                            puntuacionMaxima: { type: "number" },
+                            porcentaje: { type: "number" },
+                            recomendacion: { type: "string" }
+                        },
+                        required: ["correcciones", "resumen", "puntuacionTotal", "puntuacionMaxima", "porcentaje", "recomendacion"]
+                    }
                 }
             },
             {
@@ -86,7 +102,13 @@ Responde en formato JSON con la siguiente estructura:
             const jsonMatch = responseText.match(/\{[\s\S]*\}/);
             if (jsonMatch) {
                 const parsedResponse = JSON.parse(jsonMatch[0]);
-                return parsedResponse;
+
+                // Validar la estructura de la respuesta
+                if (validateGeminiResponse(parsedResponse)) {
+                    return parsedResponse;
+                } else {
+                    throw new Error('La respuesta de Gemini no tiene la estructura esperada');
+                }
             } else {
                 throw new Error('No se encontró JSON en la respuesta');
             }
@@ -102,6 +124,37 @@ Responde en formato JSON con la siguiente estructura:
         console.log('Usando respuesta mock como fallback...');
         return getMockResponse(quizData);
     }
+}
+
+// Función para validar la respuesta de Gemini
+function validateGeminiResponse(response) {
+    const requiredFields = ['correcciones', 'resumen', 'puntuacionTotal', 'puntuacionMaxima', 'porcentaje', 'recomendacion'];
+
+    // Verificar campos requeridos
+    for (const field of requiredFields) {
+        if (!(field in response)) {
+            console.error(`Campo faltante: ${field}`);
+            return false;
+        }
+    }
+
+    // Validar correcciones
+    if (!Array.isArray(response.correcciones)) {
+        console.error('correcciones debe ser un array');
+        return false;
+    }
+
+    for (const correccion of response.correcciones) {
+        const corregirFields = ['numero', 'pregunta', 'correccion', 'puntuacion', 'sugerencias'];
+        for (const field of corregirFields) {
+            if (!(field in correccion)) {
+                console.error(`Campo faltante en corrección: ${field}`);
+                return false;
+            }
+        }
+    }
+
+    return true;
 }
 
 function parseManualResponse(responseText, quizData) {
@@ -180,11 +233,90 @@ function getMockResponse(quizData) {
     };
 }
 
+// Función para enviar email de confirmación inmediata
+async function sendConfirmationEmail(email, nombre) {
+    try {
+        const transporter = nodemailer.createTransporter({
+            service: 'hotmail',
+            auth: {
+                user: process.env.EMAIL_USER || 'pablitocfv@hotmail.com',
+                pass: process.env.EMAIL_PASSWORD || 'hotmail070823'
+            }
+        });
+
+        const confirmationHTML = `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                <div style="background: linear-gradient(135deg, #007bff, #0056b3); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0;">
+                    <h1 style="margin: 0; font-size: 24px;">¡Formulario Recibido!</h1>
+                    <p style="margin: 10px 0 0 0; opacity: 0.9;">Instituto Lidera</p>
+                </div>
+
+                <div style="background: white; padding: 30px; border-radius: 0 0 10px 10px; border: 1px solid #e0e0e0;">
+                    <h2 style="color: #333; margin-top: 0;">Hola ${nombre},</h2>
+                    <p style="color: #666; line-height: 1.6;">Hemos recibido tu formulario de evaluación y estamos procesando tus respuestas con nuestro sistema de inteligencia artificial.</p>
+
+                    <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #007bff;">
+                        <h3 style="color: #007bff; margin-top: 0;">📋 ¿Qué sucede ahora?</h3>
+                        <ul style="color: #666; line-height: 1.8;">
+                            <li><strong>Análisis de IA:</strong> Nuestro sistema está evaluando tus respuestas</li>
+                            <li><strong>Corrección detallada:</strong> Generando feedback personalizado</li>
+                            <li><strong>Resultados:</strong> Recibirás un email completo con tus resultados</li>
+                        </ul>
+                    </div>
+
+                    <div style="background: #e8f5e8; padding: 20px; border-radius: 8px; margin: 20px 0; border: 1px solid #28a745;">
+                        <h3 style="color: #28a745; margin-top: 0;">⏱️ Tiempo estimado</h3>
+                        <p style="color: #666; margin: 0;">Recibirás tus resultados detallados en aproximadamente <strong>2-5 minutos</strong>.</p>
+                    </div>
+
+                    <div style="text-align: center; margin: 30px 0;">
+                        <div style="display: inline-block; background: #007bff; color: white; padding: 15px 30px; border-radius: 25px; font-weight: bold;">
+                            📧 Revisa tu correo electrónico pronto
+                        </div>
+                    </div>
+
+                    <p style="color: #666; text-align: center; margin: 30px 0 0 0;">
+                        <em>Gracias por confiar en Instituto Lidera para tu evaluación educativa.</em>
+                    </p>
+                </div>
+
+                <div style="text-align: center; padding: 20px; color: #999; font-size: 12px;">
+                    <p>© 2024 Instituto Lidera. Todos los derechos reservados.</p>
+                    <p>Este es un correo automático, por favor no respondas a este mensaje.</p>
+                </div>
+            </div>
+        `;
+
+        const mailOptions = {
+            from: process.env.EMAIL_USER || 'pablitocfv@hotmail.com',
+            to: email,
+            subject: `Confirmación de Recepción - Instituto Lidera`,
+            html: confirmationHTML
+        };
+
+        await transporter.sendMail(mailOptions);
+        console.log('Email de confirmación enviado a:', email);
+        return { success: true };
+    } catch (error) {
+        console.error('Error enviando email de confirmación:', error);
+        return { success: false };
+    }
+}
+
 // Función para enviar email con formulario completo y correcciones
 async function sendResultsEmail(email, nombre, quizData, corrections) {
     try {
         console.log('Enviando email con resultados a:', email);
         console.log('Nombre del usuario:', nombre);
+
+        // Configurar transporte de correo para Hotmail/Outlook
+        const transporter = nodemailer.createTransporter({
+            service: 'hotmail',
+            auth: {
+                user: process.env.EMAIL_USER || 'pablitocfv@hotmail.com',
+                pass: process.env.EMAIL_PASSWORD || 'hotmail070823'
+            }
+        });
 
         // Preparar el contenido del email con el formulario completo
         let formularioHTML = `
@@ -277,36 +409,33 @@ async function sendResultsEmail(email, nombre, quizData, corrections) {
             </p>
         `;
 
-        // Simular el envío a Netlify Forms para que llegue por email
-        // Netlify Forms procesará esto y enviará el email automáticamente
-        const netlifyFormData = {
-            form_name: 'evaluacion-completa',
-            nombre: nombre,
-            email: email,
-            asunto: `Resultados de Evaluación - ${nombre}`,
-            formulario_html: formularioHTML,
-            puntuacion_total: corrections.puntuacionTotal,
-            puntuacion_maxima: corrections.puntuacionMaxima,
-            porcentaje: corrections.porcentaje,
-            fecha_envio: new Date().toISOString()
+        // Configurar el correo electrónico
+        const mailOptions = {
+            from: process.env.EMAIL_USER || 'pablitocfv@hotmail.com',
+            to: email,
+            subject: `Resultados de Evaluación - ${nombre}`,
+            html: formularioHTML
         };
 
-        console.log('Formulario preparado para Netlify Forms:', netlifyFormData);
+        // Enviar el correo
+        console.log('Enviando correo electrónico...');
+        const info = await transporter.sendMail(mailOptions);
+        console.log('Correo enviado exitosamente:', info.messageId);
 
         return {
             success: true,
-            message: 'Formulario completo preparado para envío',
+            message: 'Correo enviado exitosamente',
             email: email,
             nombre: nombre,
-            formData: netlifyFormData,
+            messageId: info.messageId,
             corrections: corrections
         };
 
     } catch (error) {
-        console.error('Error preparando formulario completo:', error);
+        console.error('Error enviando correo:', error);
         return {
             success: false,
-            message: 'Error preparando formulario completo',
+            message: 'Error enviando correo',
             error: error.message
         };
     }
@@ -372,17 +501,38 @@ exports.handler = async (event, context) => {
         console.log('Preguntas en quiz:', quizData.preguntas?.length || 0);
         console.log('Respuestas del usuario:', Object.keys(userAnswers).length);
 
+        // Enviar email de confirmación inmediata
+        console.log('Enviando email de confirmación...');
+        const confirmationResult = await sendConfirmationEmail(email, nombre);
+
         // Procesar respuestas con Gemini
+        console.log('Iniciando procesamiento con Gemini API...');
         const corrections = await processWithGemini(quizData, userAnswers);
 
         console.log('Correcciones generadas:', corrections);
 
         // Enviar email con formulario completo y correcciones
+        console.log('Enviando email con resultados...');
         const emailResult = await sendResultsEmail(email, nombre, quizData, corrections);
 
         if (!emailResult.success) {
             throw new Error(`Error enviando email: ${emailResult.message}`);
         }
+
+        // Logging del proceso completo
+        const processLog = {
+            timestamp: new Date().toISOString(),
+            user: nombre,
+            email: email,
+            preguntas: quizData.preguntas.length,
+            puntuacionTotal: corrections.puntuacionTotal,
+            puntuacionMaxima: corrections.puntuacionMaxima,
+            porcentaje: corrections.porcentaje,
+            confirmacionEnviada: confirmationResult.success,
+            resultadosEnviados: emailResult.success
+        };
+
+        console.log('Proceso completado:', JSON.stringify(processLog, null, 2));
 
         return {
             statusCode: 200,
@@ -390,7 +540,9 @@ exports.handler = async (event, context) => {
                 success: true,
                 message: 'Formulario completo procesado exitosamente',
                 corrections: corrections,
-                emailResult: emailResult
+                emailResult: emailResult,
+                confirmationSent: confirmationResult.success,
+                processLog: processLog
             })
         };
 

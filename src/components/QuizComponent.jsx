@@ -293,6 +293,7 @@ const QuizComponent = ({
         const { data: { user }, error } = await supabase.auth.getUser();
         if (user && user.email) {
           setUserEmail(user.email);
+          setServicesStatus(prev => ({ ...prev, email: true }));
           console.log('Email del usuario detectado:', user.email);
         }
       } catch (error) {
@@ -850,7 +851,7 @@ const QuizComponent = ({
               {emailStatus === 'sending' && 'Procesando formulario con IA...'}
               {emailStatus === 'success' && (userEmail ? `✅ Formulario enviado a: ${userEmail}` : '✅ Formulario procesado correctamente')}
               {emailStatus === 'error' && '❌ Error al procesar formulario'}
-              {emailStatus === 'idle' && (userEmail ? `📧 Email configurado: ${userEmail}` : '📧 Formulario no enviado')}
+              {emailStatus === 'idle' && (userEmail ? `📧 Email configurado: ${userEmail}` : '📧 Formulario listo para enviar')}
             </span>
           </div>
 
@@ -916,7 +917,7 @@ const QuizComponent = ({
           <div className="services-status">
             <h5>Estado de Servicios</h5>
             <div className={`service-status ${servicesStatus.email ? 'configured' : 'not-configured'}`}>
-              Email: {servicesStatus.email ? '✅ Configurado' : '❌ No configurado'}
+              Email: {servicesStatus.email ? `✅ Configurado (${userEmail})` : '❌ No configurado'}
             </div>
             <div className={`service-status ${servicesStatus.webhook ? 'configured' : 'not-configured'}`}>
               Webhook: {servicesStatus.webhook ? '✅ Configurado' : '❌ No configurado'}

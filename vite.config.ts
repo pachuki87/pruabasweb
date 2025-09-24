@@ -8,4 +8,11 @@ export default defineConfig({
     port: 5175
   },
   // base: '/',
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: undefined
+      }
+    }
+  }
 })

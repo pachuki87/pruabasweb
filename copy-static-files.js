@@ -20,6 +20,17 @@ try {
     console.warn('⚠️ contacto.html no encontrado en la raíz del proyecto');
   }
 
+  // Copiar quiz-results-form.html
+  const quizFormSource = join(__dirname, 'quiz-results-form.html');
+  const quizFormDest = join(__dirname, 'dist', 'quiz-results-form.html');
+
+  if (existsSync(quizFormSource)) {
+    copyFileSync(quizFormSource, quizFormDest);
+    console.log('✅ quiz-results-form.html copiado al directorio dist');
+  } else {
+    console.warn('⚠️ quiz-results-form.html no encontrado en la raíz del proyecto');
+  }
+
   // Copiar _redirects
   const redirectsSource = join(__dirname, '_redirects');
   const redirectsDest = join(__dirname, 'dist', '_redirects');

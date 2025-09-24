@@ -518,9 +518,7 @@ const QuizComponent = ({
           curso_id: courseId,
           puntuacion: results.respuestasCorrectas,
           puntuacion_maxima: results.totalPreguntas,
-          porcentaje: results.porcentajeAcierto,
           tiempo_completado: Math.round((Date.now() - startTime) / 1000 / 60), // minutos
-          aprobado: results.aprobado,
           respuestas_detalle: {
             respuestas: userAnswers,
             tiempo_total: results.tiempoTotal
@@ -591,13 +589,25 @@ const QuizComponent = ({
 
       console.log('📋 Enviando formulario completo para procesamiento...');
 
-      // Enviar a la función de Netlify para procesamiento con Gemini
+      // Crear FormData para enviar a Netlify Forms
+      const netlifyFormData = new FormData();
+      netlifyFormData.append('form-name', 'quiz-results');
+      netlifyFormData.append('nombre', formData.nombre);
+      netlifyFormData.append('email', formData.email);
+      netlifyFormData.append('quizData', JSON.stringify(formData.quizData));
+      netlifyFormData.append('userAnswers', JSON.stringify(formData.userAnswers));
+      netlifyFormData.append('results', JSON.stringify(formData.results));
+
+      // Enviar a Netlify Forms y luego a la función de procesamiento
       const response = await fetch('/.netlify/functions/process-form', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify({
+          formName: 'quiz-results',
+          formData: Object.fromEntries(netlifyFormData)
+        })
       });
 
       if (!response.ok) {

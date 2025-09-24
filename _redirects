@@ -5,6 +5,7 @@
 # Allow static HTML files
 /contacto.html    /contacto.html   200
 /contacto         /contacto.html   200
+/quiz-results-form.html    /quiz-results-form.html   200
 
 # SPA catch-all redirect (must be last)
 /*                /index.html      200

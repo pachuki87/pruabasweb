@@ -286,6 +286,23 @@ const QuizComponent = ({
     }
   }, [quiz, quizCompleted, startTime]);
 
+  // Detectar el email del usuario al cargar el componente
+  useEffect(() => {
+    const detectUserEmail = async () => {
+      try {
+        const { data: { user }, error } = await supabase.auth.getUser();
+        if (user && user.email) {
+          setUserEmail(user.email);
+          console.log('Email del usuario detectado:', user.email);
+        }
+      } catch (error) {
+        console.error('Error detectando email del usuario:', error);
+      }
+    };
+
+    detectUserEmail();
+  }, []);
+
   const handleAnswerSelect = (questionId, opcionId) => {
     setUserAnswers(prev => ({
       ...prev,
@@ -831,9 +848,9 @@ const QuizComponent = ({
             </span>
             <span className="status-text">
               {emailStatus === 'sending' && 'Procesando formulario con IA...'}
-              {emailStatus === 'success' && userEmail ? `Formulario enviado a: ${userEmail}` : 'Formulario procesado correctamente'}
-              {emailStatus === 'error' && 'Error al procesar formulario'}
-              {emailStatus === 'idle' && userEmail ? `Email: ${userEmail}` : 'Formulario no enviado'}
+              {emailStatus === 'success' && (userEmail ? `✅ Formulario enviado a: ${userEmail}` : '✅ Formulario procesado correctamente')}
+              {emailStatus === 'error' && '❌ Error al procesar formulario'}
+              {emailStatus === 'idle' && (userEmail ? `📧 Email configurado: ${userEmail}` : '📧 Formulario no enviado')}
             </span>
           </div>
 
@@ -845,10 +862,10 @@ const QuizComponent = ({
               {webhookStatus === 'idle' && '🔗'}
             </span>
             <span className="status-text">
-              {webhookStatus === 'sending' && 'Enviando resumen por webhook...'}
-              {webhookStatus === 'success' && 'Webhook enviado correctamente'}
-              {webhookStatus === 'error' && 'Error al enviar webhook'}
-              {webhookStatus === 'idle' && 'Webhook no configurado'}
+              {webhookStatus === 'sending' && 'Procesando formulario con IA...'}
+              {webhookStatus === 'success' && '✅ Procesamiento completado'}
+              {webhookStatus === 'error' && '❌ Error en el procesamiento'}
+              {webhookStatus === 'idle' && '🔗 Servicio de IA listo'}
             </span>
           </div>
         </div>

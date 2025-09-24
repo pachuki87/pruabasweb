@@ -32,9 +32,8 @@
     </div>
 
     <div class="container mx-auto px-4 py-8 max-w-4xl">
-        <form name="preguntas-abiertas-mcp" method="POST" data-netlify="true" netlify-honeypot="bot-field" class="space-y-6">
+        <form name="preguntas-abiertas-mcp" method="POST" data-netlify="true" class="space-y-6">
             <input type="hidden" name="form-name" value="preguntas-abiertas-mcp" />
-            <input type="hidden" name="bot-field" />
 
             <!-- Información del estudiante -->
             <div class="bg-white rounded-lg shadow-md p-6">
@@ -175,23 +174,15 @@
                 try {
                     log('Iniciando procesamiento del formulario...');
 
-                    // 1. Enviar a Netlify Forms (usando el endpoint correcto)
+                    // 1. Enviar a Netlify Forms (siguiendo el ejemplo exacto de la documentación)
                     log('Enviando datos a Netlify Forms...');
                     updateStatus('Netlify', 'processing', '📤 Enviando a Netlify...');
 
-                    // Para Netlify Forms, necesitamos enviar al formulario específico
-                    const netlifyFormData = new FormData();
-                    netlifyFormData.append('form-name', 'preguntas-abiertas-mcp');
-                    netlifyFormData.append('nombre', data.nombre);
-                    netlifyFormData.append('email', data.email);
-                    netlifyFormData.append('pregunta1', data.pregunta1);
-                    netlifyFormData.append('pregunta2', data.pregunta2);
-                    netlifyFormData.append('pregunta3', data.pregunta3);
-                    netlifyFormData.append('pregunta4', data.pregunta4);
-
+                    // Según la documentación de Netlify, usar el método recomendado
                     const netlifyResponse = await fetch('/', {
                         method: 'POST',
-                        body: netlifyFormData
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: new URLSearchParams(formData).toString()
                     });
 
                     if (!netlifyResponse.ok) {

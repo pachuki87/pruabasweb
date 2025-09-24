@@ -166,7 +166,6 @@ export class ProgressService {
         curso_id: courseId,
         puntuacion: score,
         puntuacion_maxima: totalQuestions,
-        porcentaje: Math.round((correctAnswers / totalQuestions) * 100),
         tiempo_completado: timeTakenMinutes,
         respuestas_detalle: answersData,
         aprobado: passed,

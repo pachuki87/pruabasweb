@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { ChevronLeft, ChevronRight, FileText, Download, ExternalLink, BookOpen, Clock, User } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
 import QuizComponent from '../QuizComponent';
+import { supabase } from '../../supabaseClient';
 
 interface Lesson {
   id: string;

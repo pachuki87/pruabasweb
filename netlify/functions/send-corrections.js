@@ -60,6 +60,7 @@ Responde en formato JSON con la siguiente estructura:
 `;
 
         console.log('Enviando solicitud a Gemini API...');
+        console.log('Gemini API Key utilizada:', geminiConfig.apiKey ? 'Configurada' : 'No configurada o vacía');
 
         const response = await axios.post(
             `${geminiConfig.baseUrl}?key=${geminiConfig.apiKey}`,

@@ -137,6 +137,7 @@ function App() {
           {/* Public routes */}
           <Route path="/" element={<HomePage currentRole={currentRole} onRoleChange={handleRoleChange} />} />
           <Route path="/about" element={<AboutPage currentRole={currentRole} onRoleChange={handleRoleChange} />} />
+          <Route path="/contacto" element={<AboutPage currentRole={currentRole} onRoleChange={handleRoleChange} />} />
           <Route path="/faqs" element={<FaqsPage currentRole={currentRole} onRoleChange={handleRoleChange} />} />
           <Route path="/courses" element={<CoursesPage currentRole={currentRole} onRoleChange={handleRoleChange} />} />
           <Route path="/courses/:courseId" element={<CoursePage />} />

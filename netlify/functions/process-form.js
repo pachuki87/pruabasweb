@@ -175,28 +175,28 @@ function getMockResponse() {
 // Función para preparar el contenido para Netlify Forms notifications
 async function sendResultsEmail(email, nombre, corrections) {
     try {
-        // Formatear los resultados para mostrar en el formulario
-        // Netlify Forms enviará automáticamente una notificación por email cuando se procese el formulario
-
-        console.log('Preparando contenido para Netlify Forms notification...');
+        console.log('Procesando formulario para Netlify Forms...');
         console.log('Email del usuario:', email);
         console.log('Nombre del usuario:', nombre);
 
         // Netlify Forms automáticamente enviará una notificación al email configurado
         // en los ajustes de Netlify Forms cuando se reciba un nuevo formulario
+        // El usuario recibirá una copia porque Netlify Forms envía notificaciones
+        // a todos los emails configurados en las notificaciones del formulario
+
         return {
             success: true,
-            message: 'Netlify Forms notification configured',
+            message: 'Formulario procesado para Netlify Forms',
             email: email,
             nombre: nombre,
             corrections: corrections
         };
 
     } catch (error) {
-        console.error('Error preparando notificación:', error);
+        console.error('Error procesando formulario:', error);
         return {
             success: false,
-            message: 'Error preparando notificación',
+            message: 'Error procesando formulario',
             error: error.message
         };
     }

@@ -90,6 +90,10 @@ Responde en formato JSON con la siguiente estructura:
         // Parsear la respuesta de la API
         const responseText = response.data.candidates[0].content.parts[0].text;
 
+        // TEMPORAL: Devolver la respuesta cruda para depuración
+        return { rawResponse: responseText };
+
+        /*
         // Extraer JSON de la respuesta de forma más robusta
         const startIndex = responseText.indexOf('{');
         const endIndex = responseText.lastIndexOf('}');
@@ -101,6 +105,7 @@ Responde en formato JSON con la siguiente estructura:
         } else {
             throw new Error('No se encontró JSON válido en la respuesta de Gemini');
         }
+        */
 
     } catch (error) {
         console.error('Error generando correcciones:', error.response?.data || error.message);

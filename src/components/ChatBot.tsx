@@ -10,11 +10,11 @@ interface Message {
 }
 
 interface ChatBotProps {
-  glmApiKey?: string;
+  geminiApiKey?: string;
 }
 
 const ChatBot: React.FC<ChatBotProps> = ({
-  glmApiKey = import.meta.env.VITE_ZAI_API_KEY || 'nfp_rVfRcr4gHR1s3jjq9b5ujYCHcGiqNqpkc9e4'
+  geminiApiKey = import.meta.env.VITE_GEMINI_API_KEY || ''
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
@@ -37,32 +37,28 @@ const ChatBot: React.FC<ChatBotProps> = ({
     scrollToBottom();
   }, [messages]);
 
-  const sendMessageToGLM = async (message: string): Promise<string> => {
+  const sendMessageToGemini = async (message: string): Promise<string> => {
     try {
-      console.log('🤖 Enviando mensaje a GLM API:', {
+      console.log('🤖 Enviando mensaje a Gemini API:', {
         message: message,
         timestamp: new Date().toISOString()
       });
 
       const response = await axios.post(
-        'https://api.zai.ai/v1/chat/completions',
+        '/.netlify/functions/gemini-api',
         {
-          model: 'glm-4.5',
+          systemInstruction: `Eres un asistente virtual del Instituto Lidera, especializado en educación sobre adicciones, psicología y salud mental.
+
+          Tu personalidad:
+          - Amigable, profesional y empático
+          - Proporciona información precisa y útil
+          - Mantén un tono educativo y de apoyo
+          - Si no conoces algo, admítelo y sugiere consultar con un profesional
+          - No proporciones diagnóstico médicos específicos
+          - Enfocado en ayudar estudiantes del instituto
+
+          Contexto: El usuario está interactuando contigo a través del chatbot del Instituto Lidera.`,
           messages: [
-            {
-              role: 'system',
-              content: `Eres un asistente virtual del Instituto Lidera, especializado en educación sobre adicciones, psicología y salud mental.
-
-              Tu personalidad:
-              - Amigable, profesional y empático
-              - Proporciona información precisa y útil
-              - Mantén un tono educativo y de apoyo
-              - Si no conoces algo, admítelo y sugiere consultar con un profesional
-              - No proporciones diagnóstico médicos específicos
-              - Enfocado en ayudar estudiantes del instituto
-
-              Contexto: El usuario está interactuando contigo a través del chatbot del Instituto Lidera.`
-            },
             {
               role: 'user',
               content: message
@@ -73,14 +69,13 @@ const ChatBot: React.FC<ChatBotProps> = ({
         },
         {
           headers: {
-            'Authorization': `Bearer ${glmApiKey}`,
             'Content-Type': 'application/json'
           },
           timeout: 15000 // 15 segundos timeout
         }
       );
 
-      console.log('✅ Respuesta recibida de GLM API:', {
+      console.log('✅ Respuesta recibida de Gemini API:', {
         status: response.status,
         data: response.data
       });
@@ -88,59 +83,32 @@ const ChatBot: React.FC<ChatBotProps> = ({
       const botResponse = response.data.choices[0].message.content;
 
       if (typeof botResponse !== 'string') {
-        console.warn('⚠️ Respuesta de GLM no es string, convirtiendo...');
+        console.warn('⚠️ Respuesta de Gemini no es string, convirtiendo...');
         return String(botResponse);
       }
 
       return botResponse;
 
     } catch (error: any) {
-      console.error('❌ Error al comunicarse con GLM API:', {
+      console.error('❌ Error al comunicarse con Gemini API:', {
         error: error.message,
         response: error.response?.data,
         status: error.response?.status,
         config: {
           url: error.config?.url,
-          headers: error.config?.headers ? 'Headers set' : 'No headers',
-          model: error.config?.data?.model
+          headers: error.config?.headers ? 'Headers set' : 'No headers'
         }
       });
 
-      // Si el error es 404, probar con el endpoint alternativo
-      if (error.response?.status === 404) {
-        console.log('🔄 Intentando con endpoint alternativo...');
-        try {
-          const altResponse = await axios.post(
-            'https://api.zai.ai/api/paas/v4/chat/completions',
-            {
-              model: 'glm-4.5',
-              messages: [
-                {
-                  role: 'system',
-                  content: `Eres un asistente virtual del Instituto Lidera, especializado en educación sobre adicciones, psicología y salud mental.`
-                },
-                {
-                  role: 'user',
-                  content: message
-                }
-              ],
-              max_tokens: 1000,
-              temperature: 0.7
-            },
-            {
-              headers: {
-                'Authorization': `Bearer ${glmApiKey}`,
-                'Content-Type': 'application/json'
-              },
-              timeout: 15000
-            }
-          );
+      // Extraer información detallada del error
+      const errorData = error.response?.data;
+      const isQuotaError = errorData?.error?.message?.includes('quota') ||
+                         errorData?.error?.message?.includes('billing') ||
+                         error.response?.status === 429;
 
-          const botResponse = altResponse.data.choices[0].message.content;
-          return typeof botResponse === 'string' ? botResponse : String(botResponse);
-        } catch (altError: any) {
-          console.error('❌ Error con endpoint alternativo:', altError.message);
-        }
+      // Si es error de cuota de Gemini
+      if (isQuotaError) {
+        return 'Lo siento, el servicio de IA está temporalmente no disponible debido a limitaciones de uso. Por favor, inténtalo de nuevo más tarde o contacta con soporte.';
       }
 
       // Determinar tipo de error para mensaje específico
@@ -148,8 +116,6 @@ const ChatBot: React.FC<ChatBotProps> = ({
         return 'Lo siento, el servicio está tardando demasiado en responder. Por favor, inténtalo de nuevo más tarde.';
       } else if (error.response?.status === 401) {
         return 'Lo siento, hay un problema de autenticación. Por favor, contacta con soporte técnico.';
-      } else if (error.response?.status === 429) {
-        return 'Lo siento, hemos alcanzado el límite de solicitudes. Por favor, inténtalo de nuevo en unos minutos.';
       } else if (error.response?.status >= 500) {
         return 'Lo siento, hay un problema temporal en nuestro servidor. Por favor, inténtalo de nuevo en unos minutos.';
       } else {
@@ -174,7 +140,7 @@ const ChatBot: React.FC<ChatBotProps> = ({
     setIsLoading(true);
 
     try {
-      const botResponse = await sendMessageToGLM(currentMessage);
+      const botResponse = await sendMessageToGemini(currentMessage);
 
       const botMessage: Message = {
         id: (Date.now() + 1).toString(),

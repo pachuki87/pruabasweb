@@ -1,0 +1,55 @@
+functionsDirectory = "C:\\Users\\pabli\\OneDrive\\Desktop\\institutoooo - copia\\pruabasweb\\netlify\\functions"
+functionsDirectoryOrigin = "config"
+headersOrigin = "config"
+redirectsOrigin = "config"
+plugins = []
+
+[build]
+publish = "C:\\Users\\pabli\\OneDrive\\Desktop\\institutoooo - copia\\pruabasweb\\dist"
+publishOrigin = "config"
+commandOrigin = "config"
+command = "npm run build"
+functions = "C:\\Users\\pabli\\OneDrive\\Desktop\\institutoooo - copia\\pruabasweb\\netlify\\functions"
+
+[build.environment]
+
+[build.processing]
+
+[build.processing.css]
+bundle = true
+
+[build.processing.html]
+pretty_urls = true
+
+[build.processing.images]
+compress = true
+
+[build.processing.js]
+bundle = true
+
+[build.services]
+
+[functions]
+
+[functions."*"]
+
+[[headers]]
+for = "/*"
+
+[headers.values]
+X-Frame-Options = "DENY"
+X-XSS-Protection = "1; mode=block"
+X-Content-Type-Options = "nosniff"
+Referrer-Policy = "strict-origin-when-cross-origin"
+
+[[redirects]]
+from = "/*"
+to = "/index.html"
+status = 200.0
+force = false
+
+[redirects.query]
+
+[redirects.conditions]
+
+[redirects.headers]

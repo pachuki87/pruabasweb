@@ -89,7 +89,7 @@ Responde en formato JSON con la siguiente estructura:
 
         // Parsear la respuesta de la API
         const responseText = response.data.candidates[0].content.parts[0].text;
-        console.log('Respuesta cruda:', responseText);
+        console.log('Respuesta cruda de Gemini:', responseText);
 
         // Extraer JSON de la respuesta
         const jsonMatch = responseText.match(/\{[\s\S]*\}/);

@@ -22,7 +22,11 @@
     <div class="container mx-auto px-4 py-8 max-w-4xl">
         <form name="preguntas-abiertas" method="POST" data-netlify="true" netlify-honeypot="bot-field" class="space-y-6">
             <input type="hidden" name="form-name" value="preguntas-abiertas" />
-            <input type="hidden" name="subject" value="Nuevas respuestas del formulario de preguntas abiertas" />
+            <input type="hidden" name="subject" value="Nuevas respuestas del formulario de preguntas abiertas de %{siteName}" />
+            <!-- Campo honeypot oculto para spam -->
+            <p class="hidden">
+                <label>Don't fill this out: <input name="bot-field" /></label>
+            </p>
 
             <!-- Información del estudiante -->
             <div class="bg-white rounded-lg shadow-md p-6">
@@ -37,6 +41,7 @@
                         <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Correo Electrónico</label>
                         <input type="email" id="email" name="email" required
                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <p id="emailStatus" class="text-sm mt-1 text-red-600">Detectando email...</p>
                     </div>
                 </div>
             </div>
@@ -88,10 +93,7 @@
                 </button>
             </div>
 
-            <!-- Campos ocultos para Netlify Forms -->
-            <input type="hidden" name="form-name" value="preguntas-abiertas" />
-            <input type="hidden" name="_subject" value="Nuevas respuestas del formulario de preguntas abiertas" />
-            <input type="hidden" id="recipientEmail" name="_to" value="" />
+            <!-- No necesitamos campos ocultos adicionales para Netlify Forms -->
         </form>
 
         <!-- Indicador de progreso -->
@@ -119,23 +121,62 @@
             // Obtener email del usuario autenticado de Supabase
             async function getUserEmail() {
                 try {
-                    // Intentar obtener el usuario desde localStorage (Supabase auth)
+                    console.log('Intentando obtener email de Supabase...');
+
+                    // Método 1: Intentar obtener el usuario desde localStorage (Supabase auth)
                     const supabaseUser = localStorage.getItem('supabase.auth.token');
                     if (supabaseUser) {
+                        console.log('Encontrado token en localStorage');
                         const user = JSON.parse(supabaseUser);
-                        return user.user?.email || user.email;
+                        const email = user.user?.email || user.email;
+                        if (email) {
+                            console.log('Email obtenido desde localStorage:', email);
+                            return email;
+                        }
                     }
 
-                    // O intentar desde el objeto global de Supabase
+                    // Método 2: Buscar en otros posibles lugares de localStorage
+                    const keys = Object.keys(localStorage);
+                    for (const key of keys) {
+                        if (key.includes('supabase') || key.includes('auth')) {
+                            try {
+                                const value = localStorage.getItem(key);
+                                const parsed = JSON.parse(value);
+                                if (parsed && (parsed.email || parsed.user?.email)) {
+                                    const email = parsed.email || parsed.user?.email;
+                                    console.log('Email encontrado en', key, ':', email);
+                                    return email;
+                                }
+                            } catch (e) {
+                                // No hacer nada, continuar con el siguiente
+                            }
+                        }
+                    }
+
+                    // Método 3: Intentar desde el objeto global de Supabase
                     if (window.supabase && window.supabase.auth) {
+                        console.log('Intentando obtener email desde supabase.auth...');
                         const { data, error } = await window.supabase.auth.getUser();
                         if (!error && data.user) {
+                            console.log('Email obtenido desde supabase.auth:', data.user.email);
                             return data.user.email;
                         }
                     }
+
+                    // Método 4: Verificar si hay un usuario en la sesión actual
+                    if (window.supabase && window.supabase.auth.session) {
+                        const session = window.supabase.auth.session();
+                        if (session && session.user) {
+                            console.log('Email obtenido desde sesión:', session.user.email);
+                            return session.user.email;
+                        }
+                    }
+
                 } catch (error) {
-                    console.log('No se pudo obtener el email del usuario:', error);
+                    console.error('Error obteniendo email del usuario:', error);
                 }
+
+                console.log('No se encontró email del usuario');
                 return null;
             }
 
@@ -144,16 +185,32 @@
                 const userEmail = await getUserEmail();
                 const emailInput = document.getElementById('email');
 
+                console.log('Email detectado:', userEmail);
+
                 if (userEmail && emailInput) {
                     emailInput.value = userEmail;
                     emailInput.readOnly = true; // Hacer el campo de solo lectura
                     emailInput.classList.add('bg-gray-100');
 
-                    // Configurar el campo oculto para que Netlify envíe el email al usuario
-                    const recipientEmailField = document.getElementById('recipientEmail');
-                    recipientEmailField.value = userEmail;
+                    // Mostrar el email detectado en la interfaz
+                    const emailStatus = document.getElementById('emailStatus');
+                    if (emailStatus) {
+                        emailStatus.textContent = `Email detectado: ${userEmail}`;
+                        emailStatus.classList.remove('text-red-600');
+                        emailStatus.classList.add('text-green-600');
+                    }
 
-                    console.log('Email del usuario configurado para Netlify Forms:', userEmail);
+                    console.log('Email del usuario configurado:', userEmail);
+                } else {
+                    console.log('No se pudo configurar el email del usuario');
+
+                    // Mostrar mensaje de error
+                    const emailStatus = document.getElementById('emailStatus');
+                    if (emailStatus) {
+                        emailStatus.textContent = 'Email no detectado - Por favor inicia sesión';
+                        emailStatus.classList.remove('text-green-600');
+                        emailStatus.classList.add('text-red-600');
+                    }
                 }
             }
 

@@ -34,6 +34,7 @@ const QuizComponent = ({
     email: false,
     webhook: false
   });
+  const [userEmail, setUserEmail] = useState('');
 
 
 
@@ -571,9 +572,17 @@ const QuizComponent = ({
       // NOTA: Los servicios de email y webhook están deshabilitados en el frontend
       // para evitar errores de consola. Estas funcionalidades se moverán al backend.
       console.log('ℹ️ Servicios de email y webhook deshabilitados en frontend');
-      
-      setEmailStatus('idle');
-      setWebhookStatus('idle');
+
+      // Actualizar estado para mostrar información del usuario
+      if (user && user.email) {
+        setUserEmail(user.email);
+        setEmailStatus('success');
+        setWebhookStatus('idle');
+      } else {
+        setUserEmail('');
+        setEmailStatus('idle');
+        setWebhookStatus('idle');
+      }
 
     } catch (error) {
       console.error('❌ Error sending quiz summary:', error);
@@ -799,9 +808,9 @@ const QuizComponent = ({
             </span>
             <span className="status-text">
               {emailStatus === 'sending' && 'Enviando resumen por email...'}
-              {emailStatus === 'success' && 'Email enviado correctamente'}
+              {emailStatus === 'success' && userEmail ? `Resumen enviado a: ${userEmail}` : 'Email enviado correctamente'}
               {emailStatus === 'error' && 'Error al enviar email'}
-              {emailStatus === 'idle' && 'Email no configurado'}
+              {emailStatus === 'idle' && userEmail ? `Email: ${userEmail}` : 'Email no configurado'}
             </span>
           </div>
 

@@ -568,11 +568,13 @@ const QuizComponent = ({
 
       if (userError || !user) {
         console.warn('⚠️ No se pudo obtener información del usuario:', userError);
+        setEmailStatus('error');
         return;
       }
 
       if (!user.email) {
         console.warn('⚠️ El usuario no tiene email configurado');
+        setEmailStatus('error');
         return;
       }
 
@@ -589,25 +591,13 @@ const QuizComponent = ({
 
       console.log('📋 Enviando formulario completo para procesamiento...');
 
-      // Crear FormData para enviar a Netlify Forms
-      const netlifyFormData = new FormData();
-      netlifyFormData.append('form-name', 'quiz-results');
-      netlifyFormData.append('nombre', formData.nombre);
-      netlifyFormData.append('email', formData.email);
-      netlifyFormData.append('quizData', JSON.stringify(formData.quizData));
-      netlifyFormData.append('userAnswers', JSON.stringify(formData.userAnswers));
-      netlifyFormData.append('results', JSON.stringify(formData.results));
-
-      // Enviar a Netlify Forms y luego a la función de procesamiento
+      // Enviar a la función de procesamiento
       const response = await fetch('/.netlify/functions/process-form', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          formName: 'quiz-results',
-          formData: Object.fromEntries(netlifyFormData)
-        })
+        body: JSON.stringify(formData)
       });
 
       if (!response.ok) {

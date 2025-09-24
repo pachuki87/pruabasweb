@@ -323,7 +323,40 @@ exports.handler = async (event, context) => {
 
     try {
         const data = JSON.parse(event.body);
-        const { nombre, email, quizData, userAnswers } = data;
+
+        // Verificar si es el formato antiguo (preguntas individuales) o nuevo (quizData)
+        let nombre, email, quizData, userAnswers;
+
+        if (data.pregunta1 && data.pregunta2) {
+            // Formato antiguo: preguntas individuales
+            nombre = data.nombre;
+            email = data.email;
+
+            // Crear estructura quizData compatible
+            quizData = {
+                titulo: 'Evaluación de Adicciones',
+                preguntas: [
+                    { id: 'pregunta1', pregunta: '¿Qué significa para usted ser adicto y cuáles considera que son las principales características de una conducta adictiva?' },
+                    { id: 'pregunta2', pregunta: 'Describa las principales consecuencias que las adicciones pueden tener en la vida de una persona y su entorno familiar.' },
+                    { id: 'pregunta3', pregunta: '¿Qué role considera que juega la familia en el proceso de recuperación de una persona con adicciones?' },
+                    { id: 'pregunta4', pregunta: 'Explique cómo el mindfulness puede ser una herramienta útil en el tratamiento de conductas adictivas.' }
+                ]
+            };
+
+            // Crear userAnswers compatible
+            userAnswers = {
+                pregunta1: { textoRespuesta: data.pregunta1 },
+                pregunta2: { textoRespuesta: data.pregunta2 },
+                pregunta3: { textoRespuesta: data.pregunta3 },
+                pregunta4: { textoRespuesta: data.pregunta4 }
+            };
+        } else {
+            // Formato nuevo: quizData y userAnswers
+            nombre = data.nombre;
+            email = data.email;
+            quizData = data.quizData;
+            userAnswers = data.userAnswers;
+        }
 
         // Validar datos requeridos
         if (!nombre || !email || !quizData || !userAnswers) {

@@ -32,8 +32,9 @@
     </div>
 
     <div class="container mx-auto px-4 py-8 max-w-4xl">
-        <form name="preguntas-abiertas-mcp" method="POST" data-netlify="true" class="space-y-6">
+        <form name="preguntas-abiertas-mcp" method="POST" data-netlify="true" netlify-honeypot="bot-field" class="space-y-6">
             <input type="hidden" name="form-name" value="preguntas-abiertas-mcp" />
+            <input type="hidden" name="bot-field" />
 
             <!-- Información del estudiante -->
             <div class="bg-white rounded-lg shadow-md p-6">
@@ -177,15 +178,19 @@
                 try {
                     log('Iniciando procesamiento del formulario...');
 
-                    // 1. Enviar a Netlify Forms
+                    // 1. Enviar a Netlify Forms (formato correcto)
                     log('Enviando datos a Netlify Forms...');
                     updateStatus('Netlify', 'processing', '📤 Enviando a Netlify...');
 
-                    await fetch('/', {
+                    const netlifyResponse = await fetch('/', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                         body: new URLSearchParams(formData).toString()
                     });
+
+                    if (!netlifyResponse.ok) {
+                        throw new Error(`Error HTTP: ${netlifyResponse.status}`);
+                    }
 
                     log('✅ Datos enviados a Netlify Forms');
                     updateStatus('Netlify', 'success', '✅ Enviado a Netlify');

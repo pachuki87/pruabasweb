@@ -1,5 +1,6 @@
 const axios = require('axios');
-const nodemailer = require('nodemailer');
+const { createTransport } = require('nodemailer');
+const axios = require('axios');
 
 // Configuración de la API de Google Gemini
 const geminiConfig = {
@@ -236,7 +237,7 @@ function getMockResponse(quizData) {
 // Función para enviar email de confirmación inmediata
 async function sendConfirmationEmail(email, nombre) {
     try {
-        const transporter = nodemailer.createTransporter({
+        const transporter = createTransport({
             service: 'hotmail',
             auth: {
                 user: process.env.EMAIL_USER || 'pablitocfv@hotmail.com',
@@ -310,7 +311,7 @@ async function sendResultsEmail(email, nombre, quizData, corrections) {
         console.log('Nombre del usuario:', nombre);
 
         // Configurar transporte de correo para Hotmail/Outlook
-        const transporter = nodemailer.createTransporter({
+        const transporter = createTransport({
             service: 'hotmail',
             auth: {
                 user: process.env.EMAIL_USER || 'pablitocfv@hotmail.com',

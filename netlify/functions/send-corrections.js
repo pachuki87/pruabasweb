@@ -91,13 +91,16 @@ Responde en formato JSON con la siguiente estructura:
         const responseText = response.data.candidates[0].content.parts[0].text;
         console.log('Respuesta cruda de Gemini:', responseText);
 
-        // Extraer JSON de la respuesta
-        const jsonMatch = responseText.match(/\{[\s\S]*\}/);
-        if (jsonMatch) {
-            const parsedResponse = JSON.parse(jsonMatch[0]);
+        // Extraer JSON de la respuesta de forma más robusta
+        const startIndex = responseText.indexOf('{');
+        const endIndex = responseText.lastIndexOf('}');
+
+        if (startIndex !== -1 && endIndex !== -1 && endIndex > startIndex) {
+            const jsonString = responseText.substring(startIndex, endIndex + 1);
+            const parsedResponse = JSON.parse(jsonString);
             return parsedResponse;
         } else {
-            throw new Error('No se encontró JSON en la respuesta');
+            throw new Error('No se encontró JSON válido en la respuesta de Gemini');
         }
 
     } catch (error) {

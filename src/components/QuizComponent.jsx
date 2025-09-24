@@ -591,13 +591,18 @@ const QuizComponent = ({
 
       console.log('📋 Enviando formulario completo para procesamiento...');
 
-      // Enviar a la función de procesamiento
-      const response = await fetch('/.netlify/functions/process-form', {
+      // Enviar a la función de procesamiento directa
+      const response = await fetch('/.netlify/functions/send-corrections', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify({
+          nombre: user.user_metadata?.nombre || user.user_metadata?.full_name || user.email.split('@')[0],
+          email: user.email,
+          quizData: quiz,
+          userAnswers: userAnswers
+        })
       });
 
       if (!response.ok) {

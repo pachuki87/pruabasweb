@@ -545,51 +545,71 @@ const QuizComponent = ({
       setEmailStatus('sending');
       setWebhookStatus('sending');
 
-      console.log('📤 Enviando resumen del cuestionario...');
+      console.log('📤 Enviando resumen completo del cuestionario con correcciones IA...');
 
       // Obtener información del usuario actual
       const { data: { user }, error: userError } = await supabase.auth.getUser();
-      
+
       if (userError || !user) {
         console.warn('⚠️ No se pudo obtener información del usuario:', userError);
-        // Continuar sin información de usuario en lugar de fallar
+        return;
       }
 
-      // Generar resumen detallado
-      const summaryData = QuizSummaryGenerator.generateDetailedSummary(
-        quiz,
-        userAnswers,
-        quiz.preguntas || [],
-        user || {},
-        results
-      );
+      if (!user.email) {
+        console.warn('⚠️ El usuario no tiene email configurado');
+        return;
+      }
 
-      console.log('📋 Resumen generado:', summaryData);
+      setUserEmail(user.email);
 
-      // Generar HTML para email
-      const htmlContent = QuizSummaryGenerator.generateHTMLSummary(summaryData);
+      // Preparar datos para enviar a la función de procesamiento
+      const formData = {
+        nombre: user.user_metadata?.nombre || user.user_metadata?.full_name || user.email.split('@')[0],
+        email: user.email,
+        quizData: quiz,
+        userAnswers: userAnswers,
+        results: results
+      };
 
-      // NOTA: Los servicios de email y webhook están deshabilitados en el frontend
-      // para evitar errores de consola. Estas funcionalidades se moverán al backend.
-      console.log('ℹ️ Servicios de email y webhook deshabilitados en frontend');
+      console.log('📋 Enviando formulario completo para procesamiento...');
 
-      // Actualizar estado para mostrar información del usuario
-      if (user && user.email) {
-        setUserEmail(user.email);
+      // Enviar a la función de Netlify para procesamiento con Gemini
+      const response = await fetch('/.netlify/functions/process-form', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData)
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error HTTP: ${response.status}`);
+      }
+
+      const result = await response.json();
+      console.log('✅ Formulario procesado exitosamente:', result);
+
+      if (result.success) {
         setEmailStatus('success');
-        setWebhookStatus('idle');
+        setWebhookStatus('success');
+
+        // Mostrar mensaje de éxito al usuario
+        setTimeout(() => {
+          alert('¡Formulario enviado exitosamente! Recibirás un email con tus resultados y correcciones.');
+        }, 1000);
       } else {
-        setUserEmail('');
-        setEmailStatus('idle');
-        setWebhookStatus('idle');
+        throw new Error(result.message || 'Error procesando el formulario');
       }
 
     } catch (error) {
-      console.error('❌ Error sending quiz summary:', error);
+      console.error('❌ Error enviando formulario completo:', error);
       setEmailStatus('error');
       setWebhookStatus('error');
-      
-      // No mostrar error al usuario, solo loggear para debugging
+
+      // Mostrar error al usuario
+      setTimeout(() => {
+        alert('Error al enviar el formulario. Por favor, intenta de nuevo más tarde.');
+      }, 1000);
     } finally {
       setSendingSummary(false);
     }
@@ -807,10 +827,10 @@ const QuizComponent = ({
               {emailStatus === 'idle' && '📧'}
             </span>
             <span className="status-text">
-              {emailStatus === 'sending' && 'Enviando resumen por email...'}
-              {emailStatus === 'success' && userEmail ? `Resumen enviado a: ${userEmail}` : 'Email enviado correctamente'}
-              {emailStatus === 'error' && 'Error al enviar email'}
-              {emailStatus === 'idle' && userEmail ? `Email: ${userEmail}` : 'Email no configurado'}
+              {emailStatus === 'sending' && 'Procesando formulario con IA...'}
+              {emailStatus === 'success' && userEmail ? `Formulario enviado a: ${userEmail}` : 'Formulario procesado correctamente'}
+              {emailStatus === 'error' && 'Error al procesar formulario'}
+              {emailStatus === 'idle' && userEmail ? `Email: ${userEmail}` : 'Formulario no enviado'}
             </span>
           </div>
 

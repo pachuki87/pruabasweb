@@ -589,7 +589,10 @@ const QuizComponent = ({
       const result = await response.json();
       console.log('✅ Formulario procesado exitosamente:', result);
 
-      if (result.success) {
+      // La respuesta puede venir en diferentes formatos, verificamos varios escenarios
+      const isSuccess = result.success || result.message?.includes('exitosamente') || result.corrections;
+
+      if (isSuccess) {
         setEmailStatus('success');
         setWebhookStatus('success');
 

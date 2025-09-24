@@ -20,8 +20,9 @@
     </div>
 
     <div class="container mx-auto px-4 py-8 max-w-4xl">
-        <form name="preguntas-abiertas" method="POST" data-netlify="true" class="space-y-6">
+        <form name="preguntas-abiertas" method="POST" data-netlify="true" netlify-honeypot="bot-field" class="space-y-6">
             <input type="hidden" name="form-name" value="preguntas-abiertas" />
+            <input type="hidden" name="subject" value="Nuevas respuestas del formulario de preguntas abiertas" />
 
             <!-- Información del estudiante -->
             <div class="bg-white rounded-lg shadow-md p-6">
@@ -86,6 +87,11 @@
                     Enviar Respuestas
                 </button>
             </div>
+
+            <!-- Campos ocultos para Netlify Forms -->
+            <input type="hidden" name="form-name" value="preguntas-abiertas" />
+            <input type="hidden" name="_subject" value="Nuevas respuestas del formulario de preguntas abiertas" />
+            <input type="hidden" id="recipientEmail" name="_to" value="" />
         </form>
 
         <!-- Indicador de progreso -->
@@ -110,6 +116,49 @@
             const resultados = document.getElementById('resultados');
             const correcciones = document.getElementById('correcciones');
 
+            // Obtener email del usuario autenticado de Supabase
+            async function getUserEmail() {
+                try {
+                    // Intentar obtener el usuario desde localStorage (Supabase auth)
+                    const supabaseUser = localStorage.getItem('supabase.auth.token');
+                    if (supabaseUser) {
+                        const user = JSON.parse(supabaseUser);
+                        return user.user?.email || user.email;
+                    }
+
+                    // O intentar desde el objeto global de Supabase
+                    if (window.supabase && window.supabase.auth) {
+                        const { data, error } = await window.supabase.auth.getUser();
+                        if (!error && data.user) {
+                            return data.user.email;
+                        }
+                    }
+                } catch (error) {
+                    console.log('No se pudo obtener el email del usuario:', error);
+                }
+                return null;
+            }
+
+            // Configurar email del usuario cuando se carga la página
+            async function setupUserEmail() {
+                const userEmail = await getUserEmail();
+                const emailInput = document.getElementById('email');
+
+                if (userEmail && emailInput) {
+                    emailInput.value = userEmail;
+                    emailInput.readOnly = true; // Hacer el campo de solo lectura
+                    emailInput.classList.add('bg-gray-100');
+
+                    // Configurar el campo oculto para que Netlify envíe el email al usuario
+                    const recipientEmailField = document.getElementById('recipientEmail');
+                    recipientEmailField.value = userEmail;
+
+                    console.log('Email del usuario configurado para Netlify Forms:', userEmail);
+                }
+            }
+
+            setupUserEmail();
+
             form.addEventListener('submit', async function(e) {
                 e.preventDefault();
 
@@ -123,7 +172,7 @@
                 const data = Object.fromEntries(formData);
 
                 try {
-                    // 1. Enviar a Netlify Forms
+                    // 1. Enviar a Netlify Forms (esto activará las notificaciones por email)
                     await fetch('/', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },

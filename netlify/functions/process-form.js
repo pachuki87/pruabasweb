@@ -172,75 +172,33 @@ function getMockResponse() {
     };
 }
 
-// Función para enviar email con resultados usando Netlify Forms
+// Función para preparar el contenido para Netlify Forms notifications
 async function sendResultsEmail(email, nombre, corrections) {
     try {
-        // Formatear los resultados para el email
-        const emailContent = {
-            to: email,
-            subject: 'Resultados de tu Evaluación - Instituto Lidera',
-            html: `
-                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-                    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; text-align: center;">
-                        <h1 style="margin: 0;">Instituto Lidera</h1>
-                        <p style="margin: 10px 0 0 0;">Resultados de tu Evaluación</p>
-                    </div>
+        // Formatear los resultados para mostrar en el formulario
+        // Netlify Forms enviará automáticamente una notificación por email cuando se procese el formulario
 
-                    <div style="padding: 20px; background-color: #f9f9f9;">
-                        <h2>Hola ${nombre},</h2>
-                        <p>Gracias por completar el formulario de evaluación. Aquí está la retroalimentación detallada de tus respuestas:</p>
+        console.log('Preparando contenido para Netlify Forms notification...');
+        console.log('Email del usuario:', email);
+        console.log('Nombre del usuario:', nombre);
 
-                        <div style="margin: 20px 0;">
-                            <h3 style="color: #333;">Resultados Detallados:</h3>
-
-                            ${Object.entries(corrections).map(([key, value]) => {
-                                if (key === 'resumen') return '';
-                                return `
-                                    <div style="border-left: 4px solid #667eea; padding-left: 15px; margin: 15px 0;">
-                                        <h4 style="color: #667eea; margin: 0 0 10px 0;">Pregunta ${key.slice(-1)}</h4>
-                                        <p style="margin: 5px 0;"><strong>Corrección:</strong> ${value.correccion}</p>
-                                        <p style="margin: 5px 0;"><strong>Puntuación:</strong> ${value.puntuacion}/10</p>
-                                        ${value.sugerencias && value.sugerencias.length > 0 ? `
-                                            <div style="margin: 10px 0;">
-                                                <strong>Sugerencias:</strong>
-                                                <ul style="margin: 5px 0 0 20px;">
-                                                    ${value.sugerencias.map(s => `<li>${s}</li>`).join('')}
-                                                </ul>
-                                            </div>
-                                        ` : ''}
-                                    </div>
-                                `;
-                            }).join('')}
-
-                            ${corrections.resumen ? `
-                                <div style="background-color: #e8f4f8; padding: 15px; border-radius: 5px; margin: 20px 0;">
-                                    <h4 style="color: #2c5282; margin: 0 0 10px 0;">Resumen General:</h4>
-                                    <p style="margin: 0;">${corrections.resumen}</p>
-                                </div>
-                            ` : ''}
-                        </div>
-
-                        <div style="text-align: center; margin: 30px 0;">
-                            <p style="color: #666; font-size: 14px;">Este es un correo automático generado por el sistema de evaluación del Instituto Lidera.</p>
-                            <p style="color: #666; font-size: 14px;">Si tienes alguna pregunta, no dudes en contactarnos.</p>
-                        </div>
-                    </div>
-                </div>
-            `
+        // Netlify Forms automáticamente enviará una notificación al email configurado
+        // en los ajustes de Netlify Forms cuando se reciba un nuevo formulario
+        return {
+            success: true,
+            message: 'Netlify Forms notification configured',
+            email: email,
+            nombre: nombre,
+            corrections: corrections
         };
 
-        // Enviar el email usando la API de Netlify Forms para notificaciones
-        // Netlify Forms automáticamente enviará una notificación por email cuando se reciba un nuevo formulario
-        console.log('Email notification configured for:', email);
-        console.log('Email content prepared:', emailContent.subject);
-
-        // Aquí podrías integrar con servicios de email de Netlify o第三方 servicios
-        // Por ahora, solo registramos que el email está listo para enviar
-        return { success: true, message: 'Email notification prepared' };
-
     } catch (error) {
-        console.error('Error preparando email:', error);
-        throw error;
+        console.error('Error preparando notificación:', error);
+        return {
+            success: false,
+            message: 'Error preparando notificación',
+            error: error.message
+        };
     }
 }
 

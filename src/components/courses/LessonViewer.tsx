@@ -41,6 +41,7 @@ interface QuizResults {
   aprobado: boolean;
   respuestasCorrectas: number;
   totalPreguntas: number;
+  respuestas?: Record<string, any>;
 }
 
 const LessonViewer: React.FC<LessonViewerProps> = ({

@@ -390,7 +390,8 @@ const QuizComponent = ({
         tiempoTotal: 0,
         aprobado: false,
         respuestasCorrectas: 0,
-        totalPreguntas: 0
+        totalPreguntas: 0,
+        respuestas: {}
       };
     }
 
@@ -400,6 +401,7 @@ const QuizComponent = ({
     let tiempoTotal = 0;
 
     const updatedAnswers = { ...userAnswers };
+    const detailedResponses = {};
 
     console.log('🔍 Calculando resultados para', quiz.preguntas.length, 'preguntas');
     console.log('📝 Respuestas del usuario:', userAnswers);
@@ -416,21 +418,32 @@ const QuizComponent = ({
         tiempoTotal += userAnswer.tiempoRespuesta || 0;
 
         let esCorrecta = false;
+        let respuestaCorrecta = '';
+        let respuestaUsuario = '';
 
         if (question.tipo === 'multiple_choice') {
           const opcionCorrecta = question.opciones_respuesta?.find(op => op.es_correcta);
           esCorrecta = userAnswer.opcionId === opcionCorrecta?.id;
+          respuestaCorrecta = opcionCorrecta?.opcion || '';
+          respuestaUsuario = question.opciones_respuesta?.find(op => op.id === userAnswer.opcionId)?.opcion || userAnswer.opcionId || '';
           console.log(`   Opción correcta: ${opcionCorrecta?.id}, Opción usuario: ${userAnswer.opcionId}, Resultado: ${esCorrecta}`);
         } else if (question.tipo === 'verdadero_falso') {
           // Para verdadero/falso, verificar contra respuesta_correcta
-          const respuestaUsuario = userAnswer.opcionId === 'verdadero' ? 'V' : 'F';
-          esCorrecta = respuestaUsuario === question.respuesta_correcta;
-          console.log(`   Respuesta correcta: ${question.respuesta_correcta}, Respuesta usuario: ${respuestaUsuario}, Resultado: ${esCorrecta}`);
+          const respuestaUsuarioValor = userAnswer.opcionId === 'verdadero' ? 'V' : 'F';
+          esCorrecta = respuestaUsuarioValor === question.respuesta_correcta;
+          respuestaCorrecta = question.respuesta_correcta === 'V' ? 'Verdadero' : 'Falso';
+          respuestaUsuario = userAnswer.opcionId === 'verdadero' ? 'Verdadero' : 'Falso';
+          console.log(`   Respuesta correcta: ${question.respuesta_correcta}, Respuesta usuario: ${respuestaUsuarioValor}, Resultado: ${esCorrecta}`);
         } else if (question.tipo === 'texto_libre' || question.tipo === 'archivo_adjunto') {
           // Para texto libre, considerar correcto si hay respuesta significativa
           const tieneTexto = userAnswer.textoRespuesta && userAnswer.textoRespuesta.trim().length > 3;
           const tieneArchivos = userAnswer.archivos && userAnswer.archivos.length > 0;
           esCorrecta = tieneTexto || tieneArchivos;
+          respuestaUsuario = userAnswer.textoRespuesta || '';
+          if (userAnswer.archivos && userAnswer.archivos.length > 0) {
+            respuestaUsuario += ' (con archivos adjuntos)';
+          }
+          respuestaCorrecta = 'Respuesta libre';
           console.log(`   Tiene texto: ${tieneTexto}, Tiene archivos: ${tieneArchivos}, Resultado: ${esCorrecta}`);
         }
 
@@ -446,8 +459,34 @@ const QuizComponent = ({
           ...userAnswer,
           esCorrecta
         };
+
+        // Agregar respuesta detallada para el resumen
+        detailedResponses[question.id] = {
+          preguntaTexto: question.pregunta,
+          textoRespuesta: respuestaUsuario,
+          opcionId: userAnswer.opcionId,
+          respuestaCorrecta: respuestaCorrecta,
+          esCorrecta: esCorrecta,
+          tiempoRespuesta: userAnswer.tiempoRespuesta || 0,
+          tipo: question.tipo
+        };
       } else {
         console.log(`   ⚠️ Sin respuesta`);
+
+        // Agregar respuesta vacía para el resumen
+        detailedResponses[question.id] = {
+          preguntaTexto: question.pregunta,
+          textoRespuesta: 'No respondida',
+          opcionId: null,
+          respuestaCorrecta: question.tipo === 'multiple_choice'
+            ? question.opciones_respuesta?.find(op => op.es_correcta)?.opcion || ''
+            : question.tipo === 'verdadero_falso'
+            ? question.respuesta_correcta === 'V' ? 'Verdadero' : 'Falso'
+            : 'Respuesta libre',
+          esCorrecta: false,
+          tiempoRespuesta: 0,
+          tipo: question.tipo
+        };
       }
     });
 
@@ -473,7 +512,8 @@ const QuizComponent = ({
       tiempoTotal,
       aprobado,
       respuestasCorrectas,
-      totalPreguntas: quiz.preguntas.length
+      totalPreguntas: quiz.preguntas.length,
+      respuestas: detailedResponses
     };
   };
 

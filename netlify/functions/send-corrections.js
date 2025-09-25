@@ -296,6 +296,10 @@ const validatePayload = (payload) => {
         errors.push('Para respuestas de quiz, el payload debe incluir "responses"');
     }
 
+    if (payload.type === 'quiz-responses' && payload.studentInfo && !payload.studentInfo.email) {
+        errors.push('Para respuestas de quiz, studentInfo debe incluir "email"');
+    }
+
     return {
         valid: errors.length === 0,
         errors
@@ -360,24 +364,32 @@ exports.handler = async (event, context) => {
         }
         console.log('Datos recibidos:', JSON.stringify(data, null, 2));
 
-        // Preparar payload para n8n
+        // Preparar payload para n8n con información completa
         const webhookPayload = {
             type: 'quiz-responses',
             timestamp: new Date().toISOString(),
             source: 'instituto-lidera-elearning',
             studentInfo: {
-                name: data.nombre || 'Estudiante',
-                email: data.email || '',
-                quizId: data.quizId || null,
+                name: data.nombre || data.nombre_completo || 'Estudiante',
+                email: data.email || data.correo || '',
+                userId: data.userId || null,
+                quizId: data.quizId || data.cuestionario_id || null,
                 submittedAt: data.fechaEnvio || new Date().toISOString()
             },
             quizInfo: {
-                title: data.quizData?.titulo || 'Evaluación',
-                lessonId: data.quizData?.leccion_id || null,
-                courseId: data.quizData?.curso_id || null,
-                totalQuestions: data.quizData?.preguntas?.length || 0
+                title: data.quizData?.titulo || data.titulo_cuestionario || 'Evaluación',
+                lessonId: data.quizData?.leccion_id || data.leccion_id || null,
+                courseId: data.quizData?.curso_id || data.curso_id || null,
+                totalQuestions: data.quizData?.preguntas?.length || data.total_preguntas || 0,
+                score: data.puntuacion || 0,
+                maxScore: data.puntuacion_maxima || 0,
+                percentage: data.porcentaje || 0,
+                passed: data.aprobado || false,
+                timeSpent: data.tiempo_transcurrido || 0,
+                attemptNumber: data.intento_numero || 1
             },
-            responses: []
+            responses: [],
+            rawData: data // Incluir datos crudos para referencia
         };
 
         // Procesar respuestas abiertas
@@ -388,13 +400,15 @@ exports.handler = async (event, context) => {
                     questionId: respuesta.questionId,
                     question: respuesta.question || '',
                     answer: respuesta.answer || '',
+                    answerType: 'open',
                     files: respuesta.files || [],
-                    timeSpent: respuesta.timeSpent || 0
+                    timeSpent: respuesta.timeSpent || 0,
+                    submittedAt: respuesta.submittedAt || new Date().toISOString()
                 });
             });
         }
 
-        // Procesar todas las respuestas del usuario
+        // Procesar respuestas de opción múltiple
         if (data.userAnswers) {
             Object.keys(data.userAnswers).forEach(questionId => {
                 const answer = data.userAnswers[questionId];
@@ -403,12 +417,40 @@ exports.handler = async (event, context) => {
                 if (!existingResponse) {
                     webhookPayload.responses.push({
                         questionId: questionId,
-                        answer: answer.textoRespuesta || answer.opcionId || '',
-                        isCorrect: answer.esCorrecta || false,
-                        timeSpent: answer.tiempoRespuesta || 0
+                        answer: answer.textoRespuesta || answer.opcionId || answer.answer || '',
+                        answerType: 'multiple_choice',
+                        selectedOption: answer.opcionSeleccionada || answer.opcionId || null,
+                        isCorrect: answer.esCorrecta || answer.correcta || false,
+                        timeSpent: answer.tiempoRespuesta || answer.tiempo || 0,
+                        submittedAt: answer.fechaRespuesta || new Date().toISOString()
                     });
                 }
             });
+        }
+
+        // Procesar respuestas desde la base de datos (respuestas_guardadas)
+        if (data.respuestas_guardadas && typeof data.respuestas_guardadas === 'object') {
+            Object.keys(data.respuestas_guardadas).forEach(questionId => {
+                const answer = data.respuestas_guardadas[questionId];
+                const existingResponse = webhookPayload.responses.find(r => r.questionId === questionId);
+
+                if (!existingResponse) {
+                    webhookPayload.responses.push({
+                        questionId: questionId,
+                        answer: 'Respuesta guardada en BD',
+                        answerType: 'database',
+                        isCorrect: answer.es_correcta || answer.esCorrecta || false,
+                        timeSpent: answer.tiempo_respuesta || answer.tiempoRespuesta || 0,
+                        submittedAt: answer.fecha_respuesta || new Date().toISOString()
+                    });
+                }
+            });
+        }
+
+        // Asegurar que tenemos el email del usuario en el payload
+        if (!webhookPayload.studentInfo.email && data.userId) {
+            // Intentar obtener el email desde la base de datos si tenemos el userId
+            webhookPayload.studentInfo.email = data.userId + '@usuario.local'; // Fallback temporal
         }
 
         // Validar el payload antes de enviarlo

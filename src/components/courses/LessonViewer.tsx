@@ -41,7 +41,7 @@ interface QuizResults {
   aprobado: boolean;
   respuestasCorrectas: number;
   totalPreguntas: number;
-  respuestas?: Record<string, any>;
+  questionsSummary?: any[];
 }
 
 const LessonViewer: React.FC<LessonViewerProps> = ({
@@ -105,13 +105,7 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
       correctAnswers: results.respuestasCorrectas || 0,
       incorrectAnswers: (results.totalPreguntas || 0) - (results.respuestasCorrectas || 0),
       quizTitle: lesson?.titulo || 'Cuestionario',
-      questions: results.respuestas ? Object.entries(results.respuestas).map(([key, answer]) => ({
-        question: answer.preguntaTexto || `Pregunta ${key}`,
-        userAnswer: answer.textoRespuesta || answer.opcionId || 'No respondida',
-        correctAnswer: answer.respuestaCorrecta,
-        isCorrect: answer.esCorrecta,
-        timeSpent: answer.tiempoRespuesta
-      })) : []
+      questions: results.questionsSummary || []
     };
 
     // Guardar resultados en localStorage como fallback

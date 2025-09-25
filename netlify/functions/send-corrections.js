@@ -117,70 +117,127 @@ Responde en formato JSON con la siguiente estructura:
     }
 }
 
-// Función para enviar datos al webhook
-async function sendToWebhook(data) {
+// Función para enviar datos brutos directamente al webhook n8n (SIN PROCESAMIENTO GEMINI)
+async function sendRawDataToWebhook(data) {
     try {
-        console.log('Enviando datos al webhook...');
+        console.log('Enviando datos brutos al webhook n8n...');
+
+        // Extraer respuestas abiertas de forma estructurada
+        const openAnswers = [];
+        data.quizData.preguntas.forEach((pregunta, index) => {
+            const respuesta = data.userAnswers[pregunta.id] || data.userAnswers[`pregunta${index + 1}`] || '';
+
+            if (pregunta.tipo === 'texto_libre' || respuesta.textoRespuesta) {
+                openAnswers.push({
+                    questionNumber: index + 1,
+                    questionId: pregunta.id,
+                    questionText: pregunta.pregunta,
+                    answer: respuesta.textoRespuesta || respuesta || '',
+                    files: respuesta.archivos || [],
+                    responseTime: respuesta.tiempoRespuesta || 0
+                });
+            }
+        });
 
         const webhookPayload = {
-            type: 'quiz-corrections',
+            type: 'quiz-raw-responses',
+            source: 'instituto-lidera-elearning',
             timestamp: new Date().toISOString(),
             studentInfo: {
                 name: data.nombre,
-                email: data.email, // Email del estudiante incluido
+                email: data.email, // Email del estudiante incluido (IMPORTANTE)
                 processDate: new Date().toISOString()
             },
             quizInfo: {
                 title: data.quizData.titulo || 'Evaluación',
                 totalQuestions: data.quizData.preguntas?.length || 0,
                 lessonId: data.quizData.leccion_id,
-                courseId: data.quizData.curso_id
+                courseId: data.quizData.curso_id,
+                quizId: data.quizData.id
             },
-            corrections: data.corrections,
-            userAnswers: data.userAnswers,
-            rawResponse: data.corrections,
+            openAnswers: openAnswers, // Solo respuestas abiertas
+            allUserAnswers: data.userAnswers, // Todas las respuestas del usuario
+            quizData: {
+                questions: data.quizData.preguntas,
+                settings: {
+                    allowMultipleAttempts: data.quizData.permitir multiples_intentos || false,
+                    timeLimit: data.quizData.limite_tiempo || 0,
+                    passingScore: data.quizData.puntuacion_aprobacion || 70
+                }
+            },
             metadata: {
-                processedBy: 'gemini-api',
-                version: '1.0.0',
-                source: 'instituto-lidera-elearning'
+                version: '2.0.0',
+                source: 'instituto-lidera-elearning',
+                processing: 'raw-data-to-n8n',
+                priority: 'high'
             }
         };
+
+        console.log('Payload preparado para webhook:', {
+            type: webhookPayload.type,
+            studentEmail: webhookPayload.studentInfo.email,
+            openAnswersCount: openAnswers.length,
+            totalQuestions: webhookPayload.quizInfo.totalQuestions
+        });
 
         const response = await axios.post(WEBHOOK_URL, webhookPayload, {
             headers: {
                 'Content-Type': 'application/json',
-                'User-Agent': 'Instituto-Lidera-Webhook/1.0.0'
+                'User-Agent': 'Instituto-Lidera-Webhook/2.0.0',
+                'X-Webhook-Priority': 'high'
             },
-            timeout: 30000
+            timeout: 45000 // Aumentado timeout para respuestas largas
         });
 
-        console.log('Webhook enviado exitosamente:', {
+        console.log('✅ Webhook enviado exitosamente a n8n:', {
             status: response.status,
             statusText: response.statusText,
-            webhookUrl: WEBHOOK_URL
+            webhookUrl: WEBHOOK_URL,
+            payloadSize: JSON.stringify(webhookPayload).length
         });
 
         return {
             success: true,
             status: response.status,
             statusText: response.statusText,
-            webhookUrl: WEBHOOK_URL
+            webhookUrl: WEBHOOK_URL,
+            payloadSize: JSON.stringify(webhookPayload).length,
+            openAnswersCount: openAnswers.length
         };
 
     } catch (error) {
-        console.error('Error enviando webhook:', {
+        console.error('❌ Error enviando webhook a n8n:', {
             message: error.message,
             webhookUrl: WEBHOOK_URL,
             status: error.response?.status,
-            statusText: error.response?.statusText
+            statusText: error.response?.statusText,
+            responseData: error.response?.data
         });
 
-        // No lanzamos error para no interrumpir el proceso principal
         return {
             success: false,
             error: error.message,
             webhookUrl: WEBHOOK_URL,
-            status: error.response?.status
+            status: error.response?.status,
+            errorDetails: error.response?.data
+        };
+    }
+}
+
+// Función para enviar datos al webhook (versión anterior con Gemini - DORMIDA)
+async function sendToWebhook(data) {
+    try {
+        console.log('⚠️ Función sendToWebhook con Gemini está dormida. Usar sendRawDataToWebhook en su lugar.');
+        return {
+            success: false,
+            message: 'Función dormida - usar sendRawDataToWebhook',
+            webhookUrl: WEBHOOK_URL
+        };
+    } catch (error) {
+        return {
+            success: false,
+            error: 'Función dormida',
+            webhookUrl: WEBHOOK_URL
         };
     }
 }
@@ -331,7 +388,7 @@ exports.handler = async (event, context) => {
 
     try {
         const data = JSON.parse(event.body);
-        console.log('Datos recibidos:', JSON.stringify(data, null, 2));
+        console.log('📥 Datos recibidos:', JSON.stringify(data, null, 2));
 
         const { nombre, email, quizData, userAnswers } = data;
 
@@ -343,59 +400,70 @@ exports.handler = async (event, context) => {
             };
         }
 
-        console.log('Generando correcciones con Gemini API...');
-        const corrections = await generateCorrections(quizData, userAnswers);
-        console.log('Correcciones generadas (objeto completo):', JSON.stringify(corrections, null, 2));
+        console.log('🚀 Iniciando envío DIRECTO al webhook n8n (SIN procesamiento Gemini)...');
 
-        console.log('Enviando correo con resultados...');
-        const emailResult = await sendCorrectionsEmail(email, nombre, quizData, corrections);
-        console.log('Email enviado:', emailResult);
-
-        console.log('Enviando datos al webhook...');
+        // Preparar datos para el webhook
         const webhookData = {
             nombre: nombre,
             email: email,
             quizData: quizData,
-            userAnswers: userAnswers,
-            corrections: corrections
+            userAnswers: userAnswers
         };
-        const webhookResult = await sendToWebhook(webhookData);
-        console.log('Webhook enviado:', webhookResult);
 
-        // Logging del proceso completo
+        // ENVIAR DIRECTAMENTE AL WEBHOOK N8N (SISTEMA ACTIVO)
+        console.log('📤 Enviando datos brutos al webhook n8n...');
+        const webhookResult = await sendRawDataToWebhook(webhookData);
+        console.log('📊 Resultado del webhook:', JSON.stringify(webhookResult, null, 2));
+
+        // SISTEMA ANTERIOR CON GEMINI (DORMIDO - Comentado)
+        /*
+        console.log('⏸️ Sistema Gemini dormido. Código comentado:');
+
+        // Código dormido - Descomentar para reactivar sistema con Gemini
+        // console.log('Generando correcciones con Gemini API...');
+        // const corrections = await generateCorrections(quizData, userAnswers);
+        // console.log('Correcciones generadas (objeto completo):', JSON.stringify(corrections, null, 2));
+
+        // console.log('Enviando correo con resultados...');
+        // const emailResult = await sendCorrectionsEmail(email, nombre, quizData, corrections);
+        // console.log('Email enviado:', emailResult);
+        */
+
+        // Logging del proceso simplificado
         const processLog = {
             timestamp: new Date().toISOString(),
+            mode: 'direct-webhook-n8n',
             user: nombre,
             email: email,
-            preguntas: quizData.preguntas.length,
-            puntuacionTotal: corrections.puntuacionTotal,
-            puntuacionMaxima: corrections.puntuacionMaxima,
-            porcentaje: corrections.porcentaje,
-            emailEnviado: emailResult.success
+            preguntas: quizData.preguntas?.length || 0,
+            webhookEnviado: webhookResult.success,
+            webhookStatus: webhookResult.status,
+            openAnswersCount: webhookResult.openAnswersCount || 0
         };
 
-        console.log('Proceso completado:', JSON.stringify(processLog, null, 2));
+        console.log('✅ Proceso completado (modo directo):', JSON.stringify(processLog, null, 2));
 
         return {
             statusCode: 200,
             body: JSON.stringify({
                 success: true,
-                message: 'Correcciones enviadas exitosamente',
-                corrections: corrections,
-                emailResult: emailResult,
+                message: 'Datos enviados exitosamente al webhook n8n',
+                mode: 'direct-webhook',
                 webhookResult: webhookResult,
-                processLog: processLog
+                processLog: processLog,
+                info: 'Sistema Gemini dormido - enviando datos brutos a n8n para procesamiento'
             })
         };
 
     } catch (error) {
-        console.error('Error en el handler:', error);
+        console.error('❌ Error en el handler:', error);
         return {
             statusCode: 500,
             body: JSON.stringify({
-                message: 'Error procesando las correcciones',
+                message: 'Error procesando el envío al webhook n8n',
                 error: error.message,
-                stack: error.stack
+                stack: error.stack,
+                mode: 'direct-webhook'
             })
         };
     }

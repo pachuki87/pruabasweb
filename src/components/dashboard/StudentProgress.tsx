@@ -167,15 +167,18 @@ const StudentProgress: React.FC = () => {
           const lessonWeight = 0.6; // 60% peso para lecciones
           const quizWeight = 0.4;   // 40% peso para cuestionarios
 
+          // Fix: No double counting - inProgressLessons are separate from completedLessons
+          const effectiveLessons = completedLessons + (inProgressLessons * 0.5);
           const lessonProgressPercentage = totalChapters > 0
-            ? ((completedLessons + (inProgressLessons * 0.5)) / totalChapters) * 100
+            ? Math.min(100, (effectiveLessons / totalChapters) * 100)
             : 0;
 
           const quizProgressPercentage = totalQuizzes > 0
-            ? (completedQuizzes / totalQuizzes) * 100
+            ? Math.min(100, (completedQuizzes / totalQuizzes) * 100)
             : 0;
 
-          progressPercentage = Math.round((lessonProgressPercentage * lessonWeight) + (quizProgressPercentage * quizWeight));
+          // Calculate weighted progress and cap at 100%
+          progressPercentage = Math.min(100, Math.round((lessonProgressPercentage * lessonWeight) + (quizProgressPercentage * quizWeight)));
           completedChapters = Math.min(completedLessons + Math.floor(inProgressLessons * 0.5), totalChapters);
 
           console.log(`📊 Progreso calculado - Lecciones: ${lessonProgressPercentage}%, Cuestionarios: ${quizProgressPercentage}%, Total: ${progressPercentage}%`);
@@ -185,13 +188,13 @@ const StudentProgress: React.FC = () => {
 
           // Fallback: cálculo simple basado en cuestionarios
           if (totalQuizzes > 0 && completedQuizzes > 0) {
-            progressPercentage = Math.round((completedQuizzes / totalQuizzes) * 100);
+            progressPercentage = Math.min(100, Math.round((completedQuizzes / totalQuizzes) * 100));
             completedChapters = Math.round((progressPercentage / 100) * (totalChapters || 0));
           } else {
             completedChapters = Math.min(completedQuizzes || 0, totalChapters || 0);
             const totalItems = (totalChapters || 0) + (totalQuizzes || 0);
             const completedItems = completedChapters + (completedQuizzes || 0);
-            progressPercentage = totalItems > 0 ? Math.round((completedItems / totalItems) * 100) : 0;
+            progressPercentage = totalItems > 0 ? Math.min(100, Math.round((completedItems / totalItems) * 100)) : 0;
           }
         }
         

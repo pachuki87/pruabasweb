@@ -1,3 +1,21 @@
 {
-  "siteId": "abddc12c-aa1d-4552-9264-9d96932dfd00"
+	"siteId": "abddc12c-aa1d-4552-9264-9d96932dfd00",
+	"geolocation": {
+		"data": {
+			"city": "Valencia",
+			"country": {
+				"code": "ES",
+				"name": "Spain"
+			},
+			"subdivision": {
+				"code": "VC",
+				"name": "Valencia"
+			},
+			"timezone": "Europe/Madrid",
+			"latitude": 39.4676,
+			"longitude": -0.3771,
+			"postalCode": "46006"
+		},
+		"timestamp": 1758796514945
+	}
 }

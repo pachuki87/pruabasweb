@@ -127,10 +127,11 @@ const sendToWebhookWithRetry = async (payload, options = {}) => {
         attempt++;
         const attemptId = `${requestId}-attempt-${attempt}`;
 
+        let startTime;
         try {
             console.log(`📤 [${attemptId}] Intento ${attempt}/${maxRetries + 1}`);
 
-            const startTime = Date.now();
+            startTime = Date.now();
             const response = await axios.post(WEBHOOK_URL, payload, {
                 headers,
                 timeout,
@@ -364,36 +365,44 @@ exports.handler = async (event, context) => {
         }
         console.log('Datos recibidos:', JSON.stringify(data, null, 2));
 
-        // Preparar payload para n8n con información completa
-        const webhookPayload = {
-            type: 'quiz-responses',
-            timestamp: new Date().toISOString(),
-            source: 'instituto-lidera-elearning',
-            studentInfo: {
-                name: data.nombre || data.nombre_completo || 'Estudiante',
-                email: data.email || data.correo || '',
-                userId: data.userId || null,
-                quizId: data.quizId || data.cuestionario_id || null,
-                submittedAt: data.fechaEnvio || new Date().toISOString()
-            },
-            quizInfo: {
-                title: data.quizData?.titulo || data.titulo_cuestionario || 'Evaluación',
-                lessonId: data.quizData?.leccion_id || data.leccion_id || null,
-                courseId: data.quizData?.curso_id || data.curso_id || null,
-                totalQuestions: data.quizData?.preguntas?.length || data.total_preguntas || 0,
-                score: data.puntuacion || 0,
-                maxScore: data.puntuacion_maxima || 0,
-                percentage: data.porcentaje || 0,
-                passed: data.aprobado || false,
-                timeSpent: data.tiempo_transcurrido || 0,
-                attemptNumber: data.intento_numero || 1
-            },
-            responses: [],
-            rawData: data // Incluir datos crudos para referencia
-        };
+        // Si el payload ya está en el formato correcto, usarlo directamente
+        let webhookPayload;
+        if (data.type === 'quiz-responses' && data.studentInfo && data.responses) {
+            console.log('✅ Payload ya está en formato correcto, usándolo directamente');
+            webhookPayload = data;
+        } else {
+            console.log('🔄 Transformando payload al formato esperado...');
+            // Preparar payload para n8n con información completa
+            webhookPayload = {
+                type: 'quiz-responses',
+                timestamp: new Date().toISOString(),
+                source: 'instituto-lidera-elearning',
+                studentInfo: {
+                    name: data.nombre || data.nombre_completo || 'Estudiante',
+                    email: data.email || data.correo || '',
+                    userId: data.userId || null,
+                    quizId: data.quizId || data.cuestionario_id || null,
+                    submittedAt: data.fechaEnvio || new Date().toISOString()
+                },
+                quizInfo: {
+                    title: data.quizData?.titulo || data.titulo_cuestionario || 'Evaluación',
+                    lessonId: data.quizData?.leccion_id || data.leccion_id || null,
+                    courseId: data.quizData?.curso_id || data.curso_id || null,
+                    totalQuestions: data.quizData?.preguntas?.length || data.total_preguntas || 0,
+                    score: data.puntuacion || 0,
+                    maxScore: data.puntuacion_maxima || 0,
+                    percentage: data.porcentaje || 0,
+                    passed: data.aprobado || false,
+                    timeSpent: data.tiempo_transcurrido || 0,
+                    attemptNumber: data.intento_numero || 1
+                },
+                responses: [],
+                rawData: data // Incluir datos crudos para referencia
+            };
+        }
 
-        // Procesar respuestas abiertas
-        if (data.openAnswers && Array.isArray(data.openAnswers)) {
+        // Procesar respuestas abiertas (solo para payloads que necesitan transformación)
+        if (data.type !== 'quiz-responses' && data.openAnswers && Array.isArray(data.openAnswers)) {
             data.openAnswers.forEach((respuesta, index) => {
                 webhookPayload.responses.push({
                     questionNumber: index + 1,
@@ -408,8 +417,8 @@ exports.handler = async (event, context) => {
             });
         }
 
-        // Procesar respuestas de opción múltiple
-        if (data.userAnswers) {
+        // Procesar respuestas de opción múltiple (solo para payloads que necesitan transformación)
+        if (data.type !== 'quiz-responses' && data.userAnswers) {
             Object.keys(data.userAnswers).forEach(questionId => {
                 const answer = data.userAnswers[questionId];
                 const existingResponse = webhookPayload.responses.find(r => r.questionId === questionId);
@@ -428,8 +437,8 @@ exports.handler = async (event, context) => {
             });
         }
 
-        // Procesar respuestas desde la base de datos (respuestas_guardadas)
-        if (data.respuestas_guardadas && typeof data.respuestas_guardadas === 'object') {
+        // Procesar respuestas desde la base de datos (respuestas_guardadas) - solo para payloads que necesitan transformación
+        if (data.type !== 'quiz-responses' && data.respuestas_guardadas && typeof data.respuestas_guardadas === 'object') {
             Object.keys(data.respuestas_guardadas).forEach(questionId => {
                 const answer = data.respuestas_guardadas[questionId];
                 const existingResponse = webhookPayload.responses.find(r => r.questionId === questionId);

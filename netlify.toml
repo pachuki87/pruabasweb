@@ -5,6 +5,9 @@
 [functions]
   directory = "netlify/functions"
 
+[dev]
+  targetPort = 5175
+
 [functions.send-corrections]
   runtime = "js"
 

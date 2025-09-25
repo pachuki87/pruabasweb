@@ -14969,7 +14969,7 @@ var testWebhookConnectivity = async () => {
         "X-Test-Request": "true",
         "X-Request-ID": testId
       },
-      timeout: 15e3
+      timeout: 3e4
     });
     const responseTime = Date.now() - startTime;
     console.log(`\u2705 [${testId}] Prueba de conectividad exitosa:`, {

@@ -133,8 +133,7 @@ const QuizzesPage: React.FC<QuizzesPageProps> = ({ role }) => {
   };
 
   const handleAttemptQuiz = (quizId: string) => {
-    // In a real app, navigate to the quiz attempt page
-    toast.info('Quiz attempt feature will be implemented soon');
+    navigate(`/${role}/quizzes/attempt/${quizId}`);
   };
 
   const handleViewResults = (quizId: string) => {

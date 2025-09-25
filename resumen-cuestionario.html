@@ -144,7 +144,9 @@
                 <h3 class="text-xl font-bold text-gray-800 mb-4">
                     <i class="fas fa-chart-pie text-purple-600 mr-2"></i>Rendimiento
                 </h3>
-                <canvas id="performanceChart" width="200" height="200"></canvas>
+                <div class="w-full h-48 flex items-center justify-center">
+                    <canvas id="performanceChart" class="max-w-full max-h-full"></canvas>
+                </div>
             </div>
         </div>
 
@@ -159,7 +161,10 @@
         </div>
 
         <!-- Action Buttons -->
-        <div class="flex flex-col sm:flex-row gap-4 justify-center no-print">
+        <div class="flex flex-col sm:flex-row gap-4 justify-center no-print mb-8">
+            <button onclick="scrollToAnswers()" class="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors">
+                <i class="fas fa-arrow-down mr-2"></i>Ver Respuestas
+            </button>
             <button onclick="window.history.back()" class="bg-gray-600 text-white px-6 py-3 rounded-lg hover:bg-gray-700 transition-colors">
                 <i class="fas fa-arrow-left mr-2"></i>Volver al Curso
             </button>
@@ -289,7 +294,8 @@
                 },
                 options: {
                     responsive: true,
-                    maintainAspectRatio: false,
+                    maintainAspectRatio: true,
+                    aspectRatio: 1,
                     plugins: {
                         legend: {
                             position: 'bottom'
@@ -367,6 +373,16 @@
                 // Fallback: copy to clipboard
                 navigator.clipboard.writeText(text).then(() => {
                     alert('¡Resultados copiados al portapapeles!');
+                });
+            }
+        }
+
+        function scrollToAnswers() {
+            const questionsSection = document.querySelector('#questionsContainer');
+            if (questionsSection) {
+                questionsSection.scrollIntoView({ 
+                    behavior: 'smooth',
+                    block: 'start'
                 });
             }
         }

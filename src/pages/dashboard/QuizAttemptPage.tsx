@@ -166,24 +166,6 @@ const QuizAttemptPage: React.FC = () => {
     setIsSavingAnswer(false);
   }, [selectedAnswers, currentQuestionIndex]);
 
-  const handleNextQuestion = useCallback(async () => {
-    if (quiz && currentQuestionIndex < quiz.questions.length - 1) {
-      setIsLoadingQuestion(true);
-      // Simular pequeña carga para transición suave
-      await new Promise(resolve => setTimeout(resolve, 200));
-      setCurrentQuestionIndex(currentQuestionIndex + 1);
-      setIsLoadingQuestion(false);
-    } else {
-      await handleSubmitQuiz();
-    }
-  }, [quiz, currentQuestionIndex, handleSubmitQuiz]);
-
-  const handlePreviousQuestion = useCallback(() => {
-    if (currentQuestionIndex > 0) {
-      setCurrentQuestionIndex(currentQuestionIndex - 1);
-    }
-  }, [currentQuestionIndex]);
-
   const handleSubmitQuiz = useCallback(async () => {
     if (!quiz) return;
 
@@ -205,19 +187,12 @@ const QuizAttemptPage: React.FC = () => {
       const { error } = await supabase
         .from('user_test_results')
         .insert({
-          usuario_id: user.id,
+          user_id: user.id,
           cuestionario_id: quiz.id,
           curso_id: quiz.curso_id,
-          score: finalScore,
-          total_questions: quiz.questions.length,
-          correct_answers: correctAnswers,
-          incorrect_answers: quiz.questions.length - correctAnswers,
-          time_taken_minutes: Math.round(timeElapsed / 60),
-          answers_data: selectedAnswers,
-          passed: finalScore >= 70,
-          attempt_number: 1,
-          started_at: new Date().toISOString(),
-          completed_at: new Date().toISOString()
+          puntuacion: finalScore,
+          puntuacion_maxima: 100,
+          respuestas_detalle: selectedAnswers
         });
 
       if (error) {
@@ -243,6 +218,24 @@ const QuizAttemptPage: React.FC = () => {
     setIsSubmitting(false);
   }, [quiz, selectedAnswers, user, timeElapsed]);
 
+  const handleNextQuestion = useCallback(async () => {
+    if (quiz && currentQuestionIndex < quiz.questions.length - 1) {
+      setIsLoadingQuestion(true);
+      // Simular pequeña carga para transición suave
+      await new Promise(resolve => setTimeout(resolve, 200));
+      setCurrentQuestionIndex(currentQuestionIndex + 1);
+      setIsLoadingQuestion(false);
+    } else {
+      await handleSubmitQuiz();
+    }
+  }, [quiz, currentQuestionIndex, handleSubmitQuiz]);
+
+  const handlePreviousQuestion = useCallback(() => {
+    if (currentQuestionIndex > 0) {
+      setCurrentQuestionIndex(currentQuestionIndex - 1);
+    }
+  }, [currentQuestionIndex]);
+
   const handleBackToCourse = useCallback(async () => {
     setIsNavigating(true);
     
@@ -262,6 +255,18 @@ const QuizAttemptPage: React.FC = () => {
       navigate(`/student/courses/${quiz.curso_id}`);
     }
   }, [quiz, navigate]);
+
+  const isLastQuestion = useMemo(() => currentQuestionIndex === (quiz?.questions.length || 0) - 1, [currentQuestionIndex, quiz]);
+  
+  const canSubmit = useMemo(() => {
+    if (!quiz) return false;
+    return quiz.questions.every((_, index) => selectedAnswers[index] !== undefined);
+  }, [quiz, selectedAnswers]);
+
+  const correctAnswersCount = useMemo(() => {
+    if (!quiz?.questions) return 0;
+    return quiz.questions.filter((_, index) => selectedAnswers[index] === quiz.questions[index].correct_answer).length;
+  }, [quiz, selectedAnswers]);
 
   if (authLoading || isLoading) {
     return (
@@ -380,18 +385,6 @@ const QuizAttemptPage: React.FC = () => {
       </div>
     );
   }
-
-  const isLastQuestion = useMemo(() => currentQuestionIndex === (quiz?.questions.length || 0) - 1, [currentQuestionIndex, quiz]);
-  
-  const canSubmit = useMemo(() => {
-    if (!quiz) return false;
-    return quiz.questions.every((_, index) => selectedAnswers[index] !== undefined);
-  }, [quiz, selectedAnswers]);
-
-  const correctAnswersCount = useMemo(() => {
-    if (!quiz?.questions) return 0;
-    return quiz.questions.filter((_, index) => selectedAnswers[index] === quiz.questions[index].correct_answer).length;
-  }, [quiz, selectedAnswers]);
 
   return (
     <div className="max-w-4xl mx-auto p-6">

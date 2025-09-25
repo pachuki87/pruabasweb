@@ -3,6 +3,7 @@ import { ChevronLeft, ChevronRight, FileText, Download, ExternalLink, BookOpen, 
 import { useNavigate, useParams } from 'react-router-dom';
 import QuizComponent from '../QuizComponent';
 import { supabase } from '../../lib/supabase';
+import { useAuth } from '../../contexts/AuthContext';
 
 interface Lesson {
   id: string;
@@ -73,19 +74,26 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
   const hasQuiz = lesson.tiene_cuestionario || false;
   const navigate = useNavigate();
   const { courseId } = useParams<{ courseId: string }>();
+  const { user } = useAuth();
 
   const handleQuizClick = () => {
     setShowQuiz(true);
     setQuizCompleted(false);
   };
 
-  const handleQuizComplete = (results: QuizResults) => {
+  const handleQuizComplete = async (results: QuizResults) => {
     console.log('📊 Cuestionario completado con resultados:', results);
+
+    // Verificar si tenemos usuario autenticado
+    if (!user) {
+      console.error('❌ No hay usuario autenticado para completar el cuestionario');
+      return;
+    }
 
     // Preparar datos para la página de resumen
     const summaryData = {
-      studentName: user?.user_metadata?.nombre || user?.email || 'Estudiante',
-      studentEmail: user?.email || 'No disponible',
+      studentName: user.user_metadata?.nombre || user.email || 'Estudiante',
+      studentEmail: user.email || 'No disponible',
       completionDate: new Date().toISOString(),
       timeSpent: results.tiempoTotal || 0,
       score: results.puntuacionObtenida || 0,
@@ -173,20 +181,8 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
   // Efecto para marcar la lección como vista cuando se carga
   useEffect(() => {
     const markLessonAsViewed = async () => {
-      if (lesson.id && course.id) {
+      if (lesson.id && course.id && user) {
         try {
-          const { data: { user }, error: authError } = await supabase.auth.getUser();
-
-          if (authError) {
-            console.error('❌ Error de autenticación:', authError);
-            return;
-          }
-
-          if (!user) {
-            console.log('❌ No hay usuario autenticado');
-            return;
-          }
-
           console.log('👁️ Marcando lección como vista:', lesson.id, 'Usuario:', user.id);
 
           // Actualizar progreso de la lección
@@ -213,7 +209,11 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
           console.error('❌ Error marcando lección como vista:', error);
         }
       } else {
-        console.log('❌ Faltan datos:', { lessonId: lesson.id, courseId: course.id });
+        console.log('❌ Faltan datos:', {
+          lessonId: lesson.id,
+          courseId: course.id,
+          user: user?.id || 'No disponible'
+        });
       }
     };
 
@@ -221,7 +221,7 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
     const timer = setTimeout(markLessonAsViewed, 3000);
 
     return () => clearTimeout(timer);
-  }, [lesson.id, course.id]);
+  }, [lesson.id, course.id, user, supabase]);
 
   useEffect(() => {
     console.log('🔄 LessonViewer useEffect triggered - lessonContent available:', !!lessonContent);
@@ -302,7 +302,7 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
     };
 
     loadContent();
-  }, [lessonSlug, lessonContent, lessonFileUrl]);
+  }, [lessonSlug, lessonContent, lessonFileUrl, course.id]);
 
   const processHtmlContent = (html: string, slug: string): string => {
     // Crear un parser DOM temporal

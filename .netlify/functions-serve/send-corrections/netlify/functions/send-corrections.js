@@ -14945,9 +14945,11 @@ var require_axios = __commonJS({
 // netlify/functions/send-corrections.js
 var axios = require_axios();
 var WEBHOOK_URL = process.env.N8N_WEBHOOK_URL || "https://n8n.srv1024767.hstgr.cloud/webhook-test/fbdc5d15-3435-42f9-8047-891869aa9f7e";
+var FALLBACK_WEBHOOK_URL = process.env.FALLBACK_WEBHOOK_URL || "/.netlify/functions/test-webhook";
 var MAX_RETRIES = process.env.MAX_RETRIES || 3;
 var TIMEOUT = process.env.WEBHOOK_TIMEOUT || 3e4;
 var DEBUG_MODE = process.env.DEBUG_MODE === "true";
+var USE_FALLBACK = process.env.USE_FALLBACK_WEBHOOK === "true" || false;
 var testWebhookConnectivity = async () => {
   const testId = `test-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
   try {
@@ -15035,8 +15037,12 @@ var sendToWebhookWithRetry = async (payload, options = {}) => {
   const requestId = `req-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
   const maxRetries = options.maxRetries || MAX_RETRIES;
   const timeout = options.timeout || TIMEOUT;
+  let webhookUrl = WEBHOOK_URL;
+  let useFallback = USE_FALLBACK;
   console.log(`\u{1F4E4} [${requestId}] Iniciando env\xEDo al webhook...`);
-  console.log(`\u{1F4E4} [${requestId}] URL: ${WEBHOOK_URL}`);
+  console.log(`\u{1F4E4} [${requestId}] URL principal: ${WEBHOOK_URL}`);
+  console.log(`\u{1F4E4} [${requestId}] URL fallback: ${FALLBACK_WEBHOOK_URL}`);
+  console.log(`\u{1F4E4} [${requestId}] Usar fallback: ${useFallback}`);
   if (DEBUG_MODE) {
     console.log(`\u{1F4E4} [${requestId}] Payload:`, JSON.stringify(payload, null, 2));
   }
@@ -15049,14 +15055,19 @@ var sendToWebhookWithRetry = async (payload, options = {}) => {
   };
   let lastError = null;
   let attempt = 0;
+  let triedFallback = false;
   while (attempt <= maxRetries) {
     attempt++;
     const attemptId = `${requestId}-attempt-${attempt}`;
+    if (attempt === 1 && useFallback) {
+      webhookUrl = FALLBACK_WEBHOOK_URL;
+      console.log(`\u{1F504} [${attemptId}] Usando webhook fallback directamente`);
+    }
     let startTime;
     try {
-      console.log(`\u{1F4E4} [${attemptId}] Intento ${attempt}/${maxRetries + 1}`);
+      console.log(`\u{1F4E4} [${attemptId}] Intento ${attempt}/${maxRetries + 1} - URL: ${webhookUrl}`);
       startTime = Date.now();
-      const response = await axios.post(WEBHOOK_URL, payload, {
+      const response = await axios.post(webhookUrl, payload, {
         headers,
         timeout,
         maxRedirects: 5,
@@ -15069,7 +15080,8 @@ var sendToWebhookWithRetry = async (payload, options = {}) => {
         status: response.status,
         statusText: response.statusText,
         responseTime: `${responseTime}ms`,
-        dataSize: JSON.stringify(response.data).length
+        dataSize: JSON.stringify(response.data).length,
+        webhookUsed: webhookUrl === FALLBACK_WEBHOOK_URL ? "fallback" : "primary"
       });
       return {
         success: true,
@@ -15078,7 +15090,8 @@ var sendToWebhookWithRetry = async (payload, options = {}) => {
         attempt,
         requestId,
         data: response.data,
-        headers: response.headers
+        headers: response.headers,
+        webhookUsed: webhookUrl === FALLBACK_WEBHOOK_URL ? "fallback" : "primary"
       };
     } catch (error) {
       lastError = error;
@@ -15086,8 +15099,16 @@ var sendToWebhookWithRetry = async (payload, options = {}) => {
         message: error.message,
         code: error.code,
         status: error.response?.status,
-        responseTime: error.response ? `${Date.now() - startTime}ms` : "N/A"
+        responseTime: error.response ? `${Date.now() - startTime}ms` : "N/A",
+        webhookUsed: webhookUrl === FALLBACK_WEBHOOK_URL ? "fallback" : "primary"
       });
+      if (webhookUrl === WEBHOOK_URL && !triedFallback && !useFallback) {
+        console.log(`\u{1F504} [${attemptId}] Webhook principal fall\xF3, intentando con fallback...`);
+        webhookUrl = FALLBACK_WEBHOOK_URL;
+        triedFallback = true;
+        attempt--;
+        continue;
+      }
       if (attempt > maxRetries) {
         break;
       }

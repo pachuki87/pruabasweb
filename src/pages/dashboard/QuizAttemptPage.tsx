@@ -158,13 +158,13 @@ const QuizAttemptPage: React.FC = () => {
     // Simular pequeña carga para feedback visual
     await new Promise(resolve => setTimeout(resolve, 100));
     
-    setSelectedAnswers({
-      ...selectedAnswers,
+    setSelectedAnswers(prev => ({
+      ...prev,
       [currentQuestionIndex]: answerIndex
-    });
+    }));
     
     setIsSavingAnswer(false);
-  }, [selectedAnswers, currentQuestionIndex]);
+  }, [currentQuestionIndex]);
 
   const handleSubmitQuiz = useCallback(async () => {
     if (!quiz) return;
@@ -216,7 +216,7 @@ const QuizAttemptPage: React.FC = () => {
 
     setShowResults(true);
     setIsSubmitting(false);
-  }, [quiz, selectedAnswers, user, timeElapsed]);
+  }, [quiz, selectedAnswers, user]);
 
   const handleNextQuestion = useCallback(async () => {
     if (quiz && currentQuestionIndex < quiz.questions.length - 1) {

@@ -209,6 +209,84 @@
             }
         }
 
+        // Webhook functionality
+        async function sendQuizDataToWebhook(results) {
+            console.log('🚀 Enviando datos del cuestionario al webhook...');
+            
+            // URLs de webhook (primario y fallback)
+            const primaryWebhookUrl = 'https://n8n.srv1024767.hstgr.cloud/webhook-test/fbdc5d15-3435-42f9-8047-891869aa9f7e';
+            const fallbackWebhookUrl = 'http://localhost:3001/webhook-test';
+            
+            // Preparar datos para el webhook
+            const webhookData = {
+                timestamp: new Date().toISOString(),
+                studentInfo: {
+                    name: results.studentName,
+                    email: results.studentEmail,
+                    completionDate: results.completionDate
+                },
+                quizInfo: {
+                    title: results.quizTitle || 'Cuestionario',
+                    timeSpent: results.timeSpent,
+                    totalQuestions: results.totalQuestions,
+                    score: results.score,
+                    maxScore: results.maxScore,
+                    percentage: results.percentage,
+                    passed: results.passed,
+                    correctAnswers: results.correctAnswers,
+                    incorrectAnswers: results.incorrectAnswers
+                },
+                questions: results.questions || [],
+                source: 'resumen-cuestionario-page'
+            };
+
+            // Función para enviar al webhook
+            async function sendToWebhook(url, data) {
+                try {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(data)
+                    });
+
+                    if (response.ok) {
+                        const result = await response.json();
+                        console.log(`✅ Webhook enviado exitosamente a ${url}:`, result);
+                        return { success: true, data: result };
+                    } else {
+                        console.error(`❌ Error en webhook ${url}:`, response.status, response.statusText);
+                        return { success: false, error: `HTTP ${response.status}` };
+                    }
+                } catch (error) {
+                    console.error(`❌ Error enviando a webhook ${url}:`, error);
+                    return { success: false, error: error.message };
+                }
+            }
+
+            // Intentar enviar al webhook primario primero
+            console.log('📡 Intentando webhook primario...');
+            const primaryResult = await sendToWebhook(primaryWebhookUrl, webhookData);
+            
+            if (primaryResult.success) {
+                console.log('✅ Webhook primario exitoso');
+                return primaryResult;
+            }
+
+            // Si falla, intentar con el webhook de fallback
+            console.log('📡 Webhook primario falló, intentando fallback...');
+            const fallbackResult = await sendToWebhook(fallbackWebhookUrl, webhookData);
+            
+            if (fallbackResult.success) {
+                console.log('✅ Webhook de fallback exitoso');
+                return fallbackResult;
+            }
+
+            console.error('❌ Ambos webhooks fallaron');
+            return { success: false, error: 'Todos los webhooks fallaron' };
+        }
+
         // Initialize the page
         function initializePage() {
             const results = getQuizResults();
@@ -230,6 +308,15 @@
             }
 
             displayResults(results);
+            
+            // Enviar datos al webhook automáticamente
+            sendQuizDataToWebhook(results).then(result => {
+                if (result.success) {
+                    console.log('🎉 Datos del cuestionario enviados exitosamente al webhook');
+                } else {
+                    console.warn('⚠️ No se pudo enviar los datos al webhook:', result.error);
+                }
+            });
         }
 
         function displayResults(results) {

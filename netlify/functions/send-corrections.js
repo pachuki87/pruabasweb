@@ -1,41 +1,305 @@
 const axios = require('axios');
 
-const WEBHOOK_URL = 'https://n8n.srv1024767.hstgr.cloud/webhook/fbdc5d15-3435-42f9-8047-891869aa9f7e';
+// Configuración mejorada con variables de entorno y fallback
+const WEBHOOK_URL = process.env.N8N_WEBHOOK_URL || 'https://n8n.srv1024767.hstgr.cloud/webhook/fbdc5d15-3435-42f9-8047-891869aa9f7e';
+const MAX_RETRIES = process.env.MAX_RETRIES || 3;
+const TIMEOUT = process.env.WEBHOOK_TIMEOUT || 30000;
+const DEBUG_MODE = process.env.DEBUG_MODE === 'true';
 
-// Función para probar la conectividad del webhook
+// Función mejorada para probar la conectividad del webhook
 const testWebhookConnectivity = async () => {
+    const testId = `test-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+
     try {
-        console.log('🔍 Probando conectividad del webhook...');
+        console.log(`🔍 [${testId}] Probando conectividad del webhook...`);
+        console.log(`🔍 [${testId}] URL: ${WEBHOOK_URL}`);
 
         const testPayload = {
             type: 'test-connection',
             timestamp: new Date().toISOString(),
             source: 'instituto-lidera-elearning-test',
-            message: 'Prueba de conectividad'
+            testId: testId,
+            message: 'Prueba de conectividad',
+            debug: DEBUG_MODE
         };
 
+        const startTime = Date.now();
         const response = await axios.post(WEBHOOK_URL, testPayload, {
             headers: {
                 'Content-Type': 'application/json',
-                'User-Agent': 'Instituto-Lidera-Webhook-Test/1.0'
+                'User-Agent': 'Instituto-Lidera-Webhook-Test/1.0',
+                'X-Test-Request': 'true',
+                'X-Request-ID': testId
             },
             timeout: 15000
         });
+        const responseTime = Date.now() - startTime;
 
-        console.log('✅ Prueba de conectividad exitosa:', response.status);
+        console.log(`✅ [${testId}] Prueba de conectividad exitosa:`, {
+            status: response.status,
+            statusText: response.statusText,
+            responseTime: `${responseTime}ms`,
+            dataSize: JSON.stringify(response.data).length
+        });
+
         return {
             success: true,
             status: response.status,
-            message: 'Conectividad del webhook verificada'
+            responseTime,
+            testId,
+            message: 'Conectividad del webhook verificada',
+            n8nResponse: response.data
         };
     } catch (error) {
-        console.error('❌ Error en prueba de conectividad:', error.message);
+        const errorTime = Date.now();
+        console.error(`❌ [${testId}] Error en prueba de conectividad:`, {
+            message: error.message,
+            code: error.code,
+            status: error.response?.status,
+            url: WEBHOOK_URL,
+            timestamp: errorTime
+        });
+
+        // Análisis detallado del error
+        let errorType = 'unknown';
+        let errorSolution = '';
+
+        if (error.code === 'ECONNREFUSED') {
+            errorType = 'connection_refused';
+            errorSolution = 'El servidor n8n no está respondiendo. Verifica que el servicio esté activo.';
+        } else if (error.code === 'ENOTFOUND') {
+            errorType = 'dns_resolution';
+            errorSolution = 'No se puede resolver el dominio. Verifica la URL del webhook.';
+        } else if (error.code === 'ETIMEDOUT') {
+            errorType = 'timeout';
+            errorSolution = 'El servidor tardó demasiado en responder. Aumenta el timeout o verifica el estado del servidor.';
+        } else if (error.response?.status === 404) {
+            errorType = 'not_found';
+            errorSolution = 'El webhook no existe. Verifica la URL del webhook.';
+        } else if (error.response?.status >= 500) {
+            errorType = 'server_error';
+            errorSolution = 'Error del servidor n8n. Contacta al administrador.';
+        } else if (error.response?.status >= 400) {
+            errorType = 'client_error';
+            errorSolution = 'Error en la solicitud. Verifica el formato del payload.';
+        }
+
         return {
             success: false,
             error: error.message,
-            details: error.response?.data || 'Error desconocido'
+            errorType,
+            errorSolution,
+            testId,
+            details: {
+                code: error.code,
+                status: error.response?.status,
+                data: error.response?.data,
+                url: WEBHOOK_URL
+            }
         };
     }
+};
+
+// Función mejorada para enviar datos al webhook con retry y mejor manejo de errores
+const sendToWebhookWithRetry = async (payload, options = {}) => {
+    const requestId = `req-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    const maxRetries = options.maxRetries || MAX_RETRIES;
+    const timeout = options.timeout || TIMEOUT;
+
+    console.log(`📤 [${requestId}] Iniciando envío al webhook...`);
+    console.log(`📤 [${requestId}] URL: ${WEBHOOK_URL}`);
+    if (DEBUG_MODE) {
+        console.log(`📤 [${requestId}] Payload:`, JSON.stringify(payload, null, 2));
+    }
+
+    const headers = {
+        'Content-Type': 'application/json',
+        'User-Agent': 'Instituto-Lidera-Webhook/1.0',
+        'X-Request-ID': requestId,
+        'X-Source': 'instituto-lidera-elearning',
+        ...options.headers
+    };
+
+    let lastError = null;
+    let attempt = 0;
+
+    while (attempt <= maxRetries) {
+        attempt++;
+        const attemptId = `${requestId}-attempt-${attempt}`;
+
+        try {
+            console.log(`📤 [${attemptId}] Intento ${attempt}/${maxRetries + 1}`);
+
+            const startTime = Date.now();
+            const response = await axios.post(WEBHOOK_URL, payload, {
+                headers,
+                timeout,
+                maxRedirects: 5,
+                validateStatus: function (status) {
+                    // Consideramos válidos los códigos 2xx y 3xx
+                    return status >= 200 && status < 400;
+                }
+            });
+
+            const responseTime = Date.now() - startTime;
+
+            console.log(`✅ [${attemptId}] Envío exitoso:`, {
+                status: response.status,
+                statusText: response.statusText,
+                responseTime: `${responseTime}ms`,
+                dataSize: JSON.stringify(response.data).length
+            });
+
+            return {
+                success: true,
+                status: response.status,
+                responseTime,
+                attempt,
+                requestId,
+                data: response.data,
+                headers: response.headers
+            };
+
+        } catch (error) {
+            lastError = error;
+
+            console.error(`❌ [${attemptId}] Error en intento ${attempt}:`, {
+                message: error.message,
+                code: error.code,
+                status: error.response?.status,
+                responseTime: error.response ? `${Date.now() - startTime}ms` : 'N/A'
+            });
+
+            // Si es el último intento, no esperamos más
+            if (attempt > maxRetries) {
+                break;
+            }
+
+            // Esperar antes de reintentar (exponential backoff)
+            const waitTime = Math.min(1000 * Math.pow(2, attempt - 1), 10000); // Max 10 segundos
+            console.log(`⏳ [${attemptId}] Esperando ${waitTime}ms antes de reintentar...`);
+
+            await new Promise(resolve => setTimeout(resolve, waitTime));
+        }
+    }
+
+    // Si llegamos aquí, todos los intentos fallaron
+    console.error(`💀 [${requestId}] Todos los intentos fallaron después de ${maxRetries + 1} reintentos`);
+
+    // Análisis del error final
+    const errorAnalysis = analyzeError(lastError);
+
+    return {
+        success: false,
+        error: lastError.message,
+        errorType: errorAnalysis.type,
+        errorSolution: errorAnalysis.solution,
+        attempt: attempt - 1,
+        requestId,
+        details: {
+            code: lastError.code,
+            status: lastError.response?.status,
+            data: lastError.response?.data,
+            config: lastError.config
+        }
+    };
+};
+
+// Función para analizar errores y proporcionar soluciones
+const analyzeError = (error) => {
+    if (!error) {
+        return {
+            type: 'unknown',
+            solution: 'Error desconocido. Contacte al administrador.'
+        };
+    }
+
+    if (error.code === 'ECONNREFUSED') {
+        return {
+            type: 'connection_refused',
+            solution: 'El servidor n8n no está respondiendo. Verifique que el servicio esté activo y accesible.'
+        };
+    } else if (error.code === 'ENOTFOUND') {
+        return {
+            type: 'dns_resolution',
+            solution: 'No se puede resolver el dominio. Verifique la URL del webhook y la configuración DNS.'
+        };
+    } else if (error.code === 'ETIMEDOUT') {
+        return {
+            type: 'timeout',
+            solution: 'El servidor tardó demasiado en responder. Aumente el timeout o verifique el estado del servidor.'
+        };
+    } else if (error.code === 'ECONNRESET') {
+        return {
+            type: 'connection_reset',
+            solution: 'La conexión fue reseteada. Intente nuevamente o verifique la estabilidad de la red.'
+        };
+    } else if (error.response?.status === 404) {
+        return {
+            type: 'not_found',
+            solution: 'El webhook no existe. Verifique que la URL del webhook sea correcta.'
+        };
+    } else if (error.response?.status === 401) {
+        return {
+            type: 'unauthorized',
+            solution: 'No autorizado. Verifique si el webhook requiere autenticación.'
+        };
+    } else if (error.response?.status === 403) {
+        return {
+            type: 'forbidden',
+            solution: 'Acceso denegado. Verifique la configuración de seguridad del webhook.'
+        };
+    } else if (error.response?.status >= 500) {
+        return {
+            type: 'server_error',
+            solution: 'Error del servidor n8n. Contacte al administrador del servidor.'
+        };
+    } else if (error.response?.status >= 400) {
+        return {
+            type: 'client_error',
+            solution: 'Error en la solicitud. Verifique el formato del payload y los headers.'
+        };
+    }
+
+    return {
+        type: 'unknown',
+        solution: 'Error no categorizado. Verifique los logs del servidor para más detalles.'
+    };
+};
+
+// Función para validar el payload antes de enviarlo
+const validatePayload = (payload) => {
+    const errors = [];
+
+    if (!payload || typeof payload !== 'object') {
+        errors.push('El payload debe ser un objeto válido');
+        return { valid: false, errors };
+    }
+
+    if (!payload.type) {
+        errors.push('El payload debe incluir un campo "type"');
+    }
+
+    if (!payload.timestamp) {
+        errors.push('El payload debe incluir un campo "timestamp"');
+    }
+
+    if (!payload.source) {
+        errors.push('El payload debe incluir un campo "source"');
+    }
+
+    if (payload.type === 'quiz-responses' && !payload.studentInfo) {
+        errors.push('Para respuestas de quiz, el payload debe incluir "studentInfo"');
+    }
+
+    if (payload.type === 'quiz-responses' && !payload.responses) {
+        errors.push('Para respuestas de quiz, el payload debe incluir "responses"');
+    }
+
+    return {
+        valid: errors.length === 0,
+        errors
+    };
 };
 
 exports.handler = async (event, context) => {
@@ -63,7 +327,7 @@ exports.handler = async (event, context) => {
             console.log('🧪 Ejecutando prueba de conectividad...');
             const testResult = await testWebhookConnectivity();
             return {
-                statusCode: 200,
+                statusCode: testResult.success ? 200 : 502,
                 body: JSON.stringify(testResult)
             };
         }
@@ -147,67 +411,78 @@ exports.handler = async (event, context) => {
             });
         }
 
-        console.log('Enviando datos a n8n:', JSON.stringify(webhookPayload, null, 2));
-        console.log('URL del webhook:', WEBHOOK_URL);
-
-        try {
-            // Enviar datos al webhook de n8n
-            const response = await axios.post(WEBHOOK_URL, webhookPayload, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'User-Agent': 'Instituto-Lidera-Webhook/1.0'
-                },
-                timeout: 30000,
-                maxRedirects: 5
-            });
-
-            console.log('Respuesta de n8n:', {
-                status: response.status,
-                statusText: response.statusText,
-                data: response.data
-            });
-
-            // Verificar si la respuesta es exitosa
-            if (response.status >= 200 && response.status < 300) {
-                console.log('✅ Datos enviados exitosamente a n8n');
-                return {
-                    statusCode: 200,
-                    body: JSON.stringify({
-                        success: true,
-                        message: 'Datos enviados correctamente a n8n',
-                        webhookResponse: response.data,
-                        webhookStatus: 'success'
-                    })
-                };
-            } else {
-                throw new Error(`Respuesta inesperada del webhook: ${response.status}`);
-            }
-        } catch (webhookError) {
-            console.error('❌ Error al enviar datos al webhook:', webhookError);
-
-            // Detalles específicos del error
-            const errorDetails = {
-                message: webhookError.message,
-                code: webhookError.code,
-                response: webhookError.response?.data,
-                status: webhookError.response?.status,
-                config: {
-                    url: webhookError.config?.url,
-                    method: webhookError.config?.method,
-                    timeout: webhookError.config?.timeout
-                }
+        // Validar el payload antes de enviarlo
+        const validation = validatePayload(webhookPayload);
+        if (!validation.valid) {
+            console.error('❌ Payload inválido:', validation.errors);
+            return {
+                statusCode: 400,
+                body: JSON.stringify({
+                    success: false,
+                    message: 'Payload inválido',
+                    validationErrors: validation.errors,
+                    webhookStatus: 'validation_failed'
+                })
             };
+        }
 
-            console.error('Detalles del error del webhook:', JSON.stringify(errorDetails, null, 2));
+        console.log('📋 Enviando datos a n8n...');
+        console.log('📋 URL del webhook:', WEBHOOK_URL);
+        console.log('📋 Payload size:', JSON.stringify(webhookPayload).length, 'bytes');
+
+        // Enviar datos al webhook de n8n con retry logic
+        const webhookResult = await sendToWebhookWithRetry(webhookPayload, {
+            maxRetries: MAX_RETRIES,
+            timeout: TIMEOUT
+        });
+
+        console.log('📊 Resultado del envío:', webhookResult);
+
+        if (webhookResult.success) {
+            console.log('✅ Datos enviados exitosamente a n8n');
+            return {
+                statusCode: 200,
+                body: JSON.stringify({
+                    success: true,
+                    message: 'Datos enviados correctamente a n8n',
+                    webhookResponse: webhookResult.data,
+                    webhookStatus: 'success',
+                    performance: {
+                        attempt: webhookResult.attempt,
+                        responseTime: webhookResult.responseTime,
+                        requestId: webhookResult.requestId
+                    }
+                })
+            };
+        } else {
+            console.error('❌ Error al enviar datos al webhook de n8n:', webhookResult.error);
+
+            // Determinar el código de estado HTTP apropiado basado en el tipo de error
+            let statusCode = 502; // Bad Gateway por defecto
+            if (webhookResult.errorType === 'connection_refused' || webhookResult.errorType === 'dns_resolution') {
+                statusCode = 503; // Service Unavailable
+            } else if (webhookResult.errorType === 'timeout') {
+                statusCode = 504; // Gateway Timeout
+            } else if (webhookResult.errorType === 'client_error') {
+                statusCode = 400; // Bad Request
+            } else if (webhookResult.errorType === 'not_found') {
+                statusCode = 404; // Not Found
+            }
 
             return {
-                statusCode: 200, // Mantenemos 200 para que el frontend muestre el mensaje personalizado
+                statusCode: statusCode,
                 body: JSON.stringify({
                     success: false,
                     message: 'Error al enviar datos al webhook de n8n',
-                    error: webhookError.message,
-                    errorDetails: errorDetails,
-                    webhookStatus: 'failed'
+                    error: webhookResult.error,
+                    errorType: webhookResult.errorType,
+                    errorSolution: webhookResult.errorSolution,
+                    webhookStatus: 'failed',
+                    performance: {
+                        attempts: webhookResult.attempt,
+                        requestId: webhookResult.requestId
+                    },
+                    details: webhookResult.details
                 })
             };
         }

@@ -630,42 +630,92 @@ const QuizComponent = ({
         })
       });
 
-      if (!response.ok) {
-        throw new Error(`Error HTTP: ${response.status}`);
-      }
-
       const result = await response.json();
-      console.log('✅ Formulario procesado exitosamente:', result);
+      console.log('📊 Respuesta del servidor:', result);
 
-      // Verificar el estado real del webhook
-      const isWebhookSuccess = result.success && result.webhookStatus === 'success';
+      // Analizar la respuesta de manera más detallada
+      const isHttpSuccess = response.ok; // 200-299
+      const isWebhookSuccess = result.success === true && result.webhookStatus === 'success';
       const isWebhookFailed = result.success === false && result.webhookStatus === 'failed';
+      const isValidationError = result.webhookStatus === 'validation_failed';
+      const hasErrorSolution = result.errorSolution;
 
-      if (isWebhookSuccess) {
+      if (isHttpSuccess && isWebhookSuccess) {
+        // Éxito completo
         setEmailStatus('success');
         setWebhookStatus('success');
 
-        // Mostrar mensaje de éxito al usuario
         setTimeout(() => {
           alert('¡Formulario enviado exitosamente! Recibirás un email con tus resultados y correcciones.');
         }, 1000);
-      } else if (isWebhookFailed) {
-        // El formulario se procesó pero el webhook falló
+
+      } else if (isHttpSuccess && isWebhookFailed) {
+        // Formulario recibido pero webhook falló
         setEmailStatus('partial');
         setWebhookStatus('error');
 
-        // Mostrar mensaje de advertencia
-        setTimeout(() => {
-          alert('⚠️ Advertencia: Tu formulario se guardó correctamente, pero hubo un problema al enviar los datos al sistema de procesamiento. Los administradores han sido notificados.');
-          console.error('Error del webhook:', result.error, result.errorDetails);
-        }, 1000);
-      } else {
-        // Otros casos
-        setEmailStatus('success');
-        setWebhookStatus('partial');
+        let errorMessage = '⚠️ Advertencia: Tu formulario se guardó correctamente, pero hubo un problema al enviar los datos al sistema de procesamiento.';
+
+        if (result.errorType) {
+          errorMessage += `\n\nTipo de error: ${result.errorType}`;
+        }
+
+        if (hasErrorSolution) {
+          errorMessage += `\n\nSolución sugerida: ${result.errorSolution}`;
+        }
 
         setTimeout(() => {
-          alert('✅ Formulario procesado. El estado del webhook es: ' + (result.webhookStatus || 'desconocido'));
+          alert(errorMessage);
+          console.error('Error del webhook:', result);
+        }, 1000);
+
+      } else if (isValidationError) {
+        // Error de validación
+        setEmailStatus('error');
+        setWebhookStatus('error');
+
+        let errorMessage = '❌ Error de validación en el formulario.';
+        if (result.validationErrors && result.validationErrors.length > 0) {
+          errorMessage += '\n\nErrores:\n' + result.validationErrors.join('\n');
+        }
+
+        setTimeout(() => {
+          alert(errorMessage);
+        }, 1000);
+
+      } else if (!isHttpSuccess) {
+        // Error HTTP
+        setEmailStatus('error');
+        setWebhookStatus('error');
+
+        let errorMessage = `❌ Error HTTP ${response.status}: `;
+
+        if (result.error) {
+          errorMessage += result.error;
+        } else if (result.message) {
+          errorMessage += result.message;
+        } else {
+          errorMessage += 'Error desconocido';
+        }
+
+        if (hasErrorSolution) {
+          errorMessage += `\n\nSolución: ${result.errorSolution}`;
+        }
+
+        setTimeout(() => {
+          alert(errorMessage);
+        }, 1000);
+
+      } else {
+        // Caso desconocido
+        setEmailStatus('partial');
+        setWebhookStatus('partial');
+
+        const statusMessage = `Estado: ${result.webhookStatus || 'desconocido'}`;
+        const successFlag = result.success === true ? 'Éxito' : result.success === false ? 'Fallo' : 'Desconocido';
+
+        setTimeout(() => {
+          alert(`⚠️ Formulario procesado con estado inesperado:\n${statusMessage}\nResultado: ${successFlag}`);
         }, 1000);
       }
 
@@ -674,9 +724,21 @@ const QuizComponent = ({
       setEmailStatus('error');
       setWebhookStatus('error');
 
-      // Mostrar error al usuario
+      // Mostrar error detallado al usuario
+      let errorMessage = '❌ Error al enviar el formulario.';
+
+      if (error.message.includes('Failed to fetch')) {
+        errorMessage += '\n\nNo se pudo conectar con el servidor. Verifica tu conexión a internet.';
+      } else if (error.message.includes('HTTP error')) {
+        errorMessage += `\n\nError del servidor: ${error.message}`;
+      } else {
+        errorMessage += `\n\nDetalles: ${error.message}`;
+      }
+
+      errorMessage += '\n\nPor favor, intenta de nuevo más tarde o contacta al soporte técnico.';
+
       setTimeout(() => {
-        alert('Error al enviar el formulario. Por favor, intenta de nuevo más tarde.');
+        alert(errorMessage);
       }, 1000);
     } finally {
       setSendingSummary(false);

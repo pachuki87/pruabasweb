@@ -108,15 +108,12 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
       questions: results.questionsSummary || []
     };
 
-    // Guardar resultados en localStorage como fallback
+    // Guardar resultados en localStorage
     localStorage.setItem('lastQuizResults', JSON.stringify(summaryData));
 
-    // Codificar datos para URL
-    const encodedData = btoa(JSON.stringify(summaryData));
-    const summaryUrl = `/resumen-cuestionario.html?results=${encodedData}`;
-
     // Redirigir a la página de resumen
-    console.log('🔄 Redirigiendo a página de resumen:', summaryUrl);
+    const summaryUrl = '/resumen-cuestionario.html';
+    console.log('🔄 Redirigiendo a página de resumen (usando localStorage)...');
     window.location.href = summaryUrl;
   };
 

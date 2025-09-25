@@ -381,8 +381,9 @@ const QuizComponent = ({
   };
 
   const calculateResults = () => {
-    if (!quiz || !quiz.preguntas) {
-      console.warn('⚠️ No hay quiz o preguntas para calcular resultados');
+    console.log('[calculateResults] Iniciando cálculo de resultados...');
+    if (!quiz || !Array.isArray(quiz.preguntas) || quiz.preguntas.length === 0) {
+      console.error('[calculateResults] No hay quiz o preguntas para calcular. Saliendo.');
       return {
         puntuacionObtenida: 0,
         puntuacionMaxima: 0,
@@ -396,118 +397,84 @@ const QuizComponent = ({
     }
 
     let puntuacionObtenida = 0;
-    let puntuacionMaxima = 0;
+    const puntuacionMaxima = quiz.preguntas.length;
     let respuestasCorrectas = 0;
     let tiempoTotal = 0;
-
-    const updatedAnswers = { ...userAnswers };
     const questionsSummary = [];
 
-    console.log('🔍 Calculando resultados para', quiz.preguntas.length, 'preguntas');
-    console.log('📝 Respuestas del usuario:', userAnswers);
+    console.log(`[calculateResults] Calculando para ${puntuacionMaxima} preguntas.`);
 
-    quiz.preguntas.forEach((question, index) => {
-      puntuacionMaxima += 1;
+    for (const question of quiz.preguntas) {
       const userAnswer = userAnswers[question.id];
-
-      console.log(`❓ Pregunta ${index + 1}:`, question.pregunta?.substring(0, 50) + '...');
-      console.log(`   Tipo: ${question.tipo}`);
-      console.log(`   Respuesta usuario:`, userAnswer);
-
       let esCorrecta = false;
+      let respuestaUsuario = 'No respondida';
       let respuestaCorrecta = '';
-      let respuestaUsuario = '';
+      let tiempoRespuesta = 0;
 
       if (userAnswer) {
-        tiempoTotal += userAnswer.tiempoRespuesta || 0;
+        tiempoRespuesta = userAnswer.tiempoRespuesta || 0;
+        tiempoTotal += tiempoRespuesta;
 
-        if (question.tipo === 'multiple_choice') {
-          const opcionCorrecta = question.opciones_respuesta?.find(op => op.es_correcta);
-          esCorrecta = userAnswer.opcionId === opcionCorrecta?.id;
-          respuestaCorrecta = opcionCorrecta?.opcion || '';
-          respuestaUsuario = question.opciones_respuesta?.find(op => op.id === userAnswer.opcionId)?.opcion || userAnswer.opcionId || '';
-          console.log(`   Opción correcta: ${opcionCorrecta?.id}, Opción usuario: ${userAnswer.opcionId}, Resultado: ${esCorrecta}`);
-        } else if (question.tipo === 'verdadero_falso') {
-          const respuestaUsuarioValor = userAnswer.opcionId === 'verdadero' ? 'V' : 'F';
-          esCorrecta = respuestaUsuarioValor === question.respuesta_correcta;
-          respuestaCorrecta = question.respuesta_correcta === 'V' ? 'Verdadero' : 'Falso';
-          respuestaUsuario = userAnswer.opcionId === 'verdadero' ? 'Verdadero' : 'Falso';
-          console.log(`   Respuesta correcta: ${question.respuesta_correcta}, Respuesta usuario: ${respuestaUsuarioValor}, Resultado: ${esCorrecta}`);
-        } else if (question.tipo === 'texto_libre' || question.tipo === 'archivo_adjunto') {
-          const tieneTexto = userAnswer.textoRespuesta && userAnswer.textoRespuesta.trim().length > 3;
-          const tieneArchivos = userAnswer.archivos && userAnswer.archivos.length > 0;
-          esCorrecta = tieneTexto || tieneArchivos;
-          respuestaUsuario = userAnswer.textoRespuesta || '';
-          if (userAnswer.archivos && userAnswer.archivos.length > 0) {
-            respuestaUsuario += ' (con archivos adjuntos)';
-          }
-          respuestaCorrecta = 'Respuesta libre';
-          console.log(`   Tiene texto: ${tieneTexto}, Tiene archivos: ${tieneArchivos}, Resultado: ${esCorrecta}`);
+        switch (question.tipo) {
+          case 'multiple_choice':
+            const opcionCorrecta = question.opciones_respuesta?.find(op => op.es_correcta);
+            esCorrecta = userAnswer.opcionId === opcionCorrecta?.id;
+            respuestaCorrecta = opcionCorrecta?.opcion || 'N/A';
+            respuestaUsuario = question.opciones_respuesta?.find(op => op.id === userAnswer.opcionId)?.opcion || 'Opción inválida';
+            break;
+          case 'verdadero_falso':
+            const respuestaUsuarioValor = userAnswer.opcionId === 'verdadero' ? 'V' : 'F';
+            esCorrecta = respuestaUsuarioValor === question.respuesta_correcta;
+            respuestaCorrecta = question.respuesta_correcta === 'V' ? 'Verdadero' : 'Falso';
+            respuestaUsuario = userAnswer.opcionId === 'verdadero' ? 'Verdadero' : 'Falso';
+            break;
+          case 'texto_libre':
+          case 'archivo_adjunto':
+            const tieneTexto = userAnswer.textoRespuesta && userAnswer.textoRespuesta.trim().length > 0;
+            const tieneArchivos = userAnswer.archivos && userAnswer.archivos.length > 0;
+            esCorrecta = tieneTexto || tieneArchivos; // Considerada correcta si hay cualquier contenido
+            respuestaUsuario = userAnswer.textoRespuesta || '';
+            if (tieneArchivos) {
+              respuestaUsuario += ` (${userAnswer.archivos.length} archivos adjuntos)`;
+            }
+            respuestaCorrecta = 'Respuesta abierta';
+            break;
+          default:
+            console.warn(`[calculateResults] Tipo de pregunta desconocido: ${question.tipo}`);
+            break;
         }
-
-        if (esCorrecta) {
-          puntuacionObtenida += 1;
-          respuestasCorrectas += 1;
-          console.log(`   ✅ CORRECTA`);
-        } else {
-          console.log(`   ❌ INCORRECTA`);
-        }
-
-        updatedAnswers[question.id] = {
-          ...userAnswer,
-          esCorrecta
-        };
-
-        questionsSummary.push({
-          question: question.pregunta,
-          userAnswer: respuestaUsuario,
-          correctAnswer: respuestaCorrecta,
-          isCorrect: esCorrecta,
-          timeSpent: userAnswer.tiempoRespuesta || 0,
-        });
-
-      } else {
-        console.log(`   ⚠️ Sin respuesta`);
-
-        questionsSummary.push({
-          question: question.pregunta,
-          userAnswer: 'No respondida',
-          correctAnswer: question.tipo === 'multiple_choice'
-            ? question.opciones_respuesta?.find(op => op.es_correcta)?.opcion || ''
-            : question.tipo === 'verdadero_falso'
-            ? question.respuesta_correcta === 'V' ? 'Verdadero' : 'Falso'
-            : 'Respuesta libre',
-          isCorrect: false,
-          timeSpent: 0,
-        });
       }
-    });
+      
+      if(esCorrecta) {
+        puntuacionObtenida++;
+        respuestasCorrectas++;
+      }
 
-    setUserAnswers(updatedAnswers);
+      questionsSummary.push({
+        question: question.pregunta || 'Pregunta sin texto',
+        userAnswer: respuestaUsuario,
+        correctAnswer: respuestaCorrecta,
+        isCorrect: esCorrecta,
+        timeSpent: tiempoRespuesta,
+      });
+    }
 
     const porcentajeAcierto = puntuacionMaxima > 0 ? Math.round((puntuacionObtenida / puntuacionMaxima) * 100) : 0;
-    const porcentajeAprobacion = quiz?.porcentaje_aprobacion || 70;
-    const aprobado = porcentajeAcierto >= porcentajeAprobacion;
+    const aprobado = porcentajeAcierto >= (quiz?.porcentaje_aprobacion || 70);
 
-    console.log('📊 Resultados calculados:', {
-      puntuacionObtenida,
-      puntuacionMaxima,
-      porcentajeAcierto,
-      aprobado,
-      respuestasCorrectas,
-      totalPreguntas: quiz.preguntas.length
-    });
-
-    return {
+    const finalResults = {
       puntuacionObtenida,
       puntuacionMaxima,
       porcentajeAcierto,
       tiempoTotal,
       aprobado,
       respuestasCorrectas,
-      totalPreguntas: quiz.preguntas.length,
-      questionsSummary: questionsSummary
+      totalPreguntas: puntuacionMaxima,
+      questionsSummary,
     };
+    
+    console.log('[calculateResults] Resultados finales:', finalResults);
+    return finalResults;
   };
 
   const finishQuiz = async () => {

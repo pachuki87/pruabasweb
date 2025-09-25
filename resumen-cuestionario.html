@@ -183,15 +183,15 @@
         // Get quiz results from URL parameters or localStorage
         function getQuizResults() {
             try {
-                // Try to get from URL parameters first
                 const urlParams = new URLSearchParams(window.location.search);
                 const resultsData = urlParams.get('results');
 
                 if (resultsData) {
-                    return JSON.parse(atob(resultsData));
+                    // Decodificar de forma segura para Unicode
+                    const decodedData = decodeURIComponent(atob(resultsData));
+                    return JSON.parse(decodedData);
                 }
 
-                // Fallback to localStorage
                 const savedResults = localStorage.getItem('lastQuizResults');
                 if (savedResults) {
                     return JSON.parse(savedResults);

@@ -31,7 +31,7 @@ const testWebhookConnectivity = async () => {
                 'X-Test-Request': 'true',
                 'X-Request-ID': testId
             },
-            timeout: 15000
+            timeout: 30000
         });
         const responseTime = Date.now() - startTime;
 

@@ -1,6 +1,9 @@
 const { createTransport } = require('nodemailer');
 const axios = require('axios');
 
+// Configuración del webhook
+const WEBHOOK_URL = 'https://n8n.srv1024767.hstgr.cloud/webhook/fbdc5d15-3435-42f9-8047-891869aa9f7e';
+
 // Configuración de la API de Google Gemini
 const geminiConfig = {
     apiKey: process.env.GEMINI_API_KEY,
@@ -111,6 +114,74 @@ Responde en formato JSON con la siguiente estructura:
     } catch (error) {
         console.error('Error generando correcciones:', error.response?.data || error.message);
         throw error;
+    }
+}
+
+// Función para enviar datos al webhook
+async function sendToWebhook(data) {
+    try {
+        console.log('Enviando datos al webhook...');
+
+        const webhookPayload = {
+            type: 'quiz-corrections',
+            timestamp: new Date().toISOString(),
+            studentInfo: {
+                name: data.nombre,
+                email: data.email, // Email del estudiante incluido
+                processDate: new Date().toISOString()
+            },
+            quizInfo: {
+                title: data.quizData.titulo || 'Evaluación',
+                totalQuestions: data.quizData.preguntas?.length || 0,
+                lessonId: data.quizData.leccion_id,
+                courseId: data.quizData.curso_id
+            },
+            corrections: data.corrections,
+            userAnswers: data.userAnswers,
+            rawResponse: data.corrections,
+            metadata: {
+                processedBy: 'gemini-api',
+                version: '1.0.0',
+                source: 'instituto-lidera-elearning'
+            }
+        };
+
+        const response = await axios.post(WEBHOOK_URL, webhookPayload, {
+            headers: {
+                'Content-Type': 'application/json',
+                'User-Agent': 'Instituto-Lidera-Webhook/1.0.0'
+            },
+            timeout: 30000
+        });
+
+        console.log('Webhook enviado exitosamente:', {
+            status: response.status,
+            statusText: response.statusText,
+            webhookUrl: WEBHOOK_URL
+        });
+
+        return {
+            success: true,
+            status: response.status,
+            statusText: response.statusText,
+            webhookUrl: WEBHOOK_URL
+        };
+
+    } catch (error) {
+        console.error('Error enviando webhook:', {
+            message: error.message,
+            webhookUrl: WEBHOOK_URL,
+            status: error.response?.status,
+            statusText: error.response?.statusText
+        });
+
+        // No lanzamos error para no interrumpir el proceso principal
+        return {
+            success: false,
+            error: error.message,
+            webhookUrl: WEBHOOK_URL,
+            status: error.response?.status
+        };
     }
 }
 
@@ -280,6 +351,17 @@ exports.handler = async (event, context) => {
         const emailResult = await sendCorrectionsEmail(email, nombre, quizData, corrections);
         console.log('Email enviado:', emailResult);
 
+        console.log('Enviando datos al webhook...');
+        const webhookData = {
+            nombre: nombre,
+            email: email,
+            quizData: quizData,
+            userAnswers: userAnswers,
+            corrections: corrections
+        };
+        const webhookResult = await sendToWebhook(webhookData);
+        console.log('Webhook enviado:', webhookResult);
+
         // Logging del proceso completo
         const processLog = {
             timestamp: new Date().toISOString(),
@@ -301,6 +383,7 @@ exports.handler = async (event, context) => {
                 message: 'Correcciones enviadas exitosamente',
                 corrections: corrections,
                 emailResult: emailResult,
+                webhookResult: webhookResult,
                 processLog: processLog
             })
         };

@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resumen de Evaluación - Instituto Lidera</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .card-shadow {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .score-excellent { color: #10b981; }
+        .score-good { color: #3b82f6; }
+        .score-average { color: #f59e0b; }
+        .score-poor { color: #ef4444; }
+        .fade-in {
+            animation: fadeIn 0.6s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        .print-button {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            transition: all 0.3s ease;
+        }
+        .print-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <div class="gradient-bg text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="text-center">
+                <h1 class="text-4xl font-bold mb-2">
+                    <i class="fas fa-chart-line mr-3"></i>Resumen de Evaluación
+                </h1>
+                <p class="text-xl opacity-90">Instituto Lidera - Formación en Adicciones</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container mx-auto px-4 py-8 max-w-6xl">
+        <!-- Loading State -->
+        <div id="loadingState" class="text-center py-12">
+            <div class="inline-flex items-center justify-center w-16 h-16 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin mb-4"></div>
+            <p class="text-gray-600 text-lg">Cargando tus resultados...</p>
+        </div>
+
+        <!-- Summary Content -->
+        <div id="summaryContent" class="hidden space-y-8">
+            <!-- User Information Card -->
+            <div class="bg-white rounded-xl card-shadow p-6 fade-in">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-2xl font-bold text-gray-800">
+                        <i class="fas fa-user-circle text-blue-600 mr-2"></i>Información Personal
+                    </h2>
+                    <span class="text-sm text-gray-500" id="completionDate"></span>
+                </div>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="flex items-center space-x-3">
+                        <div class="bg-blue-100 p-3 rounded-full">
+                            <i class="fas fa-user text-blue-600"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-600">Nombre Completo</p>
+                            <p class="font-semibold text-gray-800" id="userName">-</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <div class="bg-green-100 p-3 rounded-full">
+                            <i class="fas fa-envelope text-green-600"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-600">Correo Electrónico</p>
+                            <p class="font-semibold text-gray-800" id="userEmail">-</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Overall Score Card -->
+            <div class="bg-white rounded-xl card-shadow p-6 fade-in">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">
+                    <i class="fas fa-trophy text-yellow-500 mr-2"></i>Resultados Generales
+                </h2>
+                <div class="grid md:grid-cols-4 gap-6 mb-6">
+                    <div class="text-center">
+                        <div class="bg-gradient-to-br from-blue-500 to-purple-600 text-white rounded-xl p-4">
+                            <p class="text-3xl font-bold" id="totalScore">0</p>
+                            <p class="text-sm opacity-90">Puntuación Total</p>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <div class="bg-gradient-to-br from-green-500 to-teal-600 text-white rounded-xl p-4">
+                            <p class="text-3xl font-bold" id="percentageScore">0%</p>
+                            <p class="text-sm opacity-90">Porcentaje</p>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <div class="bg-gradient-to-br from-purple-500 to-pink-600 text-white rounded-xl p-4">
+                            <p class="text-3xl font-bold" id="timeSpent">0</p>
+                            <p class="text-sm opacity-90">Tiempo (min)</p>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <div class="bg-gradient-to-br from-orange-500 to-red-600 text-white rounded-xl p-4">
+                            <p class="text-3xl font-bold" id="statusBadge">-</p>
+                            <p class="text-sm opacity-90">Estado</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Score Chart -->
+                <div class="bg-gray-50 rounded-lg p-4">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-3">Distribución de Puntuaciones</h3>
+                    <div class="h-64">
+                        <canvas id="scoreChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detailed Questions and Answers -->
+            <div class="bg-white rounded-xl card-shadow p-6 fade-in">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800">
+                        <i class="fas fa-clipboard-list text-indigo-600 mr-2"></i>Respuestas Detalladas
+                    </h2>
+                    <button onclick="window.print()" class="print-button text-white px-4 py-2 rounded-lg font-medium">
+                        <i class="fas fa-print mr-2"></i>Imprimir Resumen
+                    </button>
+                </div>
+
+                <div id="questionsContainer" class="space-y-6">
+                    <!-- Questions will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- AI Evaluation Summary -->
+            <div class="bg-white rounded-xl card-shadow p-6 fade-in">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">
+                    <i class="fas fa-brain text-purple-600 mr-2"></i>Evaluación con IA
+                </h2>
+                <div class="bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg p-6">
+                    <h3 class="text-lg font-semibold text-purple-800 mb-3">Resumen General</h3>
+                    <p class="text-gray-700 leading-relaxed" id="aiSummary">-</p>
+                </div>
+
+                <div class="mt-6 grid md:grid-cols-2 gap-6">
+                    <div class="bg-blue-50 rounded-lg p-4">
+                        <h4 class="font-semibold text-blue-800 mb-2">
+                            <i class="fas fa-lightbulb mr-2"></i>Fortalezas Detectadas
+                        </h4>
+                        <ul id="strengthsList" class="text-blue-700 space-y-1">
+                            <!-- Will be populated by JavaScript -->
+                        </ul>
+                    </div>
+                    <div class="bg-orange-50 rounded-lg p-4">
+                        <h4 class="font-semibold text-orange-800 mb-2">
+                            <i class="fas fa-exclamation-triangle mr-2"></i>Áreas de Mejora
+                        </h4>
+                        <ul id="improvementsList" class="text-orange-700 space-y-1">
+                            <!-- Will be populated by JavaScript -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Next Steps -->
+            <div class="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl p-6 text-white fade-in">
+                <h2 class="text-2xl font-bold mb-4">
+                    <i class="fas fa-arrow-right mr-2"></i>Próximos Pasos
+                </h2>
+                <div class="grid md:grid-cols-3 gap-4">
+                    <div class="text-center">
+                        <div class="bg-white bg-opacity-20 rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-2">
+                            <i class="fas fa-certificate"></i>
+                        </div>
+                        <h3 class="font-semibold mb-1">Certificado</h3>
+                        <p class="text-sm opacity-90">Recibirás tu certificado por correo</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="bg-white bg-opacity-20 rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-2">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <h3 class="font-semibold mb-1">Material Adicional</h3>
+                        <p class="text-sm opacity-90">Accede a recursos de aprendizaje</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="bg-white bg-opacity-20 rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-2">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3 class="font-semibold mb-1">Comunidad</h3>
+                        <p class="text-sm opacity-90">Únete a nuestra comunidad de estudiantes</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Error State -->
+        <div id="errorState" class="hidden text-center py-12">
+            <div class="bg-red-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-exclamation-triangle text-red-600 text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-800 mb-2">Error al cargar los resultados</h3>
+            <p class="text-gray-600 mb-4">No se pudieron cargar tus datos de evaluación.</p>
+            <button onclick="window.location.href='formulario-mcp-integrado.html'" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg">
+                Volver al Formulario
+            </button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-6 mt-12">
+        <div class="container mx-auto px-4 text-center">
+            <p>&copy; 2024 Instituto Lidera. Todos los derechos reservados.</p>
+            <p class="text-sm text-gray-400 mt-2">Formación de calidad en adicciones y salud mental</p>
+        </div>
+    </footer>
+
+    <script>
+        // Questions configuration
+        const questions = [
+            {
+                id: 'pregunta1',
+                text: '¿Qué significa para usted ser adicto y cuáles considera que son las principales características de una conducta adictiva?'
+            },
+            {
+                id: 'pregunta2',
+                text: 'Describa las principales consecuencias que las adicciones pueden tener en la vida de una persona y su entorno familiar.'
+            },
+            {
+                id: 'pregunta3',
+                text: '¿Qué role considera que juega la familia en el proceso de recuperación de una persona con adicciones?'
+            },
+            {
+                id: 'pregunta4',
+                text: 'Explique cómo el mindfulness puede ser una herramienta útil en el tratamiento de conductas adictivas.'
+            }
+        ];
+
+        // Load data from URL parameters
+        function loadDataFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const dataParam = urlParams.get('data');
+
+            if (dataParam) {
+                try {
+                    return JSON.parse(atob(dataParam));
+                } catch (error) {
+                    console.error('Error parsing data:', error);
+                    return null;
+                }
+            }
+            return null;
+        }
+
+        // Format date
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('es-ES', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        // Get score color class
+        function getScoreColorClass(score) {
+            if (score >= 9) return 'score-excellent';
+            if (score >= 7) return 'score-good';
+            if (score >= 5) return 'score-average';
+            return 'score-poor';
+        }
+
+        // Get score label
+        function getScoreLabel(score) {
+            if (score >= 9) return 'Excelente';
+            if (score >= 7) return 'Bueno';
+            if (score >= 5) return 'Regular';
+            return 'Necesita Mejorar';
+        }
+
+        // Create score chart
+        function createScoreChart(scores) {
+            const ctx = document.getElementById('scoreChart').getContext('2d');
+
+            new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['Pregunta 1', 'Pregunta 2', 'Pregunta 3', 'Pregunta 4'],
+                    datasets: [{
+                        label: 'Puntuaciones',
+                        data: scores,
+                        backgroundColor: 'rgba(99, 102, 241, 0.2)',
+                        borderColor: 'rgba(99, 102, 241, 1)',
+                        borderWidth: 2,
+                        pointBackgroundColor: 'rgba(99, 102, 241, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(99, 102, 241, 1)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 10,
+                            ticks: {
+                                stepSize: 2
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        }
+
+        // Populate questions and answers
+        function populateQuestions(data) {
+            const container = document.getElementById('questionsContainer');
+            const strengths = [];
+            const improvements = [];
+
+            questions.forEach((question, index) => {
+                const questionId = question.id;
+                const answer = data.answers[questionId] || '';
+                const evaluation = data.evaluations[questionId] || {};
+
+                // Collect strengths and improvements
+                if (evaluation.puntuacion >= 8) {
+                    strengths.push(`Excelente respuesta en pregunta ${index + 1}`);
+                } else if (evaluation.puntuacion < 6) {
+                    improvements.push(`Revisar pregunta ${index + 1}: ${question.text.substring(0, 50)}...`);
+                }
+
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow';
+                questionDiv.innerHTML = `
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="flex-1">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-2">
+                                <span class="bg-blue-100 text-blue-800 text-sm font-medium px-2.5 py-0.5 rounded mr-2">
+                                    Pregunta ${index + 1}
+                                </span>
+                                ${question.text}
+                            </h3>
+                        </div>
+                        <div class="ml-4 text-center">
+                            <div class="text-2xl font-bold ${getScoreColorClass(evaluation.puntuacion || 0)}">
+                                ${evaluation.puntuacion || 0}/10
+                            </div>
+                            <div class="text-xs text-gray-500">${getScoreLabel(evaluation.puntuacion || 0)}</div>
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="text-sm font-medium text-gray-700 mb-2">
+                                <i class="fas fa-comment-dots mr-1"></i>Tu Respuesta:
+                            </h4>
+                            <div class="bg-gray-50 rounded p-3 text-gray-700 text-sm leading-relaxed">
+                                ${answer || 'No respondida'}
+                            </div>
+                        </div>
+
+                        <div>
+                            <h4 class="text-sm font-medium text-gray-700 mb-2">
+                                <i class="fas fa-robot mr-1"></i>Evaluación IA:
+                            </h4>
+                            <div class="bg-blue-50 rounded p-3 text-blue-700 text-sm leading-relaxed">
+                                ${evaluation.correccion || 'Sin evaluación disponible'}
+                            </div>
+                            ${evaluation.sugerencias && evaluation.sugerencias.length > 0 ? `
+                                <div class="mt-2">
+                                    <h5 class="text-xs font-medium text-gray-600 mb-1">Sugerencias:</h5>
+                                    <ul class="text-xs text-gray-600 space-y-1">
+                                        ${evaluation.sugerencias.map(s => `<li class="flex items-start"><span class="mr-2">•</span>${s}</li>`).join('')}
+                                    </ul>
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+
+                container.appendChild(questionDiv);
+            });
+
+            // Populate strengths and improvements
+            const strengthsList = document.getElementById('strengthsList');
+            const improvementsList = document.getElementById('improvementsList');
+
+            if (strengths.length > 0) {
+                strengths.forEach(strength => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<i class="fas fa-check-circle mr-2"></i>${strength}`;
+                    strengthsList.appendChild(li);
+                });
+            } else {
+                strengthsList.innerHTML = '<li class="text-gray-500">Continúa practicando para identificar fortalezas</li>';
+            }
+
+            if (improvements.length > 0) {
+                improvements.forEach(improvement => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<i class="fas fa-arrow-right mr-2"></i>${improvement}`;
+                    improvementsList.appendChild(li);
+                });
+            } else {
+                improvementsList.innerHTML = '<li class="text-gray-500">¡Buen trabajo! Sigue manteniendo este nivel</li>';
+            }
+        }
+
+        // Initialize the page
+        function initializePage() {
+            const data = loadDataFromURL();
+
+            if (!data) {
+                document.getElementById('loadingState').classList.add('hidden');
+                document.getElementById('errorState').classList.remove('hidden');
+                return;
+            }
+
+            // Calculate overall scores
+            const scores = [
+                data.evaluations.pregunta1?.puntuacion || 0,
+                data.evaluations.pregunta2?.puntuacion || 0,
+                data.evaluations.pregunta3?.puntuacion || 0,
+                data.evaluations.pregunta4?.puntuacion || 0
+            ];
+
+            const totalScore = scores.reduce((sum, score) => sum + score, 0);
+            const averageScore = totalScore / scores.length;
+            const percentageScore = Math.round(averageScore * 10);
+
+            // Populate user information
+            document.getElementById('userName').textContent = data.userInfo.nombre || 'No disponible';
+            document.getElementById('userEmail').textContent = data.userInfo.email || 'No disponible';
+            document.getElementById('completionDate').textContent = formatDate(data.timestamp);
+
+            // Populate scores
+            document.getElementById('totalScore').textContent = `${averageScore.toFixed(1)}/10`;
+            document.getElementById('percentageScore').textContent = `${percentageScore}%`;
+            document.getElementById('timeSpent').textContent = data.timeSpent || 'N/A';
+
+            const statusBadge = document.getElementById('statusBadge');
+            if (averageScore >= 7) {
+                statusBadge.textContent = 'Aprobado';
+                statusBadge.className = 'text-2xl font-bold text-green-600';
+            } else {
+                statusBadge.textContent = 'Reintentar';
+                statusBadge.className = 'text-2xl font-bold text-orange-600';
+            }
+
+            // Populate AI summary
+            document.getElementById('aiSummary').textContent = data.evaluations.resumen || 'Resumen no disponible';
+
+            // Populate questions
+            populateQuestions(data);
+
+            // Create chart
+            createScoreChart(scores);
+
+            // Show content
+            document.getElementById('loadingState').classList.add('hidden');
+            document.getElementById('summaryContent').classList.remove('hidden');
+
+            // Add print styles
+            const printStyles = document.createElement('style');
+            printStyles.textContent = `
+                @media print {
+                    .print-button { display: none; }
+                    body { background: white; }
+                    .card-shadow { box-shadow: none; }
+                }
+            `;
+            document.head.appendChild(printStyles);
+        }
+
+        // Start the page when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initializePage);
+    </script>
+</body>
+</html>

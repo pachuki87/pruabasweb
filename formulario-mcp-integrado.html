@@ -173,6 +173,7 @@
             <div class="flex justify-center space-x-4 text-sm text-gray-500">
                 <span id="statusNetlify">📤 Enviando a Netlify...</span>
                 <span id="statusGemini">💎 Procesando con Gemini...</span>
+                <span id="statusN8n">🔗 Enviando a n8n...</span>
             </div>
         </div>
 
@@ -192,6 +193,9 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Track start time for calculating time spent
+            window.startTime = Date.now();
+
             const form = document.querySelector('form[name="preguntas-abiertas-mcp"]');
             const submitBtn = document.getElementById('submitBtn');
             const loadingIndicator = document.getElementById('loadingIndicator');
@@ -233,9 +237,15 @@
 
                 updateStatus('Netlify', 'pending', '📤 Enviando a Netlify...');
                 updateStatus('Gemini', 'pending', '💎 Esperando...');
+                updateStatus('N8n', 'pending', '🔗 Esperando...');
 
                 const formData = new FormData(form);
                 const data = Object.fromEntries(formData);
+
+                // DEBUG: Verificar el email que se está enviando
+                console.log('DEBUG - Form data completo:', data);
+                console.log('DEBUG - Email extraído:', data.email);
+                console.log('DEBUG - Nombre extraído:', data.nombre);
 
                 try {
                     log('Iniciando procesamiento del formulario...');
@@ -270,9 +280,22 @@
                     log('Almacenando datos en sistema de respaldo...');
                     await almacenarDatosEnGemini(data, correccionData);
 
-                    // Mostrar resultados
-                    log('✅ Procesamiento completado', 'success');
-                    mostrarResultados(correccionData);
+                    // 5. Enviar datos al webhook de n8n (¡NUEVO!)
+                    log('Enviando datos al webhook de n8n...');
+                    updateStatus('N8n', 'processing', '🔗 Enviando a n8n...');
+                    const n8nResult = await enviarDatosAn8nWebhook(data, correccionData);
+
+                    if (n8nResult && n8nResult.success) {
+                        log('✅ Datos enviados exitosamente a n8n', 'success');
+                        updateStatus('N8n', 'success', '✅ Enviado a n8n');
+                    } else {
+                        log('⚠️ Los datos no pudieron enviarse a n8n, pero el formulario fue procesado', 'error');
+                        updateStatus('N8n', 'error', '❌ Falló n8n');
+                    }
+
+                    // Redirigir a la página de resumen con todos los datos
+                    log('Redirigiendo a página de resumen...');
+                    redirectToSummaryPage(data, correccionData);
 
                 } catch (error) {
                     log(`❌ Error: ${error.message}`, 'error');
@@ -466,6 +489,153 @@ Respuesta del estudiante: ${respuesta}
 
                 } catch (error) {
                     log(`Error almacenando datos: ${error.message}`, 'error');
+                }
+            }
+
+            // Nueva función para enviar datos al webhook de n8n
+            async function enviarDatosAn8nWebhook(data, correcciones) {
+                try {
+                    log('Enviando datos al webhook de n8n...');
+
+                    // DEBUG: Verificar el email antes de enviar al webhook
+                    console.log('DEBUG - Email en enviarDatosAn8nWebhook:', data.email);
+                    console.log('DEBUG - Data completa en webhook:', data);
+
+                    // Preparar payload para el webhook de n8n
+                    const n8nPayload = {
+                        type: 'quiz-responses',
+                        timestamp: new Date().toISOString(),
+                        source: 'instituto-lidera-elearning',
+                        studentInfo: {
+                            name: data.nombre || 'Estudiante',
+                            email: data.email || '', // Email del usuario
+                            userId: data.userId || null,
+                            quizId: 'evaluacion-adicciones',
+                            submittedAt: new Date().toISOString()
+                        },
+                        quizInfo: {
+                            title: 'Evaluación de Adicciones',
+                            lessonId: null,
+                            courseId: null,
+                            totalQuestions: 4,
+                            score: Math.round((correcciones.pregunta1?.puntuacion || 0 + correcciones.pregunta2?.puntuacion || 0 + correcciones.pregunta3?.puntuacion || 0 + correcciones.pregunta4?.puntuacion || 0) / 4 * 10) / 10,
+                            maxScore: 10,
+                            percentage: Math.round((correcciones.pregunta1?.puntuacion || 0 + correcciones.pregunta2?.puntuacion || 0 + correcciones.pregunta3?.puntuacion || 0 + correcciones.pregunta4?.puntuacion || 0) / 4 * 10),
+                            passed: (correcciones.pregunta1?.puntuacion || 0 + correcciones.pregunta2?.puntuacion || 0 + correcciones.pregunta3?.puntuacion || 0 + correcciones.pregunta4?.puntuacion || 0) / 4 >= 7,
+                            timeSpent: 0,
+                            attemptNumber: 1
+                        },
+                        responses: [
+                            {
+                                questionNumber: 1,
+                                questionId: 'pregunta1',
+                                question: '¿Qué significa para usted ser adicto y cuáles considera que son las principales características de una conducta adictiva?',
+                                answer: data.pregunta1 || '',
+                                answerType: 'open',
+                                timeSpent: 0,
+                                submittedAt: new Date().toISOString()
+                            },
+                            {
+                                questionNumber: 2,
+                                questionId: 'pregunta2',
+                                question: 'Describa las principales consecuencias que las adicciones pueden tener en la vida de una persona y su entorno familiar.',
+                                answer: data.pregunta2 || '',
+                                answerType: 'open',
+                                timeSpent: 0,
+                                submittedAt: new Date().toISOString()
+                            },
+                            {
+                                questionNumber: 3,
+                                questionId: 'pregunta3',
+                                question: '¿Qué role considera que juega la familia en el proceso de recuperación de una persona con adicciones?',
+                                answer: data.pregunta3 || '',
+                                answerType: 'open',
+                                timeSpent: 0,
+                                submittedAt: new Date().toISOString()
+                            },
+                            {
+                                questionNumber: 4,
+                                questionId: 'pregunta4',
+                                question: 'Explique cómo el mindfulness puede ser una herramienta útil en el tratamiento de conductas adictivas.',
+                                answer: data.pregunta4 || '',
+                                answerType: 'open',
+                                timeSpent: 0,
+                                submittedAt: new Date().toISOString()
+                            }
+                        ],
+                        rawData: {
+                            ...data,
+                            correcciones: correcciones
+                        }
+                    };
+
+                    log(`Enviando payload a n8n webhook para email: ${data.email}`);
+                    log(`Payload size: ${JSON.stringify(n8nPayload).length} bytes`);
+
+                    // DEBUG: Mostrar el payload completo que se envía
+                    console.log('DEBUG - Payload completo enviado a webhook:', JSON.stringify(n8nPayload, null, 2));
+
+                    const response = await fetch('/.netlify/functions/send-corrections', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(n8nPayload)
+                    });
+
+                    if (response.ok) {
+                        const result = await response.json();
+                        log('✅ Datos enviados exitosamente a n8n webhook', 'success');
+                        log(`Respuesta n8n: ${JSON.stringify(result).substring(0, 200)}...`, 'success');
+                        return result;
+                    } else {
+                        const errorText = await response.text();
+                        log(`❌ Error al enviar a n8n webhook: ${response.status} - ${errorText}`, 'error');
+                        throw new Error(`HTTP ${response.status}: ${errorText}`);
+                    }
+
+                } catch (error) {
+                    log(`Error enviando datos a n8n webhook: ${error.message}`, 'error');
+                    console.error('Error n8n webhook:', error);
+                    // No lanzamos el error para no interrumpir el flujo principal
+                }
+            }
+
+            function redirectToSummaryPage(formData, evaluations) {
+                try {
+                    // Prepare complete data structure for summary page
+                    const summaryData = {
+                        userInfo: {
+                            nombre: formData.nombre,
+                            email: formData.email
+                        },
+                        answers: {
+                            pregunta1: formData.pregunta1,
+                            pregunta2: formData.pregunta2,
+                            pregunta3: formData.pregunta3,
+                            pregunta4: formData.pregunta4
+                        },
+                        evaluations: evaluations,
+                        timestamp: new Date().toISOString(),
+                        timeSpent: Math.floor((Date.now() - window.startTime) / 60000) || 0,
+                        formName: 'Evaluación de Adicciones'
+                    };
+
+                    // Encode data for URL transmission
+                    const encodedData = btoa(JSON.stringify(summaryData));
+                    const summaryUrl = `pagina-resumen.html?data=${encodedData}`;
+
+                    log(`Redirigiendo a: ${summaryUrl.substring(0, 100)}...`);
+
+                    // Add a small delay to show final success message
+                    setTimeout(() => {
+                        window.location.href = summaryUrl;
+                    }, 1000);
+
+                } catch (error) {
+                    log(`Error preparing redirect: ${error.message}`, 'error');
+                    // Fallback: show results on current page
+                    mostrarResultados(evaluations);
                 }
             }
 

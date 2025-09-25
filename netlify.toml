@@ -5,6 +5,9 @@
 [functions]
   directory = "netlify/functions"
 
+[functions.send-corrections]
+  runtime = "js"
+
 # Configuración de notificaciones de formulario
 [[headers]]
   for = "/*"

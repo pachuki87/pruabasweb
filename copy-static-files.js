@@ -42,6 +42,17 @@ try {
     console.warn('⚠️ formulario-mcp-integrado.html no encontrado en la raíz del proyecto');
   }
 
+  // Copiar resumen-cuestionario.html
+  const resumenSource = join(__dirname, 'resumen-cuestionario.html');
+  const resumenDest = join(__dirname, 'dist', 'resumen-cuestionario.html');
+
+  if (existsSync(resumenSource)) {
+    copyFileSync(resumenSource, resumenDest);
+    console.log('✅ resumen-cuestionario.html copiado al directorio dist');
+  } else {
+    console.warn('⚠️ resumen-cuestionario.html no encontrado en la raíz del proyecto');
+  }
+
   // Copiar _redirects
   const redirectsSource = join(__dirname, '_redirects');
   const redirectsDest = join(__dirname, 'dist', '_redirects');

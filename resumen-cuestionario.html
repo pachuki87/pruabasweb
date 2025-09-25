@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resumen del Cuestionario - Instituto Lidera</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .card-shadow {
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        .score-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: bold;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        .score-circle::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: conic-gradient(#10b981 var(--score-percentage), #e5e7eb var(--score-percentage));
+            z-index: -1;
+        }
+        .score-circle::after {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            bottom: 10px;
+            background: white;
+            border-radius: 50%;
+            z-index: -1;
+        }
+        @media print {
+            .no-print { display: none !important; }
+            .print-break { page-break-inside: avoid; }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="gradient-bg text-white py-6">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold">Resumen del Cuestionario</h1>
+                    <p class="text-blue-100 mt-2">Instituto Lidera - Plataforma de Aprendizaje</p>
+                </div>
+                <button onclick="window.print()" class="no-print bg-white text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-50 transition-colors">
+                    <i class="fas fa-print mr-2"></i>Imprimir Resultados
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- User Info Card -->
+        <div class="bg-white rounded-lg card-shadow p-6 mb-8 print-break">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-2xl font-bold text-gray-800">
+                    <i class="fas fa-user-circle text-blue-600 mr-3"></i>Información del Estudiante
+                </h2>
+                <span class="text-sm text-gray-500" id="completionDate"></span>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <label class="text-sm font-medium text-gray-600">Nombre</label>
+                    <p class="text-lg font-semibold text-gray-800" id="studentName">Cargando...</p>
+                </div>
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <label class="text-sm font-medium text-gray-600">Email</label>
+                    <p class="text-lg font-semibold text-gray-800" id="studentEmail">Cargando...</p>
+                </div>
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <label class="text-sm font-medium text-gray-600">Tiempo Utilizado</label>
+                    <p class="text-lg font-semibold text-gray-800" id="timeSpent">Cargando...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Overview -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+            <!-- Score Card -->
+            <div class="bg-white rounded-lg card-shadow p-6 text-center print-break">
+                <h3 class="text-xl font-bold text-gray-800 mb-4">Puntuación Final</h3>
+                <div class="score-circle mx-auto mb-4" id="scoreCircle" style="--score-percentage: 0%">
+                    <span id="scoreText">-</span>
+                </div>
+                <div class="space-y-2">
+                    <p class="text-2xl font-bold text-gray-800" id="finalScore">-</p>
+                    <p class="text-gray-600" id="scoreDetails">-</p>
+                    <div class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium" id="statusBadge">
+                        <i class="fas fa-circle mr-2 text-xs"></i>
+                        <span id="statusText">Cargando...</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Card -->
+            <div class="bg-white rounded-lg card-shadow p-6 print-break">
+                <h3 class="text-xl font-bold text-gray-800 mb-4">
+                    <i class="fas fa-chart-bar text-green-600 mr-2"></i>Estadísticas
+                </h3>
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-600">Preguntas Totales</span>
+                        <span class="font-bold text-gray-800" id="totalQuestions">-</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-600">Respuestas Correctas</span>
+                        <span class="font-bold text-green-600" id="correctAnswers">-</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-600">Respuestas Incorrectas</span>
+                        <span class="font-bold text-red-600" id="incorrectAnswers">-</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-600">Porcentaje de Acierto</span>
+                        <span class="font-bold text-blue-600" id="percentage">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Performance Chart -->
+            <div class="bg-white rounded-lg card-shadow p-6 print-break">
+                <h3 class="text-xl font-bold text-gray-800 mb-4">
+                    <i class="fas fa-chart-pie text-purple-600 mr-2"></i>Rendimiento
+                </h3>
+                <canvas id="performanceChart" width="200" height="200"></canvas>
+            </div>
+        </div>
+
+        <!-- Questions Review -->
+        <div class="bg-white rounded-lg card-shadow p-6 mb-8 print-break">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">
+                <i class="fas fa-list-check text-indigo-600 mr-3"></i>Revisión de Respuestas
+            </h2>
+            <div id="questionsContainer" class="space-y-6">
+                <!-- Questions will be loaded here -->
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex flex-col sm:flex-row gap-4 justify-center no-print">
+            <button onclick="window.history.back()" class="bg-gray-600 text-white px-6 py-3 rounded-lg hover:bg-gray-700 transition-colors">
+                <i class="fas fa-arrow-left mr-2"></i>Volver al Curso
+            </button>
+            <button onclick="window.print()" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors">
+                <i class="fas fa-print mr-2"></i>Imprimir Resultados
+            </button>
+            <button onclick="shareResults()" class="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors">
+                <i class="fas fa-share mr-2"></i>Compartir Resultados
+            </button>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-6 mt-12">
+        <div class="container mx-auto px-4 text-center">
+            <p>&copy; 2024 Instituto Lidera. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Get quiz results from URL parameters or localStorage
+        function getQuizResults() {
+            try {
+                // Try to get from URL parameters first
+                const urlParams = new URLSearchParams(window.location.search);
+                const resultsData = urlParams.get('results');
+
+                if (resultsData) {
+                    return JSON.parse(atob(resultsData));
+                }
+
+                // Fallback to localStorage
+                const savedResults = localStorage.getItem('lastQuizResults');
+                if (savedResults) {
+                    return JSON.parse(savedResults);
+                }
+
+                return null;
+            } catch (error) {
+                console.error('Error loading quiz results:', error);
+                return null;
+            }
+        }
+
+        // Initialize the page
+        function initializePage() {
+            const results = getQuizResults();
+
+            if (!results) {
+                document.body.innerHTML = `
+                    <div class="min-h-screen flex items-center justify-center bg-gray-50">
+                        <div class="text-center">
+                            <i class="fas fa-exclamation-triangle text-yellow-500 text-6xl mb-4"></i>
+                            <h1 class="text-2xl font-bold text-gray-800 mb-2">No se encontraron resultados</h1>
+                            <p class="text-gray-600 mb-6">No se pudieron cargar los resultados del cuestionario.</p>
+                            <button onclick="window.history.back()" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors">
+                                <i class="fas fa-arrow-left mr-2"></i>Volver
+                            </button>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
+            displayResults(results);
+        }
+
+        function displayResults(results) {
+            // User Info
+            document.getElementById('studentName').textContent = results.studentName || 'Estudiante';
+            document.getElementById('studentEmail').textContent = results.studentEmail || 'No disponible';
+            document.getElementById('completionDate').textContent = new Date(results.completionDate || Date.now()).toLocaleString('es-ES');
+            document.getElementById('timeSpent').textContent = formatTime(results.timeSpent || 0);
+
+            // Score Information
+            const percentage = results.percentage || 0;
+            const score = results.score || 0;
+            const maxScore = results.maxScore || 100;
+            const passed = results.passed || false;
+
+            document.getElementById('scoreText').textContent = `${percentage}%`;
+            document.getElementById('scoreCircle').style.setProperty('--score-percentage', `${percentage}%`);
+            document.getElementById('finalScore').textContent = `${score}/${maxScore}`;
+            document.getElementById('scoreDetails').textContent = `${percentage}% de acierto`;
+
+            // Status Badge
+            const statusBadge = document.getElementById('statusBadge');
+            const statusText = document.getElementById('statusText');
+            if (passed) {
+                statusBadge.className = 'inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800';
+                statusBadge.querySelector('i').className = 'fas fa-circle mr-2 text-xs text-green-500';
+                statusText.textContent = 'APROBADO';
+            } else {
+                statusBadge.className = 'inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800';
+                statusBadge.querySelector('i').className = 'fas fa-circle mr-2 text-xs text-red-500';
+                statusText.textContent = 'NO APROBADO';
+            }
+
+            // Statistics
+            document.getElementById('totalQuestions').textContent = results.totalQuestions || 0;
+            document.getElementById('correctAnswers').textContent = results.correctAnswers || 0;
+            document.getElementById('incorrectAnswers').textContent = results.incorrectAnswers || 0;
+            document.getElementById('percentage').textContent = `${percentage}%`;
+
+            // Performance Chart
+            createPerformanceChart(percentage);
+
+            // Questions Review
+            displayQuestions(results.questions || []);
+        }
+
+        function createPerformanceChart(percentage) {
+            const ctx = document.getElementById('performanceChart').getContext('2d');
+
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Correctas', 'Incorrectas'],
+                    datasets: [{
+                        data: [percentage, 100 - percentage],
+                        backgroundColor: [
+                            percentage >= 70 ? '#10b981' : percentage >= 50 ? '#f59e0b' : '#ef4444',
+                            '#e5e7eb'
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+
+        function displayQuestions(questions) {
+            const container = document.getElementById('questionsContainer');
+            container.innerHTML = '';
+
+            questions.forEach((question, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'border border-gray-200 rounded-lg p-4';
+
+                const isCorrect = question.isCorrect;
+                const statusIcon = isCorrect ? 'fa-check-circle text-green-600' : 'fa-times-circle text-red-600';
+                const statusBg = isCorrect ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200';
+
+                questionDiv.innerHTML = `
+                    <div class="flex items-start justify-between mb-3">
+                        <div class="flex-1">
+                            <h4 class="font-semibold text-gray-800 mb-2">
+                                <span class="inline-flex items-center justify-center w-8 h-8 rounded-full ${statusBg} mr-3">
+                                    <i class="fas ${statusIcon} text-sm"></i>
+                                </span>
+                                Pregunta ${index + 1}
+                            </h4>
+                            <p class="text-gray-700 mb-3">${question.question || question.text || 'Sin texto'}</p>
+                            <div class="bg-gray-50 p-3 rounded">
+                                <p class="text-sm text-gray-600 mb-1">Tu respuesta:</p>
+                                <p class="font-medium text-gray-800">${question.userAnswer || 'No respondida'}</p>
+                            </div>
+                            ${question.correctAnswer ? `
+                                <div class="bg-blue-50 p-3 rounded mt-2">
+                                    <p class="text-sm text-blue-600 mb-1">Respuesta correcta:</p>
+                                    <p class="font-medium text-blue-800">${question.correctAnswer}</p>
+                                </div>
+                            ` : ''}
+                        </div>
+                        <div class="ml-4 text-right">
+                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${isCorrect ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
+                                ${isCorrect ? 'Correcta' : 'Incorrecta'}
+                            </span>
+                            ${question.timeSpent ? `<p class="text-xs text-gray-500 mt-1">${question.timeSpent}s</p>` : ''}
+                        </div>
+                    </div>
+                `;
+
+                container.appendChild(questionDiv);
+            });
+        }
+
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = seconds % 60;
+            return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+        }
+
+        function shareResults() {
+            const results = getQuizResults();
+            if (!results) return;
+
+            const text = `He completado el cuestionario "${results.quizTitle || 'Cuestionario'}" con una puntuación de ${results.percentage}% (${results.score}/${results.maxScore})`;
+
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Resultados del Cuestionario',
+                    text: text,
+                    url: window.location.href
+                });
+            } else {
+                // Fallback: copy to clipboard
+                navigator.clipboard.writeText(text).then(() => {
+                    alert('¡Resultados copiados al portapapeles!');
+                });
+            }
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', initializePage);
+    </script>
+</body>
+</html>

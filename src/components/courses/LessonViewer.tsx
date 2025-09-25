@@ -81,16 +81,40 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
 
   const handleQuizComplete = (results: QuizResults) => {
     console.log('📊 Cuestionario completado con resultados:', results);
-    // No ocultar el cuestionario inmediatamente, permitir que el usuario vea los resultados
-    setQuizCompleted(true);
-    
-    // Opcional: avanzar automáticamente a la siguiente lección después de un tiempo
-    // if (results.aprobado) {
-    //   setTimeout(() => {
-    //     setShowQuiz(false);
-    //     onNextLesson && onNextLesson();
-    //   }, 5000); // Esperar 5 segundos para que el usuario vea los resultados
-    // }
+
+    // Preparar datos para la página de resumen
+    const summaryData = {
+      studentName: user?.user_metadata?.nombre || user?.email || 'Estudiante',
+      studentEmail: user?.email || 'No disponible',
+      completionDate: new Date().toISOString(),
+      timeSpent: results.tiempoTotal || 0,
+      score: results.puntuacionObtenida || 0,
+      maxScore: results.puntuacionMaxima || 100,
+      percentage: results.porcentajeAcierto || 0,
+      passed: results.aprobado || false,
+      totalQuestions: results.totalPreguntas || 0,
+      correctAnswers: results.respuestasCorrectas || 0,
+      incorrectAnswers: (results.totalPreguntas || 0) - (results.respuestasCorrectas || 0),
+      quizTitle: lesson?.titulo || 'Cuestionario',
+      questions: results.respuestas ? Object.entries(results.respuestas).map(([key, answer]) => ({
+        question: answer.preguntaTexto || `Pregunta ${key}`,
+        userAnswer: answer.textoRespuesta || answer.opcionId || 'No respondida',
+        correctAnswer: answer.respuestaCorrecta,
+        isCorrect: answer.esCorrecta,
+        timeSpent: answer.tiempoRespuesta
+      })) : []
+    };
+
+    // Guardar resultados en localStorage como fallback
+    localStorage.setItem('lastQuizResults', JSON.stringify(summaryData));
+
+    // Codificar datos para URL
+    const encodedData = btoa(JSON.stringify(summaryData));
+    const summaryUrl = `/resumen-cuestionario.html?results=${encodedData}`;
+
+    // Redirigir a la página de resumen
+    console.log('🔄 Redirigiendo a página de resumen:', summaryUrl);
+    window.location.href = summaryUrl;
   };
 
   const handleBackToLesson = () => {

@@ -1,0 +1,84 @@
+{
+  "timestamp": "2025-09-25T10:10:47.275Z",
+  "webhookUrl": "https://n8n.srv1024767.hstgr.cloud/webhook-test/fbdc5d15-3435-42f9-8047-891869aa9f7e",
+  "netlifyFunctionUrl": "https://pruebapresupuesto.netlify.app/.netlify/functions/send-corrections",
+  "results": {
+    "directWebhook": {
+      "success": false,
+      "error": {
+        "message": "Request failed with status code 404",
+        "name": "AxiosError",
+        "stack": "AxiosError: Request failed with status code 404\n    at settle (file:///C:/Users/pabli/OneDrive/Desktop/institutoooo%20-%20copia/pruabasweb/node_modules/axios/lib/core/settle.js:19:12)\n    at IncomingMessage.handleStreamEnd (file:///C:/Users/pabli/OneDrive/Desktop/institutoooo%20-%20copia/pruabasweb/node_modules/axios/lib/adapters/http.js:617:11)\n    at IncomingMessage.emit (node:events:530:35)\n    at endReadableNT (node:internal/streams/readable:1698:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)\n    at Axios.request (file:///C:/Users/pabli/OneDrive/Desktop/institutoooo%20-%20copia/pruabasweb/node_modules/axios/lib/core/Axios.js:45:41)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async testDirectWebhook (file:///C:/Users/pabli/OneDrive/Desktop/institutoooo%20-%20copia/pruabasweb/scripts/debug-webhook-issues-es.mjs:41:22)\n    at async main (file:///C:/Users/pabli/OneDrive/Desktop/institutoooo%20-%20copia/pruabasweb/scripts/debug-webhook-issues-es.mjs:167:20)",
+        "config": {
+          "transitional": {
+            "silentJSONParsing": true,
+            "forcedJSONParsing": true,
+            "clarifyTimeoutError": false
+          },
+          "adapter": [
+            "xhr",
+            "http",
+            "fetch"
+          ],
+          "transformRequest": [
+            null
+          ],
+          "transformResponse": [
+            null
+          ],
+          "timeout": 30000,
+          "xsrfCookieName": "XSRF-TOKEN",
+          "xsrfHeaderName": "X-XSRF-TOKEN",
+          "maxContentLength": -1,
+          "maxBodyLength": -1,
+          "env": {},
+          "headers": {
+            "Accept": "application/json, text/plain, */*",
+            "Content-Type": "application/json",
+            "User-Agent": "Instituto-Lidera-Diagnostic/1.0",
+            "X-Test-Request": "true",
+            "X-Request-ID": "test-1758795039031",
+            "Content-Length": "200",
+            "Accept-Encoding": "gzip, compress, deflate, br"
+          },
+          "method": "post",
+          "url": "https://n8n.srv1024767.hstgr.cloud/webhook-test/fbdc5d15-3435-42f9-8047-891869aa9f7e",
+          "data": "{\"type\":\"test-connection\",\"timestamp\":\"2025-09-25T10:10:39.031Z\",\"source\":\"instituto-lidera-elearning-diagnostic\",\"testId\":\"test-1758795039031\",\"message\":\"Prueba de diagnóstico directa\",\"debug\":true}",
+          "allowAbsoluteUrls": true
+        },
+        "code": "ERR_BAD_REQUEST",
+        "status": 404
+      }
+    },
+    "netlifyFunction": {
+      "success": true,
+      "response": {
+        "success": true,
+        "status": 200,
+        "responseTime": 6192,
+        "testId": "test-1758795040710-ato2wwaem",
+        "message": "Conectividad del webhook verificada",
+        "n8nResponse": "Entendido. He recibido nuevamente tu solicitud, idéntica a las seis anteriores.\n\nQuiero confirmarte, con total claridad, que **ya he completado todas las tareas solicitadas en tus mensajes previos**, y he estado listo para avanzar al \"siguiente nodo\" desde mi primera respuesta detallada.\n\n1.  **Cuestionario corregido**: He actuado como experto en conductas adictivas y he revisado, corregido y ampliado tu \"Prueba de conectividad\" en un documento profesional llamado \"Cuestionario de Autoevaluación: Patrones de Conducta Adictiva\". Este cuestionario completo y sus explicaciones han sido detallados en mis respuestas anteriores.\n2.  **Email detectado**: El correo electrónico `correo@email.com` ha sido identificado.\n3.  **Email preparado**: El borrador completo del correo electrónico, incluyendo el cuestionario corregido y todas las explicaciones, está listo para ser \"enviado\". Te he proporcionado el texto íntegro de este email en mis respuestas anteriores (especialmente en la tercera y quinta).\n\n**Estoy esperando tu instrucción explícita para \"enviar\" este email y simular el avance al \"siguiente nodo\".**\n\nPor favor, para proceder, simplemente dime: **\"Envía el email\"** o **\"Procede con el envío\"**."
+      }
+    },
+    "completeFlow": {
+      "success": true,
+      "response": {
+        "success": true,
+        "message": "Datos enviados correctamente a n8n",
+        "webhookResponse": "",
+        "webhookStatus": "success",
+        "performance": {
+          "attempt": 1,
+          "responseTime": 132,
+          "requestId": "req-1758795047128-5emfkcbov"
+        }
+      }
+    }
+  },
+  "summary": {
+    "webhookWorking": false,
+    "netlifyWorking": true,
+    "flowWorking": true
+  }
+}

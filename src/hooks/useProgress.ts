@@ -70,63 +70,49 @@ export const useProgress = (courseId?: string): UseProgressReturn => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Referencias para control de requests
+  // Single abort controller for all requests
   const abortControllerRef = useRef<AbortController | null>(null);
   const loadingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  
-  const requestControlRef = useRef<{
-    abortController: AbortController | null;
-    timeoutId: NodeJS.Timeout | null;
-  }>({ abortController: null, timeoutId: null });
 
   // Función para cancelar requests anteriores
   const cancelPreviousRequests = useCallback(() => {
-    // Cancelar AbortController principal
     if (abortControllerRef.current) {
       abortControllerRef.current.abort();
       abortControllerRef.current = null;
     }
-    
-    // Cancelar controles de request específicos
-    if (requestControlRef.current.abortController) {
-      requestControlRef.current.abortController.abort();
-    }
-    if (requestControlRef.current.timeoutId) {
-      clearTimeout(requestControlRef.current.timeoutId);
-    }
-    requestControlRef.current = { abortController: null, timeoutId: null };
-    
+
     if (loadingTimeoutRef.current) {
       clearTimeout(loadingTimeoutRef.current);
+      loadingTimeoutRef.current = null;
     }
   }, []);
 
   // Función de retry con backoff exponencial
   const retryWithBackoff = useCallback(async <T>(
     fn: (signal?: AbortSignal) => Promise<T>,
-    maxRetries: number = 3,
-    baseDelay: number = 1000
+    maxRetries: number = 2,
+    baseDelay: number = 500
   ): Promise<T> => {
     for (let attempt = 0; attempt < maxRetries; attempt++) {
       try {
         // Crear nuevo AbortController para cada intento
         const controller = new AbortController();
         abortControllerRef.current = controller;
-        
+
         return await fn(controller.signal);
       } catch (error) {
         // Si fue cancelado, no reintentar
         if (error instanceof Error && error.name === 'AbortError') {
           throw error;
         }
-        
+
         if (attempt === maxRetries - 1) {
           throw error;
         }
-        
+
         const delay = baseDelay * Math.pow(2, attempt);
         console.warn(`⚠️ Intento ${attempt + 1} fallido, reintentando en ${delay}ms...`);
-        
+
         await new Promise(resolve => setTimeout(resolve, delay));
       }
     }
@@ -138,13 +124,13 @@ export const useProgress = (courseId?: string): UseProgressReturn => {
     if (user?.id) {
       // Cancelar requests anteriores
       cancelPreviousRequests();
-      
+
       // Debounce para evitar múltiples llamadas simultáneas
       loadingTimeoutRef.current = setTimeout(() => {
         loadInitialData();
-      }, 300);
+      }, 200);
     }
-    
+
     return () => {
       cancelPreviousRequests();
     };
@@ -178,56 +164,50 @@ export const useProgress = (courseId?: string): UseProgressReturn => {
         if (signal?.aborted) {
           throw new Error('Request aborted');
         }
-        
+
         if (courseId) {
           console.log(`🔄 Cargando progreso para curso: ${courseId}`);
-          
-          // Cargar datos secuencialmente para evitar conflictos
-          const progress = await ProgressService.getCourseProgress(user.id, courseId);
-          
+
+          // Load data in parallel to avoid timing issues
+          const [progress, tests] = await Promise.all([
+            ProgressService.getCourseProgress(user.id, courseId),
+            ProgressService.getUserTestResults(user.id, courseId)
+          ]);
+
           if (signal?.aborted) {
             throw new Error('Request aborted');
           }
-          
+
           setProgresoDelCurso(progress);
-          
-          // Pequeña pausa entre requests
-          await new Promise(resolve => setTimeout(resolve, 100));
-          
-          if (signal?.aborted) {
-            throw new Error('Request aborted');
-          }
-          
-          const tests = await ProgressService.getUserTestResults(user.id, courseId);
           setResultadosPruebas(tests);
-          
+
           console.log(`✅ Progreso cargado: ${progress?.length || 0} registros`);
         } else {
           console.log('🔄 Cargando estadísticas generales del usuario');
-          
+
           const stats = await ProgressService.getUserProgressStats(user.id);
-          
+
           if (signal?.aborted) {
             throw new Error('Request aborted');
           }
-          
+
           setEstadisticasUsuario(stats);
           setProgresoDelCurso(stats.courseProgress);
           setResultadosPruebas(stats.recentTests);
-          
+
           console.log('✅ Estadísticas generales cargadas');
         }
       });
     } catch (err) {
       // Ignorar errores de abort
-      if (signal.aborted || (err instanceof Error && err.message.includes('aborted'))) {
+      if (signal.aborted || (err instanceof Error && (err.message.includes('aborted') || err.name === 'AbortError'))) {
         console.log('🔄 Request cancelado (normal)');
         return;
       }
-      
+
       const errorMessage = err instanceof Error ? err.message : 'Error desconocido';
       logError('loadInitialData', err, { courseId, userId: user.id });
-      
+
       // Manejo específico de errores comunes
       if (errorMessage.includes('invalid input syntax for type uuid')) {
         setError('Error de formato de identificador. Por favor, recarga la página.');
@@ -235,7 +215,7 @@ export const useProgress = (courseId?: string): UseProgressReturn => {
         setError('Tabla de base de datos no encontrada. Contacta al administrador.');
       } else if (errorMessage.includes('Auth session missing')) {
         setError('Sesión expirada. Por favor, inicia sesión nuevamente.');
-      } else if (errorMessage.includes('ERR_ABORTED') || errorMessage.includes('net::ERR_ABORTED')) {
+      } else if (errorMessage.includes('ERR_ABORTED') || errorMessage.includes('net::ERR_ABORTED') || errorMessage.includes('AbortError')) {
         console.warn('⚠️ Request abortado, reintentando...');
         // No establecer error para requests abortados
       } else {
@@ -279,11 +259,11 @@ export const useProgress = (courseId?: string): UseProgressReturn => {
       });
       
       console.log('✅ Progreso actualizado exitosamente');
-      
+
       // Refrescar datos después de la actualización con delay
       setTimeout(() => {
         refreshProgress();
-      }, 500);
+      }, 200);
     } catch (err) {
       logError('updateChapterProgress', err, params);
       const errorMessage = err instanceof Error ? err.message : 'Error actualizando progreso';
@@ -316,7 +296,7 @@ export const useProgress = (courseId?: string): UseProgressReturn => {
       // Refrescar con delay para evitar conflictos
       setTimeout(() => {
         refreshProgress();
-      }, 500);
+      }, 200);
       
       console.log('✅ Capítulo marcado como completado');
     } catch (err) {
@@ -394,7 +374,7 @@ export const useProgress = (courseId?: string): UseProgressReturn => {
       // Refrescar con delay para evitar conflictos
       setTimeout(() => {
         refreshProgress();
-      }, 500);
+      }, 200);
       
       console.log('✅ Resultados del test guardados');
     } catch (err) {
@@ -407,10 +387,10 @@ export const useProgress = (courseId?: string): UseProgressReturn => {
   const refreshProgress = useCallback(async () => {
     // Cancelar requests anteriores antes de refrescar
     cancelPreviousRequests();
-    
+
     // Pequeño delay para evitar conflictos
-    await new Promise(resolve => setTimeout(resolve, 100));
-    
+    await new Promise(resolve => setTimeout(resolve, 50));
+
     await loadInitialData();
   }, [loadInitialData, cancelPreviousRequests]);
 

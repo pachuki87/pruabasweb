@@ -1,7 +1,7 @@
 const axios = require('axios');
 
 // Configuración mejorada con variables de entorno y fallback
-const WEBHOOK_URL = process.env.N8N_WEBHOOK_URL || 'https://n8n.srv1024767.hstgr.cloud/webhook/fbdc5d15-3435-42f9-8047-891869aa9f7e';
+const WEBHOOK_URL = process.env.N8N_WEBHOOK_URL || 'https://n8n.srv1024767.hstgr.cloud/webhook-test/fbdc5d15-3435-42f9-8047-891869aa9f7e';
 const MAX_RETRIES = process.env.MAX_RETRIES || 3;
 const TIMEOUT = process.env.WEBHOOK_TIMEOUT || 30000;
 const DEBUG_MODE = process.env.DEBUG_MODE === 'true';

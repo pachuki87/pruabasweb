@@ -30,6 +30,7 @@ const QuizComponent = ({
   const [sendingSummary, setSendingSummary] = useState(false);
   const [emailStatus, setEmailStatus] = useState('idle');
   const [webhookStatus, setWebhookStatus] = useState('idle');
+  const [diagnosticInfo, setDiagnosticInfo] = useState(null);
   const [servicesStatus, setServicesStatus] = useState({
     email: false,
     webhook: false
@@ -580,6 +581,30 @@ const QuizComponent = ({
 
       setUserEmail(user.email);
 
+      // Primero, probar la conectividad del webhook
+      try {
+        console.log('🧪 Probando conectividad del webhook...');
+        const testResponse = await fetch('/.netlify/functions/send-corrections', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            action: 'test-webhook'
+          })
+        });
+
+        const testResult = await testResponse.json();
+        console.log('Resultado de prueba del webhook:', testResult);
+        setDiagnosticInfo(testResult);
+      } catch (testError) {
+        console.error('Error en prueba de webhook:', testError);
+        setDiagnosticInfo({
+          success: false,
+          error: testError.message
+        });
+      }
+
       // Preparar datos para enviar a la función de procesamiento
       const formData = {
         nombre: user.user_metadata?.nombre || user.user_metadata?.full_name || user.email.split('@')[0],
@@ -612,10 +637,11 @@ const QuizComponent = ({
       const result = await response.json();
       console.log('✅ Formulario procesado exitosamente:', result);
 
-      // La respuesta puede venir en diferentes formatos, verificamos varios escenarios
-      const isSuccess = result.success || result.message?.includes('exitosamente') || result.corrections;
+      // Verificar el estado real del webhook
+      const isWebhookSuccess = result.success && result.webhookStatus === 'success';
+      const isWebhookFailed = result.success === false && result.webhookStatus === 'failed';
 
-      if (isSuccess) {
+      if (isWebhookSuccess) {
         setEmailStatus('success');
         setWebhookStatus('success');
 
@@ -623,8 +649,24 @@ const QuizComponent = ({
         setTimeout(() => {
           alert('¡Formulario enviado exitosamente! Recibirás un email con tus resultados y correcciones.');
         }, 1000);
+      } else if (isWebhookFailed) {
+        // El formulario se procesó pero el webhook falló
+        setEmailStatus('partial');
+        setWebhookStatus('error');
+
+        // Mostrar mensaje de advertencia
+        setTimeout(() => {
+          alert('⚠️ Advertencia: Tu formulario se guardó correctamente, pero hubo un problema al enviar los datos al sistema de procesamiento. Los administradores han sido notificados.');
+          console.error('Error del webhook:', result.error, result.errorDetails);
+        }, 1000);
       } else {
-        throw new Error(result.message || 'Error procesando el formulario');
+        // Otros casos
+        setEmailStatus('success');
+        setWebhookStatus('partial');
+
+        setTimeout(() => {
+          alert('✅ Formulario procesado. El estado del webhook es: ' + (result.webhookStatus || 'desconocido'));
+        }, 1000);
       }
 
     } catch (error) {
@@ -865,15 +907,26 @@ const QuizComponent = ({
               {webhookStatus === 'sending' && '⏳'}
               {webhookStatus === 'success' && '✅'}
               {webhookStatus === 'error' && '❌'}
+              {webhookStatus === 'partial' && '⚠️'}
               {webhookStatus === 'idle' && '🔗'}
             </span>
             <span className="status-text">
               {webhookStatus === 'sending' && 'Procesando formulario con IA...'}
               {webhookStatus === 'success' && '✅ Procesamiento completado'}
               {webhookStatus === 'error' && '❌ Error en el procesamiento'}
+              {webhookStatus === 'partial' && '⚠️ Procesamiento parcial - verificar webhook'}
               {webhookStatus === 'idle' && '🔗 Servicio de IA listo'}
             </span>
           </div>
+
+          {diagnosticInfo && (
+            <div className="diagnostic-info">
+              <details>
+                <summary>🔍 Información de diagnóstico</summary>
+                <pre>{JSON.stringify(diagnosticInfo, null, 2)}</pre>
+              </details>
+            </div>
+          )}
         </div>
 
         <div className="results-actions">

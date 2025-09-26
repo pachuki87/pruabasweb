@@ -293,11 +293,14 @@ class QuizSummaryGenerator {
   }
 
   /**
-   * Genera un resumen simplificado para webhook
+   * Genera un resumen simplificado para webhook (SOLO preguntas abiertas)
    * @param {Object} summary - Resumen completo
-   * @returns {Object} - Resumen simplificado para webhook
+   * @returns {Object} - Resumen simplificado para webhook con solo preguntas de texto libre
    */
   generateWebhookSummary(summary) {
+    // Filtrar solo las preguntas de tipo texto libre (preguntas abiertas)
+    const openEndedQuestions = summary.questionsSummary.filter(q => q.questionType === 'texto_libre');
+
     return {
       userId: summary.userInfo.id,
       userEmail: summary.userInfo.email,
@@ -316,7 +319,8 @@ class QuizSummaryGenerator {
         approved: summary.results.approved,
         averageTimePerQuestion: summary.results.averageTimePerQuestion
       },
-      questions: summary.questionsSummary.map(q => ({
+      // Enviar SOLO las preguntas abiertas (texto libre)
+      questions: openEndedQuestions.map(q => ({
         questionNumber: q.questionNumber,
         questionId: q.questionId,
         questionText: q.questionText,
@@ -324,10 +328,16 @@ class QuizSummaryGenerator {
         isCorrect: q.isCorrect,
         points: q.points,
         timeSpent: q.timeSpent,
-        userAnswer: q.questionType === 'texto_libre' ? q.userAnswer.content : q.userAnswer.selectedOption,
-        correctAnswer: q.questionType === 'texto_libre' ? null : q.correctAnswer.correctOption
+        userAnswer: q.userAnswer.content, // Para preguntas abiertas, solo el contenido del texto
+        correctAnswer: null // Las preguntas abiertas no tienen respuesta correcta definida
       })),
-      generatedAt: summary.generatedAt
+      generatedAt: summary.generatedAt,
+      metadata: {
+        totalQuestions: summary.questionsSummary.length,
+        openEndedQuestionsOnly: true,
+        openEndedQuestionsCount: openEndedQuestions.length,
+        filteredQuestions: summary.questionsSummary.length - openEndedQuestions.length
+      }
     };
   }
 }

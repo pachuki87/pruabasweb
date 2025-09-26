@@ -102,6 +102,9 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
       return;
     }
 
+    // Filtrar solo las preguntas abiertas (texto libre) para el webhook
+    const openEndedQuestions = (results.questionsSummary || []).filter(q => q.questionType === 'texto_libre');
+
     // Preparar datos para la página de resumen
     const summaryData = {
       studentName: user.user_metadata?.nombre || user.email || 'Estudiante',
@@ -116,7 +119,14 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
       correctAnswers: results.respuestasCorrectas || 0,
       incorrectAnswers: (results.totalPreguntas || 0) - (results.respuestasCorrectas || 0),
       quizTitle: lesson?.titulo || 'Cuestionario',
-      questions: results.questionsSummary || []
+      // Enviar SOLO las preguntas abiertas (texto libre) para el webhook
+      questions: openEndedQuestions,
+      metadata: {
+        totalQuestions: results.questionsSummary?.length || 0,
+        openEndedQuestionsOnly: true,
+        openEndedQuestionsCount: openEndedQuestions.length,
+        filteredQuestions: (results.questionsSummary?.length || 0) - openEndedQuestions.length
+      }
     };
 
     // Guardar resultados en localStorage

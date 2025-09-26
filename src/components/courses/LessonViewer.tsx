@@ -12,6 +12,7 @@ interface Lesson {
   contenido?: string;
   archivo_url?: string;
   pdfs?: string[];
+  pdfUrls?: string[]; // URLs originales para construcción de enlaces
   videos?: string[];
   enlaces_externos?: Array<{title: string; url: string; isExternal: boolean}>;
   tiene_cuestionario?: boolean;
@@ -62,7 +63,7 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
   const lessonTitle = lesson.titulo;
   const lessonContent = lesson.contenido;
   const lessonFileUrl = lesson.archivo_url;
-  
+
   // Memoizar PDFs para evitar duplicados en re-renders
   const pdfs = useMemo(() => {
     const pdfList = lesson.pdfs || [];
@@ -71,6 +72,15 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
     console.log('🔍 PDFs memoizados:', uniquePdfs.length, 'únicos de', pdfList.length, 'totales');
     return uniquePdfs;
   }, [lesson.pdfs]);
+
+  // Memoizar URLs de PDFs para evitar duplicados en re-renders
+  const pdfUrls = useMemo(() => {
+    const urlList = lesson.pdfUrls || [];
+    // Eliminar duplicados usando Set
+    const uniqueUrls = [...new Set(urlList)];
+    console.log('🔗 PDF URLs memoizadas:', uniqueUrls.length, 'únicas de', urlList.length, 'totales');
+    return uniqueUrls;
+  }, [lesson.pdfUrls]);
   
   const externalLinks = lesson.enlaces_externos || [];
   const hasQuiz = lesson.tiene_cuestionario || false;
@@ -458,25 +468,31 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
                 <h3 className="text-lg font-semibold text-gray-900 mb-3">📄 Materiales de la Lección</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   {pdfs.map((pdf, index) => {
-                    // Determinar la ruta del PDF basado en el curso y la lección
-                    const isMasterCourse = course.id === 'b5ef8c64-fe26-4f20-8221-80a1bf475b05';
-                    
+                    // Usar la URL original de la base de datos si está disponible
                     let pdfPath;
-                    // Si la ruta del PDF ya es absoluta o contiene la estructura completa, usarla directamente
-                    if (pdf.startsWith('/') || pdf.includes('master en adicciones/') || pdf.includes('experto-conductas-adictivas/')) {
-                      pdfPath = `/${pdf}`; // Asegurarse de que siempre empiece con /
-                    } else if (isMasterCourse && lessonSlug.includes('Material Complementario y Ejercicios2 Cuestionarios')) {
-                      // Lección 5 del máster, los PDFs están en la subcarpeta "5) PSICOLOGIA ADICCIONES"
-                      pdfPath = `/pdfs/master-adicciones/5) PSICOLOGIA ADICCIONES/${pdf}`;
-                    } else if (isMasterCourse) {
-                      // Otras lecciones del máster
-                      pdfPath = `/pdfs/master-adicciones/${pdf}`;
+                    if (pdfUrls && pdfUrls[index]) {
+                      // Usar la URL original de la base de datos
+                      pdfPath = pdfUrls[index].startsWith('/') ? pdfUrls[index] : `/${pdfUrls[index]}`;
+                      console.log(`📄 Using original URL for ${pdf}: ${pdfPath}`);
                     } else {
-                      // Curso experto
-                      pdfPath = `/pdfs/experto-conductas-adictivas/${pdf}`;
+                      // Fallback al método anterior de construcción de rutas
+                      const isMasterCourse = course.id === 'b5ef8c64-fe26-4f20-8221-80a1bf475b05';
+
+                      // Si la ruta del PDF ya es absoluta o contiene la estructura completa, usarla directamente
+                      if (pdf.startsWith('/') || pdf.includes('master en adicciones/') || pdf.includes('experto-conductas-adictivas/')) {
+                        pdfPath = `/${pdf}`; // Asegurarse de que siempre empiece con /
+                      } else if (isMasterCourse && lessonSlug.includes('Material Complementario y Ejercicios2 Cuestionarios')) {
+                        // Lección 5 del máster, los PDFs están en la subcarpeta "5) PSICOLOGIA ADICCIONES"
+                        pdfPath = `/pdfs/master-adicciones/5) PSICOLOGIA ADICCIONES/${pdf}`;
+                      } else if (isMasterCourse) {
+                        // Otras lecciones del máster
+                        pdfPath = `/pdfs/master-adicciones/${pdf}`;
+                      } else {
+                        // Curso experto
+                        pdfPath = `/pdfs/experto-conductas-adictivas/${pdf}`;
+                      }
+                      console.log(`📄 Fallback path for ${pdf}: ${pdfPath}`);
                     }
-                    
-                    console.log(`📄 PDF path for ${pdf}: ${pdfPath}`);
                     
                     // Detectar tipo de archivo
                     const isVideo = pdf.match(/\.(mp4|avi|mov|wmv|flv|webm|mkv)$/i);

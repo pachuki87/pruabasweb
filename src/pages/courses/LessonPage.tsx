@@ -22,6 +22,7 @@ interface Lesson {
   archivo_url?: string; // URL del archivo HTML migrado
   contenido_html?: string; // Mantenemos por compatibilidad, pero será null después de la migración
   pdfs?: string[];
+  pdfUrls?: string[]; // URLs originales para construcción de enlaces
   externalLinks?: Array<{title: string; url: string; isExternal: boolean}>;
   tiene_cuestionario?: boolean;
 }
@@ -238,27 +239,35 @@ const LessonPage: React.FC = () => {
         
         // Crear un mapa de lección ID a materiales (PDFs)
         const materialesMap = new Map();
+        const materialesUrlsMap = new Map(); // Nuevo mapa para URLs originales
         if (materialesData) {
           materialesData.forEach(material => {
             if (!materialesMap.has(material.leccion_id)) {
               materialesMap.set(material.leccion_id, []);
             }
+            if (!materialesUrlsMap.has(material.leccion_id)) {
+              materialesUrlsMap.set(material.leccion_id, []);
+            }
             // Extraer solo el nombre del archivo de la URL y decodificar caracteres URL
         const fileName = material.url_archivo.split('/').pop() || material.url_archivo;
         const decodedFileName = decodeURIComponent(fileName);
         materialesMap.get(material.leccion_id).push(decodedFileName);
+        // Guardar la URL original para construcción de enlaces
+        materialesUrlsMap.get(material.leccion_id).push(material.url_archivo);
           });
         }
         
         console.log('📋 Materials map created:', materialesMap);
-        
+        console.log('🔗 Materials URLs map created:', materialesUrlsMap);
+
         // Procesar lecciones para extraer información de PDFs y cuestionarios
         const processedLessons = lessonsData.map(lesson => {
           const generatedSlug = slugify(lesson.titulo);
           console.log('🔄 Processing lesson:', lesson.titulo, 'generated slug:', generatedSlug);
-          
+
           // Obtener PDFs desde la base de datos
           const pdfs: string[] = materialesMap.get(lesson.id) || [];
+          const pdfUrls: string[] = materialesUrlsMap.get(lesson.id) || []; // URLs originales
           const hasQuiz = quizMap.has(lesson.id) && quizMap.get(lesson.id).length > 0;
           
           console.log('🎯 Lesson', lesson.titulo, 'has quiz:', hasQuiz, 'quiz IDs:', quizMap.get(lesson.id));
@@ -346,6 +355,7 @@ const LessonPage: React.FC = () => {
             slug: generatedSlug,
             archivo_url,
             pdfs,
+            pdfUrls, // Agregar URLs originales
             externalLinks,
             tiene_cuestionario: hasQuiz
           };

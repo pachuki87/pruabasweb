@@ -430,60 +430,48 @@ exports.handler = async (event, context) => {
             };
         }
 
-        // Procesar respuestas abiertas (solo para payloads que necesitan transformación)
-        if (data.type !== 'quiz-responses' && data.openAnswers && Array.isArray(data.openAnswers)) {
-            data.openAnswers.forEach((respuesta, index) => {
-                webhookPayload.responses.push({
-                    questionNumber: index + 1,
-                    questionId: respuesta.questionId,
-                    question: respuesta.question || '',
-                    answer: respuesta.answer || '',
-                    answerType: 'open',
-                    files: respuesta.files || [],
-                    timeSpent: respuesta.timeSpent || 0,
-                    submittedAt: respuesta.submittedAt || new Date().toISOString()
+        // SOLO procesar respuestas abiertas - detectar por el formato del payload anidado
+        if (data.type !== 'quiz-responses' && data.questions && Array.isArray(data.questions)) {
+            console.log('📝 Procesando preguntas desde formato questions anidado...');
+
+            // La estructura es questions[0] que contiene el array real de preguntas
+            const actualQuestions = data.questions[0];
+
+            if (actualQuestions && Array.isArray(actualQuestions)) {
+                actualQuestions.forEach((question, index) => {
+                    // Detectar si es una pregunta abierta: correctAnswer es "Respuesta abierta" y userAnswer no es Verdadero/Falso
+                    const isOpenQuestion = question.correctAnswer === "Respuesta abierta" &&
+                                        question.userAnswer &&
+                                        question.userAnswer !== "Verdadero" &&
+                                        question.userAnswer !== "Falso";
+
+                    if (isOpenQuestion) {
+                        console.log(`📝 Pregunta abierta encontrada: ${question.question}`);
+                        console.log(`📝 Respuesta del usuario: ${question.userAnswer}`);
+                        webhookPayload.responses.push({
+                            questionNumber: index + 1,
+                            questionId: `question-${index}`,
+                            question: question.question || '',
+                            answer: question.userAnswer || '',
+                            answerType: 'open',
+                            isCorrect: null, // Las preguntas abiertas no se evalúan automáticamente
+                            needsEvaluation: true, // Indica que necesita evaluación manual
+                            evaluationStatus: 'pending', // Estado de evaluación
+                            timeSpent: question.timeSpent || 0,
+                            submittedAt: new Date().toISOString()
+                        });
+                    }
                 });
-            });
+            }
         }
 
-        // Procesar respuestas de opción múltiple (solo para payloads que necesitan transformación)
-        if (data.type !== 'quiz-responses' && data.userAnswers) {
-            Object.keys(data.userAnswers).forEach(questionId => {
-                const answer = data.userAnswers[questionId];
-                const existingResponse = webhookPayload.responses.find(r => r.questionId === questionId);
-
-                if (!existingResponse) {
-                    webhookPayload.responses.push({
-                        questionId: questionId,
-                        answer: answer.textoRespuesta || answer.opcionId || answer.answer || '',
-                        answerType: 'multiple_choice',
-                        selectedOption: answer.opcionSeleccionada || answer.opcionId || null,
-                        isCorrect: answer.esCorrecta || answer.correcta || false,
-                        timeSpent: answer.tiempoRespuesta || answer.tiempo || 0,
-                        submittedAt: answer.fechaRespuesta || new Date().toISOString()
-                    });
-                }
-            });
+        // Si ya es un payload de quiz-responses, filtrar para mantener solo preguntas abiertas
+        if (data.type === 'quiz-responses' && webhookPayload.responses) {
+            console.log('📝 Filtrando payload existente para mantener solo preguntas abiertas...');
+            webhookPayload.responses = webhookPayload.responses.filter(response => response.answerType === 'open');
         }
 
-        // Procesar respuestas desde la base de datos (respuestas_guardadas) - solo para payloads que necesitan transformación
-        if (data.type !== 'quiz-responses' && data.respuestas_guardadas && typeof data.respuestas_guardadas === 'object') {
-            Object.keys(data.respuestas_guardadas).forEach(questionId => {
-                const answer = data.respuestas_guardadas[questionId];
-                const existingResponse = webhookPayload.responses.find(r => r.questionId === questionId);
-
-                if (!existingResponse) {
-                    webhookPayload.responses.push({
-                        questionId: questionId,
-                        answer: 'Respuesta guardada en BD',
-                        answerType: 'database',
-                        isCorrect: answer.es_correcta || answer.esCorrecta || false,
-                        timeSpent: answer.tiempo_respuesta || answer.tiempoRespuesta || 0,
-                        submittedAt: answer.fecha_respuesta || new Date().toISOString()
-                    });
-                }
-            });
-        }
+        console.log(`📝 Total de preguntas abiertas a enviar: ${webhookPayload.responses.length}`);
 
         // Asegurar que tenemos el email del usuario en el payload
         if (!webhookPayload.studentInfo.email && data.userId) {

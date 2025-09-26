@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { ChevronLeft, ChevronRight, FileText, Download, ExternalLink, BookOpen, Clock, User } from 'lucide-react';
+import { ChevronLeft, ChevronRight, FileText, Download, ExternalLink, BookOpen, Clock, User, Video } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
 import QuizComponent from '../QuizComponent';
 import { supabase } from '../../lib/supabase';
@@ -12,6 +12,7 @@ interface Lesson {
   contenido?: string;
   archivo_url?: string;
   pdfs?: string[];
+  videos?: string[];
   enlaces_externos?: Array<{title: string; url: string; isExternal: boolean}>;
   tiene_cuestionario?: boolean;
 }
@@ -477,10 +478,31 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
                     
                     console.log(`📄 PDF path for ${pdf}: ${pdfPath}`);
                     
+                    // Detectar tipo de archivo
+                    const isVideo = pdf.match(/\.(mp4|avi|mov|wmv|flv|webm|mkv)$/i);
+                    const isPdf = pdf.endsWith('.pdf');
+                    
+                    // Configurar estilos y colores según el tipo de archivo
+                    const fileConfig = isVideo 
+                      ? {
+                          bgColor: 'bg-blue-50',
+                          borderColor: 'border-blue-200',
+                          icon: <Video className="w-5 h-5 mr-2 text-blue-600" />,
+                          buttonColor: 'bg-blue-600 hover:bg-blue-700',
+                          buttonText: 'Ver Video'
+                        }
+                      : {
+                          bgColor: 'bg-red-50',
+                          borderColor: 'border-red-200',
+                          icon: <FileText className="w-5 h-5 mr-2 text-red-600" />,
+                          buttonColor: 'bg-red-600 hover:bg-red-700',
+                          buttonText: isPdf ? 'Ver PDF' : 'Ver Documento'
+                        };
+                    
                     return (
-                      <div key={index} className="bg-red-50 border border-red-200 rounded-lg p-4">
+                      <div key={index} className={`${fileConfig.bgColor} ${fileConfig.borderColor} rounded-lg p-4`}>
                         <div className="flex items-center mb-2">
-                          <FileText className="w-5 h-5 mr-2 text-red-600" />
+                          {fileConfig.icon}
                           <span className="text-sm font-medium text-gray-900 truncate">{pdf}</span>
                         </div>
                         <div className="flex space-x-2">
@@ -488,9 +510,9 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
                             href={pdfPath}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex-1 bg-red-600 text-white px-3 py-2 rounded-md hover:bg-red-700 transition-colors text-xs text-center"
+                            className={`flex-1 ${fileConfig.buttonColor} text-white px-3 py-2 rounded-md transition-colors text-xs text-center`}
                           >
-                            {pdf.endsWith('.pdf') ? 'Ver PDF' : 'Ver Documento'}
+                            {fileConfig.buttonText}
                           </a>
                           <a
                             href={pdfPath}
@@ -500,6 +522,26 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
                             Descargar
                           </a>
                         </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {lesson.videos && lesson.videos.length > 0 && (
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-3">🎬 Videos de la Lección</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {lesson.videos.map((video, index) => {
+                    const videoPath = video.startsWith('/') ? video : `/videos/${video}`;
+                    return (
+                      <div key={index} className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                        <div className="flex items-center mb-2">
+                          <Video className="w-5 h-5 mr-2 text-blue-600" />
+                          <span className="text-sm font-medium text-gray-900 truncate">{video}</span>
+                        </div>
+                        <video controls src={videoPath} className="w-full rounded-md" />
                       </div>
                     );
                   })}

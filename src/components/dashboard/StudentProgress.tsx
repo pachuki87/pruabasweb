@@ -191,7 +191,7 @@ const StudentProgress: React.FC = () => {
       setError(error instanceof Error ? error.message : 'Error loading progress data');
       setIsLoading(false);
     }
-  }, [user, estadisticasUsuario]);
+  }, [user]);
 
   useEffect(() => {
     fetchStudentProgress();

@@ -272,7 +272,7 @@ const LessonPage: React.FC = () => {
             'FAMILIA Y TRABAJO EQUIPO': '/lessons/leccion-3-familia-y-trabajo-equipo.html',
             'RECOVERY COACHING': '/lessons/leccion-4-recovery-coaching.html',
             'PSICOLOGIA ADICCIONES': '/lessons/leccion-5-psicologia-adicciones.html',
-            'INTERVENCION FAMILIAR Y RECOVERY MENTO': '/lessons/leccion-6-intervencion-familiar-y-recovery-mentoring.html',
+            'INTERVENCION FAMILIAR Y RECOVERY MENTORING': '/lessons/leccion-6-intervencion-familiar-y-recovery-mentoring.html',
             'NUEVOS MODELOS TERAPEUTICOS': '/lessons/leccion-7-nuevos-modelos-terapeuticos.html',
             'GESTIÓN DE LAS ADICCIONES DESDE LA PERSPECTIVA DE GÉNERO': '/lessons/leccion-8-gestion-perspectiva-genero.html',
             'INTELIGENCIA EMOCIONAL': '/lessons/leccion-9-inteligencia-emocional.html',

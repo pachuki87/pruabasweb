@@ -14,7 +14,9 @@
   "dependencies": {
     "@stripe/react-stripe-js": "^4.0.2",
     "@stripe/stripe-js": "^7.9.0",
+    "@supabase/mcp-server-supabase": "^0.5.5",
     "@supabase/supabase-js": "^2.53.0",
+    "@upstash/context7-mcp": "^1.0.18",
     "axios": "^1.12.2",
     "cheerio": "^1.1.2",
     "dotenv": "^17.2.1",

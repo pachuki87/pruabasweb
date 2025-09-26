@@ -271,7 +271,7 @@ const LessonPage: React.FC = () => {
             'TERAPIA COGNITIVA DROGODEPENDENCIAS': '/lessons/leccion-2-terapia-cognitiva-drogodependencias.html',
             'FAMILIA Y TRABAJO EQUIPO': '/lessons/leccion-3-familia-y-trabajo-equipo.html',
             'RECURSOS COACHING': '/lessons/leccion-4-recovery-coaching.html',
-            'INTERVENCIÓN FAMILIAR Y RECURSOS MENTORINNG': '/lessons/leccion-6-intervencion-familiar-y-recovery-mentoring.html',
+            'INTERVENCION FAMILIAR Y RECOVERY MENTO': '/lessons/leccion-6-intervencion-familiar-y-recovery-mentoring.html',
             'NUEVOS MODELOS TERAPÉUTICOS': '/lessons/leccion-7-nuevos-modelos-terapeuticos.html',
             'INTELIGENCIA EMOCIONAL': '/lessons/leccion-9-inteligencia-emocional.html',
             'GESTIÓN DE LAS ADICCIONES DESDE LA PERSPECTIVA DE GÉNERO': '/lessons/leccion-8-gestion-perspectiva-genero.html',

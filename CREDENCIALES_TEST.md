@@ -4,7 +4,7 @@
 
 ### 📧 Credenciales de Acceso
 - **Email:** `teststudent@gmail.com`
-- **Contraseña:** `123456789`
+- **Contraseña:** `test123456`
 
 ### 🎯 Propósito
 Este usuario se utiliza para:

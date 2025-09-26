@@ -313,12 +313,13 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
       // Buscar diferentes estructuras de contenido
       const contentSelectors = [
         '.entry-content',
-        '.main-content', 
+        '.main-content',
         '.content',
         'main',
         '.lesson-content',
         'article .entry-content',
         'body > div',
+        '.container',  // Añadido para lecciones que usan .container
         // Añadir un selector más genérico para el contenido principal si existe
         '[role="main"]',
         '#main',

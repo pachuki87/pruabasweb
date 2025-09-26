@@ -305,14 +305,14 @@ const QuizComponent = ({
     detectUserEmail();
   }, []);
 
-  const handleAnswerSelect = (questionId, opcionId) => {
+  const handleAnswerSelect = (questionId, opcionId, questionTipo = 'multiple_choice') => {
     setUserAnswers(prev => ({
       ...prev,
       [questionId]: {
         opcionId,
         esCorrecta: false, // Se calculará al final
         tiempoRespuesta: startTime ? Date.now() - startTime : 0,
-        tipo: 'multiple_choice'
+        tipo: questionTipo
       }
     }));
   };
@@ -787,7 +787,7 @@ const QuizComponent = ({
                 <button
                   key={opcion.id}
                   className={`option-button ${userAnswer?.opcionId === opcion.id ? 'selected' : ''}`}
-                  onClick={() => handleAnswerSelect(question.id, opcion.id)}
+                  onClick={() => handleAnswerSelect(question.id, opcion.id, 'multiple_choice')}
                 >
                   <span className="option-letter">{String.fromCharCode(65 + index)}</span>
                   <span className="option-text">{opcion.opcion}</span>
@@ -864,14 +864,14 @@ const QuizComponent = ({
             <div className="true-false-options">
               <button
                 className={`option-button ${userAnswer?.opcionId === 'verdadero' ? 'selected' : ''}`}
-                onClick={() => handleAnswerSelect(question.id, 'verdadero')}
+                onClick={() => handleAnswerSelect(question.id, 'verdadero', 'verdadero_falso')}
               >
                 <span className="option-letter">V</span>
                 <span className="option-text">Verdadero</span>
               </button>
               <button
                 className={`option-button ${userAnswer?.opcionId === 'falso' ? 'selected' : ''}`}
-                onClick={() => handleAnswerSelect(question.id, 'falso')}
+                onClick={() => handleAnswerSelect(question.id, 'falso', 'verdadero_falso')}
               >
                 <span className="option-letter">F</span>
                 <span className="option-text">Falso</span>

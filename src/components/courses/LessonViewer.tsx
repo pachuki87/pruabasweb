@@ -129,12 +129,41 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
       }
     };
 
+    try {
+      // Guardar resultados en la base de datos (esto activará el trigger del webhook)
+      console.log('💾 Guardando resultados en la base de datos...');
+      const { data: savedResult, error: saveError } = await supabase
+        .from('user_test_results')
+        .insert({
+          user_id: user.id,
+          cuestionario_id: results.quizId,
+          curso_id: course?.id || courseId,
+          leccion_id: lesson?.id,
+          puntuacion: results.puntuacionObtenida || 0,
+          puntuacion_maxima: results.puntuacionMaxima || 100,
+          tiempo_completado: results.tiempoTotal || 0,
+          respuestas_detalle: results.detallesRespuestas || {},
+          aprobado: results.aprobado || false,
+          completed_at: new Date().toISOString()
+        })
+        .select()
+        .single();
+
+      if (saveError) {
+        console.error('❌ Error al guardar resultados en la base de datos:', saveError);
+      } else {
+        console.log('✅ Resultados guardados en la base de datos:', savedResult);
+      }
+    } catch (error) {
+      console.error('❌ Error inesperado al guardar en base de datos:', error);
+    }
+
     // Guardar resultados en localStorage
     localStorage.setItem('lastQuizResults', JSON.stringify(summaryData));
 
     // Redirigir a la página de resumen
     const summaryUrl = '/resumen-cuestionario.html';
-    console.log('🔄 Redirigiendo a página de resumen (usando localStorage)...');
+    console.log('🔄 Redirigiendo a página de resumen...');
     window.location.href = summaryUrl;
   };
 

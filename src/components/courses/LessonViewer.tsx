@@ -44,6 +44,8 @@ interface QuizResults {
   respuestasCorrectas: number;
   totalPreguntas: number;
   questionsSummary?: any[];
+  quizId?: string;
+  detallesRespuestas?: any;
 }
 
 const LessonViewer: React.FC<LessonViewerProps> = ({
@@ -58,6 +60,7 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
 }) => {
   const [showQuiz, setShowQuiz] = useState(false);
   const [quizCompleted, setQuizCompleted] = useState(false);
+  const [currentQuizId, setCurrentQuizId] = useState<string | null>(null);
   // Extraer propiedades del objeto lesson
   const lessonSlug = lesson.slug;
   const lessonTitle = lesson.titulo;
@@ -132,17 +135,41 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
     try {
       // Guardar resultados en la base de datos (esto activará el trigger del webhook)
       console.log('💾 Guardando resultados en la base de datos...');
+
+      // Preparar los datos de respuestas para la base de datos
+      const respuestasDetalle = {
+        respuestas: results.questionsSummary?.reduce((acc, question) => {
+          if (question.questionType === 'texto_libre') {
+            acc[question.questionId] = {
+              tipo: question.questionType,
+              textoRespuesta: question.userAnswer || '',
+              tiempoRespuesta: question.timeSpent || 0,
+              esCorrecta: question.isCorrect || true
+            };
+          } else {
+            acc[question.questionId] = {
+              tipo: question.questionType,
+              opcionId: question.selectedOptionId,
+              esCorrecta: question.isCorrect || false,
+              tiempoRespuesta: question.timeSpent || 0
+            };
+          }
+          return acc;
+        }, {}) || {},
+        tiempo_total: results.tiempoTotal || 0
+      };
+
       const { data: savedResult, error: saveError } = await supabase
         .from('user_test_results')
         .insert({
           user_id: user.id,
-          cuestionario_id: results.quizId,
+          cuestionario_id: currentQuizId,
           curso_id: course?.id || courseId,
           leccion_id: lesson?.id,
           puntuacion: results.puntuacionObtenida || 0,
           puntuacion_maxima: results.puntuacionMaxima || 100,
           tiempo_completado: results.tiempoTotal || 0,
-          respuestas_detalle: results.detallesRespuestas || {},
+          respuestas_detalle: respuestasDetalle,
           aprobado: results.aprobado || false,
           completed_at: new Date().toISOString()
         })
@@ -175,6 +202,34 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
   const [content, setContent] = useState<string>('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  // Obtener el quizId asociado a la lección
+  useEffect(() => {
+    const fetchQuizId = async () => {
+      if (!lesson?.id) return;
+
+      try {
+        const { data, error } = await supabase
+          .from('cuestionarios')
+          .select('id')
+          .eq('leccion_id', lesson.id)
+          .single();
+
+        if (error) {
+          console.log('No hay cuestionario para esta lección:', error.message);
+          setCurrentQuizId(null);
+        } else if (data) {
+          setCurrentQuizId(data.id);
+          console.log('QuizId encontrado:', data.id);
+        }
+      } catch (err) {
+        console.error('Error al obtener quizId:', err);
+        setCurrentQuizId(null);
+      }
+    };
+
+    fetchQuizId();
+  }, [lesson?.id]);
 
   useEffect(() => {
     const handleNavigationClick = (event: Event) => {
@@ -635,9 +690,10 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
                   </button>
                 ) : (
                   <div className="mt-4">
-                    <QuizComponent 
+                    <QuizComponent
                       leccionId={lesson.id}
                       courseId={course?.id || courseId}
+                      quizId={currentQuizId}
                       onQuizComplete={handleQuizComplete}
                       onBackToLesson={handleBackToLesson}
                     />

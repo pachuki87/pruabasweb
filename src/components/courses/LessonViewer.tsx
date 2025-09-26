@@ -323,7 +323,11 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
         // Añadir un selector más genérico para el contenido principal si existe
         '[role="main"]',
         '#main',
-        '#content'
+        '#content',
+        // Selector específico para las lecciones master que tienen estructura .container
+        '.container > div:not(.navigation)',
+        // Selector de respaldo para cualquier div dentro del body
+        'body div'
       ];
 
       for (const selector of contentSelectors) {
@@ -346,6 +350,14 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
     if (!mainContent) {
       console.log('⚠️ Could not extract main content, returning full HTML body.');
       return doc.body.innerHTML || html;
+    }
+
+    // Para las lecciones master, remover la sección de navegación si existe
+    if (course.id === 'b5ef8c64-fe26-4f20-8221-80a1bf475b05') {
+      mainContent = mainContent.replace(
+        /<div[^>]*class="[^"]*navigation[^"]*"[^>]*>[\s\S]*?<\/div>/gi,
+        ''
+      );
     }
     
     // Ajustar rutas de imágenes

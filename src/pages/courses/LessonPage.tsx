@@ -267,14 +267,15 @@ const LessonPage: React.FC = () => {
           
           // Mapeo de títulos de lecciones del master a nombres de archivos HTML
           const masterLessonFileMap: { [key: string]: string } = {
-            'FUNDAMENTOS Y TERAPÉUTICO': '/lessons/leccion-1-fundamentos-p-terapeutico.html',
-            'TERAPIA COGNITIVA DROGODEPENDENCIAS': '/lessons/leccion-2-terapia-cognitiva-drogodependencias.html',
+            'FUNDAMENTOS P TERAPEUTICO': '/lessons/leccion-1-fundamentos-p-terapeutico.html',
+            'TERAPIA COGNITIVA DROGODEPENDENCIA': '/lessons/leccion-2-terapia-cognitiva-drogodependencias.html',
             'FAMILIA Y TRABAJO EQUIPO': '/lessons/leccion-3-familia-y-trabajo-equipo.html',
-            'RECURSOS COACHING': '/lessons/leccion-4-recovery-coaching.html',
+            'RECOVERY COACHING': '/lessons/leccion-4-recovery-coaching.html',
+            'PSICOLOGIA ADICCIONES': '/lessons/leccion-5-psicologia-adicciones.html',
             'INTERVENCION FAMILIAR Y RECOVERY MENTO': '/lessons/leccion-6-intervencion-familiar-y-recovery-mentoring.html',
-            'NUEVOS MODELOS TERAPÉUTICOS': '/lessons/leccion-7-nuevos-modelos-terapeuticos.html',
-            'INTELIGENCIA EMOCIONAL': '/lessons/leccion-9-inteligencia-emocional.html',
+            'NUEVOS MODELOS TERAPEUTICOS': '/lessons/leccion-7-nuevos-modelos-terapeuticos.html',
             'GESTIÓN DE LAS ADICCIONES DESDE LA PERSPECTIVA DE GÉNERO': '/lessons/leccion-8-gestion-perspectiva-genero.html',
+            'INTELIGENCIA EMOCIONAL': '/lessons/leccion-9-inteligencia-emocional.html',
             'TRABAJO FINAL DE MÁSTER': '/lessons/leccion-10-trabajo-final-master.html'
           };
           
@@ -283,9 +284,12 @@ const LessonPage: React.FC = () => {
           if (courseId === 'b5ef8c64-fe26-4f20-8221-80a1bf475b05') {
             // Es el curso master
             const lessonTitle = lesson.titulo.toUpperCase();
+            console.log('🔍 Looking for master lesson:', lessonTitle, 'in map:', Object.keys(masterLessonFileMap));
             if (masterLessonFileMap[lessonTitle]) {
               archivo_url = masterLessonFileMap[lessonTitle];
               console.log('🎯 Master lesson file URL set:', archivo_url, 'for lesson:', lesson.titulo);
+            } else {
+              console.log('❌ No matching file found for lesson:', lessonTitle, 'Available keys:', Object.keys(masterLessonFileMap));
             }
           }
           

@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consecuencias de las adicciones</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .lesson-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .lesson-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .lesson-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        .lesson-header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            position: relative;
+            z-index: 1;
+        }
+
+        .lesson-info {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .lesson-content {
+            padding: 40px;
+        }
+
+        .consequence-section {
+            margin-bottom: 40px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .consequence-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .physical { border-left-color: #e74c3c; }
+        .cerebral { border-left-color: #9b59b6; }
+        .psychological { border-left-color: #f39c12; }
+        .social { border-left-color: #27ae60; }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .section-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 20px;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .physical .section-icon { background: linear-gradient(135deg, #e74c3c, #c0392b); }
+        .cerebral .section-icon { background: linear-gradient(135deg, #9b59b6, #8e44ad); }
+        .psychological .section-icon { background: linear-gradient(135deg, #f39c12, #e67e22); }
+        .social .section-icon { background: linear-gradient(135deg, #27ae60, #229954); }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .consequences-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .consequences-list li {
+            background: rgba(255, 255, 255, 0.7);
+            margin-bottom: 12px;
+            padding: 15px 20px;
+            border-radius: 10px;
+            border-left: 3px solid;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .physical .consequences-list li { border-left-color: #e74c3c; }
+        .cerebral .consequences-list li { border-left-color: #9b59b6; }
+        .psychological .consequences-list li { border-left-color: #f39c12; }
+        .social .consequences-list li { border-left-color: #27ae60; }
+
+        .consequences-list li:hover {
+            transform: translateX(10px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .consequences-list li::before {
+            content: '•';
+            position: absolute;
+            left: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .physical .consequences-list li::before { color: #e74c3c; }
+        .cerebral .consequences-list li::before { color: #9b59b6; }
+        .psychological .consequences-list li::before { color: #f39c12; }
+        .social .consequences-list li::before { color: #27ae60; }
+
+        .brain-image {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 15px;
+        }
+
+        .brain-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .brain-image img:hover {
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 768px) {
+            .lesson-container {
+                margin: 10px;
+                border-radius: 15px;
+            }
+
+            .lesson-header {
+                padding: 30px 20px;
+            }
+
+            .lesson-header h1 {
+                font-size: 2rem;
+            }
+
+            .lesson-content {
+                padding: 20px;
+            }
+
+            .consequence-section {
+                padding: 20px;
+                margin-bottom: 30px;
+            }
+
+            .section-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .section-icon {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="lesson-container">
+        <div class="lesson-header">
+            <h1>Consecuencias de las adicciones</h1>
+            <div class="lesson-info">
+                <strong>Lección 3</strong> de 12
+            </div>
+        </div>
+        
+        <div class="lesson-content">
+            <div class="consequence-section physical">
+                <div class="section-header">
+                    <h2 class="section-title">1. CONSECUENCIAS FÍSICAS</h2>
+                </div>
+                <ul class="consequences-list">
+                    <li>Enfermedades pulmonares</li>
+                    <li>Enfermedades cardiacas</li>
+                    <li>Cáncer</li>
+                    <li>Problemas dentales</li>
+                    <li>Riesgo de contraer infecciones</li>
+                    <li>Sudoración</li>
+                    <li>Temblores</li>
+                    <li>Ojeras</li>
+                    <li>Nerviosismo</li>
+                    <li>Impaciencia</li>
+                </ul>
+            </div>
+
+            <div class="consequence-section cerebral">
+                <div class="section-header">
+                    <h2 class="section-title">2. CONSECUENCIAS CEREBRALES</h2>
+                </div>
+                <ul class="consequences-list">
+                    <li>La adicción es considerada una enfermedad cerebral puesto que las drogas cambian el cerebro modificando su estructura y funcionamiento. Estos cambios son los responsables de los comportamientos peligrosos que se observan en las personas adictas.</li>
+                    <li>Destruir las células nerviosas del cerebro o del sistema nervioso periférico (el sistema nervioso fuera del cerebro y la médula espinal).</li>
+                    <li>Se puede desarrollar una enfermedad mental.</li>
+                    <li>Pérdida de memoria.</li>
+                    <li>Modifica la percepción del espacio y tiempo.</li>
+                    <li>Alucinaciones.</li>
+                </ul>
+                
+                <div class="brain-image">
+                    <img src="images-leccion-3/Danos-drogas-cerebro.jpg" alt="Daños de las drogas en el cerebro">
+                </div>
+            </div>
+
+            <div class="consequence-section psychological">
+                <div class="section-header">
+                    <h2 class="section-title">3. CONSECUENCIAS PSICOLÓGICAS</h2>
+                </div>
+                <ul class="consequences-list">
+                    <li>El adicto sufre una perdida del control en la limitación de la ingesta. Su objetivo es el consumo, por lo que se convierte en su prioridad y el resto de ámbitos quedan en un segundo plano.</li>
+                    <li>La persona continua consumiendo aun sabiendo que esta padeciendo problemas importantes como alteraciones en el comportamiento o disminución de las habilidades cognitivas (memoria, lenguaje, atención, orientación…).</li>
+                    <li>Ansiedad</li>
+                    <li>Depresión</li>
+                    <li>Esquizofrenia</li>
+                    <li>Estrés</li>
+                    <li>Baja autoestima</li>
+                </ul>
+            </div>
+
+            <div class="consequence-section social">
+                <div class="section-header">
+                    <h2 class="section-title">4. CONSECUENCIAS SOCIALES</h2>
+                </div>
+                <ul class="consequences-list">
+                    <li>Rechazo por parte del entorno familiar y las amistades</li>
+                    <li>Rechazo social</li>
+                    <li>Aislamiento</li>
+                    <li>Pérdida de empleo</li>
+                    <li>Problemas económicos</li>
+                    <li>Conflictos</li>
+                    <li>Marginación</li>
+                    <li>Desorden público</li>
+                    <li>Conflictos con la autoridad</li>
+                </ul>
+            </div>
+            
+
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La recaída</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .lesson-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .lesson-header {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
+            padding: 30px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .lesson-header h1 {
+            color: white;
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .lesson-info {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.1em;
+            font-weight: 500;
+        }
+
+        .lesson-content {
+            padding: 40px;
+            color: white;
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .section-icon {
+            font-size: 2em;
+            margin-right: 15px;
+            filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3));
+        }
+
+        .section h2 {
+            color: #fff;
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .section h3 {
+            color: #fff;
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .section ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .section li {
+            background: rgba(255, 255, 255, 0.1);
+            margin-bottom: 12px;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #4CAF50;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .section li:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateX(5px);
+        }
+
+        .section li::before {
+            content: "•";
+            color: #4CAF50;
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-right: 10px;
+        }
+
+        .nested-list {
+            margin-top: 10px;
+            padding-left: 20px;
+        }
+
+        .nested-list li {
+            border-left-color: #FF9800;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .nested-list li::before {
+            color: #FF9800;
+        }
+
+        .intro-text {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 25px;
+            border-left: 4px solid #2196F3;
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .lesson-container {
+                border-radius: 15px;
+            }
+
+            .lesson-header {
+                padding: 20px;
+            }
+
+            .lesson-header h1 {
+                font-size: 1.8em;
+            }
+
+            .lesson-content {
+                padding: 20px;
+            }
+
+            .section {
+                padding: 20px;
+            }
+
+            .section-icon {
+                font-size: 1.5em;
+            }
+
+            .section li {
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="lesson-container">
+        <div class="lesson-header">
+            <h1>La recaída</h1>
+            <div class="lesson-info">
+                <strong>Lección 8</strong> de 12
+            </div>
+        </div>
+        
+        <div class="lesson-content">
+            <div class="intro-text">
+                La recaída es una parte común del proceso de recuperación. Comprender sus señales, factores de riesgo y estrategias de prevención es fundamental para mantener la abstinencia a largo plazo.
+            </div>
+
+            <div class="section">
+                <div class="section-header">
+                    <h2>Estrategias de ayuda y prevención</h2>
+                </div>
+                <ul>
+                    <li>Pedir ayuda o contárselo a alguien. ¿A quién?</li>
+                    <li>Evitar ciertos lugares o personas ¿Cuáles?</li>
+                    <li>Dejar el dinero en casa.</li>
+                    <li>Hacerte un plan de actuación ¿Cuál?</li>
+                    <li>Otras ¿Cuáles?</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <div class="section-header">
+                    <h2>Comportamientos de riesgo a evitar</h2>
+                </div>
+                <ul>
+                    <li>Ocultar el consumo a las personas que te pueden ayudar.</li>
+                    <li>Manipular los controles de orina.</li>
+                    <li>Involucrar a otras personas en mentiras.</li>
+                    <li>Otras, ¿Cuáles?</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <div class="section-header">
+                    <h2>Señales de alarma de recaída</h2>
+                </div>
+                <ul>
+                    <li><strong>Cambios en el pensamiento:</strong> pensar en el consumo, pensar que el consumo te va a aliviar el malestar, etc.</li>
+                    <li><strong>Cambios de actitud:</strong> mostrar actitud negativa con la abstinencia o que las cosas te van mal.</li>
+                    <li><strong>Cambios en los sentimientos y en el humor:</strong> sentir tristeza y apatía, tener momentos de ira, nerviosismo, euforia repentina, etc.</li>
+                    <li><strong>Cambios en el comportamiento:</strong> discutir sin motivo, disminuir o aumentar las dosis de la medicación, acudir a lugares relacionados con el consumo, consumir otro tipo de sustancias, mentir más, etc.</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <div class="section-header">
+                    <h2>Manejo de situaciones de riesgo</h2>
+                </div>
+                <ul>
+                    <li>Si ante una situación de riesgo de consumo (por ejemplo, alguien te ofrece drogas, etc.) tienes alternativas, aumenta tu sensación de control, mayor confianza en ti y en tus respuestas y disminuyes la probabilidad de recaída.</li>
+                    <li>Si ante una situación de riesgo no sabes qué hacer, sientes que no controlas la situación y no tienes respuesta, te puede pasar que:
+                        <ul class="nested-list">
+                            <li>Pienses: "Por hacerlo una vez no va a pasar nada"</li>
+                            <li>Anticipes los efectos positivos de la droga y desees consumir.</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <div class="section-header">
+                    <h2>Pensamientos de riesgo comunes</h2>
+                </div>
+                <ul>
+                    <li>Pienses: "Por hacerlo una vez no va a pasar nada"</li>
+                    <li>Anticipes los efectos positivos de la droga y desees consumir.</li>
+                </ul>
+            </div>
+            
+
+        </div>
+    </div>
+</body>
+</html>

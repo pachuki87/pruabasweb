@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fundamentos del Programa Terapéutico - Lección 1 - Cuestionario</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .lesson-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .lesson-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px 0;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            border-radius: 10px;
+            color: white;
+        }
+
+        .lesson-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .lesson-info {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .lesson-content {
+            padding: 0 20px;
+        }
+
+        .main-title {
+            font-size: 2.2rem;
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #3498db;
+        }
+
+        .quiz-section {
+            margin-bottom: 40px;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 5px solid #3498db;
+        }
+
+        .quiz-section h3 {
+            color: #2c3e50;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .question {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .question h4 {
+            color: #2c3e50;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option {
+            padding: 12px 15px;
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .option:hover {
+            background: #e3f2fd;
+            border-color: #2196f3;
+        }
+
+        .option.selected {
+            background: #2196f3;
+            color: white;
+            border-color: #1976d2;
+        }
+
+        .option.correct {
+            background: #4caf50 !important;
+            color: white !important;
+            border-color: #388e3c !important;
+        }
+
+        .option.incorrect {
+            background: #f44336 !important;
+            color: white !important;
+            border-color: #d32f2f !important;
+        }
+
+        .text-area {
+            width: 100%;
+            min-height: 120px;
+            padding: 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 1rem;
+            resize: vertical;
+        }
+
+        .text-area:focus {
+            outline: none;
+            border-color: #2196f3;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
+        }
+
+        .submit-btn:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .result-message {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+            display: none;
+        }
+
+        .result-message.correct {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .result-message.incorrect {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .explanation {
+            margin-top: 20px;
+            padding: 20px;
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .explanation.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .explanation h4 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-divider {
+            height: 3px;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            margin: 40px 0;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="lesson-container">
+        <div class="lesson-header">
+            <h1>MÓDULO 1 – Fundamentos del Programa Terapéutico en Adicciones</h1>
+            <div class="lesson-info">Lección 1 - Cuestionario de Evaluación</div>
+        </div>
+
+        <div class="lesson-content">
+            <h2 class="main-title">Cuestionario de Evaluación</h2>
+
+            <!-- Sección Verdadero/Falso -->
+            <div class="quiz-section">
+                <h3>📝 Preguntas Verdadero/Falso</h3>
+                
+                <div class="question">
+                    <h4>1. El uso de fármacos interdictores se emplea para facilitar la abstinencia.</h4>
+                    <div class="options">
+                        <label class="option" data-value="true" data-question="1">
+                            <input type="radio" name="question1" value="true" style="display: none;">
+                            Verdadero
+                        </label>
+                        <label class="option" data-value="false" data-question="1">
+                            <input type="radio" name="question1" value="false" style="display: none;">
+                            Falso
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <h4>2. El paciente no debe tener autonomía en entornos no supervisados.</h4>
+                    <div class="options">
+                        <label class="option" data-value="true" data-question="2">
+                            <input type="radio" name="question2" value="true" style="display: none;">
+                            Verdadero
+                        </label>
+                        <label class="option" data-value="false" data-question="2">
+                            <input type="radio" name="question2" value="false" style="display: none;">
+                            Falso
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <h4>3. El entorno juega un papel fundamental en la recuperación del paciente.</h4>
+                    <div class="options">
+                        <label class="option" data-value="true" data-question="3">
+                            <input type="radio" name="question3" value="true" style="display: none;">
+                            Verdadero
+                        </label>
+                        <label class="option" data-value="false" data-question="3">
+                            <input type="radio" name="question3" value="false" style="display: none;">
+                            Falso
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <h4>4. La autonomía del paciente no es relevante en la recuperación.</h4>
+                    <div class="options">
+                        <label class="option" data-value="true" data-question="4">
+                            <input type="radio" name="question4" value="true" style="display: none;">
+                            Verdadero
+                        </label>
+                        <label class="option" data-value="false" data-question="4">
+                            <input type="radio" name="question4" value="false" style="display: none;">
+                            Falso
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <h4>5. Los fármacos interdictores se usan como parte de la farmacoterapia en adicciones.</h4>
+                    <div class="options">
+                        <label class="option" data-value="true" data-question="5">
+                            <input type="radio" name="question5" value="true" style="display: none;">
+                            Verdadero
+                        </label>
+                        <label class="option" data-value="false" data-question="5">
+                            <input type="radio" name="question5" value="false" style="display: none;">
+                            Falso
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-divider"></div>
+
+            <!-- Sección Preguntas Abiertas -->
+            <div class="quiz-section">
+                <h3>💭 Preguntas Abiertas</h3>
+                
+                <div class="question">
+                    <h4>1. Explica la importancia de la autonomía del paciente en entornos no supervisados.</h4>
+                    <textarea class="text-area" placeholder="Escribe tu respuesta aquí..."></textarea>
+                </div>
+
+                <div class="question">
+                    <h4>2. ¿Cómo afecta la farmacoterapia en el proceso de recuperación?</h4>
+                    <textarea class="text-area" placeholder="Escribe tu respuesta aquí..."></textarea>
+                </div>
+
+                <div class="question">
+                    <h4>3. Describe un caso en el que el entorno haya sido determinante en la recaída o recuperación del paciente.</h4>
+                    <textarea class="text-area" placeholder="Escribe tu respuesta aquí..."></textarea>
+                </div>
+
+                <div class="question">
+                    <h4>4. ¿Cuáles son las fases principales de un programa terapéutico en adicciones?</h4>
+                    <textarea class="text-area" placeholder="Escribe tu respuesta aquí..."></textarea>
+                </div>
+
+                <div class="question">
+                    <h4>5. ¿Qué papel cumple el entorno en el proceso de recuperación del paciente?</h4>
+                    <textarea class="text-area" placeholder="Escribe tu respuesta aquí..."></textarea>
+                </div>
+
+                <div class="question">
+                    <h4>6. Menciona ejemplos de fármacos utilizados en la farmacoterapia de apoyo.</h4>
+                    <textarea class="text-area" placeholder="Escribe tu respuesta aquí..."></textarea>
+                </div>
+            </div>
+
+            <div class="section-divider"></div>
+
+            <!-- Sección Ejercicios -->
+            <div class="quiz-section">
+                <h3>🎯 Ejercicios Prácticos</h3>
+                
+                <div class="question">
+                    <h4>1. Describe las fases de un programa terapéutico y ejemplifica cada una.</h4>
+                    <textarea class="text-area" placeholder="Desarrolla tu respuesta detalladamente..."></textarea>
+                </div>
+
+                <div class="question">
+                    <h4>2. Explica cómo influye la familia y los amigos en el proceso de recuperación.</h4>
+                    <textarea class="text-area" placeholder="Desarrolla tu respuesta detalladamente..."></textarea>
+                </div>
+
+                <div class="question">
+                    <h4>3. Haz un esquema de los fármacos de apoyo más utilizados y sus efectos.</h4>
+                    <textarea class="text-area" placeholder="Puedes usar texto para crear tu esquema..."></textarea>
+                </div>
+
+                <div class="question">
+                    <h4>4. Diseña un esquema de programa terapéutico para un paciente que inicia su recuperación.</h4>
+                    <textarea class="text-area" placeholder="Desarrolla tu propuesta de programa terapéutico..."></textarea>
+                </div>
+            </div>
+
+            <button class="submit-btn" onclick="submitQuiz()" id="submitBtn">
+                Enviar Cuestionario
+            </button>
+
+            <div class="result-message" id="resultMessage"></div>
+        </div>
+    </div>
+
+    <script>
+        let selectedAnswers = {};
+        let quizCompleted = false;
+        
+        // Respuestas correctas para las preguntas verdadero/falso
+        const correctAnswers = {
+            1: 'true',   // El uso de fármacos interdictores se emplea para facilitar la abstinencia
+            2: 'false',  // El paciente no debe tener autonomía en entornos no supervisados
+            3: 'true',   // El entorno juega un papel fundamental en la recuperación
+            4: 'false',  // La autonomía del paciente no es relevante en la recuperación
+            5: 'true'    // Los fármacos interdictores se usan como parte de la farmacoterapia
+        };
+        
+        // Efecto de aparición suave para las secciones
+        document.addEventListener('DOMContentLoaded', function() {
+            const sections = document.querySelectorAll('.quiz-section');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            });
+
+            sections.forEach(section => {
+                section.style.opacity = '0';
+                section.style.transform = 'translateY(20px)';
+                section.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(section);
+            });
+            
+            // Configurar eventos para las opciones del cuestionario
+            setupQuizEvents();
+        });
+        
+        function setupQuizEvents() {
+            const options = document.querySelectorAll('.option');
+            
+            options.forEach(option => {
+                option.addEventListener('click', function() {
+                    if (quizCompleted) return;
+                    
+                    const questionNum = this.getAttribute('data-question');
+                    const questionOptions = document.querySelectorAll(`[data-question="${questionNum}"]`);
+                    
+                    // Remover selección previa de esta pregunta
+                    questionOptions.forEach(opt => opt.classList.remove('selected'));
+                    
+                    // Seleccionar la opción actual
+                    this.classList.add('selected');
+                    selectedAnswers[questionNum] = this.getAttribute('data-value');
+                    
+                    // Marcar el radio button correspondiente
+                    const radio = this.querySelector('input[type="radio"]');
+                    radio.checked = true;
+                });
+            });
+        }
+        
+        function submitQuiz() {
+            if (quizCompleted) return;
+            
+            const resultMessage = document.getElementById('resultMessage');
+            const submitBtn = document.getElementById('submitBtn');
+            
+            // Verificar que se hayan respondido todas las preguntas verdadero/falso
+            let answeredQuestions = Object.keys(selectedAnswers).length;
+            if (answeredQuestions < 5) {
+                alert('Por favor, responde todas las preguntas de Verdadero/Falso antes de enviar.');
+                return;
+            }
+            
+            quizCompleted = true;
+            
+            // Calcular puntuación
+            let correctCount = 0;
+            const options = document.querySelectorAll('.option');
+            
+            // Mostrar colores para todas las opciones
+            for (let questionNum = 1; questionNum <= 5; questionNum++) {
+                const questionOptions = document.querySelectorAll(`[data-question="${questionNum}"]`);
+                const userAnswer = selectedAnswers[questionNum];
+                const correctAnswer = correctAnswers[questionNum];
+                
+                if (userAnswer === correctAnswer) {
+                    correctCount++;
+                }
+                
+                questionOptions.forEach(option => {
+                    const value = option.getAttribute('data-value');
+                    if (value === correctAnswer) {
+                        option.classList.add('correct');
+                    } else if (value === userAnswer && userAnswer !== correctAnswer) {
+                        option.classList.add('incorrect');
+                    }
+                    option.style.cursor = 'default';
+                });
+            }
+            
+            // Mostrar mensaje de resultado
+            const percentage = (correctCount / 5) * 100;
+            resultMessage.innerHTML = `
+                <h4>Resultados del Cuestionario</h4>
+                <p><strong>Preguntas Verdadero/Falso:</strong> ${correctCount}/5 correctas (${percentage}%)</p>
+                <p><strong>Preguntas Abiertas y Ejercicios:</strong> Revisión manual requerida</p>
+                <p>¡Gracias por completar el cuestionario!</p>
+            `;
+            
+            if (percentage >= 70) {
+                resultMessage.className = 'result-message correct';
+            } else {
+                resultMessage.className = 'result-message incorrect';
+            }
+            
+            resultMessage.style.display = 'block';
+            
+            // Cambiar el botón
+            submitBtn.textContent = 'Cuestionario Completado';
+            submitBtn.disabled = true;
+            
+            // Scroll al resultado
+            resultMessage.scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>

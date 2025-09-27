@@ -1,0 +1,43 @@
+-- SQL para insertar opciones de respuesta en cuestionarios del Máster en Adicciones
+-- Total de opciones a insertar: 40
+
+INSERT INTO opciones_respuesta (pregunta_id, opcion, es_correcta, orden) VALUES (bbba66ea-2db2-4cf1-bf93-8bcb296400c4, 'Serotonina', false, 1);
+INSERT INTO opciones_respuesta (pregunta_id, opcion, es_correcta, orden) VALUES (bbba66ea-2db2-4cf1-bf93-8bcb296400c4, 'Dopamina', false, 2);
+INSERT INTO opciones_respuesta (pregunta_id, opcion, es_correcta, orden) VALUES (bbba66ea-2db2-4cf1-bf93-8bcb296400c4, 'GABA', false, 3);
+INSERT INTO opciones_respuesta (pregunta_id, opcion, es_correcta, orden) VALUES (bbba66ea-2db2-4cf1-bf93-8bcb296400c4, 'Acetilcolina', false, 4);
+INSERT INTO opciones_respuesta (pregunta_id, opcion, es_correcta, orden) VALUES (e2152c46-8a47-4e77-9046-b2c56cf5f653, 'Hipocampo', false, 1);
+INSERT INTO opciones_respuesta (pregunta_id, opcion, es_correcta, orden) VALUES (e2152c46-8a47-4e77-9046-b2c56cf5f653, 'Amígdala', false, 2);
+INSERT INTO opciones_respuesta (pregunta_id, opcion, es_correcta, orden) VALUES (e2152c46-8a47-4e77-9046-b2c56cf5f653, 'Núcleo accumbens', false, 3);
+INSERT INTO opciones_respuesta (pregunta_id, opcion, es_correcta, orden) VALUES (e2152c46-8a47-4e77-9046-b2c56cf5f653, 'Corteza prefrontal', false, 4);
+INSERT INTO opciones_respuesta (pregunta_id, opcion, es_correcta, orden) VALUES (ac08f3f6-72f0-4d9a-be14-120bcb53187c, 'Apoyo familiar fuerte', false, 1);
+INSERT INTO opciones_respuesta (pregunta_id, opcion, es_correcta, orden) VALUES (ac08f3f6-72f0-4d9a-be14-120bcb53187c, 'Predisposición genética', false, 2);
+INSERT INTO opciones_respuesta (pregunta_id, opcion, es_correcta, orden) VALUES (ac08f3f6-72f0-4d9a-be14-120bcb53187c, 'Actividades recreativas saludables', false, 3);
+INSERT INTO opciones_respuesta (pregunta_id, opcion, es_correcta, orden) VALUES (ac08f3f6-72f0-4d9a-be14-120bcb53187c, 'Red social positiva', false, 4);
+INSERT INTO opciones_respuesta (pregunta_id, opcion, es_correcta, orden) VALUES (ea8b5bb5-4761-4231-94d2-1df0ad6ff6ce, '20-30%', false, 1);
+INSERT INTO opciones_respuesta (pregunta_id, opcion, es_correcta, orden) VALUES (ea8b5bb5-4761-4231-94d2-1df0ad6ff6ce, '40-60%', false, 2);
+INSERT INTO opciones_respuesta (pregunta_id, opcion, es_correcta, orden) VALUES (ea8b5bb5-4761-4231-94d2-1df0ad6ff6ce, '70-80%', false, 3);
+INSERT INTO opciones_respuesta (pregunta_id, opcion, es_correcta, orden) VALUES (ea8b5bb5-4761-4231-94d2-1df0ad6ff6ce, '90-95%', false, 4);
+INSERT INTO opciones_respuesta (pregunta_id, opcion, es_correcta, orden) VALUES (253cb6ea-626d-457a-a37d-5ecca1e6a382, 'CAGE', false, 1);
+INSERT INTO opciones_respuesta (pregunta_id, opcion, es_correcta, orden) VALUES (253cb6ea-626d-457a-a37d-5ecca1e6a382, 'AUDIT', false, 2);
+INSERT INTO opciones_respuesta (pregunta_id, opcion, es_correcta, orden) VALUES (253cb6ea-626d-457a-a37d-5ecca1e6a382, 'MAST', false, 3);
+INSERT INTO opciones_respuesta (pregunta_id, opcion, es_correcta, orden) VALUES (253cb6ea-626d-457a-a37d-5ecca1e6a382, 'SASSI', false, 4);
+INSERT INTO opciones_respuesta (pregunta_id, opcion, es_correcta, orden) VALUES (5725ca4c-7337-4948-a80b-8a6c994819bf, '1-2 criterios', false, 1);
+INSERT INTO opciones_respuesta (pregunta_id, opcion, es_correcta, orden) VALUES (5725ca4c-7337-4948-a80b-8a6c994819bf, '2-3 criterios', false, 2);
+INSERT INTO opciones_respuesta (pregunta_id, opcion, es_correcta, orden) VALUES (5725ca4c-7337-4948-a80b-8a6c994819bf, '4-5 criterios', false, 3);
+INSERT INTO opciones_respuesta (pregunta_id, opcion, es_correcta, orden) VALUES (5725ca4c-7337-4948-a80b-8a6c994819bf, '6 o más criterios', false, 4);
+INSERT INTO opciones_respuesta (pregunta_id, opcion, es_correcta, orden) VALUES (38db4162-748c-48f7-8e51-4a7e2169fcc6, 'Confrontar la negación del paciente', false, 1);
+INSERT INTO opciones_respuesta (pregunta_id, opcion, es_correcta, orden) VALUES (38db4162-748c-48f7-8e51-4a7e2169fcc6, 'Aumentar la motivación intrínseca para el cambio', false, 2);
+INSERT INTO opciones_respuesta (pregunta_id, opcion, es_correcta, orden) VALUES (38db4162-748c-48f7-8e51-4a7e2169fcc6, 'Proporcionar información sobre los riesgos', false, 3);
+INSERT INTO opciones_respuesta (pregunta_id, opcion, es_correcta, orden) VALUES (38db4162-748c-48f7-8e51-4a7e2169fcc6, 'Establecer metas de abstinencia', false, 4);
+INSERT INTO opciones_respuesta (pregunta_id, opcion, es_correcta, orden) VALUES (6a58aa8a-2c71-47c8-8284-cdf399f60de9, 'Reestructuración cognitiva', false, 1);
+INSERT INTO opciones_respuesta (pregunta_id, opcion, es_correcta, orden) VALUES (6a58aa8a-2c71-47c8-8284-cdf399f60de9, 'Prevención de recaídas', false, 2);
+INSERT INTO opciones_respuesta (pregunta_id, opcion, es_correcta, orden) VALUES (6a58aa8a-2c71-47c8-8284-cdf399f60de9, 'Entrenamiento en habilidades sociales', false, 3);
+INSERT INTO opciones_respuesta (pregunta_id, opcion, es_correcta, orden) VALUES (6a58aa8a-2c71-47c8-8284-cdf399f60de9, 'Todas las anteriores', false, 4);
+INSERT INTO opciones_respuesta (pregunta_id, opcion, es_correcta, orden) VALUES (9a1423b1-9fea-442d-9836-a31258d0dca1, 'Naloxona', false, 1);
+INSERT INTO opciones_respuesta (pregunta_id, opcion, es_correcta, orden) VALUES (9a1423b1-9fea-442d-9836-a31258d0dca1, 'Buprenorfina', false, 2);
+INSERT INTO opciones_respuesta (pregunta_id, opcion, es_correcta, orden) VALUES (9a1423b1-9fea-442d-9836-a31258d0dca1, 'Metadona', false, 3);
+INSERT INTO opciones_respuesta (pregunta_id, opcion, es_correcta, orden) VALUES (9a1423b1-9fea-442d-9836-a31258d0dca1, 'Tanto B como C', false, 4);
+INSERT INTO opciones_respuesta (pregunta_id, opcion, es_correcta, orden) VALUES (ee2feca1-f48b-4a79-8206-e19465852367, 'Bloquea los receptores de dopamina', false, 1);
+INSERT INTO opciones_respuesta (pregunta_id, opcion, es_correcta, orden) VALUES (ee2feca1-f48b-4a79-8206-e19465852367, 'Bloquea los receptores opioides', false, 2);
+INSERT INTO opciones_respuesta (pregunta_id, opcion, es_correcta, orden) VALUES (ee2feca1-f48b-4a79-8206-e19465852367, 'Aumenta la serotonina', false, 3);
+INSERT INTO opciones_respuesta (pregunta_id, opcion, es_correcta, orden) VALUES (ee2feca1-f48b-4a79-8206-e19465852367, 'Inhibe la acetilcolinesterasa', false, 4);

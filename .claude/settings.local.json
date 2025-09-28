@@ -38,7 +38,10 @@
       "mcp__playwright__playwright_navigate",
       "Bash(npm run lint)",
       "Bash(mkdir:*)",
-      "Bash(cp:*)"
+      "Bash(cp:*)",
+      "mcp__supabase__list_organizations",
+      "mcp__supabase__list_projects",
+      "mcp__supabase__apply_migration"
     ],
     "deny": [],
     "ask": []

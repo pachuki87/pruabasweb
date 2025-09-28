@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intervención Familiar y Recovery Mentoring - Máster en Adicciones</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #17a2b8;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+            font-size: 2.2em;
+        }
+        h2 {
+            color: #34495e;
+            margin-top: 35px;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            border-left: 4px solid #17a2b8;
+            padding-left: 15px;
+        }
+        h3 {
+            color: #138496;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        h4 {
+            color: #34495e;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        .highlight {
+            background: linear-gradient(135deg, #e1f5fe 0%, #b3e5fc 100%);
+            padding: 20px;
+            border-left: 5px solid #17a2b8;
+            margin: 25px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .intervention-section {
+            background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);
+            padding: 25px;
+            border-radius: 10px;
+            margin: 30px 0;
+            border: 2px solid #9c27b0;
+        }
+        .approaches-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+        .approach-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-left: 4px solid #673ab7;
+        }
+        .approach-card h4 {
+            color: #673ab7;
+            margin-top: 0;
+        }
+        .techniques-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .technique-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #28a745;
+        }
+        .technique-card h5 {
+            color: #28a745;
+            margin-top: 0;
+            margin-bottom: 8px;
+            font-size: 1em;
+        }
+        .mentoring-section {
+            background: linear-gradient(135deg, #fff8e1 0%, #ffecb3 100%);
+            padding: 25px;
+            border-radius: 10px;
+            margin: 30px 0;
+            border: 2px solid #ff9800;
+        }
+        .key-points {
+            background: #e8f5e8;
+            border: 1px solid #c3e6cb;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .key-points h4 {
+            color: #155724;
+            margin-top: 0;
+        }
+        .phases-timeline {
+            position: relative;
+            padding: 20px 0;
+        }
+        .phase-item {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #6c757d;
+        }
+        .phase-number {
+            background: #6c757d;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-weight: bold;
+        }
+        .gender-section {
+            background: linear-gradient(135deg, #fce4ec 0%, #f8bbd9 100%);
+            padding: 25px;
+            border-radius: 10px;
+            margin: 30px 0;
+            border: 2px solid #e91e63;
+        }
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .comparison-table th {
+            background: #17a2b8;
+            color: white;
+            padding: 15px;
+            text-align: left;
+        }
+        .comparison-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #dee2e6;
+        }
+        .comparison-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        .inner-child-section {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffcc02 100%);
+            padding: 25px;
+            border-radius: 10px;
+            margin: 30px 0;
+            border: 2px solid #ff9800;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        .navigation {
+            margin-top: 40px;
+            text-align: center;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background-color: #17a2b8;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            margin: 0 10px;
+            transition: background-color 0.3s;
+        }
+        .btn:hover {
+            background-color: #138496;
+        }
+        .content-separator {
+            border: none;
+            height: 2px;
+            background: linear-gradient(to right, transparent, #17a2b8, transparent);
+            margin: 40px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Intervención Familiar y Recovery Mentoring</h1>
+        
+        <h2>1. INTERVENCIÓN FAMILIAR ESPECIALIZADA</h2>
+        <p>La intervención familiar en adicciones requiere enfoques especializados que consideren las dinámicas complejas del sistema familiar y su impacto en el proceso de recuperación.</p>
+        
+        <div class="highlight">
+            <strong>Principio Fundamental:</strong> La familia puede ser tanto un factor de riesgo como de protección. Una intervención familiar efectiva transforma las dinámicas disfuncionales en recursos de apoyo para la recuperación.
+        </div>
+        
+        <h2>2. ENFOQUES DE INTERVENCIÓN FAMILIAR</h2>
+        <div class="approaches-grid">
+            <div class="approach-card">
+                <h4>Terapia Familiar Estructural</h4>
+                <p>Enfoque que trabaja con la estructura familiar, límites, jerarquías y patrones de interacción para crear cambios sistémicos.</p>
+            </div>
+            
+            <div class="approach-card">
+                <h4>Terapia Familiar Estratégica</h4>
+                <p>Utiliza intervenciones directivas y estrategias específicas para interrumpir patrones disfuncionales.</p>
+            </div>
+            
+            <div class="approach-card">
+                <h4>Terapia Multisistémica (MST)</h4>
+                <p>Intervención intensiva que aborda múltiples sistemas: individual, familiar, escolar y comunitario.</p>
+            </div>
+            
+            <div class="approach-card">
+                <h4>Terapia Familiar Multidimensional</h4>
+                <p>Enfoque integrador que combina elementos individuales, familiares y comunitarios en el tratamiento.</p>
+            </div>
+            
+            <div class="approach-card">
+                <h4>Intervención Familiar Unilateral</h4>
+                <p>Trabajo con familiares cuando la persona con adicción no está dispuesta a participar en tratamiento.</p>
+            </div>
+            
+            <div class="approach-card">
+                <h4>Terapia de Red Social</h4>
+                <p>Movilización de la red social ampliada para crear un sistema de apoyo integral.</p>
+            </div>
+        </div>
+        
+        <h2>3. TÉCNICAS ESPECÍFICAS DE INTERVENCIÓN</h2>
+        <div class="techniques-grid">
+            <div class="technique-card">
+                <h5>Genograma Familiar</h5>
+                <p>Herramienta visual para mapear patrones familiares multigeneracionales.</p>
+            </div>
+            
+            <div class="technique-card">
+                <h5>Escultura Familiar</h5>
+                <p>Técnica experiencial que representa físicamente las dinámicas familiares.</p>
+            </div>
+            
+            <div class="technique-card">
+                <h5>Reencuadre Sistémico</h5>
+                <p>Cambio de perspectiva sobre el problema para generar nuevas soluciones.</p>
+            </div>
+            
+            <div class="technique-card">
+                <h5>Tareas Paradójicas</h5>
+                <p>Prescripción del síntoma para generar resistencia y cambio.</p>
+            </div>
+            
+            <div class="technique-card">
+                <h5>Rituales Terapéuticos</h5>
+                <p>Creación de ceremonias simbólicas para marcar transiciones y cambios.</p>
+            </div>
+            
+            <div class="technique-card">
+                <h5>Externalización del Problema</h5>
+                <p>Separación de la persona del problema para reducir culpa y vergüenza.</p>
+            </div>
+        </div>
+
+        <hr class="content-separator">
+
+        <div class="mentoring-section">
+            <h2>🤝 Recovery Mentoring Avanzado</h2>
+            
+            <h3>Modelo de Mentoring Familiar</h3>
+            <p>El recovery mentoring familiar involucra a mentores con experiencia vivida que trabajan tanto con la persona en recuperación como con su sistema familiar.</p>
+            
+            <h3>Componentes del Recovery Mentoring Familiar</h3>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Componente</th>
+                        <th>Descripción</th>
+                        <th>Beneficios</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Mentor Individual</strong></td>
+                        <td>Apoyo directo a la persona en recuperación</td>
+                        <td>Modelado, esperanza, estrategias prácticas</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Mentor Familiar</strong></td>
+                        <td>Trabajo específico con miembros de la familia</td>
+                        <td>Educación, apoyo emocional, habilidades</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Grupos de Apoyo</strong></td>
+                        <td>Sesiones grupales con otras familias</td>
+                        <td>Normalización, recursos compartidos</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Navegación de Servicios</strong></td>
+                        <td>Conexión con recursos comunitarios</td>
+                        <td>Acceso mejorado, coordinación de cuidados</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="key-points">
+                <h4>Fases del Recovery Mentoring Familiar:</h4>
+                <ul>
+                    <li><strong>Fase 1:</strong> Establecimiento de confianza y evaluación de necesidades</li>
+                    <li><strong>Fase 2:</strong> Psicoeducación sobre adicción y recuperación</li>
+                    <li><strong>Fase 3:</strong> Desarrollo de habilidades de comunicación y límites</li>
+                    <li><strong>Fase 4:</strong> Apoyo en crisis y prevención de recaídas</li>
+                    <li><strong>Fase 5:</strong> Transición hacia la independencia y mantenimiento</li>
+                </ul>
+            </div>
+        </div>
+
+        <hr class="content-separator">
+
+        <div class="intervention-section">
+            <h2>📋 Guía Práctica para Intervención Familiar</h2>
+            
+            <h3>Proceso de Intervención Estructurada</h3>
+            <div class="phases-timeline">
+                <div class="phase-item">
+                    <div class="phase-number">1</div>
+                    <div>
+                        <h4>Evaluación Familiar Integral</h4>
+                        <p>Análisis de estructura, dinámicas, recursos y necesidades del sistema familiar.</p>
+                    </div>
+                </div>
+                
+                <div class="phase-item">
+                    <div class="phase-number">2</div>
+                    <div>
+                        <h4>Formulación de Hipótesis Sistémicas</h4>
+                        <p>Comprensión de cómo la adicción se mantiene dentro del sistema familiar.</p>
+                    </div>
+                </div>
+                
+                <div class="phase-item">
+                    <div class="phase-number">3</div>
+                    <div>
+                        <h4>Diseño de Intervenciones Específicas</h4>
+                        <p>Selección de técnicas apropiadas para las necesidades identificadas.</p>
+                    </div>
+                </div>
+                
+                <div class="phase-item">
+                    <div class="phase-number">4</div>
+                    <div>
+                        <h4>Implementación y Monitoreo</h4>
+                        <p>Aplicación de intervenciones con seguimiento continuo del progreso.</p>
+                    </div>
+                </div>
+                
+                <div class="phase-item">
+                    <div class="phase-number">5</div>
+                    <div>
+                        <h4>Consolidación y Prevención</h4>
+                        <p>Fortalecimiento de cambios y desarrollo de estrategias de mantenimiento.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr class="content-separator">
+
+        <div class="gender-section">
+            <h2>⚖️ Perspectiva de Género en Intervención Familiar</h2>
+            
+            <h3>Consideraciones de Género en Adicciones</h3>
+            <p>La perspectiva de género es fundamental para comprender las diferencias en patrones de consumo, factores de riesgo y necesidades de tratamiento entre hombres y mujeres.</p>
+            
+            <h3>Factores Específicos por Género</h3>
+            <div class="approaches-grid">
+                <div class="approach-card">
+                    <h4>Mujeres y Adicciones</h4>
+                    <p>Mayor prevalencia de trauma, comorbilidad psiquiátrica, barreras para acceder a tratamiento, responsabilidades de cuidado.</p>
+                </div>
+                
+                <div class="approach-card">
+                    <h4>Hombres y Adicciones</h4>
+                    <p>Patrones de consumo más severos, mayor resistencia a buscar ayuda, presión social por roles de género tradicionales.</p>
+                </div>
+                
+                <div class="approach-card">
+                    <h4>Familias y Género</h4>
+                    <p>Roles de género en la familia, distribución de responsabilidades, impacto diferencial de la adicción.</p>
+                </div>
+                
+                <div class="approach-card">
+                    <h4>Intervenciones Sensibles</h4>
+                    <p>Adaptación de tratamientos considerando necesidades específicas de género y contexto cultural.</p>
+                </div>
+            </div>
+            
+            <div class="key-points">
+                <h4>Principios de Intervención con Perspectiva de Género:</h4>
+                <ul>
+                    <li>Reconocimiento de las diferencias biológicas, psicológicas y sociales</li>
+                    <li>Abordaje de traumas específicos relacionados con género</li>
+                    <li>Consideración de roles familiares y expectativas sociales</li>
+                    <li>Adaptación de estrategias terapéuticas según necesidades específicas</li>
+                    <li>Promoción de la equidad y empoderamiento personal</li>
+                </ul>
+            </div>
+        </div>
+
+        <hr class="content-separator">
+
+        <div class="inner-child-section">
+            <h2>👶 Trabajo con el Niño Interior</h2>
+            
+            <h3>Concepto del Niño Interior en Adicciones</h3>
+            <p>El trabajo con el niño interior aborda las heridas emocionales tempranas que a menudo subyacen a las conductas adictivas, tanto en la persona como en el sistema familiar.</p>
+            
+            <h3>Técnicas de Sanación del Niño Interior</h3>
+            <div class="techniques-grid">
+                <div class="technique-card">
+                    <h5>Diálogo Interno</h5>
+                    <p>Comunicación consciente con aspectos infantiles de la personalidad.</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h5>Visualización Guiada</h5>
+                    <p>Técnicas imaginativas para conectar con experiencias tempranas.</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h5>Trabajo Corporal</h5>
+                    <p>Integración de sensaciones y emociones almacenadas en el cuerpo.</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h5>Arte Terapia</h5>
+                    <p>Expresión creativa para acceder a contenidos inconscientes.</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h5>Reparenting</h5>
+                    <p>Proceso de proporcionar el cuidado emocional que faltó en la infancia.</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h5>Rituales de Sanación</h5>
+                    <p>Ceremonias simbólicas para integrar y sanar heridas del pasado.</p>
+                </div>
+            </div>
+            
+            <div class="key-points">
+                <h4>Integración Familiar del Trabajo con Niño Interior:</h4>
+                <ul>
+                    <li>Identificación de patrones transgeneracionales de trauma</li>
+                    <li>Sanación de heridas familiares colectivas</li>
+                    <li>Desarrollo de nuevos patrones de crianza y cuidado</li>
+                    <li>Fortalecimiento de vínculos emocionales saludables</li>
+                    <li>Creación de un ambiente familiar nutritivo y seguro</li>
+                </ul>
+            </div>
+        </div>
+
+        <h2>4. HERRAMIENTAS PRÁCTICAS PARA PROFESIONALES</h2>
+        
+        <div class="intervention-section">
+            <h3>Kit de Intervención Familiar</h3>
+            <ul>
+                <li><strong>Instrumentos de Evaluación:</strong> Escalas de funcionamiento familiar, cohesión y adaptabilidad</li>
+                <li><strong>Técnicas de Entrevista:</strong> Preguntas circulares, reflexivas y estratégicas</li>
+                <li><strong>Ejercicios Experienciales:</strong> Dinámicas grupales y técnicas vivenciales</li>
+                <li><strong>Materiales Psicoeducativos:</strong> Recursos informativos sobre adicción y familia</li>
+                <li><strong>Protocolos de Crisis:</strong> Procedimientos para situaciones de emergencia familiar</li>
+            </ul>
+            
+            <h3>Consideraciones Éticas</h3>
+            <ul>
+                <li>Confidencialidad en contextos familiares complejos</li>
+                <li>Manejo de secretos familiares y lealtades divididas</li>
+                <li>Protección de menores y miembros vulnerables</li>
+                <li>Límites profesionales en intervenciones intensivas</li>
+                <li>Coordinación con otros profesionales y servicios</li>
+            </ul>
+        </div>
+
+        <div class="key-points">
+            <h4>Recursos de Apoyo:</h4>
+            <p>Esta lección incluye guías especializadas para intervención familiar, protocolos de recovery mentoring, materiales sobre perspectiva de género en adicciones, técnicas de trabajo con el niño interior, y herramientas prácticas para profesionales en el ámbito de la terapia familiar y adicciones.</p>
+        </div>
+        
+        <div class="navigation">
+            <a href="#" class="btn">Módulo Anterior</a>
+            <a href="#" class="btn">Marcar como Completada</a>
+            <a href="#" class="btn">Siguiente Módulo</a>
+        </div>
+    </div>
+</body>
+</html>

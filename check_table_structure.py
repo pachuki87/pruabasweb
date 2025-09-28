@@ -16,7 +16,7 @@ url = os.environ.get("VITE_SUPABASE_URL")
 key = os.environ.get("VITE_SUPABASE_SERVICE_KEY")
 
 if not url or not key:
-    print("❌ Error: Variables de entorno VITE_SUPABASE_URL y VITE_SUPABASE_SERVICE_KEY requeridas")
+    print("Error: Variables de entorno VITE_SUPABASE_URL y VITE_SUPABASE_SERVICE_KEY requeridas")
     exit(1)
 
 supabase: Client = create_client(url, key)
@@ -32,21 +32,21 @@ def check_table_structure(table_name):
         
         if response.data:
             sample_row = response.data[0]
-            print(f"✅ Columnas encontradas en '{table_name}':")
+            print(f"Columnas encontradas en '{table_name}':")
             for column, value in sample_row.items():
                 value_type = type(value).__name__
                 value_preview = str(value)[:50] + '...' if len(str(value)) > 50 else str(value)
                 print(f"   - {column}: {value_type} = {value_preview}")
         else:
-            print(f"⚠️ La tabla '{table_name}' está vacía")
+            print(f"La tabla '{table_name}' está vacía")
             
         # Contar total de registros
         count_response = supabase.table(table_name).select('*', count='exact').execute()
         total_count = count_response.count if hasattr(count_response, 'count') else len(count_response.data)
-        print(f"📊 Total de registros: {total_count}")
+        print(f"Total de registros: {total_count}")
         
     except Exception as e:
-        print(f"❌ Error al verificar '{table_name}': {e}")
+        print(f"Error al verificar '{table_name}': {e}")
 
 def main():
     print("🔍 VERIFICACIÓN DE ESTRUCTURA DE TABLAS")
@@ -64,7 +64,7 @@ def main():
         check_table_structure(table)
     
     print("\n" + "=" * 60)
-    print("✅ VERIFICACIÓN COMPLETADA")
+    print("VERIFICACIÓN COMPLETADA")
 
 if __name__ == "__main__":
     main()

@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Psicología de las Adicciones - Máster en Adicciones</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #e67e22;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+            font-size: 2.2em;
+        }
+        h2 {
+            color: #34495e;
+            margin-top: 35px;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            border-left: 4px solid #e67e22;
+            padding-left: 15px;
+        }
+        h3 {
+            color: #d35400;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        h4 {
+            color: #34495e;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        .highlight {
+            background: linear-gradient(135deg, #fef5e7 0%, #fdebd0 100%);
+            padding: 20px;
+            border-left: 5px solid #e67e22;
+            margin: 25px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .psychology-section {
+            background: linear-gradient(135deg, #e8f4fd 0%, #d1ecf1 100%);
+            padding: 25px;
+            border-radius: 10px;
+            margin: 30px 0;
+            border: 2px solid #3498db;
+        }
+        .theories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+        .theory-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-left: 4px solid #8e44ad;
+        }
+        .theory-card h4 {
+            color: #8e44ad;
+            margin-top: 0;
+        }
+        .factors-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .factor-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #e74c3c;
+        }
+        .factor-card h5 {
+            color: #e74c3c;
+            margin-top: 0;
+            margin-bottom: 8px;
+            font-size: 1em;
+        }
+        .neuroscience-section {
+            background: linear-gradient(135deg, #f4e6ff 0%, #e8d5ff 100%);
+            padding: 25px;
+            border-radius: 10px;
+            margin: 30px 0;
+            border: 2px solid #9b59b6;
+        }
+        .key-points {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .key-points h4 {
+            color: #155724;
+            margin-top: 0;
+        }
+        .phases-timeline {
+            position: relative;
+            padding: 20px 0;
+        }
+        .phase-item {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #6c757d;
+        }
+        .phase-number {
+            background: #6c757d;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-weight: bold;
+        }
+        .brain-section {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            padding: 25px;
+            border-radius: 10px;
+            margin: 30px 0;
+            border: 2px solid #f39c12;
+        }
+        .diagnostic-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .diagnostic-table th {
+            background: #e67e22;
+            color: white;
+            padding: 15px;
+            text-align: left;
+        }
+        .diagnostic-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #dee2e6;
+        }
+        .diagnostic-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        .navigation {
+            margin-top: 40px;
+            text-align: center;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background-color: #e67e22;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            margin: 0 10px;
+            transition: background-color 0.3s;
+        }
+        .btn:hover {
+            background-color: #d35400;
+        }
+        .content-separator {
+            border: none;
+            height: 2px;
+            background: linear-gradient(to right, transparent, #e67e22, transparent);
+            margin: 40px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Psicología de las Adicciones</h1>
+        
+        <h2>1. FUNDAMENTOS PSICOLÓGICOS DE LA ADICCIÓN</h2>
+        <p>La psicología de las adicciones estudia los procesos mentales, emocionales y comportamentales que subyacen al desarrollo, mantenimiento y recuperación de las conductas adictivas.</p>
+        
+        <div class="highlight">
+            <strong>Concepto Central:</strong> La adicción es un trastorno complejo que involucra alteraciones en los circuitos cerebrales relacionados con la recompensa, la motivación, la memoria y el control inhibitorio.
+        </div>
+        
+        <h2>2. TEORÍAS PSICOLÓGICAS DE LA ADICCIÓN</h2>
+        <div class="theories-grid">
+            <div class="theory-card">
+                <h4>Teoría del Aprendizaje</h4>
+                <p>La adicción se desarrolla a través de procesos de condicionamiento clásico y operante, donde las sustancias actúan como reforzadores.</p>
+            </div>
+            
+            <div class="theory-card">
+                <h4>Teoría Cognitiva</h4>
+                <p>Los pensamientos distorsionados y las creencias disfuncionales sobre el consumo mantienen la conducta adictiva.</p>
+            </div>
+            
+            <div class="theory-card">
+                <h4>Teoría Psicodinámica</h4>
+                <p>La adicción como mecanismo de defensa ante conflictos inconscientes y traumas no resueltos.</p>
+            </div>
+            
+            <div class="theory-card">
+                <h4>Teoría Humanística</h4>
+                <p>La adicción surge de la búsqueda de autorrealización frustrada y la falta de sentido existencial.</p>
+            </div>
+            
+            <div class="theory-card">
+                <h4>Teoría Sistémica</h4>
+                <p>La adicción se entiende dentro del contexto de los sistemas familiares y sociales de la persona.</p>
+            </div>
+            
+            <div class="theory-card">
+                <h4>Teoría Biopsicosocial</h4>
+                <p>Modelo integrador que considera factores biológicos, psicológicos y sociales en el desarrollo de la adicción.</p>
+            </div>
+        </div>
+        
+        <h2>3. FACTORES PSICOLÓGICOS DE RIESGO</h2>
+        <div class="factors-grid">
+            <div class="factor-card">
+                <h5>Factores Cognitivos</h5>
+                <p>Distorsiones cognitivas, expectativas sobre el consumo, déficits en funciones ejecutivas.</p>
+            </div>
+            
+            <div class="factor-card">
+                <h5>Factores Emocionales</h5>
+                <p>Dificultades en regulación emocional, alexitimia, inestabilidad afectiva.</p>
+            </div>
+            
+            <div class="factor-card">
+                <h5>Factores de Personalidad</h5>
+                <p>Impulsividad, búsqueda de sensaciones, neuroticismo, baja autoestima.</p>
+            </div>
+            
+            <div class="factor-card">
+                <h5>Factores Conductuales</h5>
+                <p>Patrones de evitación, déficits en habilidades sociales, conductas de riesgo.</p>
+            </div>
+            
+            <div class="factor-card">
+                <h5>Factores Motivacionales</h5>
+                <p>Baja motivación al cambio, ambivalencia, falta de objetivos vitales.</p>
+            </div>
+            
+            <div class="factor-card">
+                <h5>Factores Traumáticos</h5>
+                <p>Historia de trauma, abuso, negligencia, trastorno de estrés postraumático.</p>
+            </div>
+        </div>
+
+        <hr class="content-separator">
+
+        <div class="neuroscience-section">
+            <h2>🧠 Neuropsicología de las Adicciones</h2>
+            
+            <h3>Circuitos Cerebrales Implicados</h3>
+            <p>La adicción afecta múltiples sistemas cerebrales que regulan la motivación, el aprendizaje, la memoria y el control ejecutivo.</p>
+            
+            <h3>Sistemas Neurobiológicos Clave</h3>
+            <div class="theories-grid">
+                <div class="theory-card">
+                    <h4>Sistema de Recompensa</h4>
+                    <p>Circuito dopaminérgico mesolímbico que procesa las experiencias placenteras y motivacionales.</p>
+                </div>
+                
+                <div class="theory-card">
+                    <h4>Sistema de Estrés</h4>
+                    <p>Eje hipotálamo-hipófisis-adrenal que regula la respuesta al estrés y la homeostasis.</p>
+                </div>
+                
+                <div class="theory-card">
+                    <h4>Sistema Ejecutivo</h4>
+                    <p>Corteza prefrontal que controla la toma de decisiones, inhibición y planificación.</p>
+                </div>
+                
+                <div class="theory-card">
+                    <h4>Sistema de Memoria</h4>
+                    <p>Estructuras que procesan y almacenan memorias asociadas al consumo y contextos de uso.</p>
+                </div>
+            </div>
+            
+            <div class="key-points">
+                <h4>Alteraciones Neuropsicológicas en Adicción:</h4>
+                <ul>
+                    <li><strong>Déficits Atencionales:</strong> Dificultades en atención sostenida y selectiva</li>
+                    <li><strong>Problemas de Memoria:</strong> Alteraciones en memoria de trabajo y episódica</li>
+                    <li><strong>Disfunción Ejecutiva:</strong> Déficits en planificación, inhibición y flexibilidad</li>
+                    <li><strong>Alteraciones Emocionales:</strong> Dificultades en reconocimiento y regulación emocional</li>
+                    <li><strong>Sesgos Cognitivos:</strong> Atención selectiva hacia estímulos relacionados con drogas</li>
+                </ul>
+            </div>
+        </div>
+
+        <hr class="content-separator">
+
+        <div class="brain-section">
+            <h2>⚡ Neuroplasticidad y Recuperación</h2>
+            
+            <h3>Capacidad de Cambio Cerebral</h3>
+            <p>El cerebro mantiene su capacidad de cambio y adaptación (neuroplasticidad) incluso después de años de consumo, lo que fundamenta la posibilidad de recuperación.</p>
+            
+            <h3>Procesos de Recuperación Neurológica</h3>
+            <div class="phases-timeline">
+                <div class="phase-item">
+                    <div class="phase-number">1</div>
+                    <div>
+                        <h4>Desintoxicación (0-30 días)</h4>
+                        <p>Eliminación de sustancias y estabilización de neurotransmisores.</p>
+                    </div>
+                </div>
+                
+                <div class="phase-item">
+                    <div class="phase-number">2</div>
+                    <div>
+                        <h4>Recuperación Temprana (1-3 meses)</h4>
+                        <p>Restauración gradual de funciones cognitivas básicas y regulación emocional.</p>
+                    </div>
+                </div>
+                
+                <div class="phase-item">
+                    <div class="phase-number">3</div>
+                    <div>
+                        <h4>Recuperación Sostenida (3-12 meses)</h4>
+                        <p>Mejora significativa en funciones ejecutivas y capacidad de toma de decisiones.</p>
+                    </div>
+                </div>
+                
+                <div class="phase-item">
+                    <div class="phase-number">4</div>
+                    <div>
+                        <h4>Recuperación a Largo Plazo (1+ años)</h4>
+                        <p>Consolidación de cambios neuroplásticos y desarrollo de nuevos patrones neuronales.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr class="content-separator">
+
+        <h2>4. EVALUACIÓN PSICOLÓGICA EN ADICCIONES</h2>
+        
+        <div class="psychology-section">
+            <h3>Instrumentos de Evaluación</h3>
+            <table class="diagnostic-table">
+                <thead>
+                    <tr>
+                        <th>Área de Evaluación</th>
+                        <th>Instrumentos</th>
+                        <th>Objetivo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Severidad de Adicción</strong></td>
+                        <td>ASI, DAST, AUDIT</td>
+                        <td>Evaluar gravedad del consumo</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Motivación al Cambio</strong></td>
+                        <td>URICA, SOCRATES</td>
+                        <td>Determinar disposición al tratamiento</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Funcionamiento Cognitivo</strong></td>
+                        <td>WAIS, MMSE, MoCA</td>
+                        <td>Evaluar capacidades cognitivas</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Estado Emocional</strong></td>
+                        <td>BDI, BAI, SCL-90</td>
+                        <td>Identificar comorbilidad psiquiátrica</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Personalidad</strong></td>
+                        <td>MMPI-2, NEO-PI-R</td>
+                        <td>Evaluar rasgos de personalidad</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h3>Proceso de Evaluación Integral</h3>
+            <ul>
+                <li><strong>Historia Clínica:</strong> Antecedentes personales, familiares y de consumo</li>
+                <li><strong>Evaluación Mental:</strong> Estado cognitivo, emocional y conductual actual</li>
+                <li><strong>Análisis Funcional:</strong> Identificación de antecedentes y consecuencias del consumo</li>
+                <li><strong>Evaluación Neuropsicológica:</strong> Funciones cognitivas y ejecutivas</li>
+                <li><strong>Evaluación Social:</strong> Redes de apoyo, funcionamiento laboral y familiar</li>
+            </ul>
+        </div>
+
+        <hr class="content-separator">
+
+        <h2>5. INTERVENCIONES PSICOLÓGICAS BASADAS EN EVIDENCIA</h2>
+        
+        <div class="theories-grid">
+            <div class="theory-card">
+                <h4>Terapia Cognitivo-Conductual</h4>
+                <p>Modificación de pensamientos y comportamientos relacionados con el consumo.</p>
+            </div>
+            
+            <div class="theory-card">
+                <h4>Entrevista Motivacional</h4>
+                <p>Técnica para explorar y resolver la ambivalencia hacia el cambio.</p>
+            </div>
+            
+            <div class="theory-card">
+                <h4>Prevención de Recaídas</h4>
+                <p>Identificación y manejo de situaciones de alto riesgo para el consumo.</p>
+            </div>
+            
+            <div class="theory-card">
+                <h4>Terapia Dialéctica Conductual</h4>
+                <p>Desarrollo de habilidades de regulación emocional y tolerancia al malestar.</p>
+            </div>
+            
+            <div class="theory-card">
+                <h4>Terapia de Aceptación y Compromiso</h4>
+                <p>Aceptación de experiencias internas y compromiso con valores personales.</p>
+            </div>
+            
+            <div class="theory-card">
+                <h4>Terapia Familiar Sistémica</h4>
+                <p>Intervención en el sistema familiar para apoyar la recuperación.</p>
+            </div>
+        </div>
+
+        <div class="key-points">
+            <h4>Recursos de Apoyo:</h4>
+            <p>Esta lección incluye materiales especializados en neuropsicología de las adicciones, instrumentos de evaluación psicológica, protocolos de intervención basados en evidencia, y guías para la comprensión integral de los procesos psicológicos en las adicciones.</p>
+        </div>
+        
+        <div class="navigation">
+            <a href="#" class="btn">Módulo Anterior</a>
+            <a href="#" class="btn">Marcar como Completada</a>
+            <a href="#" class="btn">Siguiente Módulo</a>
+        </div>
+    </div>
+</body>
+</html>

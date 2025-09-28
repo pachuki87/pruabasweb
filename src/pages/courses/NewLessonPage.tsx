@@ -18,7 +18,7 @@ interface Lesson {
   video_url?: string;
   archivo_url?: string; // URL del archivo HTML
   pdfs?: string[];
-  externalLinks?: Array<{title: string; url: string; isExternal: boolean}>;
+  enlaces_externos?: Array<{title: string; url: string; isExternal: boolean}>;
   tiene_cuestionario?: boolean;
   leccion_anterior_id?: string;
   leccion_siguiente_id?: string;
@@ -302,9 +302,9 @@ const NewLessonPage: React.FC = () => {
         console.log('📄 Lesson', lesson.titulo, 'PDFs from database:', pdfs);
         
         // Enlaces externos para Adicciones Comportamentales2 Cuestionarios y Psicología positiva
-        const externalLinks: any[] = [];
+        const enlaces_externos: any[] = [];
         if (generatedSlug.includes('Adicciones Comportamentales2 Cuestionarios')) {
-          externalLinks.push(
+          enlaces_externos.push(
             {
               title: 'Aquí tienes un artículo sobre el tratamiento de las adicciones a las TIC',
               url: 'https://sindrome-adicciones.es/adiccion-a-las-nuevas-tecnologias/',
@@ -337,10 +337,226 @@ const NewLessonPage: React.FC = () => {
             }
           );
         }
-        
-        // Video de YouTube para Psicología positiva
+  
+        // Videos de YouTube para el Máster en Adicciones
+        console.log('🎬 Checking YouTube videos for course:', courseId, 'and lesson:', lesson.titulo);
+        if (courseId === 'b5ef8c64-fe26-4f20-8221-80a1bf475b05') {
+          console.log('✅ Course ID matches! Checking lesson title...');
+          // Módulo 1: Fundamentos del Proceso Terapéutico
+          if (lesson.titulo.includes('FUNDAMENTOS P TERAPEUTICO') || lesson.titulo.includes('¿Qué significa ser adicto?')) {
+            console.log('✅ Lesson title matches! Adding YouTube videos...');
+            enlaces_externos.push(
+              {
+                title: 'Video: Modelo MATRIX. Inicio',
+                url: 'https://www.youtube.com/watch?v=B3VXIfPgbcM',
+                isExternal: true
+              },
+              {
+                title: 'Video: Las 4 fases del tratamiento de adicciones',
+                url: 'https://www.youtube.com/watch?v=3kmpJ_rAjnM',
+                isExternal: true
+              },
+              {
+                title: 'Video: Cómo dejar las drogas o conducta adictiva para siempre',
+                url: 'https://www.youtube.com/watch?v=ohi7rkEOZ2Q',
+                isExternal: true
+              }
+            );
+          }
+
+          // Módulo 2: Terapia Cognitiva en Drogodependencias
+          if (lesson.titulo.includes('TERAPIA COGNITIVA DROGODEPENDENCIA')) {
+            enlaces_externos.push(
+              {
+                title: 'Video: La terapia cognitivo conductual en las adicciones',
+                url: 'https://www.youtube.com/watch?v=zpP3cI3v8SM',
+                isExternal: true
+              },
+              {
+                title: 'Video: Intervención Terapéutica en Adicciones',
+                url: 'https://www.youtube.com/watch?v=h6lczteDcoo',
+                isExternal: true
+              },
+              {
+                title: 'Video: Webinario: Consejos de la terapia cognitivo conductual',
+                url: 'https://www.youtube.com/watch?v=QeZkEQfRLFc',
+                isExternal: true
+              }
+            );
+          }
+
+          // Módulo 3: Familia y Trabajo en Equipo
+          if (lesson.titulo.includes('FAMILIA Y TRABAJO EQUIPO')) {
+            enlaces_externos.push(
+              {
+                title: 'Video: El papel de la familia en la recuperación del adicto',
+                url: 'https://www.youtube.com/watch?v=QY8qOUrLDOA',
+                isExternal: true
+              },
+              {
+                title: 'Video: Aprender a educar, intervención familiar en adicciones',
+                url: 'https://www.youtube.com/watch?v=d-QUiHUQVfo',
+                isExternal: true
+              },
+              {
+                title: 'Video: El papel de la familia en la prevención de adicciones',
+                url: 'https://www.youtube.com/watch?v=JNFo0fyy9AY',
+                isExternal: true
+              }
+            );
+          }
+
+          // Módulo 4: Recovery Coaching
+          if (lesson.titulo.includes('RECOVERY COACHING')) {
+            enlaces_externos.push(
+              {
+                title: 'Video: Cómo recuperarte de una adicción. Conferencia magistral',
+                url: 'https://www.youtube.com/watch?v=5-TijhzQPP4',
+                isExternal: true
+              },
+              {
+                title: 'Video: Cómo vencer una adicción. Conferencia Magistral',
+                url: 'https://www.youtube.com/watch?v=e3QpAd5lGjc',
+                isExternal: true
+              },
+              {
+                title: 'Video: Una manera alternativa de dejar las adicciones',
+                url: 'https://www.youtube.com/watch?v=wtkVMNfuRpg',
+                isExternal: true
+              }
+            );
+          }
+
+          // Módulo 5: Psicología de las Adicciones
+          if (lesson.titulo.includes('PSICOLOGIA ADICCIONES')) {
+            enlaces_externos.push(
+              {
+                title: 'Playlist: Psicología de las Adicciones',
+                url: 'https://www.youtube.com/playlist?list=PLjjVfXgqEfhj_-_phBBlEGl5Y08L4_HPy',
+                isExternal: true
+              },
+              {
+                title: 'Video: Jornada sobre Psicología y Adicciones',
+                url: 'https://www.youtube.com/watch?v=sceGO2nRhfo',
+                isExternal: true
+              },
+              {
+                title: 'Video: La psicología de la adicción - Carl Jung',
+                url: 'https://www.youtube.com/watch?v=JFl2wpQiB3c',
+                isExternal: true
+              }
+            );
+          }
+
+          // Módulo 6: Intervención Familiar y Recovery Mentoring
+          if (lesson.titulo.includes('INTERVENCION FAMILIAR Y RECOVERY MENTO')) {
+            enlaces_externos.push(
+              {
+                title: 'Video: Aprender a educar, intervención familiar en adicciones',
+                url: 'https://www.youtube.com/watch?v=BaeGTCfj8qI',
+                isExternal: true
+              },
+              {
+                title: 'Video: Familia y adicciones: cómo motivar a un integrante a consultar',
+                url: 'https://www.youtube.com/watch?v=DW-203cup3w',
+                isExternal: true
+              },
+              {
+                title: 'Video: Cómo poder ayudar a un familiar adicto/a',
+                url: 'https://www.youtube.com/watch?v=acva21zg4M0',
+                isExternal: true
+              }
+            );
+          }
+
+          // Módulo 7: Nuevos Modelos Terapéuticos
+          if (lesson.titulo.includes('NUEVOS MODELOS TERAPEUTICOS')) {
+            enlaces_externos.push(
+              {
+                title: 'Video: Superar la adicción: todo sobre los tratamientos',
+                url: 'https://www.youtube.com/watch?v=5ZY8BBFuDlM',
+                isExternal: true
+              },
+              {
+                title: 'Video: Terapias conductuales de tercera generación',
+                url: 'https://www.youtube.com/watch?v=uW-X2gdugvU',
+                isExternal: true
+              },
+              {
+                title: 'Video: Tratamiento Sistémico de las Adicciones',
+                url: 'https://www.youtube.com/watch?v=yVcKg5Nw8XM',
+                isExternal: true
+              }
+            );
+          }
+
+          // Módulo 8: Gestión de las Adicciones desde la Perspectiva de Género
+          if (lesson.titulo.includes('GESTIÓN DE LAS ADICCIONES DESDE LA PERSPECTIVA DE GÉNERO')) {
+            enlaces_externos.push(
+              {
+                title: 'Video: Perspectiva de género y consumo de sustancias psicoactivas',
+                url: 'https://www.youtube.com/watch?v=P2H9tw7TmLo',
+                isExternal: true
+              },
+              {
+                title: 'Video: El análisis de Patricia Martínez Redondo – Género y adicciones',
+                url: 'https://www.youtube.com/watch?v=NxDuxPTTWp0',
+                isExternal: true
+              },
+              {
+                title: 'Video: Hogar y adicciones. Una mirada de género',
+                url: 'https://www.youtube.com/watch?v=wLhxmaM4exE',
+                isExternal: true
+              }
+            );
+          }
+
+          // Módulo 9: Inteligencia Emocional
+          if (lesson.titulo.includes('INTELIGENCIA EMOCIONAL')) {
+            enlaces_externos.push(
+              {
+                title: 'Video: Inteligencia emocional y su relación con el consumo de drogas',
+                url: 'https://www.youtube.com/watch?v=HenHL1fizwU',
+                isExternal: true
+              },
+              {
+                title: 'Video: Las adicciones y el manejo de emociones',
+                url: 'https://www.youtube.com/watch?v=3oqivnZAfIs',
+                isExternal: true
+              },
+              {
+                title: 'Video: Conferencia "Gestión emocional para la prevención de adicciones"',
+                url: 'https://www.youtube.com/watch?v=FZoWHlA5BNs',
+                isExternal: true
+              }
+            );
+          }
+
+          // Módulo 10: Trabajo Final de Máster
+          if (lesson.titulo.includes('TRABAJO FINAL DE MÁSTER')) {
+            enlaces_externos.push(
+              {
+                title: 'Video: Guía de recomendaciones para la prevención y asistencia de adicciones en el ámbito laboral',
+                url: 'https://www.youtube.com/watch?v=Ri3vH-eugXM',
+                isExternal: true
+              },
+              {
+                title: 'Video: Presentación Trabajo Final de Máster ISEP - Ejemplo real',
+                url: 'https://www.youtube.com/watch?v=BkbGsNbX9fo',
+                isExternal: true
+              },
+              {
+                title: 'Video: Buenas prácticas en la prevención de adicciones',
+                url: 'https://www.youtube.com/watch?v=XiVqGs2BRsI',
+                isExternal: true
+              }
+            );
+          }
+        }
+
+        // Video de YouTube para Psicología positiva (curso experto)
         if (generatedSlug.includes('Psicología positiva')) {
-          externalLinks.push(
+          enlaces_externos.push(
             {
               title: 'Video: Victor Küppers - El valor de tu actitud',
               url: 'https://www.youtube.com/watch?v=Z3_f6a-YrY8',
@@ -353,7 +569,7 @@ const NewLessonPage: React.FC = () => {
           ...lesson,
           slug: generatedSlug,
           pdfs,
-          externalLinks,
+          enlaces_externos,
           tiene_cuestionario: hasQuiz
         };
       });
@@ -636,6 +852,11 @@ const NewLessonPage: React.FC = () => {
           
           {/* Main content - Lesson viewer */}
           <div className="lg:col-span-3">
+            {(() => {
+              console.log('🎬 Passing lesson to LessonViewer:', currentLesson?.titulo);
+              console.log('🎬 Lesson enlaces_externos:', currentLesson?.enlaces_externos);
+              return null;
+            })()}
             <LessonViewer
               lesson={currentLesson}
               course={course}

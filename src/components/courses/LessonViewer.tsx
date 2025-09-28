@@ -661,18 +661,78 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
             
             {externalLinks.length > 0 && (
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-3">🔗 Enlaces Externos</h3>
-                <div className="flex flex-wrap gap-3">
-                  {externalLinks.map((link, index) => (
-                    <button
-                      key={`external-${index}`}
-                      onClick={() => handleExternalLinkClick(link.url)}
-                      className="inline-flex items-center px-3 py-2 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors"
-                    >
-                      <ExternalLink className="w-4 h-4 mr-2" />
-                      <span className="text-sm font-medium">{link.title}</span>
-                    </button>
-                  ))}
+                <h3 className="text-lg font-semibold text-gray-900 mb-3">🎬 Videos Recomendados</h3>
+                <div className="space-y-6">
+                  {externalLinks.map((link, index) => {
+                    // Extraer el ID del video de YouTube de la URL
+                    const getYoutubeVideoId = (url: string): string | null => {
+                      const youtubeRegex = /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/;
+                      const match = url.match(youtubeRegex);
+                      return match ? match[1] : null;
+                    };
+
+                    const videoId = getYoutubeVideoId(link.url);
+                    const isYoutubeVideo = videoId !== null;
+                    const isPlaylist = link.url.includes('youtube.com/playlist');
+
+                    return (
+                      <div key={`video-${index}`} className="bg-gray-50 rounded-lg p-6">
+                        <h4 className="text-md font-medium text-gray-900 mb-4">{link.title}</h4>
+
+                        {isYoutubeVideo && !isPlaylist ? (
+                          // Video de YouTube embebido
+                          <div className="aspect-video rounded-lg overflow-hidden shadow-md">
+                            <iframe
+                              width="100%"
+                              height="100%"
+                              src={`https://www.youtube.com/embed/${videoId}`}
+                              title={link.title}
+                              frameBorder="0"
+                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                              allowFullScreen
+                              className="w-full h-full"
+                            />
+                          </div>
+                        ) : isPlaylist ? (
+                          // Playlist de YouTube
+                          <div className="space-y-3">
+                            <div className="aspect-video rounded-lg overflow-hidden shadow-md bg-red-100 flex items-center justify-center">
+                              <div className="text-center">
+                                <div className="text-4xl mb-2">📺</div>
+                                <p className="text-sm text-gray-600">Playlist de YouTube</p>
+                                <p className="text-xs text-gray-500 mt-1">Haz clic para ver la lista completa</p>
+                              </div>
+                            </div>
+                            <button
+                              onClick={() => handleExternalLinkClick(link.url)}
+                              className="inline-flex items-center px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                            >
+                              <ExternalLink className="w-4 h-4 mr-2" />
+                              <span className="text-sm font-medium">Ver Playlist en YouTube</span>
+                            </button>
+                          </div>
+                        ) : (
+                          // Enlace externo regular
+                          <div className="space-y-3">
+                            <div className="aspect-video rounded-lg overflow-hidden shadow-md bg-gray-200 flex items-center justify-center">
+                              <div className="text-center">
+                                <div className="text-4xl mb-2">🔗</div>
+                                <p className="text-sm text-gray-600">Recurso Externo</p>
+                                <p className="text-xs text-gray-500 mt-1">Haz clic para visitar</p>
+                              </div>
+                            </div>
+                            <button
+                              onClick={() => handleExternalLinkClick(link.url)}
+                              className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                            >
+                              <ExternalLink className="w-4 h-4 mr-2" />
+                              <span className="text-sm font-medium">Visitar Enlace</span>
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             )}

@@ -15303,53 +15303,39 @@ exports.handler = async (event, context) => {
         // Incluir datos crudos para referencia
       };
     }
-    if (data.type !== "quiz-responses" && data.openAnswers && Array.isArray(data.openAnswers)) {
-      data.openAnswers.forEach((respuesta, index) => {
-        webhookPayload.responses.push({
-          questionNumber: index + 1,
-          questionId: respuesta.questionId,
-          question: respuesta.question || "",
-          answer: respuesta.answer || "",
-          answerType: "open",
-          files: respuesta.files || [],
-          timeSpent: respuesta.timeSpent || 0,
-          submittedAt: respuesta.submittedAt || (/* @__PURE__ */ new Date()).toISOString()
+    if (data.type !== "quiz-responses" && data.questions && Array.isArray(data.questions)) {
+      console.log("\u{1F4DD} Procesando preguntas desde formato questions anidado...");
+      const actualQuestions = data.questions[0];
+      if (actualQuestions && Array.isArray(actualQuestions)) {
+        actualQuestions.forEach((question, index) => {
+          const isOpenQuestion = question.correctAnswer === "Respuesta abierta" && question.userAnswer && question.userAnswer !== "Verdadero" && question.userAnswer !== "Falso";
+          if (isOpenQuestion) {
+            console.log(`\u{1F4DD} Pregunta abierta encontrada: ${question.question}`);
+            console.log(`\u{1F4DD} Respuesta del usuario: ${question.userAnswer}`);
+            webhookPayload.responses.push({
+              questionNumber: index + 1,
+              questionId: `question-${index}`,
+              question: question.question || "",
+              answer: question.userAnswer || "",
+              answerType: "open",
+              isCorrect: null,
+              // Las preguntas abiertas no se evalúan automáticamente
+              needsEvaluation: true,
+              // Indica que necesita evaluación manual
+              evaluationStatus: "pending",
+              // Estado de evaluación
+              timeSpent: question.timeSpent || 0,
+              submittedAt: (/* @__PURE__ */ new Date()).toISOString()
+            });
+          }
         });
-      });
+      }
     }
-    if (data.type !== "quiz-responses" && data.userAnswers) {
-      Object.keys(data.userAnswers).forEach((questionId) => {
-        const answer = data.userAnswers[questionId];
-        const existingResponse = webhookPayload.responses.find((r) => r.questionId === questionId);
-        if (!existingResponse) {
-          webhookPayload.responses.push({
-            questionId,
-            answer: answer.textoRespuesta || answer.opcionId || answer.answer || "",
-            answerType: "multiple_choice",
-            selectedOption: answer.opcionSeleccionada || answer.opcionId || null,
-            isCorrect: answer.esCorrecta || answer.correcta || false,
-            timeSpent: answer.tiempoRespuesta || answer.tiempo || 0,
-            submittedAt: answer.fechaRespuesta || (/* @__PURE__ */ new Date()).toISOString()
-          });
-        }
-      });
+    if (data.type === "quiz-responses" && webhookPayload.responses) {
+      console.log("\u{1F4DD} Filtrando payload existente para mantener solo preguntas abiertas...");
+      webhookPayload.responses = webhookPayload.responses.filter((response) => response.answerType === "open");
     }
-    if (data.type !== "quiz-responses" && data.respuestas_guardadas && typeof data.respuestas_guardadas === "object") {
-      Object.keys(data.respuestas_guardadas).forEach((questionId) => {
-        const answer = data.respuestas_guardadas[questionId];
-        const existingResponse = webhookPayload.responses.find((r) => r.questionId === questionId);
-        if (!existingResponse) {
-          webhookPayload.responses.push({
-            questionId,
-            answer: "Respuesta guardada en BD",
-            answerType: "database",
-            isCorrect: answer.es_correcta || answer.esCorrecta || false,
-            timeSpent: answer.tiempo_respuesta || answer.tiempoRespuesta || 0,
-            submittedAt: answer.fecha_respuesta || (/* @__PURE__ */ new Date()).toISOString()
-          });
-        }
-      });
-    }
+    console.log(`\u{1F4DD} Total de preguntas abiertas a enviar: ${webhookPayload.responses.length}`);
     if (!webhookPayload.studentInfo.email && data.userId) {
       webhookPayload.studentInfo.email = data.userId + "@usuario.local";
     }

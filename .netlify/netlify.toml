@@ -29,6 +29,9 @@ bundle = true
 
 [build.services]
 
+[dev]
+targetPort = 5175.0
+
 [functions]
 
 [functions.send-corrections]

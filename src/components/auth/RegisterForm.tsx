@@ -23,7 +23,8 @@ type RegisterFormProps = {
 
 const RegisterForm: React.FC<RegisterFormProps> = ({ role, onRegister }) => {
   const [formData, setFormData] = useState({
-    name: '',
+    nombre: '',
+    apellido: '',
     email: '',
     password: '',
     mobile: '',
@@ -261,11 +262,24 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ role, onRegister }) => {
               <User className="absolute top-3 left-3 text-gray-400" size={18} />
               <input
                 type="text"
-                name="name"
-                value={formData.name}
+                name="nombre"
+                value={formData.nombre}
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Su Nombre"
+                required
+              />
+            </div>
+
+            <div className="mb-4 relative">
+              <User className="absolute top-3 left-3 text-gray-400" size={18} />
+              <input
+                type="text"
+                name="apellido"
+                value={formData.apellido}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Su Apellido"
                 required
               />
             </div>

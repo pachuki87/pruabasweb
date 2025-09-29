@@ -5,18 +5,13 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-<<<<<<< HEAD
     "build": "vite build && node copy-static-files.js",
-=======
-    "build": "vite build",
->>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
     "lint": "eslint .",
     "preview": "vite preview",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist"
   },
   "dependencies": {
-<<<<<<< HEAD
     "@stripe/react-stripe-js": "^4.0.2",
     "@stripe/stripe-js": "^7.9.0",
     "@supabase/mcp-server-supabase": "^0.5.5",
@@ -46,20 +41,6 @@
   "devDependencies": {
     "@eslint/js": "^9.9.1",
     "@playwright/test": "^1.54.2",
-=======
-    "@supabase/supabase-js": "^2.49.5",
-    "lucide-react": "^0.344.0",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "react-error-boundary": "^6.0.0",
-    "react-icons": "^5.5.0",
-    "react-router-dom": "^6.22.3",
-    "sonner": "^1.4.3",
-    "sweetalert2": "^11.10.5"
-  },
-  "devDependencies": {
-    "@eslint/js": "^9.9.1",
->>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
     "@types/react": "^18.3.5",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.1",

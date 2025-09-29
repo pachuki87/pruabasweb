@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom'; // Import useNavigate
+import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import { Toaster } from 'sonner';
 import { ErrorBoundary } from 'react-error-boundary';
 import { CartProvider } from 'react-use-cart';
@@ -70,7 +70,6 @@ type User = {
 function App() {
   const [user, setUser] = useState<User | null>(null);
   const [currentRole, setCurrentRole] = useState<string>('visitor');
-  const navigate = useNavigate();
 
   const handleLogin = async (userData: User) => {
     // Set Supabase session after successful login
@@ -132,10 +131,11 @@ function App() {
                                currentPath.includes(`/${user.role}/profile`);
 
       if (!isDashboardRoute && currentPath !== `/login/${user.role}` && currentPath !== `/register/${user.role}`) {
-        navigate(`/${user.role}/dashboard`);
+        // Usar window.location.href para la redirección en lugar de navigate
+        window.location.href = `/${user.role}/dashboard`;
       }
     }
-  }, [user, navigate]);
+  }, [user]);
 
   return (
     <AuthProvider>

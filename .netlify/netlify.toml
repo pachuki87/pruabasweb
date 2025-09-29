@@ -1,15 +1,15 @@
-functionsDirectory = "C:\\Users\\pabli\\OneDrive\\Desktop\\institutoooo - copia\\pruabasweb\\netlify\\functions"
+functionsDirectory = "C:\\Users\\pabli\\OneDrive\\Desktop\\instrituto lidera\\pruabasweb\\netlify\\functions"
 functionsDirectoryOrigin = "config"
 headersOrigin = "config"
 redirectsOrigin = "config"
 plugins = []
 
 [build]
-publish = "C:\\Users\\pabli\\OneDrive\\Desktop\\institutoooo - copia\\pruabasweb\\dist"
+publish = "C:\\Users\\pabli\\OneDrive\\Desktop\\instrituto lidera\\pruabasweb\\dist"
 publishOrigin = "config"
 commandOrigin = "config"
 command = "npm run build"
-functions = "C:\\Users\\pabli\\OneDrive\\Desktop\\institutoooo - copia\\pruabasweb\\netlify\\functions"
+functions = "C:\\Users\\pabli\\OneDrive\\Desktop\\instrituto lidera\\pruabasweb\\netlify\\functions"
 
 [build.environment]
 

@@ -40,7 +40,7 @@ const Hero = () => {
   }, [backgroundImages.length]);
 
   return (
-    <section className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white py-20 overflow-hidden">
+    <section className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white py-20 lg:py-20 pb-32 overflow-hidden">
       {/* Background Images with Transition */}
       <div className="absolute inset-0">
         {backgroundImages.map((image, index) => (
@@ -60,7 +60,7 @@ const Hero = () => {
         <div className="absolute inset-0 bg-gradient-to-br from-gray-900/40 via-gray-800/40 to-gray-900/40"></div>
         
         {/* Indicadores de imagen */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-2 z-10">
+        <div className="absolute bottom-8 lg:bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-2 z-10">
           {backgroundImages.map((_, index) => (
             <button
               key={index}
@@ -92,8 +92,8 @@ const Hero = () => {
             />
           </a>
         </div>
-        
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16 lg:mb-0">
           <div>
             <h1 className="text-4xl lg:text-6xl font-bold mb-6 leading-tight">
               Especialízate en<br />

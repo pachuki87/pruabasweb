@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
+# -*- coding: utf-8 -*-"""
 Script para verificar la estructura de las tablas del sistema de cuestionarios
 """
 
@@ -24,7 +23,7 @@ supabase: Client = create_client(url, key)
 def check_table_structure(table_name):
     """Verificar la estructura de una tabla obteniendo una fila de muestra"""
     try:
-        print(f"\n🔍 Verificando estructura de la tabla '{table_name}':")
+        print(f"\nVerificando estructura de la tabla '{table_name}':")
         print("-" * 50)
         
         # Obtener una fila de muestra para ver las columnas disponibles
@@ -49,7 +48,7 @@ def check_table_structure(table_name):
         print(f"Error al verificar '{table_name}': {e}")
 
 def main():
-    print("🔍 VERIFICACIÓN DE ESTRUCTURA DE TABLAS")
+    print("VERIFICACIÓN DE ESTRUCTURA DE TABLAS")
     print("=" * 60)
     
     # Tablas relacionadas con cuestionarios

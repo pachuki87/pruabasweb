@@ -1,5 +1,3 @@
-const fetch = require('node-fetch');
-
 exports.handler = async (event, context) => {
   // Configurar CORS headers
   const headers = {
@@ -62,6 +60,10 @@ exports.handler = async (event, context) => {
       }
     });
     prompt += 'Assistant:';
+
+    // Importar fetch dinámicamente
+    const nodeFetch = await import('node-fetch');
+    const fetch = nodeFetch.default;
 
     // Llamar a la API de Gemini
     const response = await fetch(

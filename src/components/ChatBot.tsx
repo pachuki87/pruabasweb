@@ -47,6 +47,12 @@ const ChatBot: React.FC<ChatBotProps> = ({
       const response = await axios.post(
         '/.netlify/functions/gemini-api',
         {
+          messages: [
+            {
+              role: 'user',
+              content: message
+            }
+          ],
           systemInstruction: `Eres un asistente virtual del Instituto Lidera, especializado en educación sobre adicciones, psicología y salud mental.
 
           Tu personalidad:
@@ -58,12 +64,6 @@ const ChatBot: React.FC<ChatBotProps> = ({
           - Enfocado en ayudar estudiantes del instituto
 
           Contexto: El usuario está interactuando contigo a través del chatbot del Instituto Lidera.`,
-          messages: [
-            {
-              role: 'user',
-              content: message
-            }
-          ],
           max_tokens: 1000,
           temperature: 0.7
         },
@@ -80,7 +80,10 @@ const ChatBot: React.FC<ChatBotProps> = ({
         data: response.data
       });
 
-      const botResponse = response.data.choices[0].message.content;
+      // Parse the response from the backend function
+      const botResponse = response.data.candidates?.[0]?.content?.parts?.[0]?.text ||
+                          response.data.choices?.[0]?.message?.content ||
+                          'Lo siento, no pude procesar tu mensaje correctamente.';
 
       if (typeof botResponse !== 'string') {
         console.warn('⚠️ Respuesta de Gemini no es string, convirtiendo...');

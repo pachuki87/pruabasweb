@@ -129,9 +129,23 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ role, onRegister }) => {
       console.log('✅ Usuario creado en Auth:', authData.user.id);
       toast.success('Usuario registrado en el sistema de autenticación');
 
-      // Insertar usuario en la tabla usuarios
+      // Iniciar sesión con el usuario recién creado para obtener una sesión autenticada
+      console.log('🔑 Iniciando sesión con el usuario recién creado...');
+      const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
+        email: formData.email,
+        password: formData.password,
+      });
+
+      if (signInError) {
+        console.error('❌ Error al iniciar sesión:', signInError);
+        setError(`Error al iniciar sesión: ${signInError.message}`);
+        toast.error(`Error al iniciar sesión: ${signInError.message}`);
+        return;
+      }
+
+      // Insertar usuario en la tabla usuarios usando el cliente autenticado
       console.log('👤 Insertando usuario en tabla usuarios...');
-      const { error: insertError } = await supabaseAdmin
+      const { error: insertError } = await supabase
         .from('usuarios')
         .insert([
           {
@@ -145,11 +159,11 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ role, onRegister }) => {
 
       if (insertError) {
         console.error('❌ Error al insertar en tabla usuarios:', insertError);
-        
+
         // Limpiar usuario de Auth si falla la inserción
         console.log('🧹 Limpiando usuario de Auth...');
         await supabaseAdmin.auth.admin.deleteUser(authData.user.id);
-        
+
         setError(`Error al crear perfil de usuario: ${insertError.message}`);
         toast.error(`Error al crear perfil de usuario: ${insertError.message}`);
         return;

@@ -185,14 +185,17 @@ const QuizAttemptPage: React.FC = () => {
     // Save quiz attempt to database
     if (user) {
       const { error } = await supabase
-        .from('user_test_results')
+        .from('respuestas_texto_libre')
         .insert({
           user_id: user.id,
-          cuestionario_id: quiz.id,
-          curso_id: quiz.curso_id,
-          puntuacion: finalScore,
-          puntuacion_maxima: 100,
-          respuestas_detalle: selectedAnswers
+          pregunta_id: quiz.id,
+          respuesta: JSON.stringify({
+            puntuacion: finalScore,
+            puntuacion_maxima: 100,
+            respuestas_detalle: selectedAnswers,
+            fecha_completado: new Date().toISOString()
+          }),
+          fecha_respuesta: new Date().toISOString()
         });
 
       if (error) {

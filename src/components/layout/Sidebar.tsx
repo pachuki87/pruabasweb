@@ -33,7 +33,7 @@ const Sidebar: React.FC<SidebarProps> = ({ role }) => {
     <>
       {/* Mobile sidebar toggle button - only visible on small screens */}
       <button 
-        className="fixed z-20 bottom-4 right-4 md:hidden bg-blue-600 text-white p-3 rounded-full shadow-lg"
+        className="fixed z-20 bottom-4 left-4 md:hidden bg-blue-600 text-white p-3 rounded-full shadow-lg"
         onClick={toggleSidebar}
         aria-label={sidebarOpen ? "Cerrar menú lateral" : "Abrir menú lateral"}
       >

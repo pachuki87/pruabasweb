@@ -112,14 +112,17 @@ const StudentProgress: React.FC = () => {
           // Get completed quizzes count
           let completedQuizzes = 0;
           if (quizIds.length > 0) {
-            const { count } = await supabase
-              .from('user_test_results')
-              .select('cuestionario_id', { count: 'exact', head: true })
+            // Usar respuestas_texto_libre para contar cuestionarios completados
+            const { data: completedQuizData } = await supabase
+              .from('respuestas_texto_libre')
+              .select('pregunta_id')
               .eq('user_id', authUser.id)
-              .in('cuestionario_id', quizIds)
+              .in('pregunta_id', quizIds)
               .abortSignal(signal);
 
-            completedQuizzes = count || 0;
+            // Contar cuestionarios únicos completados
+            const uniqueQuizzes = new Set(completedQuizData?.map(r => r.pregunta_id) || []);
+            completedQuizzes = uniqueQuizzes.size;
           }
 
           if (signal.aborted) return null;
@@ -128,17 +131,18 @@ const StudentProgress: React.FC = () => {
           let progressPercentage = 0;
           let completedChapters = 0;
 
-          // Get lesson progress
+          // Get lesson progress - usar inscripciones como base y calcular progreso
           const { data: lessonProgress } = await supabase
-            .from('user_course_progress')
+            .from('inscripciones')
             .select('*')
             .eq('user_id', authUser.id)
             .eq('curso_id', courseId);
 
           if (signal.aborted) return null;
 
-          const completedLessons = lessonProgress?.filter(p => p.estado === 'completado').length || 0;
-          const inProgressLessons = lessonProgress?.filter(p => p.estado === 'en_progreso').length || 0;
+          // Calcular progreso basado en respuestas de cuestionarios
+          const completedLessons = Math.min(completedQuizzes, totalChapters);
+          const inProgressLessons = completedQuizzes > 0 && completedQuizzes < totalQuizzes ? 1 : 0;
 
           // Calculate weighted progress
           const lessonWeight = 0.6;

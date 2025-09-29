@@ -512,20 +512,21 @@ const QuizComponent = ({
       });
 
       const { data, error: saveError } = await supabase
-        .from('user_test_results')
+        .from('respuestas_texto_libre')
         .insert({
           user_id: user.id,
-          cuestionario_id: quiz.id,
-          curso_id: courseId,
-          puntuacion: results.respuestasCorrectas,
-          puntuacion_maxima: results.totalPreguntas,
-          tiempo_completado: Math.round((Date.now() - startTime) / 1000 / 60), // minutos
-          respuestas_detalle: {
-            respuestas: userAnswers,
-            tiempo_total: results.tiempoTotal
-          },
-          fecha_completado: new Date().toISOString(),
-          completed_at: new Date().toISOString()
+          pregunta_id: quiz.id,
+          respuesta: JSON.stringify({
+            puntuacion: results.respuestasCorrectas,
+            puntuacion_maxima: results.totalPreguntas,
+            tiempo_completado: Math.round((Date.now() - startTime) / 1000 / 60), // minutos
+            respuestas_detalle: {
+              respuestas: userAnswers,
+              tiempo_total: results.tiempoTotal
+            },
+            fecha_completado: new Date().toISOString()
+          }),
+          fecha_respuesta: new Date().toISOString()
         })
         .select();
 

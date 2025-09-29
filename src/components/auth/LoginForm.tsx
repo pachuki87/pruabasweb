@@ -236,12 +236,14 @@ const LoginForm: React.FC<LoginFormProps> = ({ role, onLogin }) => {
           </button>
         </form>
         
-        <p className="mt-6 text-sm text-center text-gray-600">
-          ¿No tienes una cuenta?{' '}
-          <Link to={`/register/${role}`} className="text-blue-500 hover:underline">
-            Regístrate
-          </Link>
-        </p>
+        {role === 'student' && (
+          <p className="mt-6 text-sm text-center text-gray-600">
+            ¿No tienes una cuenta?{' '}
+            <Link to="/register/student" className="text-blue-500 hover:underline">
+              Regístrate como Alumno
+            </Link>
+          </p>
+        )}
       </div>
     </div>
   );

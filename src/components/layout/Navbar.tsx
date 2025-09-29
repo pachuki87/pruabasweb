@@ -106,11 +106,11 @@ const Navbar: React.FC<NavbarProps> = ({ onRoleChange, currentRole = 'student' }
               </div>
               
               <Link
-                to="/register"
+                to="/register/student"
                 className="py-2 px-3 rounded-md text-sm font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Regístrate
+                Regístrate como Alumno
               </Link>
               <Link
                 to="/login"

@@ -21,7 +21,12 @@ const AddStudentForm: React.FC = () => {
       const { data, error } = await supabase
         .from('usuarios')
         .insert([
-          { email: email, rol: 'estudiante' } // Assuming 'rol' column exists and 'estudiante' is a valid role
+          {
+            id: crypto.randomUUID(),
+            email: email,
+            rol: 'estudiante',
+            nombre: name
+          }
         ]);
 
       if (error) {
@@ -55,8 +60,7 @@ const AddStudentForm: React.FC = () => {
             required
           />
         </div>
-        {/* Optional: Add a name field if your 'usuarios' table has one */}
-        {/* <div className="mb-4">
+        <div className="mb-4">
           <label htmlFor="name" className="block text-gray-700 text-sm font-bold mb-2">
             Nombre:
           </label>
@@ -66,8 +70,9 @@ const AddStudentForm: React.FC = () => {
             value={name}
             onChange={(e) => setName(e.target.value)}
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            required
           />
-        </div> */}
+        </div>
         <div className="flex items-center justify-between">
           <button
             type="submit"

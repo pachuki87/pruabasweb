@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useState, useEffect } from 'react';
 import { Search, Menu, X, ChevronDown, User, LogOut } from 'lucide-react';
 import CartIcon from '../cart/CartIcon';
@@ -54,11 +55,20 @@ const Header: React.FC<HeaderProps> = ({ currentRole, onRoleChange }) => {
 
     fetchUserData();
   }, [user]);
+=======
+import { useState } from 'react';
+import { Search, Menu, X, ChevronDown } from 'lucide-react';
+
+const Header = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
 
   return (
     <header className="bg-white shadow-sm relative z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
+<<<<<<< HEAD
 
 
           {/* Desktop Navigation */}
@@ -79,10 +89,33 @@ const Header: React.FC<HeaderProps> = ({ currentRole, onRoleChange }) => {
             <button
               onClick={() => setIsSearchOpen(!isSearchOpen)}
               className="p-2 text-gray-500 hover:text-blue-600 transition-colors"
+=======
+          {/* Logo */}
+          <div className="flex-shrink-0">
+            <div className="text-2xl font-bold text-red-600">Instituto Lidera</div>
+          </div>
+
+          {/* Desktop Navigation */}
+          <nav className="hidden lg:flex space-x-8">
+            <a href="#" className="text-gray-700 hover:text-red-600 transition-colors">Cursos</a>
+            <a href="#" className="text-gray-700 hover:text-red-600 transition-colors">Formación</a>
+            <a href="#" className="text-gray-700 hover:text-red-600 transition-colors">Metodología</a>
+            <a href="#" className="text-gray-700 hover:text-red-600 transition-colors">Empresas</a>
+            <a href="#" className="text-gray-700 hover:text-red-600 transition-colors">Testimonios</a>
+            <a href="#" className="text-gray-700 hover:text-red-600 transition-colors">Contacto</a>
+          </nav>
+
+          {/* Search, Login and Menu */}
+          <div className="flex items-center space-x-4">
+            <button
+              onClick={() => setIsSearchOpen(!isSearchOpen)}
+              className="p-2 text-gray-500 hover:text-red-600 transition-colors"
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
             >
               <Search className="h-5 w-5" />
             </button>
             
+<<<<<<< HEAD
             {/* Cart Icon */}
             <CartIcon onClick={() => setIsCartOpen(true)} className="text-gray-600 hover:text-blue-600" />
             
@@ -131,11 +164,31 @@ const Header: React.FC<HeaderProps> = ({ currentRole, onRoleChange }) => {
                   </a>
                 </div>
               )}
+=======
+            {/* Login Buttons */}
+            <div className="hidden md:flex items-center space-x-2">
+              <a
+                href="/login/student"
+                className="px-4 py-2 text-sm text-gray-700 hover:text-red-600 transition-colors"
+              >
+                Estudiante
+              </a>
+              <a
+                href="/login/teacher"
+                className="px-4 py-2 text-sm bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+              >
+                Profesor
+              </a>
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
             </div>
             
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
+<<<<<<< HEAD
               className="lg:hidden p-2 text-gray-500 hover:text-lidera-light-blue transition-colors"
+=======
+              className="lg:hidden p-2 text-gray-500 hover:text-red-600 transition-colors"
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
             >
               {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
@@ -149,7 +202,11 @@ const Header: React.FC<HeaderProps> = ({ currentRole, onRoleChange }) => {
               <input
                 type="text"
                 placeholder="Buscar..."
+<<<<<<< HEAD
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-lidera-light-blue focus:border-transparent"
+=======
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
                 autoFocus
               />
             </div>
@@ -160,6 +217,7 @@ const Header: React.FC<HeaderProps> = ({ currentRole, onRoleChange }) => {
         {isMenuOpen && (
           <div className="lg:hidden absolute top-16 left-0 right-0 bg-white border-t border-gray-200">
             <nav className="px-4 py-6 space-y-4">
+<<<<<<< HEAD
               <div className="flex flex-col items-center mb-4">
                 <img src={logo2} alt="Logo" className="h-20 w-20" />
               </div>
@@ -215,14 +273,40 @@ const Header: React.FC<HeaderProps> = ({ currentRole, onRoleChange }) => {
                     </a>
                   </div>
                 )}
+=======
+              <a href="#" className="block text-gray-700 hover:text-red-600 transition-colors">Cursos</a>
+              <a href="#" className="block text-gray-700 hover:text-red-600 transition-colors">Formación</a>
+              <a href="#" className="block text-gray-700 hover:text-red-600 transition-colors">Metodología</a>
+              <a href="#" className="block text-gray-700 hover:text-red-600 transition-colors">Empresas</a>
+              <a href="#" className="block text-gray-700 hover:text-red-600 transition-colors">Testimonios</a>
+              <a href="#" className="block text-gray-700 hover:text-red-600 transition-colors">Contacto</a>
+              
+              {/* Mobile Login Buttons */}
+              <div className="pt-4 border-t border-gray-200 space-y-2">
+                <a
+                  href="/login/student"
+                  className="block w-full px-4 py-2 text-center text-gray-700 border border-gray-300 rounded-lg hover:text-red-600 hover:border-red-600 transition-colors"
+                >
+                  Acceso Estudiante
+                </a>
+                <a
+                  href="/login/teacher"
+                  className="block w-full px-4 py-2 text-center bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                >
+                  Acceso Profesor
+                </a>
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
               </div>
             </nav>
           </div>
         )}
       </div>
+<<<<<<< HEAD
       
       {/* Cart Sidebar */}
       <Cart isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
+=======
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
     </header>
   );
 };

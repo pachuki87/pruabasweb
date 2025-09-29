@@ -8,7 +8,11 @@ type QuizFormProps = {
 };
 
 export type QuizFormData = {
+<<<<<<< HEAD
   titulo: string;
+=======
+  title: string;
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
   courseId?: string;
   questions: {
     question: string;
@@ -18,7 +22,11 @@ export type QuizFormData = {
 };
 
 const QuizForm: React.FC<QuizFormProps> = ({ courseId, onSubmit, isLoading }) => {
+<<<<<<< HEAD
   const [titulo, setTitle] = useState('');
+=======
+  const [title, setTitle] = useState('');
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
   const [questions, setQuestions] = useState([
     {
       question: '',
@@ -65,7 +73,11 @@ const QuizForm: React.FC<QuizFormProps> = ({ courseId, onSubmit, isLoading }) =>
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSubmit({
+<<<<<<< HEAD
       titulo,
+=======
+      title,
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
       courseId,
       questions
     });
@@ -77,13 +89,22 @@ const QuizForm: React.FC<QuizFormProps> = ({ courseId, onSubmit, isLoading }) =>
       
       <form onSubmit={handleSubmit}>
         <div className="mb-6">
+<<<<<<< HEAD
           <label htmlFor="titulo" className="block text-sm font-medium text-gray-700 mb-1">
+=======
+          <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-1">
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
             Quiz Title
           </label>
           <input
             type="text"
+<<<<<<< HEAD
             id="titulo"
             value={titulo}
+=======
+            id="title"
+            value={title}
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
             onChange={(e) => setTitle(e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             required
@@ -96,7 +117,11 @@ const QuizForm: React.FC<QuizFormProps> = ({ courseId, onSubmit, isLoading }) =>
             <button
               type="button"
               onClick={handleAddQuestion}
+<<<<<<< HEAD
               className="flex items-center text-red-600 hover:text-red-800"
+=======
+              className="flex items-center text-blue-600 hover:text-blue-800"
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
             >
               <PlusCircle className="w-5 h-5 mr-1" />
               Add Question
@@ -166,7 +191,11 @@ const QuizForm: React.FC<QuizFormProps> = ({ courseId, onSubmit, isLoading }) =>
         
         <button
           type="submit"
+<<<<<<< HEAD
           className="w-full bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors"
+=======
+          className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
           disabled={isLoading}
         >
           {isLoading ? 'Creating...' : 'Create Quiz'}
@@ -176,4 +205,8 @@ const QuizForm: React.FC<QuizFormProps> = ({ courseId, onSubmit, isLoading }) =>
   );
 };
 
+<<<<<<< HEAD
 export default QuizForm;
+=======
+export default QuizForm;
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940

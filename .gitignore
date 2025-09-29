@@ -38,6 +38,9 @@ dist-ssr/
 
 # misc
 .DS_Store
+<<<<<<< HEAD
 
 # Local Netlify folder
 .netlify
+=======
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940

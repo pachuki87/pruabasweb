@@ -1,6 +1,11 @@
+<<<<<<< HEAD
 import React, { useState, useEffect } from 'react';
 import StatsCard from '../../components/dashboard/StatsCard';
 import StudentProgress from '../../components/dashboard/StudentProgress';
+=======
+import React, { useEffect, useState } from 'react';
+import StatsCard from '../../components/dashboard/StatsCard';
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
 import { supabase, getUserById } from '../../lib/supabase'; // Import getUserById
 
 type DashboardProps = {
@@ -38,6 +43,7 @@ const DashboardPage: React.FC<DashboardProps> = ({ role }) => {
     setIsLoading(true);
     
     try {
+<<<<<<< HEAD
       const { data: { user } } = await supabase.auth.getUser();
       
       if (!user) {
@@ -144,10 +150,38 @@ const DashboardPage: React.FC<DashboardProps> = ({ role }) => {
           completedCourses: completedCoursesCount,
         });
       }
+=======
+      // Fetch total courses
+      const { count: coursesCount, error: coursesError } = await supabase
+        .from('cursos')
+        .select('*', { count: 'exact', head: true });
+
+      if (coursesError) throw coursesError;
+
+      // Fetch total students (assuming all users in 'usuarios' are students for now, or filter by role if needed)
+      const { count: studentsCount, error: studentsError } = await supabase
+        .from('usuarios')
+        .select('*', { count: 'exact', head: true });
+
+      if (studentsError) throw studentsError;
+
+      // TODO: Fetch total chapters - need to determine how chapters are stored
+
+      setStats(prevStats => ({
+        ...prevStats,
+        courses: coursesCount || 0,
+        students: studentsCount || 0,
+        // chapters: chaptersCount || 0, // Uncomment when chapters are fetched
+      }));
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
       
       setIsLoading(false);
     } catch (error: any) {
       console.error('Error fetching stats:', error);
+<<<<<<< HEAD
+=======
+      // Set stats to 0 or previous values on error
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
       setStats({
         courses: 0,
         students: 0,
@@ -187,27 +221,43 @@ const DashboardPage: React.FC<DashboardProps> = ({ role }) => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <StatsCard
             title="Total de Cursos"
+<<<<<<< HEAD
             value={`${stats.courses}`}
+=======
+            value={`${stats.courses} curso(s)`}
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
             color="blue"
           />
           
           {role === 'teacher' ? (
             <StatsCard
               title="Total de Estudiantes"
+<<<<<<< HEAD
               value={`${stats.students}`}
+=======
+              value={`${stats.students} estudiante(s)`}
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
               color="gray"
             />
           ) : (
             <StatsCard
               title="Cursos Completados"
+<<<<<<< HEAD
               value={`${stats.completedCourses}`}
+=======
+              value={`${stats.completedCourses} curso(s)`}
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
               color="green"
             />
           )}
           
           <StatsCard
             title="Total de Cuestionarios"
+<<<<<<< HEAD
             value={`${stats.quizzes}`}
+=======
+            value={`${stats.quizzes} cuestionario(s)`}
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
             color="green"
           />
         </div>
@@ -238,7 +288,22 @@ const DashboardPage: React.FC<DashboardProps> = ({ role }) => {
               </li>
             </ul>
            ) : (
+<<<<<<< HEAD
              <StudentProgress />
+=======
+             <div>
+               <div>
+                 <h3 className="text-md font-medium mb-2">Master en Adicciones</h3>
+                 <div className="w-full bg-gray-200 rounded-full h-2.5">
+                   <div className="bg-blue-600 h-2.5 rounded-full" style={{ width: '45%' }}></div>
+                 </div>
+                 <div className="flex justify-between text-sm text-gray-500 mt-1">
+                   <span>Progreso: 45%</span>
+                   <span>5/12 lecciones completadas</span>
+                 </div>
+               </div>
+             </div>
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
            )}
          </div>
        </div>

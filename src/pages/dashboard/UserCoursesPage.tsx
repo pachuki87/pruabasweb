@@ -5,7 +5,11 @@ import { supabase } from '../../lib/supabase';
 
 type Course = {
   id: string;
+<<<<<<< HEAD
   titulo: string;
+=======
+  title: string;
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
   teacher_name: string;
   teacher_id?: string;
 };
@@ -38,6 +42,7 @@ const UserCoursesPage: React.FC<UserCoursesPageProps> = ({ role }) => {
       let coursesError;
 
       if (role === 'student') {
+<<<<<<< HEAD
         // Fetch enrolled courses for student
         const { data: enrollmentsData, error: enrollmentsError } = await supabase
       .from('inscripciones')
@@ -60,6 +65,29 @@ const UserCoursesPage: React.FC<UserCoursesPageProps> = ({ role }) => {
           .from('cursos')
           .select('id, titulo, teacher_id')
         .eq('teacher_id', user.id));
+=======
+        // Lógica existente para estudiantes
+        const { data: inscriptionsData, error: inscriptionsError } = await supabase
+          .from('inscripciones')
+          .select('curso_id')
+          .eq('usuario_id', user.id);
+
+        if (inscriptionsError) {
+          throw inscriptionsError;
+        }
+
+        const assignedCourseIds = inscriptionsData.map(inscription => inscription.curso_id);
+
+        ({ data: coursesData, error: coursesError } = await supabase
+          .from('cursos')
+          .select('id, titulo, profesor_id')
+          .in('id', assignedCourseIds));
+      } else if (role === 'teacher') {
+        // Lógica para profesores: obtener todos los cursos disponibles
+        ({ data: coursesData, error: coursesError } = await supabase
+          .from('cursos')
+          .select('id, titulo, profesor_id'));
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
       } else {
         // Rol desconocido, no cargar cursos
         setCourses([]);
@@ -71,29 +99,47 @@ const UserCoursesPage: React.FC<UserCoursesPageProps> = ({ role }) => {
         throw coursesError;
       }
 
+<<<<<<< HEAD
       // Get teacher names
       const teacherIds = coursesData.map(course => course.teacher_id).filter(Boolean);
+=======
+      // Obtener los nombres de los profesores (asumiendo que profesor_id se relaciona con la tabla usuarios)
+      const teacherIds = coursesData.map(course => course.profesor_id).filter(Boolean);
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
       let teachersMap = new Map();
       if (teacherIds.length > 0) {
         const { data: teachersData, error: teachersError } = await supabase
           .from('usuarios')
+<<<<<<< HEAD
           .select('id, nombre')
+=======
+          .select('id, nombre') // Asumiendo que 'nombre' es el campo del nombre del profesor
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
           .in('id', teacherIds);
 
         if (teachersError) {
           console.error('Error fetching teachers:', teachersError);
         } else {
           teachersData.forEach(teacher => {
+<<<<<<< HEAD
             teachersMap.set(teacher.id, teacher.nombre || teacher.name || 'Desconocido');
+=======
+            teachersMap.set(teacher.id, teacher.nombre);
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
           });
         }
       }
 
       const formattedCourses = coursesData.map(course => ({
         id: course.id,
+<<<<<<< HEAD
         titulo: course.titulo,
         teacher_name: teachersMap.get(course.teacher_id) || 'Desconocido',
         teacher_id: course.teacher_id
+=======
+        title: course.titulo,
+        teacher_name: teachersMap.get(course.profesor_id) || 'Desconocido' // Usar el nombre del profesor
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
       }));
 
       setCourses(formattedCourses);
@@ -105,6 +151,7 @@ const UserCoursesPage: React.FC<UserCoursesPageProps> = ({ role }) => {
     }
   };
 
+<<<<<<< HEAD
   const handleInscription = async (courseId) => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
@@ -151,6 +198,8 @@ const UserCoursesPage: React.FC<UserCoursesPageProps> = ({ role }) => {
     }
   };
 
+=======
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
   return (
     <div>
       <h1 className="text-2xl font-bold mb-6">Mis Cursos</h1>
@@ -206,7 +255,11 @@ const UserCoursesPage: React.FC<UserCoursesPageProps> = ({ role }) => {
                       to={`/${role}/courses/${course.id}`}
                       className="text-blue-600 hover:text-blue-800"
                     >
+<<<<<<< HEAD
                       {course.titulo}
+=======
+                      {course.title}
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
                     </Link>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">

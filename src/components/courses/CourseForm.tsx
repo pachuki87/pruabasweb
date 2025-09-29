@@ -11,7 +11,11 @@ type CourseFormProps = {
 
 type Course = {
   id: string;
+<<<<<<< HEAD
   titulo: string;
+=======
+  title: string;
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
   description: string;
   technologies: string;
   image_url: string | null;
@@ -23,7 +27,11 @@ const CourseForm: React.FC<CourseFormProps> = ({
   onSubmit, 
   isLoading 
 }) => {
+<<<<<<< HEAD
   const [titulo, setTitle] = useState('');
+=======
+  const [title, setTitle] = useState('');
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
   const [description, setDescription] = useState('');
   const [technologies, setTechnologies] = useState('');
   const [image, setImage] = useState<File | null>(null);
@@ -54,13 +62,21 @@ const CourseForm: React.FC<CourseFormProps> = ({
       // Mock data for the example
       const data: Course = {
         id: courseId,
+<<<<<<< HEAD
         titulo: 'Master en Adicciones',
+=======
+        title: 'Master en Adicciones',
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
         description: 'Información actualizada sobre el Master en Adicciones.',
         technologies: 'psicologia,neurociencia,terapia',
         image_url: null
       };
       
+<<<<<<< HEAD
       setTitle(data.titulo);
+=======
+      setTitle(data.title);
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
       setDescription(data.description);
       setTechnologies(data.technologies);
       
@@ -102,7 +118,11 @@ const CourseForm: React.FC<CourseFormProps> = ({
 
     // Create a FormData object to handle file uploads
     const formData = new FormData();
+<<<<<<< HEAD
     formData.append('titulo', titulo);
+=======
+    formData.append('title', title);
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
     formData.append('description', description);
     formData.append('technologies', technologies);
     formData.append('teacher_id', teacherId);
@@ -180,13 +200,22 @@ const CourseForm: React.FC<CourseFormProps> = ({
       
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
+<<<<<<< HEAD
           <label htmlFor="titulo" className="block text-sm font-medium text-gray-700 mb-1">
+=======
+          <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-1">
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
             Title
           </label>
           <input
             type="text"
+<<<<<<< HEAD
             id="titulo"
             value={titulo}
+=======
+            id="title"
+            value={title}
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
             onChange={(e) => setTitle(e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             required
@@ -230,7 +259,11 @@ const CourseForm: React.FC<CourseFormProps> = ({
         
         <button
           type="submit"
+<<<<<<< HEAD
           className="w-full bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors"
+=======
+          className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
           disabled={isLoading}
         >
           {isLoading ? 'Saving...' : isEditing ? 'Update Course' : 'Add Course'}

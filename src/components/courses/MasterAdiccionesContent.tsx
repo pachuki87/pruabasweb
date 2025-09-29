@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
+<<<<<<< HEAD
 import { FaGraduationCap, FaUsers, FaCalendarAlt, FaMapMarkerAlt, FaEuroSign, FaPhone, FaEnvelope, FaHome, FaBook, FaChalkboardTeacher, FaLaptop, FaHandsHelping, FaBrain, FaHeart, FaUserFriends, FaStar, FaAward, FaClock, FaUserTie, FaBriefcase, FaWhatsapp, FaCreditCard, FaMapPin } from 'react-icons/fa';
 import { getMasterPrice } from '../../config/pricing';
+=======
+import { FaGraduationCap, FaUsers, FaCalendarAlt, FaMapMarkerAlt, FaEuroSign, FaPhone, FaEnvelope, FaHome, FaBook, FaChalkboardTeacher, FaLaptop, FaHandsHelping } from 'react-icons/fa';
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
 
 const MasterAdiccionesContent: React.FC = () => {
   const [activeTab, setActiveTab] = useState("inicio");
@@ -8,6 +12,7 @@ const MasterAdiccionesContent: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50 text-gray-800">
       {/* Header */}
+<<<<<<< HEAD
       <header className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 text-white shadow-2xl relative overflow-hidden">
         <div className="absolute inset-0 bg-black opacity-10"></div>
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-pulse"></div>
@@ -21,6 +26,11 @@ const MasterAdiccionesContent: React.FC = () => {
               <p className="text-gray-100 text-sm mt-1">Formación especializada en inteligencia emocional y tratamiento de adicciones</p>
             </div>
           </div>
+=======
+      <header className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white shadow-lg">
+        <div className="container mx-auto px-4 py-6 flex justify-between items-center">
+          <h1 className="text-3xl font-bold">Máster en Adicciones e Intervención Psicosocial</h1>
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
           <nav className="space-x-4 hidden md:flex">
             {["inicio", "metodología", "módulos", "profesorado", "contacto"].map((tab) => (
               <button
@@ -45,7 +55,11 @@ const MasterAdiccionesContent: React.FC = () => {
               key={tab}
               onClick={() => setActiveTab(tab)}
               className={`px-3 py-2 rounded-md capitalize transition ${
+<<<<<<< HEAD
                 activeTab === tab ? "bg-lidera-light-blue text-white font-medium" : "hover:bg-gray-100"
+=======
+                activeTab === tab ? "bg-blue-100 text-blue-700 font-medium" : "hover:bg-gray-100"
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
               }`}
             >
               {tab}
@@ -56,12 +70,16 @@ const MasterAdiccionesContent: React.FC = () => {
 
       {/* Content */}
       <main className="container mx-auto px-4 py-8">
+<<<<<<< HEAD
         {activeTab === "inicio" && (
           <>
             <SectionSummary />
             <HomeSection />
           </>
         )}
+=======
+        {activeTab === "inicio" && <HomeSection />}
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
         {activeTab === "metodología" && <MetodologiaSection />}
         {activeTab === "módulos" && <ModulosSection />}
         {activeTab === "profesorado" && <ProfesoradoSection />}
@@ -71,13 +89,18 @@ const MasterAdiccionesContent: React.FC = () => {
       {/* Footer */}
       <footer className="bg-gray-800 text-white py-6">
         <div className="container mx-auto px-4 text-center">
+<<<<<<< HEAD
           <p>© 2025 Máster en Inteligencia Emocional Aplicada a Adicciones. Todos los derechos reservados.</p>
+=======
+          <p>© 2025 Máster en Adicciones e Intervención Psicosocial. Todos los derechos reservados.</p>
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
         </div>
       </footer>
     </div>
   );
 }
 
+<<<<<<< HEAD
 function SectionSummary() {
   const sections = [
     {
@@ -255,6 +278,40 @@ function HomeSection() {
           </button>
         </div>
       </section>
+=======
+function HomeSection() {
+  return (
+    <>
+      <section className="mb-12">
+        <h2 className="text-2xl font-semibold mb-4">Sobre el Máster</h2>
+        <p className="mb-4">
+          El Máster en Adicciones e Intervención Psicosocial es una formación orientada a la práctica,
+          centrada en el diseño y aplicación de intervenciones terapéuticas eficaces frente a las adicciones
+          y conductas autodestructivas.
+        </p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+          <StatCard title="Duración" value="Octubre 2025 - Junio 2026" />
+          <StatCard title="Plazas" value="20 - 80 por edición" />
+          <StatCard title="Precio" value="1990 €" />
+        </div>
+      </section>
+
+      <section className="mb-12">
+        <h2 className="text-2xl font-semibold mb-4">Propuesta Económica</h2>
+        <ul className="list-disc pl-6 space-y-2">
+          <li>
+            Comisión del 20% para EsVidas por cada alumno derivado (en lugar del 25% propuesto).
+          </li>
+          <li>
+            Mínimo de 15 alumnos para impartir talleres presenciales en Jerez (de lo contrario se imparten
+            en Valencia sin costes adicionales).
+          </li>
+          <li>
+            La colaboración de EsVidas es considerada fundamental para el éxito del proyecto.
+          </li>
+        </ul>
+      </section>
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
     </>
   );
 }
@@ -262,6 +319,7 @@ function HomeSection() {
 function MetodologiaSection() {
   return (
     <section>
+<<<<<<< HEAD
       {/* Header with image */}
       <div className="relative mb-12 rounded-2xl overflow-hidden shadow-xl">
         <div className="absolute inset-0">
@@ -301,6 +359,17 @@ function MetodologiaSection() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
         <ClasesOnline />
+=======
+      <h2 className="text-2xl font-semibold mb-4">Metodología</h2>
+      <p className="mb-4">
+        El máster sigue una modalidad <strong>blended learning</strong>, combinando clases teóricas online
+        con talleres prácticos presenciales. Esta metodología permite una mayor flexibilidad a los alumnos,
+        quienes podrán organizar su tiempo de estudio y aplicar los conocimientos en entornos controlados
+        durante los talleres.
+      </p>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
         <TalleresPresenciales />
         <PracticasOnline />
       </div>
@@ -308,6 +377,7 @@ function MetodologiaSection() {
   );
 }
 
+<<<<<<< HEAD
 function ClasesOnline() {
   return (
     <div className="bg-white p-8 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100">
@@ -399,12 +469,39 @@ function TalleresPresenciales() {
           </div>
         </div>
       </div>
+=======
+function TalleresPresenciales() {
+  return (
+    <div className="bg-white p-6 rounded-lg shadow-md">
+      <h3 className="text-xl font-semibold mb-3">Talleres Presenciales</h3>
+      <ul className="space-y-2 list-disc pl-5">
+        <li>
+          <strong>Duración:</strong> Domingo intensivo (09:00 - 15:00 h)
+        </li>
+        <li>
+          <strong>Lugar:</strong> Reinservida en Jerez
+        </li>
+        <li>
+          <strong>Mínimo de alumnos:</strong> 15 para desplazamiento a Jerez
+        </li>
+        <li>
+          Si no se alcanza el mínimo, los talleres se realizarán en Valencia sin gastos adicionales.
+        </li>
+      </ul>
+      <h4 className="mt-4 font-medium">Temarios:</h4>
+      <ul className="list-disc pl-5 mt-2 space-y-1">
+        <li>El Perdón Interior</li>
+        <li>Inteligencia Emocional</li>
+        <li>Intervención Familiar</li>
+      </ul>
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
     </div>
   );
 }
 
 function PracticasOnline() {
   return (
+<<<<<<< HEAD
     <div className="bg-white p-8 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100">
       <div className="flex items-center mb-6">
         <div className="bg-gradient-to-r from-green-500 to-teal-600 p-3 rounded-full mr-4">
@@ -441,6 +538,18 @@ function PracticasOnline() {
           <p className="text-sm text-gray-700">Talleres y seminarios para crear redes profesionales especializadas</p>
         </div>
       </div>
+=======
+    <div className="bg-white p-6 rounded-lg shadow-md">
+      <h3 className="text-xl font-semibold mb-3">Prácticas Online</h3>
+      <p className="mb-3">
+        Los estudiantes tendrán acceso a sesiones grupales online donde podrán poner en práctica los
+        conocimientos adquiridos.
+      </p>
+      <ul className="space-y-2 list-disc pl-5">
+        <li>Tres sesiones online de Terapia Grupal dirigidas por un especialista.</li>
+        <li>Talleres y seminarios para actualizar conocimientos y crear redes profesionales.</li>
+      </ul>
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
     </div>
   );
 }
@@ -455,10 +564,16 @@ function ModulosSection() {
         "Autonomía del paciente en entornos no supervisados",
         "Rol del entorno en el proceso de recuperación",
         "Farmacoterapia: uso de fármacos interdictores y de apoyo",
+<<<<<<< HEAD
         "Diseño de planes terapéuticos personalizados"
       ],
       resumen:
         "Se enseñan los elementos esenciales de un tratamiento integral, desde la desintoxicación hasta el mantenimiento de la abstinencia, incluyendo el abordaje en contextos abiertos. Este módulo prepara al profesional para diseñar y acompañar planes terapéuticos personalizados.",
+=======
+      ],
+      resumen:
+        "Se enseñan los elementos esenciales de un tratamiento integral, desde la desintoxicación hasta el mantenimiento de la abstinencia, incluyendo el abordaje en contextos abiertos.",
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
     },
     {
       numero: 2,
@@ -468,10 +583,16 @@ function ModulosSection() {
         "Principios de la Terapia de Aceptación y Compromiso (ACT)",
         "Introducción a Mindfulness como herramienta terapéutica",
         "Modelo transteórico del cambio (Prochaska y DiClemente)",
+<<<<<<< HEAD
         "Aplicación práctica de los modelos en adicciones"
       ],
       resumen:
         "Este módulo brinda una base teórica y práctica sobre la terapia cognitiva utilizada en el tratamiento de las adicciones. Permite al estudiante comprender y aplicar distintas estrategias según el momento del proceso de cambio del paciente.",
+=======
+      ],
+      resumen:
+        "Brinda una base teórica y práctica sobre la terapia cognitiva utilizada en el tratamiento de las adicciones.",
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
     },
     {
       numero: 3,
@@ -480,14 +601,21 @@ function ModulosSection() {
         "Principios del enfoque sistémico",
         "Ciclos vitales familiares y crisis",
         "Roles, reglas y lealtades familiares",
+<<<<<<< HEAD
         "Técnicas de intervención familiar desde la terapia sistémica"
       ],
       resumen:
         "Capacita al estudiante en el análisis y abordaje de las dinámicas familiares como sistema, proporcionando herramientas para la intervención familiar efectiva.",
+=======
+      ],
+      resumen:
+        "Capacita al estudiante en el análisis y abordaje de las dinámicas familiares como sistema.",
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
     },
     {
       numero: 4,
       nombre: "Recovery Coaching en Adicciones",
+<<<<<<< HEAD
       temas: [
         "Burnout y estrategias de prevención", 
         "Relación terapéutica y contratransferencia",
@@ -496,6 +624,11 @@ function ModulosSection() {
       ],
       resumen:
         "Ofrece un espacio de reflexión y formación sobre la práctica profesional, con énfasis en el Recovery Coaching como herramienta de acompañamiento en el proceso de recuperación.",
+=======
+      temas: ["Burnout y estrategias de prevención", "Relación terapéutica y contratransferencia"],
+      resumen:
+        "Ofrece un espacio de reflexión y formación sobre la práctica profesional, con énfasis en el Recovery Coaching.",
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
     },
     {
       numero: 5,
@@ -503,40 +636,61 @@ function ModulosSection() {
       temas: [
         "Negación y ambivalencia frente al cambio",
         "Psicoeducación para pacientes y familias",
+<<<<<<< HEAD
         "Mecanismos psicológicos de la adicción",
         "Técnicas de facilitación del insight"
       ],
       resumen:
         "Profundiza en las dinámicas psicológicas de la persona adicta y su entorno, ofreciendo herramientas para facilitar el insight y la comprensión del proceso adictivo.",
+=======
+      ],
+      resumen:
+        "Profundiza en las dinámicas psicológicas de la persona adicta y su entorno, ofreciendo herramientas para facilitar el insight.",
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
     },
     {
       numero: 6,
       nombre: "Intervención Familiar y Recovery Mentoring",
       temas: [
         "Impacto de la adicción en la estructura familiar",
+<<<<<<< HEAD
         "Comunicación no violenta y vínculos funcionales",
         "Rol del mentor en recuperación",
         "Dinámicas emocionales y autocuidado familiar"
       ],
       resumen:
         "Se capacita al estudiante para trabajar con la familia como parte del proceso de recuperación, promoviendo un enfoque colaborativo y emocionalmente consciente. Además, se introducen figuras clave como los mentores o pares en recuperación.",
+=======
+        "Rol del mentor en recuperación",
+      ],
+      resumen:
+        "Capacita al estudiante para trabajar con la familia como parte del proceso de recuperación.",
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
     },
     {
       numero: 7,
       nombre: "Nuevos Modelos Terapéuticos Aplicados a las Adicciones",
       temas: [
         "Técnica de los cinco pasos",
+<<<<<<< HEAD
         "La ventana de Johari como herramienta de autoconocimiento",
         "Reencuentro con el niño interior y trabajo con el trauma",
         "Técnicas de integración emocional"
       ],
       resumen:
         "Este módulo ofrece enfoques contemporáneos e integradores para abordar las raíces emocionales de la adicción. Se explorarán nuevas herramientas terapéuticas centradas en el crecimiento personal, la conciencia y la reconstrucción de la identidad.",
+=======
+        "Reencuentro con el niño interior y trabajo con el trauma",
+      ],
+      resumen:
+        "Ofrece enfoques contemporáneos e integradores para abordar las raíces emocionales de la adicción.",
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
     },
     {
       numero: 8,
       nombre: "Gestión de las Adicciones desde la Perspectiva de Género",
       temas: [
+<<<<<<< HEAD
         "Género y consumo de sustancias",
         "Violencias asociadas y consumo en mujeres",
         "Masculinidades y adicción",
@@ -544,12 +698,20 @@ function ModulosSection() {
       ],
       resumen:
         "El módulo profundiza en cómo las cuestiones de género atraviesan la experiencia adictiva y su tratamiento. Favorece una mirada inclusiva, crítica y contextualizada, capaz de dar respuesta a necesidades específicas.",
+=======
+        "Violencias asociadas y consumo en mujeres",
+        "Masculinidades y adicción",
+      ],
+      resumen:
+        "Profundiza en cómo las cuestiones de género atraviesan la experiencia adictiva y su tratamiento.",
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
     },
     {
       numero: 9,
       nombre: "Inteligencia Emocional",
       temas: [
         "Estructuras cerebrales implicadas en la adicción",
+<<<<<<< HEAD
         "Circuitos de recompensa y dopamina",
         "Gestión de las emociones en la conducta",
         "Cambios en la personalidad y el aprendizaje",
@@ -557,10 +719,17 @@ function ModulosSection() {
       ],
       resumen:
         "Brinda fundamentos científicos para entender cómo las adicciones afectan nuestras emociones y proporciona herramientas prácticas para la gestión emocional en el proceso terapéutico.",
+=======
+        "Gestión de las emociones disfuncionales",
+      ],
+      resumen:
+        "Brinda fundamentos científicos para entender cómo las adicciones afectan nuestras emociones.",
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
     },
     {
       numero: 10,
       nombre: "Trabajo Final de Máster",
+<<<<<<< HEAD
       temas: [
         "Metodología de investigación aplicada",
         "Diseño de proyectos innovadores",
@@ -568,11 +737,17 @@ function ModulosSection() {
       ],
       resumen:
         "Elaboración de un proyecto inédito e innovador sobre cualquier aspecto metodológico relacionado con las adicciones, aplicando los conocimientos adquiridos durante el programa.",
+=======
+      temas: [],
+      resumen:
+        "Elaboración de un proyecto inédito e innovador sobre cualquier aspecto metodológico relacionado con las adicciones.",
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
     },
   ];
 
   return (
     <section>
+<<<<<<< HEAD
       {/* Header with image */}
       <div className="relative mb-12 rounded-2xl overflow-hidden shadow-xl">
         <div className="absolute inset-0">
@@ -592,6 +767,10 @@ function ModulosSection() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+=======
+      <h2 className="text-2xl font-semibold mb-6">Módulos del Máster</h2>
+      <div className="space-y-6">
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
         {modulos.map((modulo) => (
           <ModuloCard key={modulo.numero} modulo={modulo} />
         ))}
@@ -601,6 +780,7 @@ function ModulosSection() {
 }
 
 function ModuloCard({ modulo }) {
+<<<<<<< HEAD
   const getModuleIcon = (numero) => {
     const icons = {
       1: <FaBook className="text-blue-500" />,
@@ -655,6 +835,19 @@ function ModuloCard({ modulo }) {
           </div>
         </div>
       )}
+=======
+  return (
+    <div className="bg-white p-6 rounded-lg shadow-md">
+      <h3 className="text-xl font-semibold text-blue-700 mb-2">
+        {modulo.numero}. {modulo.nombre}
+      </h3>
+      <p className="text-sm italic text-gray-600 mb-3">{modulo.resumen}</p>
+      <ul className="list-disc pl-5 space-y-1 text-sm">
+        {modulo.temas.map((tema, index) => (
+          <li key={index}>{tema}</li>
+        ))}
+      </ul>
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
     </div>
   );
 }
@@ -665,33 +858,46 @@ function ProfesoradoSection() {
       nombre: "José Manuel Zaldua Mellado",
       cargo: "Fundador de Reinservida y Director terapéutico",
       detalles: "Psicólogo y Experto en Detección e Intervención en la adicción a las nuevas tecnologías.",
+<<<<<<< HEAD
       avatar: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+=======
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
     },
     {
       nombre: "Javier Carbonell Lledó",
       cargo: "Psicoterapeuta con más de 25 años de experiencia",
       detalles:
         "Director del Instituto Lidera y conferenciante en el ámbito de las adicciones.",
+<<<<<<< HEAD
       avatar: "https://images.unsplash.com/photo-1594824388853-d0c4e3efb5d1?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+=======
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
     },
     {
       nombre: "Lidia de Ramón",
       cargo: "Terapeuta especializada en conductas adictivas",
       detalles:
         "Directora del área terapéutica de Síndrome-Adicciones. Intervencionista en adicciones y especialista en tratamientos de juego de azar.",
+<<<<<<< HEAD
       avatar: "https://images.unsplash.com/photo-1582750433449-648ed127bb54?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+=======
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
     },
     {
       nombre: "Montserrat Pintado Gellida",
       cargo: "Asesora terapéutica y responsable de gestión comercial",
       detalles:
         "Experta en Intervención Familiar en Adicciones y profesora del Master.",
+<<<<<<< HEAD
       avatar: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+=======
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
     },
   ];
 
   return (
     <section>
+<<<<<<< HEAD
       {/* Header with image */}
       <div className="relative mb-12 rounded-2xl overflow-hidden shadow-xl">
         <div className="absolute inset-0">
@@ -711,6 +917,10 @@ function ProfesoradoSection() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+=======
+      <h2 className="text-2xl font-semibold mb-6">Profesorado</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
         {profesores.map((profesor) => (
           <ProfesorCard key={profesor.nombre} profesor={profesor} />
         ))}
@@ -721,6 +931,7 @@ function ProfesoradoSection() {
 
 function ProfesorCard({ profesor }) {
   return (
+<<<<<<< HEAD
     <div className="bg-white p-8 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100 group">
       <div className="flex items-start mb-6">
         <div className="relative mr-6">
@@ -748,12 +959,19 @@ function ProfesorCard({ profesor }) {
         </h4>
         <p className="text-sm text-gray-700 leading-relaxed">{profesor.detalles}</p>
       </div>
+=======
+    <div className="bg-white p-5 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+      <h3 className="text-lg font-semibold text-gray-800">{profesor.nombre}</h3>
+      <p className="text-sm text-gray-600 font-medium">{profesor.cargo}</p>
+      <p className="mt-2 text-sm text-gray-700">{profesor.detalles}</p>
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
     </div>
   );
 }
 
 function ContactoSection() {
   return (
+<<<<<<< HEAD
     <section>
       {/* Header with image */}
       <div className="relative mb-12 rounded-2xl overflow-hidden shadow-xl">
@@ -853,11 +1071,39 @@ function ContactoSection() {
             </div>
           </div>
         </div>
+=======
+    <section className="bg-white p-6 rounded-lg shadow-md max-w-2xl mx-auto">
+      <h2 className="text-2xl font-semibold mb-4">Información de Contacto</h2>
+      <div className="space-y-4 text-gray-700">
+        <p>
+          <strong>Teléfono:</strong> 691 29 83 17 / 622 25 86 15
+        </p>
+        <p>
+          <strong>Email:</strong> liderainstituto@gmail.com
+        </p>
+        <p>
+          <strong>Dirección:</strong> C/ Poeta Mas y Ros nº 41 bajo, 46022 Valencia
+        </p>
+        <p>
+          <strong>Matrícula:</strong> Abierta durante todo el mes de junio de 2025
+        </p>
+        <p>
+          <strong>Inicio del Máster:</strong> Octubre de 2025 (primera edición)
+        </p>
+        <p>
+          <strong>Financiación:</strong> Ayudamos a gestionar bonificaciones de la Fundación Tripartita
+          (Fundae)
+        </p>
+        <p>
+          <strong>Descuentos:</strong> Consultar descuentos especiales para familiares y personas vinculadas
+        </p>
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
       </div>
     </section>
   );
 }
 
+<<<<<<< HEAD
 function StatCard({ titulo, value, icon }) {
   return (
     <div className="bg-white p-8 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 text-center group border border-gray-100">
@@ -866,6 +1112,13 @@ function StatCard({ titulo, value, icon }) {
       </div>
       <h3 className="text-xl font-bold text-gray-800 mb-2">{titulo}</h3>
       <p className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">{value}</p>
+=======
+function StatCard({ title, value }) {
+  return (
+    <div className="bg-white p-5 rounded-lg shadow-md text-center">
+      <h3 className="text-lg font-semibold text-gray-600">{title}</h3>
+      <p className="text-xl font-bold text-blue-600 mt-2">{value}</p>
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
     </div>
   );
 }

@@ -6,7 +6,11 @@ type Message = {
   id: string;
   sender_id: string;
   message: string;
+<<<<<<< HEAD
   creado_en: string;
+=======
+  created_at: string;
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
 };
 
 type ChatWindowProps = {
@@ -41,7 +45,11 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ studentId, teacherId, onClose }
         .select('*')
         .or(`sender_id.eq.${studentId},receiver_id.eq.${studentId}`)
         .or(`sender_id.eq.${teacherId},receiver_id.eq.${teacherId}`)
+<<<<<<< HEAD
         .order('creado_en', { ascending: true });
+=======
+        .order('created_at', { ascending: true });
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
 
       if (error) throw error;
       setMessages(data || []);
@@ -120,7 +128,11 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ studentId, teacherId, onClose }
             >
               <p className="text-sm">{message.message}</p>
               <span className="text-xs opacity-75">
+<<<<<<< HEAD
                 {new Date(message.creado_en).toLocaleTimeString()}
+=======
+                {new Date(message.created_at).toLocaleTimeString()}
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
               </span>
             </div>
           </div>

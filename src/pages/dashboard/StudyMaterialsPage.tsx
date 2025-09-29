@@ -6,10 +6,16 @@ import MaterialForm from '../../components/materials/MaterialForm';
 
 type Material = {
   id: string;
+<<<<<<< HEAD
   titulo: string;
   detail: string;
   remarks: string | null;
   file_path: string;
+=======
+  title: string;
+  detail: string;
+  remarks: string | null;
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
 };
 
 type StudyMaterialsPageProps = {
@@ -17,7 +23,11 @@ type StudyMaterialsPageProps = {
 };
 
 const StudyMaterialsPage: React.FC<StudyMaterialsPageProps> = ({ role }) => {
+<<<<<<< HEAD
   const { courseId } = useParams<{ courseId: string }>();
+=======
+  const { id: courseId } = useParams<{ id: string }>();
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
   const [materials, setMaterials] = useState<Material[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -52,7 +62,11 @@ const StudyMaterialsPage: React.FC<StudyMaterialsPageProps> = ({ role }) => {
     setIsUploading(true);
     try {
       const file = formData.get('file') as File;
+<<<<<<< HEAD
       const titulo = formData.get('titulo') as string;
+=======
+      const title = formData.get('title') as string;
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
       const remarks = formData.get('remarks') as string;
 
       // 1. Upload file to Supabase Storage
@@ -72,7 +86,11 @@ const StudyMaterialsPage: React.FC<StudyMaterialsPageProps> = ({ role }) => {
         .insert([
           {
             curso_id: courseId,
+<<<<<<< HEAD
             titulo: titulo,
+=======
+            title: title,
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
             detail: file.name,
             remarks: remarks,
             file_path: filePath
@@ -175,7 +193,11 @@ const StudyMaterialsPage: React.FC<StudyMaterialsPageProps> = ({ role }) => {
                 <tr key={material.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className="text-sm font-medium text-gray-900">
+<<<<<<< HEAD
                       {material.titulo}
+=======
+                      {material.title}
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -203,4 +225,8 @@ const StudyMaterialsPage: React.FC<StudyMaterialsPageProps> = ({ role }) => {
   );
 };
 
+<<<<<<< HEAD
 export default StudyMaterialsPage;
+=======
+export default StudyMaterialsPage;
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940

@@ -6,9 +6,15 @@ import { supabase } from '../../lib/supabase';
 
 type Quiz = {
   id: string;
+<<<<<<< HEAD
   titulo: string;
   curso_id: string;
   course_titulo: string;
+=======
+  title: string;
+  course_id: string;
+  course_title: string;
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
   assigned: boolean;
 };
 
@@ -29,6 +35,7 @@ const QuizzesPage: React.FC<QuizzesPageProps> = ({ role }) => {
     setIsLoading(true);
     
     try {
+<<<<<<< HEAD
       // Get current user
       const { data: { user }, error: userError } = await supabase.auth.getUser();
       
@@ -124,6 +131,21 @@ const QuizzesPage: React.FC<QuizzesPageProps> = ({ role }) => {
     } catch (error) {
       console.error('Error fetching quizzes:', error);
       setQuizzes([]);
+=======
+      // In a real implementation, we would fetch from Supabase
+      // For demo purposes, we'll use mock data
+      setTimeout(() => {
+        const mockQuizzes: Quiz[] = [
+          // Keep only quizzes not associated with the courses to be removed.
+          // The courses to remove are: PHP Course Laravel, PHP Course for Beginners, Flask
+        ];
+        
+        setQuizzes(mockQuizzes);
+        setIsLoading(false);
+      }, 800);
+    } catch (error) {
+      console.error('Error fetching quizzes:', error);
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
       setIsLoading(false);
     }
   };
@@ -133,7 +155,12 @@ const QuizzesPage: React.FC<QuizzesPageProps> = ({ role }) => {
   };
 
   const handleAttemptQuiz = (quizId: string) => {
+<<<<<<< HEAD
     navigate(`/${role}/quizzes/attempt/${quizId}`);
+=======
+    // In a real app, navigate to the quiz attempt page
+    toast.info('Quiz attempt feature will be implemented soon');
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
   };
 
   const handleViewResults = (quizId: string) => {
@@ -205,11 +232,19 @@ const QuizzesPage: React.FC<QuizzesPageProps> = ({ role }) => {
                 <tr key={quiz.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm font-medium text-blue-600">
+<<<<<<< HEAD
                       {quiz.titulo}
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-900">{quiz.course_titulo}</div>
+=======
+                      {quiz.title}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm text-gray-900">{quiz.course_title}</div>
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     {role === 'teacher' ? (

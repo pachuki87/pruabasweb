@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 
+<<<<<<< HEAD
 // Función mejorada para validar y obtener variables de entorno
 const getEnvVar = (key: string, required: boolean = true): string => {
   const value = import.meta.env[key];
@@ -122,6 +123,20 @@ try {
 }
 
 // Funciones de utilidad para operaciones comunes
+=======
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+if (!supabaseUrl || !supabaseAnonKey) {
+  throw new Error('Missing Supabase environment variables. Please check VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY.');
+}
+
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+export const auth = supabase.auth;
+
+// Función para obtener usuarios de la tabla 'usuarios'
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
 export const getUsers = async () => {
   const { data, error } = await supabase
     .from('usuarios')
@@ -134,6 +149,10 @@ export const getUsers = async () => {
   return data;
 };
 
+<<<<<<< HEAD
+=======
+// Función para obtener un usuario por ID
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
 export const getUserById = async (userId: string) => {
   const { data, error } = await supabase
     .from('usuarios')
@@ -147,6 +166,7 @@ export const getUserById = async (userId: string) => {
   }
   return data;
 };
+<<<<<<< HEAD
 
 // Función para probar la conexión
 export const testConnection = async () => {
@@ -166,3 +186,5 @@ export const testConnection = async () => {
 
 // Exportar los clientes
 export { supabase, supabaseAdmin, auth };
+=======
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940

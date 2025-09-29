@@ -8,10 +8,14 @@ type Student = {
   name: string; // Ensure name is always a string
   email: string;
   joinDate: string;
+<<<<<<< HEAD
   result?: { // Add result property
     score: number;
     totalQuestions: number;
   };
+=======
+  // result is optional, so no changes needed here
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
 };
 
 // StudentListProps remains the same
@@ -97,7 +101,11 @@ const StudentList: React.FC<StudentListProps> = ({
     content = <div className="p-6 text-center text-gray-500">Cargando estudiantes...</div>;
   } else if (errorFetching) {
     console.log('[StudentList] Rendering: Error message -', errorFetching);
+<<<<<<< HEAD
     content = <div className="p-6 text-center text-blue-500">{errorFetching}</div>;
+=======
+    content = <div className="p-6 text-center text-red-500">{errorFetching}</div>;
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
   } else if (filteredStudents.length === 0) {
     console.log('[StudentList] Rendering: "No se encontraron estudiantes" (Search term might be active)');
     content = <div className="p-6 text-center text-gray-500">No se encontraron estudiantes</div>;
@@ -158,7 +166,11 @@ const StudentList: React.FC<StudentListProps> = ({
                   {showResults && onShowResult && (
                     <button
                       onClick={() => onShowResult(student.id)}
+<<<<<<< HEAD
                       className="text-red-600 hover:text-red-800 bg-red-50 px-3 py-1 rounded-md"
+=======
+                      className="text-blue-600 hover:text-blue-900 bg-blue-50 px-3 py-1 rounded-md"
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
                     >
                       Ver Resultado
                     </button>

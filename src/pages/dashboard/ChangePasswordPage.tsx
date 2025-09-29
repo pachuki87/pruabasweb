@@ -102,4 +102,8 @@ function ChangePasswordPage({ role }: ChangePasswordPageProps) {
   );
 }
 
+<<<<<<< HEAD
 export default ChangePasswordPage;
+=======
+export default ChangePasswordPage;
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940

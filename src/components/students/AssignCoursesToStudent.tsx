@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
+<<<<<<< HEAD
 import CheckTables from '../debug/CheckTables';
+=======
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
 
 type Course = {
   id: string;
@@ -60,7 +63,11 @@ const AssignCoursesToStudent: React.FC = () => {
       const { data: assignedData, error: assignedError } = await supabase
         .from('inscripciones')
         .select('curso_id')
+<<<<<<< HEAD
         .eq('user_id', studentId);
+=======
+        .eq('usuario_id', studentId);
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
 
       if (assignedError) throw assignedError;
       if (assignedData) {
@@ -91,14 +98,22 @@ const AssignCoursesToStudent: React.FC = () => {
       const { error: deleteError } = await supabase
         .from('inscripciones')
         .delete()
+<<<<<<< HEAD
         .eq('user_id', studentId);
+=======
+        .eq('usuario_id', studentId);
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
 
       if (deleteError) throw deleteError;
 
       // Insert new assignments
       if (assignedCourseIds.length > 0) {
         const assignmentsToInsert = assignedCourseIds.map(courseId => ({
+<<<<<<< HEAD
           user_id: studentId,
+=======
+          usuario_id: studentId,
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
           curso_id: courseId
         }));
         const { error: insertError } = await supabase
@@ -123,7 +138,10 @@ const AssignCoursesToStudent: React.FC = () => {
 
   return (
     <div className="max-w-2xl mx-auto bg-white p-6 rounded-md shadow-md">
+<<<<<<< HEAD
       <CheckTables />
+=======
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
       <h2 className="text-2xl font-bold mb-4">Asignar Cursos a {studentEmail}</h2>
       
       {message && (
@@ -165,7 +183,11 @@ const AssignCoursesToStudent: React.FC = () => {
         </button>
         <button
           onClick={handleSave}
+<<<<<<< HEAD
           className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition-colors"
+=======
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
           disabled={saving}
         >
           {saving ? 'Guardando...' : 'Guardar Asignaciones'}

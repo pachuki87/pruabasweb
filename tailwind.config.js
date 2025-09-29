@@ -13,7 +13,10 @@ export default {
         warning: 'var(--warning-color)',
         error: 'var(--error-color)',
         success: 'var(--success-color)',
+<<<<<<< HEAD
         'lidera-light-blue': '#7ba7d1',
+=======
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
       },
     },
   },

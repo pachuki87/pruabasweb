@@ -3,11 +3,19 @@ import { X } from 'lucide-react';
 
 type VideoPlayerProps = {
   videoUrl: string;
+<<<<<<< HEAD
   titulo: string;
   onClose: () => void;
 };
 
 const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoUrl, titulo, onClose }) => {
+=======
+  title: string;
+  onClose: () => void;
+};
+
+const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoUrl, title, onClose }) => {
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
   // Extract video ID from YouTube URL
   const getYouTubeId = (url: string) => {
     const match = url.match(/[?&]v=([^&]+)/);
@@ -21,7 +29,11 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoUrl, titulo, onClose }) 
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg shadow-lg w-full max-w-4xl">
         <div className="flex items-center justify-between p-4 border-b">
+<<<<<<< HEAD
           <h3 className="text-lg font-semibold">{titulo}</h3>
+=======
+          <h3 className="text-lg font-semibold">{title}</h3>
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
           <button
             onClick={onClose}
             className="text-gray-500 hover:text-gray-700 focus:outline-none"

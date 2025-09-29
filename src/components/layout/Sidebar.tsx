@@ -33,7 +33,11 @@ const Sidebar: React.FC<SidebarProps> = ({ role }) => {
     <>
       {/* Mobile sidebar toggle button - only visible on small screens */}
       <button 
+<<<<<<< HEAD
         className="fixed z-20 bottom-4 left-4 md:hidden bg-blue-600 text-white p-3 rounded-full shadow-lg"
+=======
+        className="fixed z-20 bottom-4 right-4 md:hidden bg-blue-600 text-white p-3 rounded-full shadow-lg"
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
         onClick={toggleSidebar}
         aria-label={sidebarOpen ? "Cerrar menú lateral" : "Abrir menú lateral"}
       >
@@ -187,7 +191,11 @@ const Sidebar: React.FC<SidebarProps> = ({ role }) => {
               <li>
                 <Link
                   to="/logout"
+<<<<<<< HEAD
                   className="flex items-center px-4 py-2 text-sm rounded-md text-blue-600 hover:bg-blue-50"
+=======
+                  className="flex items-center px-4 py-2 text-sm rounded-md text-red-600 hover:bg-red-50"
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
                   onClick={() => setSidebarOpen(false)}
                 >
                   <LogOut className="h-5 w-5 mr-3" />

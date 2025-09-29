@@ -9,6 +9,7 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
+<<<<<<< HEAD
       usuarios: {
         Row: {
           id: string
@@ -17,18 +18,40 @@ export interface Database {
           name: string | null
           rol: 'estudiante' | 'profesor'
           creado_en: string
+=======
+      users: {
+        Row: {
+          id: string
+          email: string
+          name: string
+          role: 'student' | 'teacher'
+          created_at: string
+          mobile: string | null
+          skills: string | null
+          qualification: string | null
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
         }
         Insert: {
           id?: string
           email: string
+<<<<<<< HEAD
           nombre?: string | null
           name?: string | null
           rol: 'estudiante' | 'profesor'
           creado_en?: string
+=======
+          name: string
+          role: 'student' | 'teacher'
+          created_at?: string
+          mobile?: string | null
+          skills?: string | null
+          qualification?: string | null
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
         }
         Update: {
           id?: string
           email?: string
+<<<<<<< HEAD
           nombre?: string | null
           name?: string | null
           rol?: 'estudiante' | 'profesor'
@@ -140,16 +163,72 @@ export interface Database {
           id: string
           user_id: string
           curso_id: string
+=======
+          name?: string
+          role?: 'student' | 'teacher'
+          created_at?: string
+          mobile?: string | null
+          skills?: string | null
+          qualification?: string | null
+        }
+      }
+      courses: {
+        Row: {
+          id: string
+          title: string
+          description: string | null
+          image_url: string | null
+          teacher_id: string
+          created_at: string
+          technologies: string | null
+        }
+        Insert: {
+          id?: string
+          title: string
+          description?: string | null
+          image_url?: string | null
+          teacher_id: string
+          created_at?: string
+          technologies?: string | null
+        }
+        Update: {
+          id?: string
+          title?: string
+          description?: string | null
+          image_url?: string | null
+          teacher_id?: string
+          created_at?: string
+          technologies?: string | null
+        }
+      }
+      chapters: {
+        Row: {
+          id: string
+          title: string
+          description: string | null
+          course_id: string
+          video_url: string | null
+          remarks: string | null
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
           created_at: string
         }
         Insert: {
           id?: string
+<<<<<<< HEAD
           user_id: string
           curso_id: string
+=======
+          title: string
+          description?: string | null
+          course_id: string
+          video_url?: string | null
+          remarks?: string | null
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
           created_at?: string
         }
         Update: {
           id?: string
+<<<<<<< HEAD
           user_id?: string
           curso_id?: string
           created_at?: string
@@ -420,6 +499,132 @@ export interface Database {
           tiempo_total_gastado?: number | null
           actualizado_en?: string | null
           user_id?: string
+=======
+          title?: string
+          description?: string | null
+          course_id?: string
+          video_url?: string | null
+          remarks?: string | null
+          created_at?: string
+        }
+      }
+      quizzes: {
+        Row: {
+          id: string
+          title: string
+          course_id: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          title: string
+          course_id: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          title?: string
+          course_id?: string
+          created_at?: string
+        }
+      }
+      quiz_questions: {
+        Row: {
+          id: string
+          quiz_id: string
+          question: string
+          options: string[]
+          correct_option: number
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          quiz_id: string
+          question: string
+          options: string[]
+          correct_option: number
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          quiz_id?: string
+          question?: string
+          options?: string[]
+          correct_option?: number
+          created_at?: string
+        }
+      }
+      quiz_attempts: {
+        Row: {
+          id: string
+          student_id: string
+          quiz_id: string
+          score: number
+          total_questions: number
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          student_id: string
+          quiz_id: string
+          score: number
+          total_questions: number
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          student_id?: string
+          quiz_id?: string
+          score?: number
+          total_questions?: number
+          created_at?: string
+        }
+      }
+      enrollments: {
+        Row: {
+          id: string
+          student_id: string
+          course_id: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          student_id: string
+          course_id: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          student_id?: string
+          course_id?: string
+          created_at?: string
+        }
+      }
+      study_materials: {
+        Row: {
+          id: string
+          title: string
+          course_id: string
+          file_url: string
+          remarks: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          title: string
+          course_id: string
+          file_url: string
+          remarks?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          title?: string
+          course_id?: string
+          file_url?: string
+          remarks?: string | null
+          created_at?: string
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
         }
       }
     }

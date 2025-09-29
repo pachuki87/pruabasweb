@@ -2,6 +2,7 @@
   command = "npm run build"
   publish = "dist"
 
+<<<<<<< HEAD
 [functions]
   directory = "netlify/functions"
 
@@ -34,6 +35,8 @@
   compress = true
 
 # Configuración para SPA (Single Page Application)
+=======
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
 [[redirects]]
   from = "/*"
   to = "/index.html"

@@ -59,7 +59,11 @@ const AddCoursePage: React.FC = () => {
         id: courseId,
         titulo: title,
         descripcion: description,
+<<<<<<< HEAD
         teacher_id: teacherId,
+=======
+        profesor_id: teacherId,
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
         imagen_url: imageUrl, // Add image URL to course data
       };
       

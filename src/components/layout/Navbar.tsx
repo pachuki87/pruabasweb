@@ -2,8 +2,11 @@ import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 // Importamos los iconos necesarios
 import { Menu, X, Search } from 'lucide-react';
+<<<<<<< HEAD
 import CartIcon from '../cart/CartIcon';
 import Cart from '../cart/Cart';
+=======
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
 
 type NavbarProps = {
   onRoleChange?: (role: string) => void;
@@ -14,7 +17,10 @@ const Navbar: React.FC<NavbarProps> = ({ onRoleChange, currentRole = 'student' }
   const location = useLocation();
   const [searchQuery, setSearchQuery] = useState('');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+<<<<<<< HEAD
   const [isCartOpen, setIsCartOpen] = useState(false);
+=======
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,7 +38,15 @@ const Navbar: React.FC<NavbarProps> = ({ onRoleChange, currentRole = 'student' }
         {/* Top bar with logo and mobile menu button */}
         <div className="flex items-center justify-between w-full md:w-auto">
           <Link to="/" className="flex items-center">
+<<<<<<< HEAD
             <span className="text-xl font-bold">Instituto Lidera</span>
+=======
+            <img 
+              src="https://institutolidera.com/wp-content/uploads/2021/06/cropped-logo-insitituto-lidera_wellness-school-200x121.jpg"
+              alt="Instituto Lidera"
+              className="h-12 w-auto"
+            />
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
           </Link>
           
           {/* Mobile menu button */}
@@ -81,12 +95,15 @@ const Navbar: React.FC<NavbarProps> = ({ onRoleChange, currentRole = 'student' }
               Cursos
             </Link>
             <Link 
+<<<<<<< HEAD
               to="/formacion" 
               className={`text-sm font-medium py-2 md:py-0 ${location.pathname === '/formacion' ? 'text-yellow-400' : 'text-white hover:text-yellow-200'}`}
             >
               Formación
             </Link>
             <Link 
+=======
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
               to="/about" 
               className={`text-sm font-medium py-2 md:py-0 ${location.pathname === '/about' ? 'text-yellow-400' : 'text-white hover:text-yellow-200'}`}
             >
@@ -99,6 +116,7 @@ const Navbar: React.FC<NavbarProps> = ({ onRoleChange, currentRole = 'student' }
               Preguntas Frecuentes
             </Link>
             
+<<<<<<< HEAD
             <div className="mt-4 md:mt-0 flex flex-col md:flex-row md:items-center md:space-x-2 space-y-2 md:space-y-0">
               {/* Cart Icon */}
               <div className="flex justify-center md:justify-start">
@@ -111,6 +129,15 @@ const Navbar: React.FC<NavbarProps> = ({ onRoleChange, currentRole = 'student' }
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Regístrate como Alumno
+=======
+            <div className="mt-4 md:mt-0 flex flex-col md:flex-row md:space-x-2 space-y-2 md:space-y-0">
+              <Link
+                to="/register"
+                className="py-2 px-3 rounded-md text-sm font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Regístrate
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
               </Link>
               <Link
                 to="/login"
@@ -123,9 +150,12 @@ const Navbar: React.FC<NavbarProps> = ({ onRoleChange, currentRole = 'student' }
           </div>
         </nav>
       </div>
+<<<<<<< HEAD
       
       {/* Cart Sidebar */}
       <Cart isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
+=======
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
     </header>
   );
 };

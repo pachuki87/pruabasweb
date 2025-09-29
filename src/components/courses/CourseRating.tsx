@@ -28,7 +28,11 @@ const CourseRating: React.FC<CourseRatingProps> = ({
       const { error } = await supabase
         .from('course_ratings')
         .upsert({
+<<<<<<< HEAD
           curso_id: courseId,
+=======
+          course_id: courseId,
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
           student_id: studentId,
           rating,
           review: review.trim()
@@ -115,4 +119,8 @@ const CourseRating: React.FC<CourseRatingProps> = ({
   );
 };
 
+<<<<<<< HEAD
 export default CourseRating;
+=======
+export default CourseRating;
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940

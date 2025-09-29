@@ -13,9 +13,15 @@ type Student = {
 
 type Quiz = {
   id: string;
+<<<<<<< HEAD
   titulo: string;
   curso_id: string;
   course_titulo: string;
+=======
+  title: string;
+  course_id: string;
+  course_title: string;
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
 };
 
 const AssignQuizPage: React.FC = () => {
@@ -42,9 +48,15 @@ const AssignQuizPage: React.FC = () => {
       setTimeout(() => {
         const mockQuiz: Quiz = {
           id: quizId || 'quiz-adicciones-1', // Usar un ID representativo
+<<<<<<< HEAD
           titulo: 'Quiz Master en Adicciones',
           curso_id: 'c563c497-5583-451a-a625-a3c07d6cb6b4', // ID del Master en Adicciones
           course_titulo: 'Master en Adicciones',
+=======
+          title: 'Quiz Master en Adicciones',
+          course_id: 'c563c497-5583-451a-a625-a3c07d6cb6b4', // ID del Master en Adicciones
+          course_title: 'Master en Adicciones',
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
         };
         
         const mockStudents: Student[] = [
@@ -129,8 +141,13 @@ const AssignQuizPage: React.FC = () => {
         <div>
           {quiz && (
             <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+<<<<<<< HEAD
               <h2 className="text-xl font-semibold mb-2">{quiz.titulo}</h2>
               <p className="text-gray-600 mb-4">Course: {quiz.course_titulo}</p>
+=======
+              <h2 className="text-xl font-semibold mb-2">{quiz.title}</h2>
+              <p className="text-gray-600 mb-4">Course: {quiz.course_title}</p>
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
               
               <div className="flex justify-between items-center">
                 <div>

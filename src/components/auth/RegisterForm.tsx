@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { User, Mail, Lock, Phone, Briefcase, Award } from 'lucide-react';
@@ -15,6 +16,12 @@ const GoogleIcon = () => (
     </g>
   </svg>
 );
+=======
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { User, Mail, Lock, Phone, Briefcase, Award } from 'lucide-react';
+import { supabase } from '../../lib/supabase';
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
 
 type RegisterFormProps = {
   role: string;
@@ -23,8 +30,12 @@ type RegisterFormProps = {
 
 const RegisterForm: React.FC<RegisterFormProps> = ({ role, onRegister }) => {
   const [formData, setFormData] = useState({
+<<<<<<< HEAD
     nombre: '',
     apellido: '',
+=======
+    name: '',
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
     email: '',
     password: '',
     mobile: '',
@@ -37,6 +48,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ role, onRegister }) => {
   
   const navigate = useNavigate();
 
+<<<<<<< HEAD
   // Handle Google OAuth callback
   useEffect(() => {
     const handleAuthStateChange = async () => {
@@ -90,6 +102,8 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ role, onRegister }) => {
     return () => subscription.unsubscribe();
   }, [role, onRegister]);
 
+=======
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
@@ -100,6 +114,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ role, onRegister }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+<<<<<<< HEAD
     setError('');
 
     console.log('🚀 Iniciando proceso de registro...');
@@ -224,6 +239,33 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ role, onRegister }) => {
       }
     } catch (err: any) {
       setError(err.message || 'Error al registrarse con Google');
+=======
+    setError(null);
+    
+    try {
+      const { data, error } = await supabase.auth.signUp({
+        email: formData.email,
+        password: formData.password,
+      });
+      
+      if (error) throw error;
+      
+      await supabase.from('usuarios').insert({
+        id: data.user?.id,
+        email: formData.email,
+        rol: role,
+        mobile: formData.mobile || null,
+        skills: formData.skills || null,
+        qualification: formData.qualification || null,
+      });
+
+      setRegistrationSuccess(true);
+      setIsLoading(false);
+      
+    } catch (err: any) {
+      setError(err.message || 'Failed to register');
+      setIsLoading(false);
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
     }
   };
 
@@ -234,7 +276,11 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ role, onRegister }) => {
         <p className="text-gray-600 mb-6">
           Por favor, verifica tu correo electrónico para completar el registro.
         </p>
+<<<<<<< HEAD
         <Link to="/login/student" className="text-red-500 hover:underline">
+=======
+        <Link to="/login/student" className="text-blue-500 hover:underline">
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
           Ir a Iniciar Sesión
         </Link>
       </div>
@@ -245,6 +291,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ role, onRegister }) => {
     <div className="max-w-3xl mx-auto bg-white rounded-lg shadow-md overflow-hidden">
       <div className="md:flex">
         <div className="md:w-1/2 p-8">
+<<<<<<< HEAD
           <h2 className="text-2xl font-bold text-center text-gray-700 mb-6">
             {role === 'teacher' ? 'Registro de Profesor' : 'Registro de Estudiante'}
           </h2>
@@ -265,6 +312,12 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ role, onRegister }) => {
             <span className="w-1/5 border-b border-gray-300 md:w-1/4"></span>
           </div>
           
+=======
+          <h2 className="text-2xl font-bold text-center text-gray-700 mb-8">
+            {role === 'teacher' ? 'Registro de Profesor' : 'Registro de Estudiante'}
+          </h2>
+          
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
           {error && (
             <div className="mb-4 bg-red-50 text-red-700 p-3 rounded-md text-sm">
               {error}
@@ -276,14 +329,20 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ role, onRegister }) => {
               <User className="absolute top-3 left-3 text-gray-400" size={18} />
               <input
                 type="text"
+<<<<<<< HEAD
                 name="nombre"
                 value={formData.nombre}
+=======
+                name="name"
+                value={formData.name}
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Su Nombre"
                 required
               />
             </div>
+<<<<<<< HEAD
 
             <div className="mb-4 relative">
               <User className="absolute top-3 left-3 text-gray-400" size={18} />
@@ -297,6 +356,8 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ role, onRegister }) => {
                 required
               />
             </div>
+=======
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
             
             <div className="mb-4 relative">
               <Mail className="absolute top-3 left-3 text-gray-400" size={18} />

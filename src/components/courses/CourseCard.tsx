@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Edit, Trash, FileText, Eye, Book, CreditCard, ShoppingCart, Check } from 'lucide-react';
@@ -6,6 +7,15 @@ import { useCart } from 'react-use-cart';
 type CourseCardProps = {
   id: string;
   titulo: string;
+=======
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { Edit, Trash, FileText, Eye, Book } from 'lucide-react';
+
+type CourseCardProps = {
+  id: string;
+  title: string;
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
   image: string;
   enrollment: number;
   role: string;
@@ -15,18 +25,25 @@ type CourseCardProps = {
 
 const CourseCard: React.FC<CourseCardProps> = ({ 
   id, 
+<<<<<<< HEAD
   titulo, 
+=======
+  title, 
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
   image, 
   enrollment, 
   role,
   onEdit,
   onDelete
 }) => {
+<<<<<<< HEAD
   const navigate = useNavigate();
   const { addItem, inCart } = useCart();
   const [isAdding, setIsAdding] = useState(false);
   const [justAdded, setJustAdded] = useState(false);
   
+=======
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
   const handleEdit = (e: React.MouseEvent) => {
     e.preventDefault();
     if (onEdit) onEdit(id);
@@ -37,6 +54,7 @@ const CourseCard: React.FC<CourseCardProps> = ({
     if (onDelete) onDelete(id);
   };
 
+<<<<<<< HEAD
   const handleAddToCart = async (e: React.MouseEvent) => {
     e.preventDefault();
     
@@ -68,6 +86,8 @@ const CourseCard: React.FC<CourseCardProps> = ({
     setTimeout(() => setJustAdded(false), 2000);
   };
 
+=======
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
   const getImageUrl = () => {
     if (image) {
       return image;
@@ -80,7 +100,11 @@ const CourseCard: React.FC<CourseCardProps> = ({
       'conductas': 'https://images.pexels.com/photos/4101143/pexels-photo-4101143.jpeg',
     };
     
+<<<<<<< HEAD
     const lowerTitle = titulo.toLowerCase();
+=======
+    const lowerTitle = title.toLowerCase();
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
     
     // Intentar encontrar una imagen que coincida con el título
     for (const [key, url] of Object.entries(imageMap)) {
@@ -93,6 +117,7 @@ const CourseCard: React.FC<CourseCardProps> = ({
     return 'https://images.pexels.com/photos/3769021/pexels-photo-3769021.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1';
   };
 
+<<<<<<< HEAD
   // Función para manejar clic en el div principal (ir al curso directo)
   const handleDivClick = () => {
     if (role && role !== 'visitor') {
@@ -124,11 +149,20 @@ const CourseCard: React.FC<CourseCardProps> = ({
         <img 
           src={getImageUrl()} 
           alt={titulo} 
+=======
+  return (
+    <div className="border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+      <div className="h-40 bg-gray-100 flex items-center justify-center overflow-hidden">
+        <img 
+          src={getImageUrl()} 
+          alt={title} 
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
           className="w-full h-full object-cover"
         />
       </div>
       
       <div className="p-4">
+<<<<<<< HEAD
         <h3 className="text-lg font-semibold text-white mb-2 line-clamp-1">
           {titulo}
         </h3>
@@ -136,11 +170,21 @@ const CourseCard: React.FC<CourseCardProps> = ({
         <div className="flex items-center justify-between mt-4">
           <div className="flex items-center text-gray-300">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1 text-blue-400" viewBox="0 0 20 20" fill="currentColor">
+=======
+        <h3 className="text-lg font-semibold text-blue-600 mb-2 line-clamp-1">
+          {title}
+        </h3>
+        
+        <div className="flex items-center justify-between mt-4">
+          <div className="flex items-center text-gray-600">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1 text-blue-500" viewBox="0 0 20 20" fill="currentColor">
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
               <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z" />
             </svg>
             <span>{enrollment} estudiante(s)</span>
           </div>
           
+<<<<<<< HEAD
           {/* Botón de agregar al carrito para visitantes */}
           {(role === 'visitor' || !role) && (
             <button
@@ -181,12 +225,18 @@ const CourseCard: React.FC<CourseCardProps> = ({
             </button>
           )}
           
+=======
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
           <div className="flex space-x-1">
             {role === 'teacher' && (
               <>
                 <button 
                   onClick={handleEdit}
+<<<<<<< HEAD
                   className="p-1 text-blue-400 bg-blue-900/30 rounded hover:bg-blue-900/50 transition-colors"
+=======
+                  className="p-1 text-blue-600 bg-blue-50 rounded hover:bg-blue-100 transition-colors"
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
                   title="Edit course"
                 >
                   <Edit size={18} />
@@ -194,7 +244,11 @@ const CourseCard: React.FC<CourseCardProps> = ({
                 
                 <button 
                   onClick={handleDelete}
+<<<<<<< HEAD
                   className="p-1 text-blue-400 bg-blue-900/30 rounded hover:bg-blue-900/50 transition-colors"
+=======
+                  className="p-1 text-red-600 bg-red-50 rounded hover:bg-red-100 transition-colors"
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
                   title="Delete course"
                 >
                   <Trash size={18} />
@@ -202,7 +256,11 @@ const CourseCard: React.FC<CourseCardProps> = ({
                 
                 <Link 
                   to={`/${role}/courses/${id}/materials`}
+<<<<<<< HEAD
                   className="p-1 text-green-400 bg-green-900/30 rounded hover:bg-green-900/50 transition-colors"
+=======
+                  className="p-1 text-green-600 bg-green-50 rounded hover:bg-green-100 transition-colors"
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
                   title="Study materials"
                 >
                   <FileText size={18} />
@@ -210,7 +268,11 @@ const CourseCard: React.FC<CourseCardProps> = ({
                 
                 <Link 
                   to={`/${role}/courses/${id}/chapters`}
+<<<<<<< HEAD
                   className="p-1 text-purple-400 bg-purple-900/30 rounded hover:bg-purple-900/50 transition-colors"
+=======
+                  className="p-1 text-purple-600 bg-purple-50 rounded hover:bg-purple-100 transition-colors"
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
                   title="Chapters"
                 >
                   <Book size={18} />
@@ -218,6 +280,7 @@ const CourseCard: React.FC<CourseCardProps> = ({
               </>
             )}
             
+<<<<<<< HEAD
             <button
               className="p-1 text-gray-300 bg-gray-700 rounded hover:bg-gray-600 transition-colors"
               title="View course"
@@ -225,6 +288,15 @@ const CourseCard: React.FC<CourseCardProps> = ({
             >
               <Eye size={18} />
             </button>
+=======
+            <Link 
+              to={`/${role}/courses/${id}`}
+              className="p-1 text-gray-600 bg-gray-50 rounded hover:bg-gray-100 transition-colors"
+              title="View course"
+            >
+              <Eye size={18} />
+            </Link>
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
           </div>
         </div>
       </div>

@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
+<<<<<<< HEAD
 import Header from '../components/layout/Header';
+=======
+import Navbar from '../components/layout/Navbar';
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
 import Footer from '../components/layout/Footer';
 
 type FAQ = {
@@ -61,6 +65,7 @@ const FaqsPage: React.FC<FaqsPageProps> = ({ currentRole, onRoleChange }) => {
 
   return (
     <div className="min-h-screen flex flex-col">
+<<<<<<< HEAD
       <Header currentRole={currentRole} onRoleChange={onRoleChange} />
       
       <main className="flex-grow bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white">
@@ -110,6 +115,55 @@ const FaqsPage: React.FC<FaqsPageProps> = ({ currentRole, onRoleChange }) => {
               </div>
             )}
           </div>
+=======
+      <Navbar currentRole={currentRole} onRoleChange={onRoleChange} />
+      
+      <main className="flex-grow container mx-auto px-4 py-8">
+        <div className="max-w-3xl mx-auto">
+          <h1 className="text-3xl font-bold text-center mb-8">
+            Preguntas Frecuentes
+          </h1>
+          
+          {isLoading ? (
+            <div className="space-y-4">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="animate-pulse">
+                  <div className="h-12 bg-gray-200 rounded-lg mb-2"></div>
+                  <div className="h-20 bg-gray-100 rounded-lg"></div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {faqs.map((faq) => (
+                <div
+                  key={faq.id}
+                  className="border border-gray-200 rounded-lg overflow-hidden"
+                >
+                  <button
+                    onClick={() => toggleFaq(faq.id)}
+                    className="w-full flex items-center justify-between p-4 text-left bg-white hover:bg-gray-50 transition-colors"
+                  >
+                    <span className="font-medium text-gray-900">
+                      {faq.question}
+                    </span>
+                    {openFaq === faq.id ? (
+                      <ChevronUp className="w-5 h-5 text-gray-500" />
+                    ) : (
+                      <ChevronDown className="w-5 h-5 text-gray-500" />
+                    )}
+                  </button>
+                  
+                  {openFaq === faq.id && (
+                    <div className="p-4 bg-gray-50 border-t border-gray-200">
+                      <p className="text-gray-600">{faq.answer}</p>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
         </div>
       </main>
       

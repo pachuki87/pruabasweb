@@ -4,7 +4,11 @@ const Events = () => {
   const events = [
     {
       date: { day: "15", month: "DIC" },
+<<<<<<< HEAD
       titulo: "Conferencia de Liderazgo Empresarial 2025",
+=======
+      title: "Conferencia de Liderazgo Empresarial 2024",
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
       time: "18:30",
       location: "Madrid",
       type: "Conferencia",
@@ -13,7 +17,11 @@ const Events = () => {
     },
     {
       date: { day: "18", month: "DIC" },
+<<<<<<< HEAD
       titulo: "Taller de Gestión del Cambio",
+=======
+      title: "Taller de Gestión del Cambio",
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
       time: "19:00",
       location: "Barcelona",
       type: "Taller",
@@ -22,7 +30,11 @@ const Events = () => {
     },
     {
       date: { day: "20", month: "DIC" },
+<<<<<<< HEAD
       titulo: "Sesión Informativa Programas 2025",
+=======
+      title: "Sesión Informativa Programas 2025",
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
       time: "18:00",
       location: "Online",
       type: "Info Session",
@@ -31,7 +43,11 @@ const Events = () => {
     },
     {
       date: { day: "22", month: "DIC" },
+<<<<<<< HEAD
       titulo: "Networking Alumni Navidad",
+=======
+      title: "Networking Alumni Navidad",
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
       time: "20:00",
       location: "Valencia",
       type: "Networking",
@@ -51,7 +67,11 @@ const Events = () => {
               <div className="relative h-48">
                 <img 
                   src={event.image}
+<<<<<<< HEAD
                   alt={event.titulo}
+=======
+                  alt={event.title}
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
@@ -62,15 +82,24 @@ const Events = () => {
                   </div>
                 </div>
                 <div className="absolute top-4 right-4">
+<<<<<<< HEAD
                   <span className="inline-block bg-lidera-light-blue text-white text-xs px-2 py-1 rounded-full">
+=======
+                  <span className="inline-block bg-red-600 text-white text-xs px-2 py-1 rounded-full">
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
                     {event.type}
                   </span>
                 </div>
               </div>
               
               <div className="p-6">
+<<<<<<< HEAD
                 <h3 className="text-lg font-bold text-gray-900 mb-3 group-hover:text-lidera-light-blue transition-colors">
                   {event.titulo}
+=======
+                <h3 className="text-lg font-bold text-gray-900 mb-3 group-hover:text-red-600 transition-colors">
+                  {event.title}
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
                 </h3>
                 
                 <div className="space-y-2 text-sm text-gray-600">
@@ -93,7 +122,11 @@ const Events = () => {
         </div>
         
         <div className="text-center mt-12">
+<<<<<<< HEAD
           <button className="bg-lidera-light-blue hover:bg-[#6a96c0] text-white px-8 py-3 rounded-lg font-semibold transition-colors">
+=======
+          <button className="bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors">
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
             VER TODOS LOS EVENTOS
           </button>
         </div>

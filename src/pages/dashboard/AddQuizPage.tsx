@@ -6,7 +6,11 @@ import { supabase } from '../../lib/supabase';
 
 type Course = {
   id: string;
+<<<<<<< HEAD
   titulo: string;
+=======
+  title: string;
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
 };
 
 const AddQuizPage: React.FC = () => {
@@ -28,7 +32,11 @@ const AddQuizPage: React.FC = () => {
       // For demo purposes, we'll use mock data
       setTimeout(() => {
         const mockCourses: Course[] = [
+<<<<<<< HEAD
           { id: 'c563c497-5583-451a-a625-a3c07d6cb6b4', titulo: 'Master en Adicciones' },
+=======
+          { id: 'c563c497-5583-451a-a625-a3c07d6cb6b4', title: 'Master en Adicciones' },
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
         ];
         
         setCourses(mockCourses);
@@ -102,7 +110,11 @@ const AddQuizPage: React.FC = () => {
             >
               {courses.map((course) => (
                 <option key={course.id} value={course.id}>
+<<<<<<< HEAD
                   {course.titulo}
+=======
+                  {course.title}
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
                 </option>
               ))}
             </select>

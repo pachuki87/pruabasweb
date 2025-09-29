@@ -1,5 +1,8 @@
+<<<<<<< HEAD
 @import 'vanilla-cookieconsent/dist/cookieconsent.css';
 
+=======
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -7,11 +10,18 @@
 :root {
   --primary-color: #0066cc;
   --secondary-color: #ffa500;
+<<<<<<< HEAD
   --accent-color: #0066cc;
   --warning-color: #ff6600;
   --error-color: #0066cc;
   --success-color: #00cc66;
   --lidera-light-blue: #7ba7d1;
+=======
+  --accent-color: #00cc66;
+  --warning-color: #ff6600;
+  --error-color: #cc0000;
+  --success-color: #00cc66;
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
 }
 
 body {
@@ -24,7 +34,11 @@ body {
 }
 
 .btn-primary {
+<<<<<<< HEAD
   @apply bg-[var(--lidera-light-blue)] text-white hover:bg-[#6a96c0] focus:ring-[var(--lidera-light-blue)];
+=======
+  @apply bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500;
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
 }
 
 .btn-secondary {
@@ -36,7 +50,11 @@ body {
 }
 
 .btn-danger {
+<<<<<<< HEAD
   @apply bg-[var(--lidera-light-blue)] text-white hover:bg-[#6a96c0] focus:ring-[var(--lidera-light-blue)];
+=======
+  @apply bg-red-600 text-white hover:bg-red-700 focus:ring-red-500;
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
 }
 
 .card {
@@ -90,4 +108,8 @@ body {
 
 .animate-fadeIn {
   animation: fadeIn 0.3s ease-out forwards;
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940

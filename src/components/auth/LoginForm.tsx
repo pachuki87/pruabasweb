@@ -1,6 +1,14 @@
+<<<<<<< HEAD
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
+=======
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Facebook } from 'lucide-react';
+import { supabase } from '../../lib/supabase';
+import { FaFacebook, FaLinkedin } from 'react-icons/fa';
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
 
 type LoginFormProps = {
   role: string;
@@ -28,6 +36,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ role, onLogin }) => {
   
   const navigate = useNavigate();
 
+<<<<<<< HEAD
   // Handle Google OAuth callback
   useEffect(() => {
     const handleAuthStateChange = async () => {
@@ -64,6 +73,8 @@ const LoginForm: React.FC<LoginFormProps> = ({ role, onLogin }) => {
     return () => subscription.unsubscribe();
   }, [role, onLogin]);
 
+=======
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -122,7 +133,11 @@ const LoginForm: React.FC<LoginFormProps> = ({ role, onLogin }) => {
       const { error } = await supabase.auth.signInWithOAuth({ 
         provider: 'google',
         options: {
+<<<<<<< HEAD
           redirectTo: `${window.location.origin}/${role}/dashboard`
+=======
+          redirectTo: window.location.origin
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
         }
       });
       if (error) {
@@ -159,7 +174,17 @@ const LoginForm: React.FC<LoginFormProps> = ({ role, onLogin }) => {
           {role === 'teacher' ? 'Inicio de Sesión del Profesor' : 'Inicio de Sesión del Estudiante'}
         </h2>
         
+<<<<<<< HEAD
         <div className="flex items-center justify-center mb-6">
+=======
+        <div className="flex items-center justify-center space-x-4 mb-6">
+          <button
+            onClick={() => handleSocialLogin('facebook')}
+            className="flex items-center justify-center w-10 h-10 text-white bg-blue-600 rounded-full hover:bg-blue-700 transition-colors"
+          >
+            <Facebook size={20} />
+          </button>
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
           <button
             onClick={() => handleSocialLogin('google')}
             className="flex items-center justify-center w-full py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
@@ -167,6 +192,15 @@ const LoginForm: React.FC<LoginFormProps> = ({ role, onLogin }) => {
             <GoogleIcon />
             <span className="ml-2">Continuar con Google</span>
           </button>
+<<<<<<< HEAD
+=======
+          <button
+            onClick={() => handleSocialLogin('linkedin')}
+            className="flex items-center justify-center w-10 h-10 text-white bg-blue-500 rounded-full hover:bg-blue-600 transition-colors"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect width="4" height="12" x="2" y="9"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+          </button>
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
         </div>
         
         <div className="flex items-center justify-between mb-6">
@@ -176,7 +210,11 @@ const LoginForm: React.FC<LoginFormProps> = ({ role, onLogin }) => {
         </div>
         
         {error && (
+<<<<<<< HEAD
           <div className="mb-4 bg-blue-50 text-blue-700 p-3 rounded-md text-sm">
+=======
+          <div className="mb-4 bg-red-50 text-red-700 p-3 rounded-md text-sm">
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
             {error}
           </div>
         )}
@@ -236,6 +274,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ role, onLogin }) => {
           </button>
         </form>
         
+<<<<<<< HEAD
         {role === 'student' && (
           <p className="mt-6 text-sm text-center text-gray-600">
             ¿No tienes una cuenta?{' '}
@@ -244,6 +283,14 @@ const LoginForm: React.FC<LoginFormProps> = ({ role, onLogin }) => {
             </Link>
           </p>
         )}
+=======
+        <p className="mt-6 text-sm text-center text-gray-600">
+          ¿No tienes una cuenta?{' '}
+          <Link to={`/register/${role}`} className="text-blue-500 hover:underline">
+            Regístrate
+          </Link>
+        </p>
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
       </div>
     </div>
   );

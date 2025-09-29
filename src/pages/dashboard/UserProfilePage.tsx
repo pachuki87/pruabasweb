@@ -52,7 +52,11 @@ function UserProfilePage({ role }: UserProfilePageProps) {
           <div>
             <label className="block text-sm font-medium text-gray-700">Cuenta Creada</label>
             <p className="mt-1 text-gray-900">
+<<<<<<< HEAD
               {user?.creado_en ? new Date(user.creado_en).toLocaleDateString() : 'N/A'}
+=======
+              {user?.created_at ? new Date(user.created_at).toLocaleDateString() : 'N/A'}
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
             </p>
           </div>
         </div>

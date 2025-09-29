@@ -6,6 +6,19 @@ const Campus = () => {
   
   const locations = [
     { 
+<<<<<<< HEAD
+=======
+      name: 'Madrid', 
+      image: 'https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=800&h=400&fit=crop',
+      description: 'Centro principal de formación especializada en adicciones'
+    },
+    { 
+      name: 'Barcelona', 
+      image: 'https://images.pexels.com/photos/3184338/pexels-photo-3184338.jpeg?auto=compress&cs=tinysrgb&w=800&h=400&fit=crop',
+      description: 'Sede en Barcelona para intervención psicosocial'
+    },
+    { 
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
       name: 'Valencia', 
       image: 'https://images.pexels.com/photos/3184357/pexels-photo-3184357.jpeg?auto=compress&cs=tinysrgb&w=800&h=400&fit=crop',
       description: 'Centro de formación en prevención de adicciones'
@@ -32,7 +45,11 @@ const Campus = () => {
                 onClick={() => setActiveLocation(index)}
                 className={`flex items-center space-x-2 px-6 py-3 rounded-lg transition-colors ${
                   activeLocation === index
+<<<<<<< HEAD
                     ? 'bg-lidera-light-blue text-white'
+=======
+                    ? 'bg-red-600 text-white'
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
                     : 'bg-white text-gray-600 hover:bg-gray-100'
                 }`}
               >

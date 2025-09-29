@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
+<<<<<<< HEAD
 import Header from '../components/layout/Header';
+=======
+import Navbar from '../components/layout/Navbar';
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
 import CourseCard from '../components/courses/CourseCard';
 import { useLocation } from 'react-router-dom';
 
@@ -57,7 +61,11 @@ function CoursesPage({ currentRole, onRoleChange }: CoursesPageProps) {
       const cursosFormateados = data.map(curso => ({
         id: curso.id,
         titulo: curso.titulo,
+<<<<<<< HEAD
         imagen: curso.titulo.toLowerCase().includes('experto en conductas adictivas') ? '' : (curso.imagen_url || ''), // Si es "Experto en Conductas Adictivas", forzar imagen vacía para usar lógica de CourseCard
+=======
+        imagen: curso.imagen_url || '',
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
         inscripcion: Math.floor(Math.random() * 100) + 1,
       }));
 
@@ -85,6 +93,7 @@ function CoursesPage({ currentRole, onRoleChange }: CoursesPageProps) {
   };
 
   return (
+<<<<<<< HEAD
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
       <Header currentRole={currentRole} onRoleChange={onRoleChange} />
       <div className="max-w-7xl mx-auto py-20 px-4 sm:px-6 lg:px-8">
@@ -99,6 +108,20 @@ function CoursesPage({ currentRole, onRoleChange }: CoursesPageProps) {
             <div className="mb-8 p-4 bg-gray-800 border border-gray-700 rounded-lg">
               <p className="text-lg text-gray-300">
                 Resultados de búsqueda para: <span className="font-semibold text-lidera-light-blue">"{new URLSearchParams(location.search).get('search')}"</span>
+=======
+    <div className="min-h-screen bg-gray-50">
+      <Navbar currentRole={currentRole} onRoleChange={onRoleChange} />
+      <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+        <div className="text-center">
+          <h1 className="text-4xl font-bold text-gray-900 mb-8">Cursos Disponibles</h1>
+          <p className="text-xl text-gray-600 mb-12">
+            Explora nuestra amplia gama de cursos diseñados para ayudarte a tener éxito
+          </p>
+          {location.search && (
+            <div className="mb-8 p-4 bg-blue-50 rounded-lg">
+              <p className="text-lg text-blue-800">
+                Resultados de búsqueda para: <span className="font-semibold">"{new URLSearchParams(location.search).get('search')}"</span>
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
                 {cursosFiltrados.length === 0 && " - No se encontraron cursos"}
                 {cursosFiltrados.length > 0 && ` - ${cursosFiltrados.length} curso(s) encontrado(s)`}
               </p>
@@ -108,11 +131,19 @@ function CoursesPage({ currentRole, onRoleChange }: CoursesPageProps) {
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {isLoading ? (
+<<<<<<< HEAD
             <p className="col-span-full text-center text-gray-300">
               Cargando cursos...
             </p>
           ) : cursosFiltrados.length === 0 ? (
             <p className="col-span-full text-center text-gray-300">
+=======
+            <p className="col-span-full text-center text-gray-600">
+              Cargando cursos...
+            </p>
+          ) : cursosFiltrados.length === 0 ? (
+            <p className="col-span-full text-center text-gray-600">
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
               No hay cursos disponibles.
             </p>
           ) : (
@@ -120,7 +151,11 @@ function CoursesPage({ currentRole, onRoleChange }: CoursesPageProps) {
               <CourseCard
                 key={curso.id}
                 id={curso.id}
+<<<<<<< HEAD
                 titulo={curso.titulo}
+=======
+                title={curso.titulo}
+>>>>>>> 23ecef7f2d77187b165bee91051cef88a79a0940
                 image={curso.imagen}
                 enrollment={curso.inscripcion}
                 role={currentRole}

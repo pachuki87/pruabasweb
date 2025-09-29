@@ -70,6 +70,7 @@ type User = {
 function App() {
   const [user, setUser] = useState<User | null>(null);
   const [currentRole, setCurrentRole] = useState<string>('visitor');
+  const navigate = useNavigate();
 
   const handleLogin = async (userData: User) => {
     // Set Supabase session after successful login
@@ -120,6 +121,21 @@ function App() {
   const handleRoleChange = (role: string) => {
     setCurrentRole(role);
   };
+
+  // Redirigir automáticamente al dashboard después del login
+  useEffect(() => {
+    if (user && user.role) {
+      // Evitar redirección si ya estamos en una ruta de dashboard
+      const currentPath = window.location.pathname;
+      const isDashboardRoute = currentPath.includes(`/${user.role}/dashboard`) ||
+                               currentPath.includes(`/${user.role}/courses`) ||
+                               currentPath.includes(`/${user.role}/profile`);
+
+      if (!isDashboardRoute && currentPath !== `/login/${user.role}` && currentPath !== `/register/${user.role}`) {
+        navigate(`/${user.role}/dashboard`);
+      }
+    }
+  }, [user, navigate]);
 
   return (
     <AuthProvider>

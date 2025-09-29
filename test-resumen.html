@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Summary Page</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-8">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-3xl font-bold text-center mb-8">Test Summary Page</h1>
+
+        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+            <h2 class="text-xl font-semibold mb-4">Generate Test Data</h2>
+            <p class="text-gray-600 mb-4">Click the button below to generate test data and redirect to the summary page.</p>
+
+            <button onclick="generateTestAndRedirect()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg">
+                Generate Test Data & View Summary
+            </button>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-xl font-semibold mb-4">Manual Test Links</h2>
+            <div class="space-y-2">
+                <a href="pagina-resumen.html" class="block text-blue-600 hover:text-blue-800">View Summary Page (No Data)</a>
+                <a href="formulario-mcp-integrado.html" class="block text-blue-600 hover:text-blue-800">Go to Form</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function generateTestAndRedirect() {
+            // Generate test data
+            const testData = {
+                userInfo: {
+                    nombre: "Juan Pérez García",
+                    email: "juan.perez@example.com"
+                },
+                answers: {
+                    pregunta1: "Ser adicto significa tener una dependencia física y psicológica de una sustancia o actividad, caracterizada por la pérdida de control, tolerancia y síndrome de abstinencia. Las principales características incluyen la compulsión, la incapacidad de detenerse a pesar de las consecuencias negativas, y la priorización de la adicción sobre otras áreas de la vida.",
+                    pregunta2: "Las consecuencias de las adicciones incluyen problemas de salud física y mental, deterioro de relaciones personales y familiares, pérdida de empleo y estabilidad económica, problemas legales, aislamiento social, y en casos extremos, la muerte. En el ámbito familiar, genera desconfianza, conflictos, codependencia y trauma en los hijos.",
+                    pregunta3: "La familia juega un rol fundamental en la recuperación, proporcionando apoyo emocional, participando en terapia familiar, estableciendo límites saludables, aprendiendo sobre la adicción, y creando un ambiente que favorezca la rehabilitación. La familia también necesita recibir apoyo para su propio proceso de sanación.",
+                    pregunta4: "El mindfulness ayuda en el tratamiento de adicciones mediante la conciencia plena del presente, reducción del estrés y la ansiedad, identificación de desencadenantes, mejora del autocontrol, desarrollo de estrategias de afrontamiento saludables, y la creación de un espacio entre el impulso y la acción."
+                },
+                evaluations: {
+                    pregunta1: {
+                        correccion: "Excelente conceptualización que abarca tanto aspectos físicos como psicológicos. Has mencionado correctamente las características clave como pérdida de control y tolerancia.",
+                        puntuacion: 9,
+                        sugerencias: ["Podrías profundizar en los aspectos neurobiológicos", "Mencionar la diferencia entre dependencia y adicción"]
+                    },
+                    pregunta2: {
+                        correccion: "Respuesta muy completa que cubre múltiples dimensiones del impacto. Has considerado adecuadamente tanto consecuencias individuales como familiares.",
+                        puntuacion: 10,
+                        sugerencias: ["Incluir más detalles sobre consecuencias sociales específicas", "Mencionar el impacto en la salud mental"]
+                    },
+                    pregunta3: {
+                        correccion: "Buen análisis del rol familiar. Has identificado correctamente los aspectos de apoyo y la necesidad de que la familia también reciba ayuda.",
+                        puntuacion: 8,
+                        sugerencias: "Profundizar en los diferentes tipos de intervenciones familiares disponibles."
+                    },
+                    pregunta4: {
+                        correccion: "Muy buena explicación de cómo el mindfulness se aplica al tratamiento de adicciones. Has conectado bien las técnicas con los beneficios específicos.",
+                        puntuacion: 9,
+                        sugerencias: ["Mencionar algunas técnicas específicas de mindfulness", "Incluir evidencia científica que respalde su eficacia"]
+                    },
+                    resumen: "Tu desempeño general es excelente (9.0/10). Demuestras un sólido conocimiento teórico sobre las adicciones y su tratamiento. Tus respuestas son completas, bien estructuradas y muestran una comprensión profunda de los temas. Destacas especialmente en tu capacidad para analizar las consecuencias multidimensionales de las adicciones y en tu comprensión del abordaje terapéutico con mindfulness. Sigue así, tienes un gran potencial en este campo."
+                },
+                timestamp: new Date().toISOString(),
+                timeSpent: 15,
+                formName: 'Evaluación de Adicciones'
+            };
+
+            // Encode and redirect
+            const encodedData = btoa(JSON.stringify(testData));
+            window.location.href = `pagina-resumen.html?data=${encodedData}`;
+        }
+    </script>
+</body>
+</html>

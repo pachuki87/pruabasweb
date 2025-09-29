@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recovery Coaching - Máster en Adicciones</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #9b59b6;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+            font-size: 2.2em;
+        }
+        h2 {
+            color: #34495e;
+            margin-top: 35px;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            border-left: 4px solid #9b59b6;
+            padding-left: 15px;
+        }
+        h3 {
+            color: #8e44ad;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        h4 {
+            color: #34495e;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        .highlight {
+            background: linear-gradient(135deg, #f4e6ff 0%, #e8d5ff 100%);
+            padding: 20px;
+            border-left: 5px solid #9b59b6;
+            margin: 25px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .coaching-section {
+            background: linear-gradient(135deg, #fff9e6 0%, #fff3cd 100%);
+            padding: 25px;
+            border-radius: 10px;
+            margin: 30px 0;
+            border: 2px solid #f39c12;
+        }
+        .principles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+        .principle-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-left: 4px solid #e67e22;
+        }
+        .principle-card h4 {
+            color: #e67e22;
+            margin-top: 0;
+        }
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .skill-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #17a2b8;
+        }
+        .skill-card h5 {
+            color: #17a2b8;
+            margin-top: 0;
+            margin-bottom: 8px;
+            font-size: 1em;
+        }
+        .health-section {
+            background: linear-gradient(135deg, #e8f5e8 0%, #d4edda 100%);
+            padding: 25px;
+            border-radius: 10px;
+            margin: 30px 0;
+            border: 2px solid #28a745;
+        }
+        .key-points {
+            background: #e3f2fd;
+            border: 1px solid #90caf9;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .key-points h4 {
+            color: #1976d2;
+            margin-top: 0;
+        }
+        .phases-timeline {
+            position: relative;
+            padding: 20px 0;
+        }
+        .phase-item {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #6c757d;
+        }
+        .phase-number {
+            background: #6c757d;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-weight: bold;
+        }
+        .transform-section {
+            background: linear-gradient(135deg, #fdf2e9 0%, #f8d7da 100%);
+            padding: 25px;
+            border-radius: 10px;
+            margin: 30px 0;
+            border: 2px solid #dc3545;
+        }
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .comparison-table th {
+            background: #9b59b6;
+            color: white;
+            padding: 15px;
+            text-align: left;
+        }
+        .comparison-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #dee2e6;
+        }
+        .comparison-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        .navigation {
+            margin-top: 40px;
+            text-align: center;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background-color: #9b59b6;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            margin: 0 10px;
+            transition: background-color 0.3s;
+        }
+        .btn:hover {
+            background-color: #8e44ad;
+        }
+        .content-separator {
+            border: none;
+            height: 2px;
+            background: linear-gradient(to right, transparent, #9b59b6, transparent);
+            margin: 40px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Recovery Coaching en Adicciones</h1>
+        
+        <h2>1. ¿QUÉ ES EL RECOVERY COACHING?</h2>
+        <p>El Recovery Coaching es un enfoque colaborativo y centrado en la persona que utiliza la experiencia vivida de la recuperación para apoyar a individuos en su proceso de sanación y crecimiento personal.</p>
+        
+        <div class="highlight">
+            <strong>Definición Clave:</strong> Un Recovery Coach es una persona en recuperación que utiliza su experiencia personal, entrenamiento y habilidades para ayudar a otros a iniciar y mantener su propio proceso de recuperación.
+        </div>
+        
+        <h2>2. PRINCIPIOS FUNDAMENTALES DEL RECOVERY COACHING</h2>
+        <div class="principles-grid">
+            <div class="principle-card">
+                <h4>Esperanza</h4>
+                <p>La recuperación es posible para todos. El coach transmite esperanza a través de su propia experiencia de recuperación.</p>
+            </div>
+            
+            <div class="principle-card">
+                <h4>Autodeterminación</h4>
+                <p>Las personas tienen el derecho y la capacidad de dirigir su propia vida y tomar decisiones informadas.</p>
+            </div>
+            
+            <div class="principle-card">
+                <h4>Individualidad</h4>
+                <p>Cada persona tiene un camino único hacia la recuperación basado en sus fortalezas, necesidades y preferencias.</p>
+            </div>
+            
+            <div class="principle-card">
+                <h4>Holístico</h4>
+                <p>La recuperación abarca todos los aspectos de la vida: físico, mental, emocional, social y espiritual.</p>
+            </div>
+            
+            <div class="principle-card">
+                <h4>No Lineal</h4>
+                <p>La recuperación es un proceso continuo con altibajos, no una línea recta hacia el éxito.</p>
+            </div>
+            
+            <div class="principle-card">
+                <h4>Fortalezas</h4>
+                <p>Se enfoca en las fortalezas, habilidades y recursos de la persona, no en sus déficits.</p>
+            </div>
+        </div>
+        
+        <h2>3. DIFERENCIAS CON LA TERAPIA TRADICIONAL</h2>
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Aspecto</th>
+                    <th>Recovery Coaching</th>
+                    <th>Terapia Tradicional</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Enfoque</strong></td>
+                    <td>Futuro y soluciones</td>
+                    <td>Pasado y problemas</td>
+                </tr>
+                <tr>
+                    <td><strong>Relación</strong></td>
+                    <td>Horizontal (peer-to-peer)</td>
+                    <td>Vertical (experto-paciente)</td>
+                </tr>
+                <tr>
+                    <td><strong>Duración</strong></td>
+                    <td>Flexible y a largo plazo</td>
+                    <td>Estructurada y limitada</td>
+                </tr>
+                <tr>
+                    <td><strong>Objetivos</strong></td>
+                    <td>Definidos por la persona</td>
+                    <td>Basados en diagnóstico</td>
+                </tr>
+                <tr>
+                    <td><strong>Ubicación</strong></td>
+                    <td>Comunidad y entornos naturales</td>
+                    <td>Consulta clínica</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <hr class="content-separator">
+
+        <div class="coaching-section">
+            <h2>🎯 Habilidades Esenciales del Recovery Coach</h2>
+            
+            <h3>Habilidades de Comunicación</h3>
+            <div class="skills-grid">
+                <div class="skill-card">
+                    <h5>Escucha Activa</h5>
+                    <p>Prestar atención completa y empática a la persona.</p>
+                </div>
+                
+                <div class="skill-card">
+                    <h5>Preguntas Poderosas</h5>
+                    <p>Formular preguntas que promuevan la reflexión y el autodescubrimiento.</p>
+                </div>
+                
+                <div class="skill-card">
+                    <h5>Comunicación No Violenta</h5>
+                    <p>Expresarse de manera clara, honesta y respetuosa.</p>
+                </div>
+                
+                <div class="skill-card">
+                    <h5>Feedback Constructivo</h5>
+                    <p>Proporcionar retroalimentación útil y orientada al crecimiento.</p>
+                </div>
+            </div>
+            
+            <h3>Habilidades de Apoyo</h3>
+            <div class="skills-grid">
+                <div class="skill-card">
+                    <h5>Motivación</h5>
+                    <p>Inspirar y mantener la motivación hacia el cambio positivo.</p>
+                </div>
+                
+                <div class="skill-card">
+                    <h5>Establecimiento de Metas</h5>
+                    <p>Ayudar a definir objetivos realistas y alcanzables.</p>
+                </div>
+                
+                <div class="skill-card">
+                    <h5>Resolución de Problemas</h5>
+                    <p>Facilitar el desarrollo de estrategias para superar obstáculos.</p>
+                </div>
+                
+                <div class="skill-card">
+                    <h5>Navegación de Recursos</h5>
+                    <p>Conectar con servicios y recursos comunitarios apropiados.</p>
+                </div>
+            </div>
+        </div>
+
+        <hr class="content-separator">
+
+        <div class="health-section">
+            <h2>🏥 Health Coaching Integrado</h2>
+            
+            <h3>Enfoque Holístico de la Salud</h3>
+            <p>El Health Coaching en el contexto de adicciones aborda no solo la abstinencia, sino el bienestar integral de la persona, incluyendo aspectos físicos, mentales, emocionales y sociales.</p>
+            
+            <h3>Componentes del Health Coaching</h3>
+            <div class="principles-grid">
+                <div class="principle-card">
+                    <h4>Evaluación de Salud</h4>
+                    <p>Análisis integral del estado de salud física y mental de la persona.</p>
+                </div>
+                
+                <div class="principle-card">
+                    <h4>Plan de Bienestar</h4>
+                    <p>Desarrollo de estrategias personalizadas para mejorar la salud general.</p>
+                </div>
+                
+                <div class="principle-card">
+                    <h4>Cambio de Hábitos</h4>
+                    <p>Apoyo en la adopción de hábitos saludables y eliminación de patrones destructivos.</p>
+                </div>
+                
+                <div class="principle-card">
+                    <h4>Autocuidado</h4>
+                    <p>Enseñanza de técnicas de autocuidado y manejo del estrés.</p>
+                </div>
+            </div>
+            
+            <div class="key-points">
+                <h4>Áreas de Intervención en Health Coaching:</h4>
+                <ul>
+                    <li><strong>Nutrición:</strong> Desarrollo de hábitos alimentarios saludables</li>
+                    <li><strong>Ejercicio:</strong> Incorporación de actividad física regular</li>
+                    <li><strong>Sueño:</strong> Mejora de la higiene del sueño</li>
+                    <li><strong>Manejo del Estrés:</strong> Técnicas de relajación y mindfulness</li>
+                    <li><strong>Relaciones:</strong> Fortalecimiento de vínculos sociales saludables</li>
+                    <li><strong>Propósito:</strong> Identificación de valores y significado personal</li>
+                </ul>
+            </div>
+        </div>
+
+        <hr class="content-separator">
+
+        <h2>4. PROCESO DE RECOVERY COACHING</h2>
+        
+        <div class="phases-timeline">
+            <div class="phase-item">
+                <div class="phase-number">1</div>
+                <div>
+                    <h4>Establecimiento de la Relación</h4>
+                    <p>Construcción de confianza, rapport y definición de expectativas mutuas.</p>
+                </div>
+            </div>
+            
+            <div class="phase-item">
+                <div class="phase-number">2</div>
+                <div>
+                    <h4>Evaluación y Exploración</h4>
+                    <p>Identificación de fortalezas, necesidades, valores y objetivos personales.</p>
+                </div>
+            </div>
+            
+            <div class="phase-item">
+                <div class="phase-number">3</div>
+                <div>
+                    <h4>Planificación de la Recuperación</h4>
+                    <p>Desarrollo conjunto de un plan personalizado de recuperación.</p>
+                </div>
+            </div>
+            
+            <div class="phase-item">
+                <div class="phase-number">4</div>
+                <div>
+                    <h4>Implementación y Apoyo</h4>
+                    <p>Acompañamiento en la ejecución del plan y superación de obstáculos.</p>
+                </div>
+            </div>
+            
+            <div class="phase-item">
+                <div class="phase-number">5</div>
+                <div>
+                    <h4>Monitoreo y Ajustes</h4>
+                    <p>Evaluación continua del progreso y modificación del plan según sea necesario.</p>
+                </div>
+            </div>
+            
+            <div class="phase-item">
+                <div class="phase-number">6</div>
+                <div>
+                    <h4>Transición y Mantenimiento</h4>
+                    <p>Preparación para la independencia y mantenimiento a largo plazo.</p>
+                </div>
+            </div>
+        </div>
+
+        <hr class="content-separator">
+
+        <div class="transform-section">
+            <h2>🔄 Coaching Transformacional</h2>
+            
+            <h3>Principios del Cambio Transformacional</h3>
+            <p>El coaching transformacional va más allá del cambio de comportamientos; busca una transformación profunda en la identidad, valores y perspectiva de vida de la persona.</p>
+            
+            <h3>Elementos Clave</h3>
+            <div class="skills-grid">
+                <div class="skill-card">
+                    <h5>Conciencia de Sí Mismo</h5>
+                    <p>Desarrollo de la autoconciencia y comprensión personal profunda.</p>
+                </div>
+                
+                <div class="skill-card">
+                    <h5>Cambio de Perspectiva</h5>
+                    <p>Transformación de creencias limitantes en pensamientos empoderados.</p>
+                </div>
+                
+                <div class="skill-card">
+                    <h5>Propósito de Vida</h5>
+                    <p>Descubrimiento y alineación con el propósito y valores personales.</p>
+                </div>
+                
+                <div class="skill-card">
+                    <h5>Resiliencia</h5>
+                    <p>Desarrollo de la capacidad de recuperación ante adversidades.</p>
+                </div>
+            </div>
+            
+            <div class="key-points">
+                <h4>Herramientas Transformacionales:</h4>
+                <ul>
+                    <li>Técnicas de visualización y manifestación</li>
+                    <li>Trabajo con creencias limitantes</li>
+                    <li>Desarrollo de la inteligencia emocional</li>
+                    <li>Prácticas de mindfulness y meditación</li>
+                    <li>Establecimiento de rituales y hábitos empoderados</li>
+                </ul>
+            </div>
+        </div>
+
+        <h2>5. COMPETENCIAS DEL RECOVERY COACH</h2>
+        
+        <div class="coaching-section">
+            <h3>Competencias Personales</h3>
+            <ul>
+                <li><strong>Experiencia Vivida:</strong> Conocimiento directo del proceso de recuperación</li>
+                <li><strong>Estabilidad Personal:</strong> Mantenimiento de su propia recuperación</li>
+                <li><strong>Crecimiento Continuo:</strong> Compromiso con el desarrollo personal constante</li>
+                <li><strong>Ética Profesional:</strong> Adherencia a códigos éticos y límites apropiados</li>
+            </ul>
+            
+            <h3>Competencias Profesionales</h3>
+            <ul>
+                <li><strong>Conocimiento Especializado:</strong> Comprensión de adicciones y recuperación</li>
+                <li><strong>Habilidades de Coaching:</strong> Técnicas específicas de acompañamiento</li>
+                <li><strong>Trabajo en Equipo:</strong> Colaboración con otros profesionales</li>
+                <li><strong>Documentación:</strong> Registro apropiado del proceso de coaching</li>
+            </ul>
+        </div>
+
+        <div class="key-points">
+            <h4>Recursos de Apoyo:</h4>
+            <p>Esta lección incluye materiales especializados en recovery coaching, health coaching integral, técnicas de coaching transformacional, y herramientas prácticas para el desarrollo de competencias profesionales en el acompañamiento de procesos de recuperación.</p>
+        </div>
+        
+        <div class="navigation">
+            <a href="#" class="btn">Módulo Anterior</a>
+            <a href="#" class="btn">Marcar como Completada</a>
+            <a href="#" class="btn">Siguiente Módulo</a>
+        </div>
+    </div>
+</body>
+</html>

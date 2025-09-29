@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Resultados de Quiz</title>
+</head>
+<body>
+    <!-- Formulario estático para detección de Netlify Forms -->
+    <form name="quiz-results" netlify netlify-honeypot="bot-field" hidden>
+        <input type="hidden" name="form-name" value="quiz-results" />
+        <input type="hidden" name="bot-field" />
+        <input type="text" name="nombre" />
+        <input type="email" name="email" />
+        <textarea name="quizData"></textarea>
+        <textarea name="userAnswers"></textarea>
+        <textarea name="results"></textarea>
+        <input type="submit" value="Enviar" />
+    </form>
+</body>
+</html>

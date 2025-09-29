@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Preguntas Abiertas - Instituto Lidera</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="gradient-bg text-white py-8">
+        <div class="container mx-auto px-4">
+            <h1 class="text-3xl font-bold text-center">Formulario de Evaluación</h1>
+            <p class="text-center mt-2">Responde las siguientes preguntas abiertas</p>
+        </div>
+    </div>
+
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+        <form name="preguntas-abiertas" method="POST" data-netlify="true" netlify-honeypot="bot-field" class="space-y-6">
+            <input type="hidden" name="form-name" value="preguntas-abiertas" />
+            <!-- Campo honeypot oculto para spam -->
+            <p class="hidden">
+                <label>Don't fill this out: <input name="bot-field" /></label>
+            </p>
+
+            <!-- Información del estudiante -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-xl font-semibold mb-4 text-gray-800">Información Personal</h2>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="nombre" class="block text-sm font-medium text-gray-700 mb-2">Nombre Completo</label>
+                        <input type="text" id="nombre" name="nombre" required
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Correo Electrónico</label>
+                        <input type="email" id="email" name="email" required
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <p id="emailStatus" class="text-sm mt-1 text-red-600">Detectando email...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Preguntas abiertas -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-xl font-semibold mb-4 text-gray-800">Preguntas de Desarrollo</h2>
+
+                <div class="space-y-6">
+                    <div>
+                        <label for="pregunta1" class="block text-sm font-medium text-gray-700 mb-2">
+                            1. ¿Qué significa para usted ser adicto y cuáles considera que son las principales características de una conducta adictiva?
+                        </label>
+                        <textarea id="pregunta1" name="pregunta1" rows="4" required
+                                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
+                    </div>
+
+                    <div>
+                        <label for="pregunta2" class="block text-sm font-medium text-gray-700 mb-2">
+                            2. Describa las principales consecuencias que las adicciones pueden tener en la vida de una persona y su entorno familiar.
+                        </label>
+                        <textarea id="pregunta2" name="pregunta2" rows="4" required
+                                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
+                    </div>
+
+                    <div>
+                        <label for="pregunta3" class="block text-sm font-medium text-gray-700 mb-2">
+                            3. ¿Qué role considera que juega la familia en el proceso de recuperación de una persona con adicciones?
+                        </label>
+                        <textarea id="pregunta3" name="pregunta3" rows="4" required
+                                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
+                    </div>
+
+                    <div>
+                        <label for="pregunta4" class="block text-sm font-medium text-gray-700 mb-2">
+                            4. Explique cómo el mindfulness puede ser una herramienta útil en el tratamiento de conductas adictivas.
+                        </label>
+                        <textarea id="pregunta4" name="pregunta4" rows="4" required
+                                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botón de envío -->
+            <div class="text-center">
+                <button type="submit" id="submitBtn"
+                        class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg transition duration-300 transform hover:scale-105">
+                    Enviar Respuestas
+                </button>
+            </div>
+
+            <!-- No necesitamos campos ocultos adicionales para Netlify Forms -->
+        </form>
+
+        <!-- Indicador de progreso -->
+        <div id="loadingIndicator" class="hidden mt-4 text-center">
+            <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+            <p class="mt-2 text-gray-600">Procesando respuestas...</p>
+        </div>
+
+        <!-- Resultados -->
+        <div id="resultados" class="hidden mt-6 bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-xl font-semibold mb-4 text-green-600">¡Respuestas Enviadas!</h2>
+            <p class="text-gray-700 mb-4">Tus respuestas han sido enviadas correctamente. Recibirás un correo electrónico con la retroalimentación de la IA.</p>
+            <div id="correcciones" class="space-y-4"></div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.querySelector('form[name="preguntas-abiertas"]');
+            const submitBtn = document.getElementById('submitBtn');
+            const loadingIndicator = document.getElementById('loadingIndicator');
+            const resultados = document.getElementById('resultados');
+            const correcciones = document.getElementById('correcciones');
+
+            // Obtener email del usuario autenticado de Supabase
+            async function getUserEmail() {
+                try {
+                    console.log('Intentando obtener email de Supabase...');
+
+                    // Método 1: Intentar obtener el usuario desde localStorage (Supabase auth)
+                    const supabaseUser = localStorage.getItem('supabase.auth.token');
+                    if (supabaseUser) {
+                        console.log('Encontrado token en localStorage');
+                        const user = JSON.parse(supabaseUser);
+                        const email = user.user?.email || user.email;
+                        if (email) {
+                            console.log('Email obtenido desde localStorage:', email);
+                            return email;
+                        }
+                    }
+
+                    // Método 2: Buscar en otros posibles lugares de localStorage
+                    const keys = Object.keys(localStorage);
+                    for (const key of keys) {
+                        if (key.includes('supabase') || key.includes('auth')) {
+                            try {
+                                const value = localStorage.getItem(key);
+                                const parsed = JSON.parse(value);
+                                if (parsed && (parsed.email || parsed.user?.email)) {
+                                    const email = parsed.email || parsed.user?.email;
+                                    console.log('Email encontrado en', key, ':', email);
+                                    return email;
+                                }
+                            } catch (e) {
+                                // No hacer nada, continuar con el siguiente
+                            }
+                        }
+                    }
+
+                    // Método 3: Intentar desde el objeto global de Supabase
+                    if (window.supabase && window.supabase.auth) {
+                        console.log('Intentando obtener email desde supabase.auth...');
+                        const { data, error } = await window.supabase.auth.getUser();
+                        if (!error && data.user) {
+                            console.log('Email obtenido desde supabase.auth:', data.user.email);
+                            return data.user.email;
+                        }
+                    }
+
+                    // Método 4: Verificar si hay un usuario en la sesión actual
+                    if (window.supabase && window.supabase.auth.session) {
+                        const session = window.supabase.auth.session();
+                        if (session && session.user) {
+                            console.log('Email obtenido desde sesión:', session.user.email);
+                            return session.user.email;
+                        }
+                    }
+
+                } catch (error) {
+                    console.error('Error obteniendo email del usuario:', error);
+                }
+
+                console.log('No se encontró email del usuario');
+                return null;
+            }
+
+            // Configurar email del usuario cuando se carga la página
+            async function setupUserEmail() {
+                const userEmail = await getUserEmail();
+                const emailInput = document.getElementById('email');
+
+                console.log('Email detectado:', userEmail);
+
+                if (userEmail && emailInput) {
+                    emailInput.value = userEmail;
+                    emailInput.readOnly = true; // Hacer el campo de solo lectura
+                    emailInput.classList.add('bg-gray-100');
+
+                    // Mostrar el email detectado en la interfaz
+                    const emailStatus = document.getElementById('emailStatus');
+                    if (emailStatus) {
+                        emailStatus.textContent = `Email detectado: ${userEmail}`;
+                        emailStatus.classList.remove('text-red-600');
+                        emailStatus.classList.add('text-green-600');
+                    }
+
+                    console.log('Email del usuario configurado:', userEmail);
+                } else {
+                    console.log('No se pudo configurar el email del usuario');
+
+                    // Mostrar mensaje de error
+                    const emailStatus = document.getElementById('emailStatus');
+                    if (emailStatus) {
+                        emailStatus.textContent = 'Email no detectado - Por favor inicia sesión';
+                        emailStatus.classList.remove('text-green-600');
+                        emailStatus.classList.add('text-red-600');
+                    }
+                }
+            }
+
+            setupUserEmail();
+
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+
+                // Mostrar indicador de carga
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Procesando...';
+                loadingIndicator.classList.remove('hidden');
+                resultados.classList.add('hidden');
+
+                const formData = new FormData(form);
+                const data = Object.fromEntries(formData);
+
+                try {
+                    // 1. Enviar a Netlify Forms (esto activará las notificaciones por email)
+                    await fetch('/', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: new URLSearchParams(formData).toString()
+                    });
+
+                    // 2. Enviar al serverless function para procesar con GLM y enviar email
+                    const response = await fetch('/.netlify/functions/process-form', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(data)
+                    });
+
+                    const result = await response.json();
+
+                    if (response.ok) {
+                        // Mostrar resultados
+                        mostrarResultados(result.corrections);
+                    } else {
+                        throw new Error(result.message || 'Error procesando el formulario');
+                    }
+
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Hubo un error al procesar tus respuestas. Por favor intenta nuevamente.');
+                } finally {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Enviar Respuestas';
+                    loadingIndicator.classList.add('hidden');
+                }
+            });
+
+            function mostrarResultados(correcciones) {
+                correcciones.innerHTML = '';
+
+                Object.entries(correcciones).forEach(([key, value]) => {
+                    if (key === 'resumen') return;
+
+                    const div = document.createElement('div');
+                    div.className = 'border-l-4 border-blue-500 pl-4 py-2';
+                    div.innerHTML = `
+                        <h3 class="font-semibold text-gray-800">Pregunta ${key.slice(-1)}</h3>
+                        <p class="text-gray-700 mt-1">${value.correccion}</p>
+                        <div class="mt-2">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                Puntuación: ${value.puntuacion}/10
+                            </span>
+                        </div>
+                        ${value.sugerencias && value.sugerencias.length > 0 ? `
+                            <div class="mt-2">
+                                <h4 class="text-sm font-medium text-gray-700">Sugerencias:</h4>
+                                <ul class="mt-1 text-sm text-gray-600 list-disc list-inside">
+                                    ${value.sugerencias.map(s => `<li>${s}</li>`).join('')}
+                                </ul>
+                            </div>
+                        ` : ''}
+                    `;
+                    correcciones.appendChild(div);
+                });
+
+                // Mostrar resumen si existe
+                if (correcciones.resumen) {
+                    const resumenDiv = document.createElement('div');
+                    resumenDiv.className = 'mt-4 p-4 bg-blue-50 rounded-lg';
+                    resumenDiv.innerHTML = `
+                        <h3 class="font-semibold text-blue-800 mb-2">Resumen General</h3>
+                        <p class="text-blue-700">${correcciones.resumen}</p>
+                    `;
+                    correcciones.appendChild(resumenDiv);
+                }
+
+                resultados.classList.remove('hidden');
+            }
+        });
+    </script>
+</body>
+</html>

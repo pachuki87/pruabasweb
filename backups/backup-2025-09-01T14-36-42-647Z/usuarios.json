@@ -1,0 +1,42 @@
+[
+  {
+    "id": "79bcdeb7-512b-45cd-88df-f5b44169115e",
+    "email": "vicentemk87@gmail.com\r\n",
+    "rol": "profesor",
+    "creado_en": "2025-05-21T15:22:05+00:00",
+    "nombre": "vicente",
+    "name": null
+  },
+  {
+    "id": "83508eb3-e26e-4312-90f7-9a06901d4126",
+    "email": "pablocardonafeliu@gmail.com",
+    "rol": "estudiante",
+    "creado_en": "2025-05-17T22:59:11.161112+00:00",
+    "nombre": "pablo",
+    "name": null
+  },
+  {
+    "id": "745e0949-6486-4afb-b685-78726ad3d8e9",
+    "email": "liderainstituto@gmail.com",
+    "rol": "estudiante",
+    "creado_en": "2025-05-22T10:42:32.201053+00:00",
+    "nombre": "lidera",
+    "name": null
+  },
+  {
+    "id": "98c473d9-011e-4a6b-a646-9c41b007d3ae",
+    "email": "pablocfv@gmail.com",
+    "rol": "student",
+    "creado_en": "2025-06-01T18:52:53.86547+00:00",
+    "nombre": null,
+    "name": null
+  },
+  {
+    "id": "389debed-7930-40ec-83ce-731a4362590f",
+    "email": "javiercarbonelledo@yahoo.es",
+    "rol": "student",
+    "creado_en": "2025-06-01T21:42:33.824242+00:00",
+    "nombre": null,
+    "name": null
+  }
+]

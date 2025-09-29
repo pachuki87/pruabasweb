@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terapia Cognitiva en Drogodependencias - Máster en Adicciones</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #e74c3c;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #34495e;
+            margin-top: 30px;
+        }
+        .highlight {
+            background-color: #fdf2e9;
+            padding: 15px;
+            border-left: 4px solid #e74c3c;
+            margin: 20px 0;
+        }
+        .technique-box {
+            background-color: #e8f5e8;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        .navigation {
+            margin-top: 40px;
+            text-align: center;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #e74c3c;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+        }
+        .btn:hover {
+            background-color: #c0392b;
+        }
+        .video-container {
+            margin: 30px 0;
+            text-align: center;
+        }
+        .video-container h3 {
+            color: #34495e;
+            margin-bottom: 15px;
+        }
+        .video-container iframe {
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Terapia Cognitiva en Drogodependencias</h1>
+        
+        <h2>1. FUNDAMENTOS DE LA TERAPIA COGNITIVA</h2>
+        <p>La terapia cognitiva en drogodependencias se basa en la premisa de que los pensamientos, emociones y comportamientos están interconectados. Los patrones de pensamiento disfuncionales contribuyen al mantenimiento del consumo de sustancias.</p>
+        
+        <div class="highlight">
+            <strong>Principio Central:</strong> Modificar los patrones de pensamiento distorsionados para generar cambios duraderos en el comportamiento adictivo.
+        </div>
+        
+        <h2>2. DISTORSIONES COGNITIVAS COMUNES EN ADICCIONES</h2>
+        <div class="technique-box">
+            <p><strong>• Pensamiento Todo o Nada:</strong> "Si consumo una vez, ya fracasé completamente"</p>
+            <p><strong>• Minimización:</strong> "Solo fue una vez, no es tan grave"</p>
+            <p><strong>• Catastrofización:</strong> "Sin la sustancia no podré funcionar"</p>
+            <p><strong>• Personalización:</strong> "Es culpa mía que mi familia esté mal"</p>
+        </div>
+        
+        <h2>3. TÉCNICAS COGNITIVAS ESPECÍFICAS</h2>
+        
+        <div class="technique-box">
+            <h3>Reestructuración Cognitiva</h3>
+            <p>Identificación y modificación de pensamientos automáticos negativos relacionados con el consumo.</p>
+        </div>
+        
+        <div class="technique-box">
+            <h3>Registro de Pensamientos</h3>
+            <p>Herramienta para documentar situaciones, pensamientos, emociones y comportamientos relacionados con el consumo.</p>
+        </div>
+        
+        <div class="technique-box">
+            <h3>Prevención de Recaídas Cognitiva</h3>
+            <p>Identificación de situaciones de riesgo y desarrollo de estrategias cognitivas de afrontamiento.</p>
+        </div>
+        
+        <h2>4. APLICACIÓN PRÁCTICA</h2>
+        <p>La terapia cognitiva en drogodependencias requiere:</p>
+        <p>• Evaluación detallada de patrones cognitivos</p>
+        <p>• Psicoeducación sobre la relación pensamiento-emoción-conducta</p>
+        <p>• Práctica sistemática de técnicas cognitivas</p>
+        <p>• Generalización de aprendizajes a situaciones cotidianas</p>
+
+        <h2>5. VIDEOS RECOMENDADOS</h2>
+        <div class="video-container">
+            <h3>La terapia cognitivo conductual en las adicciones</h3>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/zpP3cI3v8SM" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+
+        <div class="video-container">
+            <h3>Intervención Terapéutica en Adicciones</h3>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/h6lczteDcoo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+
+        <div class="video-container">
+            <h3>Webinario: Consejos de la terapia cognitivo conductual</h3>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/QeZkEQfRLFc" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        
+        <div class="navigation">
+            <a href="../FUNDAMENTOS P TERAPEUTICO/contenido.html" class="btn">Módulo Anterior</a>
+            <a href="#" class="btn">Marcar como Completada</a>
+            <a href="../FAMILIA Y TRABAJO EQUIPO/contenido.html" class="btn">Siguiente Módulo</a>
+        </div>
+    </div>
+</body>
+</html>

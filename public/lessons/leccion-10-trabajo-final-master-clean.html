@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trabajo Final del Máster - Máster en Adicciones</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #20c997;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+            font-size: 2.2em;
+        }
+        h2 {
+            color: #34495e;
+            margin-top: 35px;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            border-left: 4px solid #20c997;
+            padding-left: 15px;
+        }
+        .highlight {
+            background: linear-gradient(135deg, #e6fffa 0%, #b3f5e6 100%);
+            padding: 20px;
+            border-left: 5px solid #20c997;
+            margin: 25px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .tfm-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+        .tfm-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-left: 4px solid #17a2b8;
+        }
+        .tfm-card h4 {
+            color: #17a2b8;
+            margin-top: 0;
+        }
+        .methodology-section {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            padding: 25px;
+            border-radius: 10px;
+            margin: 30px 0;
+            border: 2px solid #ffc107;
+        }
+        .timeline-section {
+            background: linear-gradient(135deg, #f8f4ff 0%, #e9d5ff 100%);
+            padding: 25px;
+            border-radius: 10px;
+            margin: 30px 0;
+            border: 2px solid #6f42c1;
+        }
+        .phases-timeline {
+            position: relative;
+            padding: 20px 0;
+        }
+        .phase-item {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #6c757d;
+        }
+        .phase-number {
+            background: #6c757d;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-weight: bold;
+        }
+        .key-points {
+            background: #e8f5e8;
+            border: 1px solid #c3e6cb;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .key-points h4 {
+            color: #155724;
+            margin-top: 0;
+        }
+        .content-separator {
+            border: none;
+            height: 2px;
+            background: linear-gradient(to right, transparent, #20c997, transparent);
+            margin: 40px 0;
+        }
+        .navigation {
+            margin-top: 40px;
+            text-align: center;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background-color: #20c997;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            margin: 0 10px;
+            transition: background-color 0.3s;
+        }
+        .btn:hover {
+            background-color: #1ba085;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Trabajo Final del Máster</h1>
+        
+        <div class="highlight">
+            <strong>Objetivo Principal:</strong> El Trabajo Final del Máster (TFM) es una investigación original que demuestra la integración de conocimientos adquiridos y la capacidad de aplicarlos en el campo de las adicciones.
+        </div>
+        
+        <h2>1. MODALIDADES DE TRABAJO FINAL</h2>
+        <div class="tfm-grid">
+            <div class="tfm-card">
+                <h4>Investigación Empírica</h4>
+                <p>Estudio original con recogida y análisis de datos primarios sobre adicciones.</p>
+            </div>
+            
+            <div class="tfm-card">
+                <h4>Revisión Sistemática</h4>
+                <p>Análisis crítico y síntesis de la literatura científica sobre un tema específico.</p>
+            </div>
+            
+            <div class="tfm-card">
+                <h4>Estudio de Caso</h4>
+                <p>Análisis en profundidad de un caso clínico o programa de intervención.</p>
+            </div>
+            
+            <div class="tfm-card">
+                <h4>Propuesta de Intervención</h4>
+                <p>Diseño de un programa o protocolo de tratamiento innovador.</p>
+            </div>
+            
+            <div class="tfm-card">
+                <h4>Evaluación de Programas</h4>
+                <p>Análisis de efectividad de programas existentes de tratamiento.</p>
+            </div>
+            
+            <div class="tfm-card">
+                <h4>Proyecto de Innovación</h4>
+                <p>Desarrollo de herramientas, tecnologías o metodologías novedosas.</p>
+            </div>
+        </div>
+
+        <hr class="content-separator">
+
+        <div class="methodology-section">
+            <h2>🔬 Metodología de Investigación</h2>
+            
+            <h3>Enfoques Metodológicos</h3>
+            <div class="tfm-grid">
+                <div class="tfm-card">
+                    <h4>Metodología Cuantitativa</h4>
+                    <p>Estudios experimentales, cuasi-experimentales, correlacionales y descriptivos.</p>
+                </div>
+                
+                <div class="tfm-card">
+                    <h4>Metodología Cualitativa</h4>
+                    <p>Estudios fenomenológicos, etnográficos, teoría fundamentada y narrativos.</p>
+                </div>
+                
+                <div class="tfm-card">
+                    <h4>Metodología Mixta</h4>
+                    <p>Combinación de enfoques cuantitativos y cualitativos para mayor comprensión.</p>
+                </div>
+                
+                <div class="tfm-card">
+                    <h4>Investigación-Acción</h4>
+                    <p>Investigación participativa orientada al cambio y mejora de la práctica.</p>
+                </div>
+            </div>
+            
+            <div class="key-points">
+                <h4>Consideraciones Éticas:</h4>
+                <ul>
+                    <li>Aprobación del comité de ética institucional</li>
+                    <li>Consentimiento informado de participantes</li>
+                    <li>Confidencialidad y anonimato de datos</li>
+                    <li>Protección de poblaciones vulnerables</li>
+                    <li>Beneficencia y no maleficencia</li>
+                </ul>
+            </div>
+        </div>
+
+        <hr class="content-separator">
+
+        <div class="timeline-section">
+            <h2>📅 Cronograma de Desarrollo</h2>
+            
+            <div class="phases-timeline">
+                <div class="phase-item">
+                    <div class="phase-number">1</div>
+                    <div>
+                        <h4>Selección del Tema (Mes 1)</h4>
+                        <p>Identificación del área de interés, revisión preliminar de literatura y definición del problema de investigación.</p>
+                    </div>
+                </div>
+                
+                <div class="phase-item">
+                    <div class="phase-number">2</div>
+                    <div>
+                        <h4>Elaboración del Proyecto (Mes 2-3)</h4>
+                        <p>Desarrollo del marco teórico, objetivos, hipótesis y metodología. Presentación del proyecto para aprobación.</p>
+                    </div>
+                </div>
+                
+                <div class="phase-item">
+                    <div class="phase-number">3</div>
+                    <div>
+                        <h4>Recogida de Datos (Mes 4-6)</h4>
+                        <p>Implementación de la metodología, recolección de información y gestión de datos.</p>
+                    </div>
+                </div>
+                
+                <div class="phase-item">
+                    <div class="phase-number">4</div>
+                    <div>
+                        <h4>Análisis y Resultados (Mes 7-8)</h4>
+                        <p>Procesamiento estadístico o cualitativo de datos, interpretación de resultados.</p>
+                    </div>
+                </div>
+                
+                <div class="phase-item">
+                    <div class="phase-number">5</div>
+                    <div>
+                        <h4>Redacción Final (Mes 9-10)</h4>
+                        <p>Elaboración del documento final, revisión, correcciones y preparación para defensa.</p>
+                    </div>
+                </div>
+                
+                <div class="phase-item">
+                    <div class="phase-number">6</div>
+                    <div>
+                        <h4>Defensa del TFM (Mes 11)</h4>
+                        <p>Presentación oral ante tribunal evaluador y defensa de la investigación realizada.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h2>2. ESTRUCTURA DEL TRABAJO FINAL</h2>
+        <div class="tfm-grid">
+            <div class="tfm-card">
+                <h4>Resumen y Abstract</h4>
+                <p>Síntesis ejecutiva en español e inglés (máximo 300 palabras cada uno).</p>
+            </div>
+            
+            <div class="tfm-card">
+                <h4>Introducción</h4>
+                <p>Contextualización del problema, justificación y objetivos del estudio.</p>
+            </div>
+            
+            <div class="tfm-card">
+                <h4>Marco Teórico</h4>
+                <p>Revisión crítica de la literatura relevante y fundamentación teórica.</p>
+            </div>
+            
+            <div class="tfm-card">
+                <h4>Metodología</h4>
+                <p>Descripción detallada del diseño, participantes, instrumentos y procedimientos.</p>
+            </div>
+            
+            <div class="tfm-card">
+                <h4>Resultados</h4>
+                <p>Presentación clara y sistemática de los hallazgos obtenidos.</p>
+            </div>
+            
+            <div class="tfm-card">
+                <h4>Discusión y Conclusiones</h4>
+                <p>Interpretación de resultados, limitaciones, implicaciones y futuras líneas.</p>
+            </div>
+        </div>
+
+        <h2>3. CRITERIOS DE EVALUACIÓN</h2>
+        <div class="tfm-grid">
+            <div class="tfm-card">
+                <h4>Relevancia y Originalidad (25%)</h4>
+                <p>Importancia del tema, novedad del enfoque y contribución al conocimiento.</p>
+            </div>
+            
+            <div class="tfm-card">
+                <h4>Rigor Metodológico (25%)</h4>
+                <p>Adecuación del diseño, validez interna y externa, consideraciones éticas.</p>
+            </div>
+            
+            <div class="tfm-card">
+                <h4>Calidad del Análisis (20%)</h4>
+                <p>Profundidad del análisis, interpretación de resultados, discusión crítica.</p>
+            </div>
+            
+            <div class="tfm-card">
+                <h4>Presentación y Redacción (15%)</h4>
+                <p>Claridad expositiva, estructura lógica, corrección lingüística y formato.</p>
+            </div>
+            
+            <div class="tfm-card">
+                <h4>Defensa Oral (15%)</h4>
+                <p>Capacidad de síntesis, dominio del tema, respuesta a preguntas del tribunal.</p>
+            </div>
+        </div>
+
+        <h2>4. RECURSOS Y APOYO</h2>
+        <div class="key-points">
+            <h4>Recursos Disponibles:</h4>
+            <ul>
+                <li><strong>Tutor académico</strong> asignado para orientación y seguimiento</li>
+                <li><strong>Bases de datos</strong> científicas especializadas en adicciones</li>
+                <li><strong>Software estadístico</strong> para análisis de datos (SPSS, R, NVivo)</li>
+                <li><strong>Talleres metodológicos</strong> sobre investigación y redacción científica</li>
+                <li><strong>Biblioteca especializada</strong> con recursos en adicciones y salud mental</li>
+                <li><strong>Plataforma virtual</strong> para seguimiento y entrega de avances</li>
+            </ul>
+        </div>
+
+        <h2>5. LÍNEAS DE INVESTIGACIÓN SUGERIDAS</h2>
+        <div class="tfm-grid">
+            <div class="tfm-card">
+                <h4>Neurociencia de las Adicciones</h4>
+                <p>Estudios sobre mecanismos neurobiológicos y neuroplasticidad en recuperación.</p>
+            </div>
+            
+            <div class="tfm-card">
+                <h4>Intervenciones Innovadoras</h4>
+                <p>Evaluación de nuevas terapias, tecnologías y enfoques de tratamiento.</p>
+            </div>
+            
+            <div class="tfm-card">
+                <h4>Perspectiva de Género</h4>
+                <p>Diferencias de género en adicciones y adaptación de tratamientos.</p>
+            </div>
+            
+            <div class="tfm-card">
+                <h4>Adicciones Comportamentales</h4>
+                <p>Investigación sobre adicciones sin sustancia y sus tratamientos.</p>
+            </div>
+            
+            <div class="tfm-card">
+                <h4>Prevención y Promoción</h4>
+                <p>Programas de prevención primaria y promoción de la salud mental.</p>
+            </div>
+            
+            <div class="tfm-card">
+                <h4>Políticas Públicas</h4>
+                <p>Análisis de políticas de drogas y su impacto en la salud pública.</p>
+            </div>
+        </div>
+
+        <div class="key-points">
+            <h4>Recursos de Apoyo:</h4>
+            <p>Esta lección incluye guías metodológicas, plantillas de proyecto, cronogramas detallados, y herramientas para el desarrollo exitoso del Trabajo Final del Máster.</p>
+        </div>
+        
+        <div class="navigation">
+            <a href="#" class="btn">Módulo Anterior</a>
+            <a href="#" class="btn">Marcar como Completada</a>
+            <a href="#" class="btn">Finalizar Máster</a>
+        </div>
+    </div>
+</body>
+</html>

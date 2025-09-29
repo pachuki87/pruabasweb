@@ -1,0 +1,63 @@
+diff --git a/.claude/settings.local.json b/.claude/settings.local.json
+index 10cb563..37d9024 100644
+--- a/.claude/settings.local.json
++++ b/.claude/settings.local.json
+@@ -41,7 +41,8 @@
+       "Bash(cp:*)",
+       "mcp__supabase__list_organizations",
+       "mcp__supabase__list_projects",
+-      "mcp__supabase__apply_migration"
++      "mcp__supabase__apply_migration",
++      "mcp__supabase__list_tables"
+     ],
+     "deny": [],
+     "ask": []
+diff --git a/.netlify/functions/gemini-api.zip b/.netlify/functions/gemini-api.zip
+index 0d3eafb..a44b499 100644
+Binary files a/.netlify/functions/gemini-api.zip and b/.netlify/functions/gemini-api.zip differ
+diff --git a/.netlify/functions/manifest.json b/.netlify/functions/manifest.json
+index 9b23195..0e8c2b2 100644
+--- a/.netlify/functions/manifest.json
++++ b/.netlify/functions/manifest.json
+@@ -1 +1 @@
+-{"functions":[{"bundler":"zisi","buildData":{"runtimeAPIVersion":1},"mainFile":"C:\\Users\\pabli\\OneDrive\\Desktop\\institutoooo - copia\\pruabasweb\\netlify\\functions\\send-corrections.js","name":"send-corrections","priority":10,"runtimeVersion":"nodejs22.x","path":"C:\\Users\\pabli\\OneDrive\\Desktop\\institutoooo - copia\\pruabasweb\\.netlify\\functions\\send-corrections.zip","runtime":"js"}],"system":{"arch":"x64","platform":"win32"},"timestamp":1758799606222,"version":1}
+\ No newline at end of file
++{"functions":[{"bundler":"zisi","buildData":{"runtimeAPIVersion":1},"mainFile":"C:\\Users\\pabli\\OneDrive\\Desktop\\institutoooo - copia\\pruabasweb\\netlify\\functions\\gemini-api.js","name":"gemini-api","priority":10,"runtimeVersion":"nodejs22.x","path":"C:\\Users\\pabli\\OneDrive\\Desktop\\institutoooo - copia\\pruabasweb\\.netlify\\functions\\gemini-api.zip","runtime":"js"},{"bundler":"zisi","buildData":{"runtimeAPIVersion":1},"mainFile":"C:\\Users\\pabli\\OneDrive\\Desktop\\institutoooo - copia\\pruabasweb\\netlify\\functions\\send-corrections.js","name":"send-corrections","priority":10,"runtimeVersion":"nodejs22.x","path":"C:\\Users\\pabli\\OneDrive\\Desktop\\institutoooo - copia\\pruabasweb\\.netlify\\functions\\send-corrections.zip","runtime":"js"},{"bundler":"zisi","buildData":{"runtimeAPIVersion":1},"mainFile":"C:\\Users\\pabli\\OneDrive\\Desktop\\institutoooo - copia\\pruabasweb\\netlify\\functions\\test-webhook.js","name":"test-webhook","priority":10,"runtimeVersion":"nodejs22.x","path":"C:\\Users\\pabli\\OneDrive\\Desktop\\institutoooo - copia\\pruabasweb\\.netlify\\functions\\test-webhook.zip","runtime":"js"}],"system":{"arch":"x64","platform":"win32"},"timestamp":1759087766721,"version":1}
+\ No newline at end of file
+diff --git a/.netlify/functions/send-corrections.zip b/.netlify/functions/send-corrections.zip
+index a8c0fe9..387b825 100644
+Binary files a/.netlify/functions/send-corrections.zip and b/.netlify/functions/send-corrections.zip differ
+diff --git a/.netlify/functions/test-webhook.zip b/.netlify/functions/test-webhook.zip
+index e85e13f..22321d9 100644
+Binary files a/.netlify/functions/test-webhook.zip and b/.netlify/functions/test-webhook.zip differ
+diff --git a/.netlify/netlify.toml b/.netlify/netlify.toml
+index 59ad9d1..987ba36 100644
+--- a/.netlify/netlify.toml
++++ b/.netlify/netlify.toml
+@@ -29,6 +29,9 @@ bundle = true
+ 
+ [build.services]
+ 
++[dev]
++targetPort = 5175.0
++
+ [functions]
+ 
+ [functions.send-corrections]
+diff --git "a/public/M\303\201STER EN ADICCIONES E INTERVENCI\303\223N PSICOSOCIAL/.claude/settings.local.json" "b/public/M\303\201STER EN ADICCIONES E INTERVENCI\303\223N PSICOSOCIAL/.claude/settings.local.json"
+index 7244a5a..7b1ab8d 100644
+--- "a/public/M\303\201STER EN ADICCIONES E INTERVENCI\303\223N PSICOSOCIAL/.claude/settings.local.json"	
++++ "b/public/M\303\201STER EN ADICCIONES E INTERVENCI\303\223N PSICOSOCIAL/.claude/settings.local.json"	
+@@ -29,7 +29,11 @@
+       "Bash(node:*)",
+       "Bash(npm run supabase:scripts:update-lesson-urls:*)",
+       "Read(//c/Users/pabli/OneDrive/Desktop/**)",
+-      "Bash(cd:*)"
++      "Bash(cd:*)",
++      "mcp__n8n-mcp__validate_node_operation",
++      "mcp__n8n-mcp__search_nodes",
++      "mcp__n8n-mcp__get_node_documentation",
++      "mcp__n8n-mcp__get_node_essentials"
+     ],
+     "deny": [],
+     "ask": []

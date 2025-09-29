@@ -1,0 +1,54 @@
+{
+  "timestamp": "2025-08-24T20:42:38.075Z",
+  "course_id": "d7c3e503-ed61-4d7a-9e5f-aedc407d4836",
+  "duplicates_removed": [
+    {
+      "quiz_id": "f852ff6a-a555-40d0-aded-216bbf8669db",
+      "quiz_title": "Cuestionario: Criterios DSM-5",
+      "lesson_id": "f40519ef-c569-4dd9-874b-df9a9b7cad26",
+      "deleted_at": "2025-08-24T20:42:38.621Z"
+    },
+    {
+      "quiz_id": "286b32b9-d202-42fc-83ac-480743b8bf23",
+      "quiz_title": "Cuestionario 1: Material Complementario",
+      "lesson_id": "64e1b69a-795b-4cf0-b2ce-4b4a416c2ede",
+      "deleted_at": "2025-08-24T20:42:38.951Z"
+    },
+    {
+      "quiz_id": "d3ce4654-0bc2-4b22-a81c-35a7a7b14ac3",
+      "quiz_title": "Cuestionario 2: Adicciones Comportamentales",
+      "lesson_id": "ba9f3851-65a0-4dc2-91ab-02fadd60e4a3",
+      "deleted_at": "2025-08-24T20:42:39.259Z"
+    },
+    {
+      "quiz_id": "e457df69-d980-4199-bbc6-ab9c24a3f44f",
+      "quiz_title": "Cuestionario 1: Adicciones Comportamentales",
+      "lesson_id": "ba9f3851-65a0-4dc2-91ab-02fadd60e4a3",
+      "deleted_at": "2025-08-24T20:42:39.427Z"
+    },
+    {
+      "quiz_id": "c8660886-616b-4a95-834d-154f28324313",
+      "quiz_title": "Cuestionario: Terapia Integral de Pareja",
+      "lesson_id": "9d91427d-0ab8-45d5-b761-684d3497e2a3",
+      "deleted_at": "2025-08-24T20:42:39.706Z"
+    },
+    {
+      "quiz_id": "79cec797-b995-495d-bb1f-04bb312b8d37",
+      "quiz_title": "Cuestionario: Psicología Positiva",
+      "lesson_id": "d3b2fd97-3f62-4825-99f4-e8e56eaaf08e",
+      "deleted_at": "2025-08-24T20:42:39.954Z"
+    },
+    {
+      "quiz_id": "bbf2848b-bed3-4752-9e3b-1346e374790e",
+      "quiz_title": "Cuestionario: Mindfulness",
+      "lesson_id": "1cf3848f-f965-4a1e-9810-955e082472fb",
+      "deleted_at": "2025-08-24T20:42:40.219Z"
+    }
+  ],
+  "errors": [],
+  "summary": {
+    "total_duplicates_found": 7,
+    "duplicates_removed": 7,
+    "errors_count": 0
+  }
+}

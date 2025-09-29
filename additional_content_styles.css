@@ -1,0 +1,121 @@
+
+/* Estilos para contenido adicional de PDFs */
+.additional-content-section {
+    margin: 40px 0;
+    padding: 30px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 15px;
+    border: 2px solid #dee2e6;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.section-title {
+    color: #2c3e50;
+    font-size: 2em;
+    margin-bottom: 25px;
+    text-align: center;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.additional-content-container {
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.pdf-content-section {
+    margin-bottom: 35px;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid #007bff;
+}
+
+.pdf-content-section h3 {
+    color: #2c3e50;
+    margin-bottom: 15px;
+    font-size: 1.3em;
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 8px;
+}
+
+.key-concepts {
+    margin-bottom: 20px;
+}
+
+.key-concepts h4 {
+    color: #495057;
+    margin-bottom: 10px;
+    font-size: 1.1em;
+}
+
+.key-concepts ul {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.key-concepts li {
+    background: #007bff;
+    color: white;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.9em;
+    font-weight: 500;
+}
+
+.extracted-content {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+}
+
+.extracted-content h4 {
+    color: #495057;
+    margin-bottom: 15px;
+    font-size: 1.1em;
+}
+
+.extracted-content p {
+    margin-bottom: 12px;
+    line-height: 1.6;
+    text-align: justify;
+    color: #212529;
+}
+
+.content-separator {
+    border: none;
+    height: 2px;
+    background: linear-gradient(to right, transparent, #dee2e6, transparent);
+    margin: 25px 0;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .additional-content-section {
+        margin: 20px 0;
+        padding: 20px;
+    }
+
+    .section-title {
+        font-size: 1.5em;
+    }
+
+    .additional-content-container {
+        padding: 15px;
+    }
+
+    .key-concepts ul {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .key-concepts li {
+        display: block;
+        text-align: center;
+    }
+}

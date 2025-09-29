@@ -1,0 +1,37 @@
+
+{
+  "lesson": "Adicciones Comportamentales",
+  "lesson_number": 6,
+  "slug": "adicciones-comportamentales",
+  "expected_quiz_count": 2,
+  "quizzes": [
+    {
+      "quiz_title": "Cuestionario 1: Adicciones Comportamentales",
+      "questions": [
+        {
+          "question": "Template question for Adicciones Comportamentales Quiz 1",
+          "type": "multiple_choice",
+          "options": [],
+          "correct": null,
+          "explanation": null,
+          "notes": "Quiz structure identified - needs manual extraction from course platform"
+        }
+      ]
+    },
+    {
+      "quiz_title": "Cuestionario 2: Adicciones Comportamentales",
+      "questions": [
+        {
+          "question": "Template question for Adicciones Comportamentales Quiz 2",
+          "type": "multiple_choice",
+          "options": [],
+          "correct": null,
+          "explanation": null,
+          "notes": "Quiz structure identified - needs manual extraction from course platform"
+        }
+      ]
+    }
+  ],
+  "extraction_status": "template_created",
+  "notes": "Template created based on course analysis. Manual extraction needed to complete quiz content."
+}

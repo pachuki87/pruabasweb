@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Quiz Navigation</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .question {
+            background: #f5f5f5;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        .option {
+            background: white;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .option:hover {
+            background: #e3f2fd;
+        }
+        .correct {
+            background: #c8e6c9;
+        }
+        .loading {
+            text-align: center;
+            padding: 40px;
+        }
+        .error {
+            color: red;
+            background: #ffebee;
+            padding: 10px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Test de Navegación al Cuestionario</h1>
+    <div id="content">Cargando...</div>
+
+    <script>
+        // Configuración de Supabase (usando variables de entorno simuladas)
+        const SUPABASE_URL = 'https://lyojcqiiixkqqtpoejdo.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx5b2pjcWlpaXhrcXF0cG9lamRvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc0OTgwMzAsImV4cCI6MjA2MzA3NDAzMH0._7ODHgTZbdP_k3PjYNIcx1j42xKWBRa3lZ-P-0BBBPc';
+        
+        // Intentar cargar desde variables de entorno del navegador si están disponibles
+        const supabaseUrl = window.VITE_SUPABASE_URL || SUPABASE_URL;
+        const supabaseKey = window.VITE_SUPABASE_ANON_KEY || SUPABASE_ANON_KEY;
+        
+        const { createClient } = supabase;
+        const supabaseClient = createClient(supabaseUrl, supabaseKey);
+        
+        const quizId = '73571904-d8e5-41ee-9485-60d4996819a8';
+        
+        async function testQuizLoad() {
+            const contentDiv = document.getElementById('content');
+            
+            try {
+                contentDiv.innerHTML = '<div class="loading">🔄 Cargando cuestionario...</div>';
+                
+                // Simular la misma consulta que hace QuizAttemptPage
+                console.log('Fetching quiz data...');
+                const { data: quizData, error: quizError } = await supabaseClient
+                    .from('cuestionarios')
+                    .select('*')
+                    .eq('id', quizId)
+                    .single();
+                
+                if (quizError) {
+                    throw new Error(`Error fetching quiz: ${quizError.message}`);
+                }
+                
+                console.log('Quiz data:', quizData);
+                
+                // Fetch quiz questions
+                console.log('Fetching questions...');
+                const { data: questionsData, error: questionsError } = await supabaseClient
+                    .from('preguntas')
+                    .select(`
+                        *,
+                        opciones_respuesta (id, opcion, es_correcta, orden, pregunta_id)
+                    `)
+                    .eq('cuestionario_id', quizId)
+                    .order('orden');
+                
+                if (questionsError) {
+                    throw new Error(`Error fetching questions: ${questionsError.message}`);
+                }
+                
+                console.log('Questions data:', questionsData);
+                
+                // Procesar datos igual que en QuizAttemptPage
+                const formattedQuiz = {
+                    id: quizData.id,
+                    title: quizData.titulo,
+                    description: quizData.descripcion || '',
+                    curso_id: quizData.curso_id,
+                    leccion_id: quizData.leccion_id,
+                    questions: (questionsData || []).map(q => {
+                        const sortedOptions = (q.opciones_respuesta || [])
+                            .sort((a, b) => a.orden - b.orden)
+                            .map(opt => opt.opcion);
+                        
+                        const correctAnswerIndex = (q.opciones_respuesta || [])
+                            .sort((a, b) => a.orden - b.orden)
+                            .findIndex(opt => opt.es_correcta);
+                        
+                        return {
+                            id: q.id,
+                            question: q.pregunta,
+                            options: sortedOptions,
+                            correct_answer: correctAnswerIndex,
+                            explanation: q.explicacion
+                        };
+                    })
+                };
+                
+                console.log('Formatted quiz:', formattedQuiz);
+                
+                // Renderizar el cuestionario
+                let html = `
+                    <h2>${formattedQuiz.title}</h2>
+                    <p><strong>Preguntas:</strong> ${formattedQuiz.questions.length}</p>
+                    <p><strong>Descripción:</strong> ${formattedQuiz.description}</p>
+                `;
+                
+                formattedQuiz.questions.forEach((question, qIndex) => {
+                    html += `
+                        <div class="question">
+                            <h3>Pregunta ${qIndex + 1}: ${question.question}</h3>
+                            <div class="options">
+                    `;
+                    
+                    question.options.forEach((option, oIndex) => {
+                        const isCorrect = oIndex === question.correct_answer;
+                        const letter = String.fromCharCode(65 + oIndex);
+                        html += `
+                            <div class="option ${isCorrect ? 'correct' : ''}">
+                                <strong>${letter}.</strong> ${option} ${isCorrect ? '✅' : ''}
+                            </div>
+                        `;
+                    });
+                    
+                    html += `
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                contentDiv.innerHTML = html;
+                
+            } catch (error) {
+                console.error('Error:', error);
+                contentDiv.innerHTML = `
+                    <div class="error">
+                        <h3>❌ Error al cargar el cuestionario</h3>
+                        <p><strong>Mensaje:</strong> ${error.message}</p>
+                        <p><strong>Quiz ID:</strong> ${quizId}</p>
+                        <p><strong>URL Supabase:</strong> ${supabaseUrl}</p>
+                        <details>
+                            <summary>Detalles técnicos</summary>
+                            <pre>${JSON.stringify(error, null, 2)}</pre>
+                        </details>
+                    </div>
+                `;
+            }
+        }
+        
+        // Ejecutar la prueba cuando se carga la página
+        testQuizLoad();
+    </script>
+</body>
+</html>

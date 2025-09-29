@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recovery Coaching - Máster en Adicciones</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #f39c12;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #34495e;
+            margin-top: 30px;
+        }
+        .highlight {
+            background-color: #fef9e7;
+            padding: 15px;
+            border-left: 4px solid #f39c12;
+            margin: 20px 0;
+        }
+        .coaching-principle {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 3px solid #f39c12;
+        }
+        .skill-box {
+            background-color: #e8f4fd;
+            padding: 12px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .navigation {
+            margin-top: 40px;
+            text-align: center;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #f39c12;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+        }
+        .btn:hover {
+            background-color: #e67e22;
+        }
+        .video-container {
+            margin: 30px 0;
+            text-align: center;
+        }
+        .video-container h3 {
+            color: #34495e;
+            margin-bottom: 15px;
+        }
+        .video-container iframe {
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Recovery Coaching en Adicciones</h1>
+        
+        <h2>1. ¿QUÉ ES EL RECOVERY COACHING?</h2>
+        <p>El Recovery Coaching es un enfoque colaborativo y centrado en la persona que apoya a individuos en su proceso de recuperación de adicciones, enfocándose en sus fortalezas, recursos y objetivos personales.</p>
+        
+        <div class="highlight">
+            <strong>Filosofía Central:</strong> Cada persona tiene la capacidad innata de recuperarse y crecer, y el coach facilita este proceso sin juzgar ni dirigir.
+        </div>
+        
+        <h2>2. PRINCIPIOS FUNDAMENTALES</h2>
+        
+        <div class="coaching-principle">
+            <h3>Autodeterminación</h3>
+            <p>La persona en recuperación es el experto en su propia vida y tiene el derecho de tomar sus propias decisiones.</p>
+        </div>
+        
+        <div class="coaching-principle">
+            <h3>Esperanza y Optimismo</h3>
+            <p>La recuperación es posible para todos, independientemente de la severidad o duración de la adicción.</p>
+        </div>
+        
+        <div class="coaching-principle">
+            <h3>Enfoque en Fortalezas</h3>
+            <p>Se centra en las capacidades, recursos y logros de la persona, no en sus déficits o problemas.</p>
+        </div>
+        
+        <div class="coaching-principle">
+            <h3>Relación Colaborativa</h3>
+            <p>El coach y la persona trabajan juntos como socios en el proceso de recuperación.</p>
+        </div>
+        
+        <h2>3. COMPETENCIAS DEL RECOVERY COACH</h2>
+        
+        <div class="skill-box">
+            <strong>Escucha Activa:</strong> Capacidad de escuchar con atención plena y empática.
+        </div>
+        
+        <div class="skill-box">
+            <strong>Preguntas Poderosas:</strong> Formular preguntas que promuevan la reflexión y el autodescubrimiento.
+        </div>
+        
+        <div class="skill-box">
+            <strong>Motivación y Apoyo:</strong> Inspirar y mantener la motivación durante el proceso de cambio.
+        </div>
+        
+        <div class="skill-box">
+            <strong>Planificación de Objetivos:</strong> Ayudar a establecer metas realistas y alcanzables.
+        </div>
+        
+        <div class="skill-box">
+            <strong>Gestión de Crisis:</strong> Proporcionar apoyo durante momentos difíciles o recaídas.
+        </div>
+        
+        <h2>4. PROCESO DE COACHING</h2>
+        <p><strong>Fase 1: Establecimiento de la Relación</strong><br>
+        - Construcción de confianza y rapport<br>
+        - Clarificación de roles y expectativas<br>
+        - Evaluación inicial de necesidades</p>
+        
+        <p><strong>Fase 2: Exploración y Planificación</strong><br>
+        - Identificación de valores y objetivos<br>
+        - Exploración de recursos y fortalezas<br>
+        - Desarrollo del plan de recuperación</p>
+        
+        <p><strong>Fase 3: Acción y Seguimiento</strong><br>
+        - Implementación de estrategias<br>
+        - Monitoreo del progreso<br>
+        - Ajustes y adaptaciones según necesidad</p>
+        
+        <h2>5. DIFERENCIAS CON LA TERAPIA TRADICIONAL</h2>
+        <p>• <strong>Enfoque:</strong> Futuro y soluciones vs. pasado y problemas</p>
+        <p>• <strong>Relación:</strong> Horizontal vs. vertical</p>
+        <p>• <strong>Duración:</strong> Flexible vs. estructurada</p>
+        <p>• <strong>Objetivos:</strong> Definidos por la persona vs. diagnóstico</p>
+
+        <h2>6. VIDEOS RECOMENDADOS</h2>
+        <div class="video-container">
+            <h3>Cómo recuperarte de una adicción. Conferencia magistral</h3>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/5-TijhzQPP4" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+
+        <div class="video-container">
+            <h3>Cómo vencer una adicción. Conferencia Magistral</h3>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/e3QpAd5lGjc" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+
+        <div class="video-container">
+            <h3>Una manera alternativa de dejar las adicciones</h3>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/wtkVMNfuRpg" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        
+        <div class="navigation">
+            <a href="../FAMILIA Y TRABAJO EQUIPO/contenido.html" class="btn">Módulo Anterior</a>
+            <a href="#" class="btn">Marcar como Completada</a>
+            <a href="../INTERVENCION FAMILIAR Y RECOVERY MENTORING/contenido.html" class="btn">Siguiente Módulo</a>
+        </div>
+    </div>
+</body>
+</html>

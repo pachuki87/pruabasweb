@@ -1,0 +1,40 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[functions]
+  directory = "netlify/functions"
+
+[dev]
+  targetPort = 5175
+
+[functions.send-corrections]
+  runtime = "js"
+
+# Configuración de notificaciones de formulario
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+# Habilitar Netlify Forms
+[build.processing.html]
+  pretty_urls = true
+
+[build.processing.css]
+  bundle = true
+
+[build.processing.js]
+  bundle = true
+
+[build.processing.images]
+  compress = true
+
+# Configuración para SPA (Single Page Application)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

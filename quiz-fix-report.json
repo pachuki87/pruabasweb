@@ -1,0 +1,14 @@
+{
+  "timestamp": "2025-08-24T20:40:28.925Z",
+  "course_id": "d7c3e503-ed61-4d7a-9e5f-aedc407d4836",
+  "actions_performed": [
+    "Verificación final: 5 cuestionarios únicos restantes"
+  ],
+  "errors": [],
+  "summary": {
+    "duplicates_removed": 0,
+    "lessons_updated": 0,
+    "total_fixes": 0
+  },
+  "leccionesConOrdenFaltante": 0
+}

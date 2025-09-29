@@ -1,0 +1,107 @@
+ÍNDICE DEL CURSO: EXPERTO EN CONDUCTAS ADICTIVAS
+============================================================
+
+Fecha de descarga: 2025-08-06
+URL original: https://institutolidera.com/courses/experto-en-conductas-adictivas/
+Credenciales utilizadas: clinicasindromemexico@gmail.com
+
+ESTRUCTURA DEL CURSO:
+------------------------------
+
+📚 MÓDULO 1 - FUNDAMENTOS Y TERAPIAS
+=====================================
+
+📖 01. ¿Qué significa ser adicto?
+   - Contenido HTML descargado
+   - Imágenes del curso
+
+📖 02. ¿Qué es una adicción? (1 Cuestionario)
+   - Contenido HTML descargado
+   - Imágenes del curso
+
+📖 03. Consecuencias de las adicciones
+   - Contenido HTML descargado
+   - Imágenes del curso
+
+📖 04. Criterios para diagnosticar una conducta adictiva según DSM 5 (1 Cuestionario)
+   - Contenido HTML descargado
+   - PDF: Actividad-casos-clinicos.pdf
+   - Imágenes del curso
+
+📖 05. Material Complementario y Ejercicios (2 Cuestionarios)
+   - Contenido HTML descargado
+   - PDF: Clasificacion-de-sustancias.pdf
+   - PDF: Fundamentos-de-la-conducta-adictiva.pdf
+   - PDF: Informe-europeo-sobre-drogas-2020.pdf
+   - PDF: Programa-Ibiza.pdf
+   - Imágenes del curso
+
+📖 06. Adicciones Comportamentales (2 Cuestionarios)
+   - Contenido HTML descargado
+   - Imágenes del curso
+
+📖 07. La familia
+   - Contenido HTML descargado
+   - Imágenes del curso
+
+📖 08. La recaída
+   - Contenido HTML descargado
+   - Imágenes del curso
+
+📖 09. Nuevas terapias psicológicas
+   - Contenido HTML descargado
+   - Imágenes del curso
+
+📖 10. Terapia integral de pareja (1 Cuestionario)
+   - Contenido HTML descargado
+   - PDF: Articilo-Terapia-Integral-de-Pareja.pdf
+   - Imágenes del curso
+
+📖 11. Psicología positiva (1 Cuestionario)
+   - Contenido HTML descargado
+   - PDF: Psicolgia-positiva-introduccion.pdf
+   - PDF: Psicologia-positiva-la-investigacion-sobre-los-efectos-de-las-emociones-positivas.pdf
+   - Imágenes del curso
+
+📖 12. Mindfulness aplicado a la Conducta Adictiva (1 Cuestionario)
+   - Contenido HTML descargado
+   - Imágenes del curso
+
+📖 13. Material complementario Mindfulness y ejercicio (1 Cuestionario)
+   - Contenido HTML descargado
+   - Imágenes del curso
+
+ESTADÍSTICAS DE DESCARGA:
+------------------------------
+Módulos: 1
+Lecciones: 13
+PDFs descargados: 8
+Archivos HTML: 13 (uno por lección)
+Carpetas de imágenes: 13
+Videos: URLs guardadas (algunos videos de YouTube requieren autenticación adicional)
+
+ARCHIVOS PDF DESCARGADOS:
+------------------------------
+1. Actividad-casos-clinicos.pdf
+2. Clasificacion-de-sustancias.pdf
+3. Fundamentos-de-la-conducta-adictiva.pdf
+4. Informe-europeo-sobre-drogas-2020.pdf
+5. Programa-Ibiza.pdf
+6. Articilo-Terapia-Integral-de-Pareja.pdf
+7. Psicolgia-positiva-introduccion.pdf
+8. Psicologia-positiva-la-investigacion-sobre-los-efectos-de-las-emociones-positivas.pdf
+
+NOTAS IMPORTANTES:
+------------------------------
+- Todo el contenido HTML de cada lección ha sido descargado
+- Las imágenes del curso han sido organizadas por lección
+- Algunos videos de YouTube no pudieron descargarse debido a restricciones de autenticación
+- Las URLs de los videos están disponibles en el contenido HTML de cada lección
+- La estructura original del curso se ha mantenido fielmente
+
+UBICACIÓN DE LOS ARCHIVOS:
+------------------------------
+Directorio principal: ~/curso_experto_conductas_adictivas/
+Estructura: Módulo 1/[Número]_[Nombre de la lección]/[archivos]
+
+✅ DESCARGA COMPLETADA EXITOSAMENTE

@@ -1,0 +1,20 @@
+{
+  "timestamp": "2025-09-01T14:36:43.569Z",
+  "supabaseUrl": "https://lyojcqiiixkqqtpoejdo.supabase.co",
+  "tablesBackedUp": [
+    "user_course_progress",
+    "user_test_results",
+    "usuarios",
+    "cursos",
+    "lecciones",
+    "inscripciones"
+  ],
+  "purpose": "Pre-migration backup before column name changes",
+  "migrationScript": "migrate-production-columns.sql",
+  "notes": [
+    "This backup was created before applying column name migrations",
+    "Original column names: usuario_id, curso_id, leccion_id, profesor_id, cuestionario_id",
+    "New column names: user_id, course_id, chapter_id, teacher_id, quiz_id",
+    "Use this backup to restore if migration fails"
+  ]
+}

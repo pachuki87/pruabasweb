@@ -1,0 +1,127 @@
+{
+  "timestamp": "2025-08-24T19:16:36.392Z",
+  "cursosProcessed": 2,
+  "leccionesProcessed": 17,
+  "filesCreated": [
+    {
+      "leccion": 2,
+      "titulo": "¿Qué es una adicción 1 Cuestionario",
+      "fileName": "leccion-2-qu-es-una-adiccin-1-cuestionario.html",
+      "url": "/lessons/leccion-2-qu-es-una-adiccin-1-cuestionario.html",
+      "size": 464271
+    },
+    {
+      "leccion": 3,
+      "titulo": "Consecuencias de las adicciones",
+      "fileName": "leccion-3-consecuencias-de-las-adicciones.html",
+      "url": "/lessons/leccion-3-consecuencias-de-las-adicciones.html",
+      "size": 445445
+    },
+    {
+      "leccion": 4,
+      "titulo": "Criterios para diagnosticar una conducta adictiva según DSM 51 Cuestionario",
+      "fileName": "leccion-4-criterios-para-diagnosticar-una-conducta-adictiva-.html",
+      "url": "/lessons/leccion-4-criterios-para-diagnosticar-una-conducta-adictiva-.html",
+      "size": 442863
+    },
+    {
+      "leccion": 5,
+      "titulo": "Material Complementario y Ejercicios2 Cuestionarios",
+      "fileName": "leccion-5-material-complementario-y-ejercicios2-cuestionario.html",
+      "url": "/lessons/leccion-5-material-complementario-y-ejercicios2-cuestionario.html",
+      "size": 448620
+    },
+    {
+      "leccion": 6,
+      "titulo": "Adicciones Comportamentales2 Cuestionarios",
+      "fileName": "leccion-6-adicciones-comportamentales2-cuestionarios.html",
+      "url": "/lessons/leccion-6-adicciones-comportamentales2-cuestionarios.html",
+      "size": 498589
+    },
+    {
+      "leccion": 7,
+      "titulo": "La familia",
+      "fileName": "leccion-7-la-familia.html",
+      "url": "/lessons/leccion-7-la-familia.html",
+      "size": 450022
+    },
+    {
+      "leccion": 8,
+      "titulo": "La recaída",
+      "fileName": "leccion-8-la-recada.html",
+      "url": "/lessons/leccion-8-la-recada.html",
+      "size": 446269
+    },
+    {
+      "leccion": 9,
+      "titulo": "Nuevas terapias psicológicas",
+      "fileName": "leccion-9-nuevas-terapias-psicolgicas.html",
+      "url": "/lessons/leccion-9-nuevas-terapias-psicolgicas.html",
+      "size": 468639
+    },
+    {
+      "leccion": 10,
+      "titulo": "Terapia integral de pareja1 Cuestionario",
+      "fileName": "leccion-10-terapia-integral-de-pareja1-cuestionario.html",
+      "url": "/lessons/leccion-10-terapia-integral-de-pareja1-cuestionario.html",
+      "size": 438531
+    },
+    {
+      "leccion": 11,
+      "titulo": "Psicología positiva1 Cuestionario",
+      "fileName": "leccion-11-psicologa-positiva1-cuestionario.html",
+      "url": "/lessons/leccion-11-psicologa-positiva1-cuestionario.html",
+      "size": 444664
+    },
+    {
+      "leccion": 12,
+      "titulo": "Mindfulness aplicado a la Conducta Adictiva1 Cuestionario",
+      "fileName": "leccion-12-mindfulness-aplicado-a-la-conducta-adictiva1-cuest.html",
+      "url": "/lessons/leccion-12-mindfulness-aplicado-a-la-conducta-adictiva1-cuest.html",
+      "size": 456474
+    },
+    {
+      "leccion": 2,
+      "titulo": "TERAPIA COGNITIVA DROGODEPENDENCIAS",
+      "fileName": "leccion-2-terapia-cognitiva-drogodependencias.html",
+      "url": "/lessons/leccion-2-terapia-cognitiva-drogodependencias.html",
+      "size": 770
+    },
+    {
+      "leccion": 3,
+      "titulo": "FAMILIA Y TRABAJO EQUIPO",
+      "fileName": "leccion-3-familia-y-trabajo-equipo.html",
+      "url": "/lessons/leccion-3-familia-y-trabajo-equipo.html",
+      "size": 748
+    },
+    {
+      "leccion": 4,
+      "titulo": "RECOVERY COACHING",
+      "fileName": "leccion-4-recovery-coaching.html",
+      "url": "/lessons/leccion-4-recovery-coaching.html",
+      "size": 734
+    },
+    {
+      "leccion": 6,
+      "titulo": "INTERVENCION FAMILIAR Y RECOVERY MENTORING",
+      "fileName": "leccion-6-intervencion-familiar-y-recovery-mentoring.html",
+      "url": "/lessons/leccion-6-intervencion-familiar-y-recovery-mentoring.html",
+      "size": 784
+    },
+    {
+      "leccion": 7,
+      "titulo": "NUEVOS MODELOS TERAPEUTICOS",
+      "fileName": "leccion-7-nuevos-modelos-terapeuticos.html",
+      "url": "/lessons/leccion-7-nuevos-modelos-terapeuticos.html",
+      "size": 754
+    },
+    {
+      "leccion": 9,
+      "titulo": "INTELIGENCIA EMOCIONAL",
+      "fileName": "leccion-9-inteligencia-emocional.html",
+      "url": "/lessons/leccion-9-inteligencia-emocional.html",
+      "size": 744
+    }
+  ],
+  "errors": []
+}

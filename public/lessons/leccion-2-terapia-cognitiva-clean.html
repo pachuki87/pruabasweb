@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terapia Cognitiva en Drogodependencias - Máster en Adicciones</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #e74c3c;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+            font-size: 2.2em;
+        }
+        h2 {
+            color: #34495e;
+            margin-top: 35px;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            border-left: 4px solid #e74c3c;
+            padding-left: 15px;
+        }
+        h3 {
+            color: #c0392b;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        h4 {
+            color: #34495e;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        .highlight {
+            background: linear-gradient(135deg, #fdf2e9 0%, #f8d7da 100%);
+            padding: 20px;
+            border-left: 5px solid #e74c3c;
+            margin: 25px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .cognitive-section {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            padding: 25px;
+            border-radius: 10px;
+            margin: 30px 0;
+            border: 2px solid #f39c12;
+        }
+        .technique-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+        .technique-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-left: 4px solid #27ae60;
+        }
+        .technique-card h4 {
+            color: #27ae60;
+            margin-top: 0;
+        }
+        .distortion-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .distortion-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #e74c3c;
+        }
+        .distortion-card h5 {
+            color: #e74c3c;
+            margin-top: 0;
+            margin-bottom: 8px;
+            font-size: 1em;
+        }
+        .act-section {
+            background: linear-gradient(135deg, #e8f5e8 0%, #d4edda 100%);
+            padding: 25px;
+            border-radius: 10px;
+            margin: 30px 0;
+            border: 2px solid #28a745;
+        }
+        .key-points {
+            background: #e3f2fd;
+            border: 1px solid #90caf9;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .key-points h4 {
+            color: #1976d2;
+            margin-top: 0;
+        }
+        .phases-timeline {
+            position: relative;
+            padding: 20px 0;
+        }
+        .phase-item {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #6c757d;
+        }
+        .phase-number {
+            background: #6c757d;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-weight: bold;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        .navigation {
+            margin-top: 40px;
+            text-align: center;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background-color: #e74c3c;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            margin: 0 10px;
+            transition: background-color 0.3s;
+        }
+        .btn:hover {
+            background-color: #c0392b;
+        }
+        .content-separator {
+            border: none;
+            height: 2px;
+            background: linear-gradient(to right, transparent, #e74c3c, transparent);
+            margin: 40px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Terapia Cognitiva en Drogodependencias</h1>
+        
+        <h2>1. FUNDAMENTOS DE LA TERAPIA COGNITIVA</h2>
+        <p>La terapia cognitiva en drogodependencias se basa en la premisa de que los pensamientos, emociones y comportamientos están interconectados. Los patrones de pensamiento disfuncionales contribuyen al mantenimiento del consumo de sustancias.</p>
+        
+        <div class="highlight">
+            <strong>Principio Central:</strong> Modificar los patrones de pensamiento distorsionados para generar cambios duraderos en el comportamiento adictivo.
+        </div>
+        
+        <h2>2. DISTORSIONES COGNITIVAS COMUNES EN ADICCIONES</h2>
+        <div class="distortion-grid">
+            <div class="distortion-card">
+                <h5>Pensamiento Todo o Nada</h5>
+                <p>"Si consumo una vez, ya fracasé completamente"</p>
+            </div>
+            
+            <div class="distortion-card">
+                <h5>Minimización</h5>
+                <p>"Solo fue una vez, no es tan grave"</p>
+            </div>
+            
+            <div class="distortion-card">
+                <h5>Catastrofización</h5>
+                <p>"Sin la sustancia no podré funcionar"</p>
+            </div>
+            
+            <div class="distortion-card">
+                <h5>Personalización</h5>
+                <p>"Es culpa mía que mi familia esté mal"</p>
+            </div>
+            
+            <div class="distortion-card">
+                <h5>Lectura Mental</h5>
+                <p>"Todos saben que tengo un problema"</p>
+            </div>
+            
+            <div class="distortion-card">
+                <h5>Filtro Mental</h5>
+                <p>Enfocarse solo en los aspectos negativos</p>
+            </div>
+        </div>
+        
+        <h2>3. TÉCNICAS COGNITIVAS ESPECÍFICAS</h2>
+        <div class="technique-grid">
+            <div class="technique-card">
+                <h4>Reestructuración Cognitiva</h4>
+                <p>Identificación y modificación de pensamientos automáticos negativos relacionados con el consumo de sustancias.</p>
+            </div>
+            
+            <div class="technique-card">
+                <h4>Registro de Pensamientos</h4>
+                <p>Herramienta para documentar situaciones, pensamientos, emociones y comportamientos relacionados con el consumo.</p>
+            </div>
+            
+            <div class="technique-card">
+                <h4>Prevención de Recaídas</h4>
+                <p>Identificación de situaciones de riesgo y desarrollo de estrategias cognitivas de afrontamiento.</p>
+            </div>
+            
+            <div class="technique-card">
+                <h4>Cuestionamiento Socrático</h4>
+                <p>Técnica de preguntas dirigidas para examinar la validez de los pensamientos disfuncionales.</p>
+            </div>
+            
+            <div class="technique-card">
+                <h4>Experimentos Conductuales</h4>
+                <p>Pruebas prácticas para verificar la veracidad de las creencias sobre el consumo.</p>
+            </div>
+            
+            <div class="technique-card">
+                <h4>Técnicas de Distracción</h4>
+                <p>Estrategias para desviar la atención de los pensamientos relacionados con el consumo.</p>
+            </div>
+        </div>
+
+        <hr class="content-separator">
+
+        <div class="act-section">
+            <h2>🎯 Terapia de Aceptación y Compromiso (ACT)</h2>
+            
+            <h3>Principios Fundamentales de ACT</h3>
+            <p>La Terapia de Aceptación y Compromiso representa un enfoque innovador que se centra en la flexibilidad psicológica y la aceptación de experiencias internas difíciles.</p>
+            
+            <h3>Los 6 Procesos Centrales de ACT</h3>
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>1. Aceptación</h4>
+                    <p>Permitir que los pensamientos y sentimientos estén presentes sin luchar contra ellos.</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>2. Defusión Cognitiva</h4>
+                    <p>Cambiar la relación con los pensamientos, viéndolos como eventos mentales, no como verdades.</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>3. Estar Presente</h4>
+                    <p>Desarrollar la capacidad de estar consciente y presente en el momento actual.</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>4. Yo como Contexto</h4>
+                    <p>Desarrollar una perspectiva del yo como observador de experiencias internas.</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>5. Valores</h4>
+                    <p>Clarificar lo que es verdaderamente importante y significativo en la vida.</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>6. Acción Comprometida</h4>
+                    <p>Tomar acciones concretas dirigidas hacia los valores, incluso en presencia de dificultades.</p>
+                </div>
+            </div>
+            
+            <div class="key-points">
+                <h4>Aplicación en Adicciones:</h4>
+                <ul>
+                    <li>Aceptar el craving sin actuar sobre él</li>
+                    <li>Identificar valores personales más allá del consumo</li>
+                    <li>Desarrollar flexibilidad psicológica</li>
+                    <li>Practicar mindfulness y atención plena</li>
+                    <li>Comprometerse con acciones valiosas</li>
+                </ul>
+            </div>
+        </div>
+
+        <hr class="content-separator">
+
+        <h2>4. PROCESO TERAPÉUTICO ESTRUCTURADO</h2>
+        
+        <div class="phases-timeline">
+            <div class="phase-item">
+                <div class="phase-number">1</div>
+                <div>
+                    <h4>Evaluación y Conceptualización</h4>
+                    <p>Identificación de patrones cognitivos, evaluación de distorsiones y establecimiento de objetivos terapéuticos.</p>
+                </div>
+            </div>
+            
+            <div class="phase-item">
+                <div class="phase-number">2</div>
+                <div>
+                    <h4>Psicoeducación</h4>
+                    <p>Enseñanza del modelo cognitivo y la relación entre pensamientos, emociones y comportamientos.</p>
+                </div>
+            </div>
+            
+            <div class="phase-item">
+                <div class="phase-number">3</div>
+                <div>
+                    <h4>Identificación de Pensamientos</h4>
+                    <p>Desarrollo de habilidades para reconocer pensamientos automáticos y distorsiones cognitivas.</p>
+                </div>
+            </div>
+            
+            <div class="phase-item">
+                <div class="phase-number">4</div>
+                <div>
+                    <h4>Reestructuración Cognitiva</h4>
+                    <p>Aplicación de técnicas para modificar pensamientos disfuncionales y desarrollar alternativas más adaptativas.</p>
+                </div>
+            </div>
+            
+            <div class="phase-item">
+                <div class="phase-number">5</div>
+                <div>
+                    <h4>Prevención de Recaídas</h4>
+                    <p>Desarrollo de estrategias cognitivas para mantener los cambios y prevenir recaídas futuras.</p>
+                </div>
+            </div>
+        </div>
+
+        <hr class="content-separator">
+
+        <h2>5. HERRAMIENTAS PRÁCTICAS Y EJERCICIOS</h2>
+        
+        <div class="cognitive-section">
+            <h3>Registro ABC de Pensamientos</h3>
+            <p><strong>A (Antecedente):</strong> Situación desencadenante</p>
+            <p><strong>B (Belief/Creencia):</strong> Pensamiento automático</p>
+            <p><strong>C (Consecuencia):</strong> Emoción y comportamiento resultante</p>
+            
+            <h3>Técnicas de Cuestionamiento</h3>
+            <ul>
+                <li>¿Qué evidencia tengo de que este pensamiento es cierto?</li>
+                <li>¿Hay una forma alternativa de ver esta situación?</li>
+                <li>¿Qué le diría a un amigo en esta situación?</li>
+                <li>¿Cuáles son las consecuencias de pensar de esta manera?</li>
+            </ul>
+        </div>
+
+        <div class="key-points">
+            <h4>Recursos de Apoyo:</h4>
+            <p>Esta lección incluye materiales especializados en terapias cognitivo-conductuales de tercera generación, cuadernillos prácticos de ACT y actividades específicas para el manejo del estrés y la ansiedad en el contexto de las adicciones.</p>
+        </div>
+        
+        <div class="navigation">
+            <a href="#" class="btn">Módulo Anterior</a>
+            <a href="#" class="btn">Marcar como Completada</a>
+            <a href="#" class="btn">Siguiente Módulo</a>
+        </div>
+    </div>
+</body>
+</html>

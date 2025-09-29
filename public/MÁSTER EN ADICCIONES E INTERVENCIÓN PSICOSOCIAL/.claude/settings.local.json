@@ -1,0 +1,37 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Users/pabli/OneDrive/Desktop/institutoooo - copia/pruabasweb/**)",
+      "Bash(npm start:*)",
+      "Bash(npm run)",
+      "Bash(npm run dev:*)",
+      "mcp__playwright__playwright_navigate",
+      "mcp__playwright__playwright_screenshot",
+      "mcp__playwright__playwright_get_visible_text",
+      "mcp__playwright__playwright_evaluate",
+      "mcp__playwright__playwright_click",
+      "mcp__playwright__playwright_close",
+      "mcp__playwright__playwright_get_visible_html",
+      "mcp__playwright__playwright_console_logs",
+      "mcp__playwright__playwright_press_key",
+      "mcp__sequential-thinking__sequentialthinking",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(gh run list:*)",
+      "Bash(npm run build:*)",
+      "Bash(pip install:*)",
+      "Bash(python:*)",
+      "Bash(copy:*)",
+      "Bash(npm run supabase:scripts:*)",
+      "Bash(findstr:*)",
+      "Bash(find:*)",
+      "Bash(node:*)",
+      "Bash(npm run supabase:scripts:update-lesson-urls:*)",
+      "Read(//c/Users/pabli/OneDrive/Desktop/**)",
+      "Bash(cd:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

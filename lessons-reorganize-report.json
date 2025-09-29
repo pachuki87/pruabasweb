@@ -1,0 +1,52 @@
+{
+  "timestamp": "2025-08-18T11:14:46.319Z",
+  "curso_id": "b5ef8c64-fe26-4f20-8221-80a1bf475b05",
+  "lecciones_eliminadas": 0,
+  "lecciones_creadas": 7,
+  "mapeo_carpetas": {
+    "1": "FUNDAMENTOS P TERAPEUTICO",
+    "2": "TERAPIA COGNITIVA DROGODEPENDENCIAS",
+    "3": "FAMILIA Y TRABAJO EQUIPO",
+    "4": "RECOVERY COACHING",
+    "6": "INTERVENCION FAMILIAR Y RECOVERY MENTORING",
+    "7": "NUEVOS MODELOS TERAPEUTICOS",
+    "9": "INTELIGENCIA EMOCIONAL"
+  },
+  "lecciones_finales": [
+    {
+      "numero": 1,
+      "titulo": "FUNDAMENTOS P TERAPEUTICO",
+      "tiene_contenido": false
+    },
+    {
+      "numero": 2,
+      "titulo": "TERAPIA COGNITIVA DROGODEPENDENCIAS",
+      "tiene_contenido": false
+    },
+    {
+      "numero": 3,
+      "titulo": "FAMILIA Y TRABAJO EQUIPO",
+      "tiene_contenido": false
+    },
+    {
+      "numero": 4,
+      "titulo": "RECOVERY COACHING",
+      "tiene_contenido": false
+    },
+    {
+      "numero": 6,
+      "titulo": "INTERVENCION FAMILIAR Y RECOVERY MENTORING",
+      "tiene_contenido": false
+    },
+    {
+      "numero": 7,
+      "titulo": "NUEVOS MODELOS TERAPEUTICOS",
+      "tiene_contenido": false
+    },
+    {
+      "numero": 9,
+      "titulo": "INTELIGENCIA EMOCIONAL",
+      "tiene_contenido": false
+    }
+  ]
+}

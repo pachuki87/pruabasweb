@@ -347,16 +347,6 @@ const NewLessonPage: React.FC = () => {
             console.log('✅ Lesson title matches! Adding YouTube videos...');
             enlaces_externos.push(
               {
-                title: 'Video: Modelo MATRIX. Inicio',
-                url: 'https://www.youtube.com/watch?v=B3VXIfPgbcM',
-                isExternal: true
-              },
-              {
-                title: 'Video: Las 4 fases del tratamiento de adicciones',
-                url: 'https://www.youtube.com/watch?v=3kmpJ_rAjnM',
-                isExternal: true
-              },
-              {
                 title: 'Video: Cómo dejar las drogas o conducta adictiva para siempre',
                 url: 'https://www.youtube.com/watch?v=ohi7rkEOZ2Q',
                 isExternal: true
@@ -406,27 +396,7 @@ const NewLessonPage: React.FC = () => {
             );
           }
 
-          // Módulo 4: Recovery Coaching
-          if (lesson.titulo.includes('RECOVERY COACHING')) {
-            enlaces_externos.push(
-              {
-                title: 'Video: Cómo recuperarte de una adicción. Conferencia magistral',
-                url: 'https://www.youtube.com/watch?v=5-TijhzQPP4',
-                isExternal: true
-              },
-              {
-                title: 'Video: Cómo vencer una adicción. Conferencia Magistral',
-                url: 'https://www.youtube.com/watch?v=e3QpAd5lGjc',
-                isExternal: true
-              },
-              {
-                title: 'Video: Una manera alternativa de dejar las adicciones',
-                url: 'https://www.youtube.com/watch?v=wtkVMNfuRpg',
-                isExternal: true
-              }
-            );
-          }
-
+  
           // Módulo 5: Psicología de las Adicciones
           if (lesson.titulo.includes('PSICOLOGIA ADICCIONES')) {
             enlaces_externos.push(

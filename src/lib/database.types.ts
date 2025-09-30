@@ -15,7 +15,7 @@ export interface Database {
           email: string
           nombre: string | null
           name: string | null
-          rol: 'estudiante' | 'profesor'
+          rol: 'student' | 'teacher'
           creado_en: string
         }
         Insert: {
@@ -23,7 +23,7 @@ export interface Database {
           email: string
           nombre?: string | null
           name?: string | null
-          rol: 'estudiante' | 'profesor'
+          rol: 'student' | 'teacher'
           creado_en?: string
         }
         Update: {

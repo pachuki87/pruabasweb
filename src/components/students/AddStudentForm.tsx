@@ -24,7 +24,7 @@ const AddStudentForm: React.FC = () => {
           {
             id: crypto.randomUUID(),
             email: email,
-            rol: 'estudiante',
+            rol: 'student',
             nombre: name
           }
         ]);

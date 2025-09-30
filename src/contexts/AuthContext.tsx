@@ -129,8 +129,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         const currentUser = session?.user ?? null;
         const currentUserId = currentUser?.id ?? null;
         
-        // Solo procesar si el usuario realmente cambió
-        if (currentUserId === lastUserId && event !== 'SIGNED_OUT') {
+        // Solo procesar si el usuario realmente cambió, pero siempre procesar SIGNED_IN y INITIAL_SESSION para actualizar datos
+        if (currentUserId === lastUserId && event !== 'SIGNED_OUT' && event !== 'SIGNED_IN' && event !== 'INITIAL_SESSION') {
           console.log('🔐 Auth state change ignored - same user:', event, currentUserId);
           return;
         }
@@ -140,6 +140,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         // Handle different auth events
         switch (event) {
           case 'SIGNED_IN':
+          case 'INITIAL_SESSION':
             setUser(currentUser);
             lastUserId = currentUserId;
             break;

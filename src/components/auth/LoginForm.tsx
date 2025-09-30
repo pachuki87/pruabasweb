@@ -42,6 +42,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ role, onLogin }) => {
           refreshToken: session.refresh_token
         };
         onLogin(user);
+        // No redirigir aquí - dejar que App.tsx maneje la redirección con el rol correcto de la BD
       }
     };
 
@@ -50,14 +51,36 @@ const LoginForm: React.FC<LoginFormProps> = ({ role, onLogin }) => {
     // Listen for auth state changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (event === 'SIGNED_IN' && session?.user) {
-        const user = {
-          id: session.user.id,
-          email: session.user.email || '',
-          role: role,
-          accessToken: session.access_token,
-          refreshToken: session.refresh_token
-        };
-        onLogin(user);
+        // Get user role from database for OAuth logins too
+        const { data: userData, error: userError } = await supabase
+          .from('usuarios')
+          .select('rol')
+          .eq('id', session.user.id)
+          .single();
+
+        if (userError) {
+          console.error('Error al obtener rol del usuario (OAuth):', userError);
+          // Fallback to role parameter if database query fails
+          const user = {
+            id: session.user.id,
+            email: session.user.email || '',
+            role: role, // Use role from URL as fallback
+            accessToken: session.access_token,
+            refreshToken: session.refresh_token
+          };
+          onLogin(user);
+        } else {
+          // Use role from database
+          const user = {
+            id: session.user.id,
+            email: session.user.email || '',
+            role: userData.rol, // Use role from database
+            accessToken: session.access_token,
+            refreshToken: session.refresh_token
+          };
+          console.log('🎯 Rol obtenido de la base de datos (OAuth):', userData.rol);
+          onLogin(user);
+        }
       }
     });
 
@@ -93,17 +116,37 @@ const LoginForm: React.FC<LoginFormProps> = ({ role, onLogin }) => {
       //   setIsLoading(false);
       // }, 800);
 
-      // Pass user data including tokens to onLogin
-      const user = {
-        id: data.user?.id,
-        email: data.user?.email,
-        role, // Role is determined by the login page, not from Supabase user data directly
-        accessToken: data.session?.access_token,
-        refreshToken: data.session?.refresh_token,
-      };
-      
-      onLogin(user);
-      navigate(`/${role}/dashboard`);
+      // Get user role from database instead of URL parameter
+      const { data: userData, error: userError } = await supabase
+        .from('usuarios')
+        .select('rol')
+        .eq('id', data.user?.id)
+        .single();
+
+      if (userError) {
+        console.error('Error al obtener rol del usuario:', userError);
+        // Fallback to role parameter if database query fails
+        const user = {
+          id: data.user?.id,
+          email: data.user?.email,
+          role, // Use role from URL as fallback
+          accessToken: data.session?.access_token,
+          refreshToken: data.session?.refresh_token,
+        };
+        onLogin(user);
+      } else {
+        // Use role from database
+        const user = {
+          id: data.user?.id,
+          email: data.user?.email,
+          role: userData.rol, // Use role from database
+          accessToken: data.session?.access_token,
+          refreshToken: data.session?.refresh_token,
+        };
+        console.log('🎯 Rol obtenido de la base de datos:', userData.rol);
+        onLogin(user);
+      }
+      // No redirigir aquí - dejar que App.tsx maneje la redirección con el rol correcto de la BD
       
       setIsLoading(false);
       
@@ -119,10 +162,10 @@ const LoginForm: React.FC<LoginFormProps> = ({ role, onLogin }) => {
 
     // In a real implementation, we would use Supabase auth
     if (provider === 'google') {
-      const { error } = await supabase.auth.signInWithOAuth({ 
+      const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: `${window.location.origin}/${role}/dashboard`
+          redirectTo: `${window.location.origin}/` // Dejar que App.tsx maneje la redirección con el rol correcto de la BD
         }
       });
       if (error) {
@@ -140,7 +183,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ role, onLogin }) => {
        };
 
        onLogin(user);
-       navigate(`/${role}/dashboard`);
+      // No redirigir aquí - dejar que App.tsx maneje la redirección con el rol correcto de la BD
     }
   };
 

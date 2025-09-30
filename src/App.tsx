@@ -87,8 +87,10 @@ function App() {
       const userId = supabaseUser.data?.user?.id;
 
       if (userId) {
+        console.log('🔍 Buscando usuario en BD con ID:', userId);
         const userFromDb = await getUserById(userId);
         if (userFromDb) {
+          console.log('✅ Usuario encontrado en BD:', { id: userFromDb.id, email: userFromDb.email, rol: userFromDb.rol });
           const newUser: User = {
             id: userFromDb.id,
             email: userFromDb.email,
@@ -96,10 +98,12 @@ function App() {
             accessToken: userData.accessToken,
             refreshToken: userData.refreshToken,
           };
+          console.log('🔄 Estableciendo usuario con rol:', newUser.role);
           setUser(newUser);
           setCurrentRole(newUser.role);
+          console.log('✅ Rol establecido en currentRole:', newUser.role);
         } else {
-          console.error('Usuario no encontrado en la base de datos');
+          console.error('❌ Usuario no encontrado en la base de datos');
         }
       } else {
         console.error('ID de usuario no encontrado en la autenticación de Supabase');
@@ -121,21 +125,53 @@ function App() {
     setCurrentRole(role);
   };
 
+  // Función para mapear roles de la BD a roles de rutas
+  const mapRoleForRouting = (dbRole: string): string => {
+    const roleMapping: { [key: string]: string } = {
+      'profesor': 'teacher',
+      'estudiante': 'student',
+      'student': 'student',
+      'teacher': 'teacher'
+    };
+    return roleMapping[dbRole] || dbRole;
+  };
+
   // Redirigir automáticamente al dashboard después del login
   useEffect(() => {
+    console.log('🔄 useEffect de redirección ejecutado');
+    console.log('👤 Usuario:', user ? { id: user.id, email: user.email, role: user.role } : 'null');
+    console.log('🎯 currentRole:', currentRole);
+
     if (user && user.role) {
+      console.log('✅ Usuario y rol detectados, evaluando redirección...');
+      
+      // Mapear el rol de la BD al rol de las rutas
+      const routeRole = mapRoleForRouting(user.role);
+      console.log('🔄 Rol mapeado:', `${user.role} -> ${routeRole}`);
+      
       // Evitar redirección si ya estamos en una ruta de dashboard
       const currentPath = window.location.pathname;
-      const isDashboardRoute = currentPath.includes(`/${user.role}/dashboard`) ||
-                               currentPath.includes(`/${user.role}/courses`) ||
-                               currentPath.includes(`/${user.role}/profile`);
+      console.log('📍 Ruta actual:', currentPath);
 
-      if (!isDashboardRoute && currentPath !== `/login/${user.role}` && currentPath !== `/register/${user.role}`) {
+      const isDashboardRoute = currentPath.includes(`/${routeRole}/dashboard`) ||
+                               currentPath.includes(`/${routeRole}/courses`) ||
+                               currentPath.includes(`/${routeRole}/profile`);
+
+      console.log('🚦 ¿Es ruta de dashboard?', isDashboardRoute);
+      console.log('🎯 Ruta esperada:', `/${routeRole}/dashboard`);
+
+      // Redirigir si no está en una ruta de dashboard
+      if (!isDashboardRoute) {
+        console.log('🚀 Redirigiendo a:', `/${routeRole}/dashboard`);
         // Usar window.location.href para la redirección en lugar de navigate
-        window.location.href = `/${user.role}/dashboard`;
+        window.location.href = `/${routeRole}/dashboard`;
+      } else {
+        console.log('⏭️  No se redirige (ya está en ruta adecuada)');
       }
+    } else {
+      console.log('⏳ Esperando usuario y rol...');
     }
-  }, [user]);
+  }, [user, currentRole]);
 
   return (
     <AuthProvider>

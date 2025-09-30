@@ -153,7 +153,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ role, onRegister }) => {
             email: formData.email,
             nombre: formData.nombre,
             apellido: formData.apellido,
-            rol: 'estudiante',
+            rol: 'student',
           },
         ]);
 
@@ -212,10 +212,10 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ role, onRegister }) => {
 
   const handleGoogleRegister = async () => {
     try {
-      const { error } = await supabase.auth.signInWithOAuth({ 
+      const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: `${window.location.origin}/${role}/dashboard`
+          redirectTo: `${window.location.origin}/` // Dejar que App.tsx maneje la redirección con el rol correcto de la BD
         }
       });
       if (error) {

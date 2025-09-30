@@ -16,6 +16,7 @@ interface UserData {
   nombre?: string;
   name?: string;
   email?: string;
+  rol?: string;
 }
 
 const Header: React.FC<HeaderProps> = ({ currentRole, onRoleChange }) => {
@@ -39,7 +40,8 @@ const Header: React.FC<HeaderProps> = ({ currentRole, onRoleChange }) => {
             setUserData({
               nombre: userDataFromDb.nombre,
               name: userDataFromDb.name,
-              email: userDataFromDb.email
+              email: userDataFromDb.email,
+              rol: userDataFromDb.rol
             });
           }
         } catch (error) {
@@ -94,7 +96,7 @@ const Header: React.FC<HeaderProps> = ({ currentRole, onRoleChange }) => {
                 <div className="flex items-center space-x-3">
                   <button
                     onClick={() => {
-                      const userRole = userData.email?.includes('profesor') || userData.email?.includes('teacher') ? 'teacher' : 'student';
+                      const userRole = userData.rol || 'student';
                       navigate(`/${userRole}/dashboard`);
                     }}
                     className="flex items-center space-x-2 px-3 py-2 text-sm text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-lg transition-colors cursor-pointer"
@@ -180,7 +182,7 @@ const Header: React.FC<HeaderProps> = ({ currentRole, onRoleChange }) => {
                   <div className="space-y-3">
                     <button
                       onClick={() => {
-                        const userRole = userData.email?.includes('profesor') || userData.email?.includes('teacher') ? 'teacher' : 'student';
+                        const userRole = userData.rol || 'student';
                         navigate(`/${userRole}/dashboard`);
                       }}
                       className="flex items-center justify-center space-x-2 w-full px-4 py-2 text-sm text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-lg transition-colors border border-blue-200 cursor-pointer"

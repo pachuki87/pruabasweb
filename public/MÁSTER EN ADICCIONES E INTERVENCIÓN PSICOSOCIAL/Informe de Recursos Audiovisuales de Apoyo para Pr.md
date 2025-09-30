@@ -16,8 +16,6 @@ Este módulo introduce los conceptos básicos y modelos fundamentales en el trat
 
 **Recursos seleccionados:**
 
-- **Modelo MATRIX. Inicio** - https://www.youtube.com/watch?v=B3VXIfPgbcM
-- **Las 4 fases del tratamiento de adicciones** - https://www.youtube.com/watch?v=3kmpJ_rAjnM
 - **Cómo dejar las drogas o conducta adictiva para siempre** - https://www.youtube.com/watch?v=ohi7rkEOZ2Q
 
 
@@ -49,9 +47,6 @@ El coaching de recuperación ofrece herramientas específicas para acompañar el
 
 **Recursos seleccionados:**
 
-- **Cómo recuperarte de una adicción. Conferencia magistral** - https://www.youtube.com/watch?v=5-TijhzQPP4
-- **Cómo vencer una adicción. Conferencia Magistral** - https://www.youtube.com/watch?v=e3QpAd5lGjc
-- **Una manera alternativa de dejar las adicciones** - https://www.youtube.com/watch?v=wtkVMNfuRpg
 
 
 ### **5. Psicología de las Adicciones**

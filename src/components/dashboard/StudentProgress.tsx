@@ -76,7 +76,7 @@ const StudentProgress: React.FC = () => {
 
       const progressData: CourseProgress[] = [];
 
-      // Process courses in parallel instead of sequentially to avoid timing issues
+      // Process courses in parallel using stored progress data
       const coursePromises = enrollments.map(async (enrollment) => {
         if (signal.aborted) return null;
 
@@ -84,8 +84,16 @@ const StudentProgress: React.FC = () => {
         const courseTitle = (enrollment.cursos as any)?.titulo || 'Curso sin título';
 
         try {
-          // Get all data in parallel requests
-          const [chaptersResponse, quizzesResponse, quizIdsResponse] = await Promise.all([
+          // Get course progress from user_course_progress table
+          const { data: progressData } = await supabase
+            .from('user_course_progress')
+            .select('*')
+            .eq('user_id', authUser.id)
+            .eq('curso_id', courseId)
+            .abortSignal(signal);
+
+          // Get course details in parallel
+          const [chaptersResponse, quizzesResponse] = await Promise.all([
             supabase
               .from('lecciones')
               .select('*', { count: 'exact', head: true })
@@ -95,11 +103,6 @@ const StudentProgress: React.FC = () => {
               .from('cuestionarios')
               .select('*', { count: 'exact', head: true })
               .eq('curso_id', courseId)
-              .abortSignal(signal),
-            supabase
-              .from('cuestionarios')
-              .select('id')
-              .eq('curso_id', courseId)
               .abortSignal(signal)
           ]);
 
@@ -107,58 +110,45 @@ const StudentProgress: React.FC = () => {
 
           const totalChapters = chaptersResponse.count || 0;
           const totalQuizzes = quizzesResponse.count || 0;
-          const quizIds = quizIdsResponse.data?.map(q => q.id) || [];
 
-          // Get completed quizzes count
-          let completedQuizzes = 0;
-          if (quizIds.length > 0) {
-            // Usar respuestas_texto_libre para contar cuestionarios completados
-            const { data: completedQuizData } = await supabase
-              .from('respuestas_texto_libre')
-              .select('pregunta_id')
-              .eq('user_id', authUser.id)
-              .in('pregunta_id', quizIds)
-              .abortSignal(signal);
-
-            // Contar cuestionarios únicos completados
-            const uniqueQuizzes = new Set(completedQuizData?.map(r => r.pregunta_id) || []);
-            completedQuizzes = uniqueQuizzes.size;
-          }
-
-          if (signal.aborted) return null;
-
-          // Calculate progress
+          // Use stored progress or calculate from user_test_results
           let progressPercentage = 0;
           let completedChapters = 0;
+          let completedQuizzes = 0;
 
-          // Get lesson progress - usar inscripciones como base y calcular progreso
-          const { data: lessonProgress } = await supabase
-            .from('inscripciones')
-            .select('*')
-            .eq('user_id', authUser.id)
-            .eq('curso_id', courseId);
+          if (progressData && progressData.length > 0) {
+            // Use the most recent progress record
+            const latestProgress = progressData.reduce((latest, current) =>
+              new Date(current.ultima_actividad) > new Date(latest.ultima_actividad) ? current : latest
+            );
 
-          if (signal.aborted) return null;
+            progressPercentage = latestProgress.progreso_porcentaje || 0;
 
-          // Calcular progreso basado en respuestas de cuestionarios
-          const completedLessons = Math.min(completedQuizzes, totalChapters);
-          const inProgressLessons = completedQuizzes > 0 && completedQuizzes < totalQuizzes ? 1 : 0;
+            // Calculate completed chapters based on progress percentage
+            completedChapters = Math.floor((progressPercentage / 100) * totalChapters);
+          } else {
+            // Fallback: calculate from user_test_results if no progress data exists
+            const { data: testResults } = await supabase
+              .from('user_test_results')
+              .select('leccion_id, aprobado')
+              .eq('user_id', authUser.id)
+              .eq('curso_id', courseId)
+              .abortSignal(signal);
 
-          // Calculate weighted progress
-          const lessonWeight = 0.6;
-          const quizWeight = 0.4;
+            if (signal.aborted) return null;
 
-          const effectiveLessons = completedLessons + (inProgressLessons * 0.5);
-          const lessonProgressPercentage = totalChapters > 0
-            ? Math.min(100, (effectiveLessons / totalChapters) * 100)
-            : 0;
+            // Count completed lessons based on approved tests
+            const completedLessonIds = new Set(
+              testResults?.filter(result => result.aprobado).map(result => result.leccion_id) || []
+            );
+            completedChapters = completedLessonIds.size;
+            completedQuizzes = testResults?.length || 0;
 
-          const quizProgressPercentage = totalQuizzes > 0
-            ? Math.min(100, (completedQuizzes / totalQuizzes) * 100)
-            : 0;
-
-          progressPercentage = Math.min(100, Math.round((lessonProgressPercentage * lessonWeight) + (quizProgressPercentage * quizWeight)));
-          completedChapters = Math.min(completedLessons + Math.floor(inProgressLessons * 0.5), totalChapters);
+            // Calculate progress percentage
+            progressPercentage = totalChapters > 0
+              ? Math.round((completedChapters / totalChapters) * 100)
+              : 0;
+          }
 
           return {
             id: courseId,

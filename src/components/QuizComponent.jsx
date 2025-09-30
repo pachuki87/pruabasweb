@@ -452,6 +452,7 @@ const QuizComponent = ({
 
       questionsSummary.push({
         question: question.pregunta || 'Pregunta sin texto',
+        questionType: question.tipo || 'multiple_choice',
         userAnswer: respuestaUsuario,
         correctAnswer: respuestaCorrecta,
         isCorrect: esCorrecta,

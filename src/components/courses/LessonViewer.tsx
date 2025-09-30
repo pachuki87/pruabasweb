@@ -687,68 +687,7 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
         )}
       </div>
 
-      {/* Contenido de la lección */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <div 
-          className="prose prose-lg max-w-none lesson-content elementor-content"
-          dangerouslySetInnerHTML={{ __html: content }}
-        />
-        
-        <style>{`
-          .elementor-content .elementor-section {
-            margin-bottom: 2rem;
-          }
-          
-          .elementor-content .elementor-widget-container {
-            margin-bottom: 1rem;
-          }
-          
-          .elementor-content .elementor-widget-text-editor p {
-            margin-bottom: 1rem;
-            line-height: 1.6;
-            color: #374151;
-          }
-          
-          .elementor-content .elementor-button {
-            display: inline-flex;
-            align-items: center;
-            padding: 0.75rem 1.5rem;
-            background-color: #dc2626;
-            color: white;
-            text-decoration: none;
-            border-radius: 0.5rem;
-            font-weight: 500;
-            margin: 0.5rem 0;
-            transition: background-color 0.2s;
-          }
-          
-          .elementor-content .elementor-button:hover {
-            background-color: #b91c1c;
-          }
-          
-          .elementor-content .elementor-button-icon {
-            margin-right: 0.5rem;
-          }
-          
-          .elementor-content iframe {
-            width: 100%;
-            max-width: 640px;
-            height: 360px;
-            border-radius: 0.5rem;
-            margin: 1rem 0;
-          }
-          
-          .elementor-content .has-inline-color {
-            color: inherit;
-          }
-          
-          .elementor-content .has-woostify-heading-color {
-            color: #1f2937;
-          }
-        `}</style>
-      </div>
-
-      {/* Videos Recomendados - Sección movida al final */}
+      {/* Videos Recomendados - Sección movida al principio */}
       {externalLinks.length > 0 && (
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mt-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-3">🎬 Videos Recomendados</h3>
@@ -826,6 +765,69 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
           </div>
         </div>
       )}
+
+      {/* Contenido de la lección */}
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <div 
+          className="prose prose-lg max-w-none lesson-content elementor-content"
+          dangerouslySetInnerHTML={{ __html: content }}
+        />
+        
+        <style>{`
+          .elementor-content .elementor-section {
+            margin-bottom: 2rem;
+          }
+          
+          .elementor-content .elementor-widget-container {
+            margin-bottom: 1rem;
+          }
+          
+          .elementor-content .elementor-widget-text-editor p {
+            margin-bottom: 1rem;
+            line-height: 1.6;
+            color: #374151;
+          }
+          
+          .elementor-content .elementor-button {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            background-color: #dc2626;
+            color: white;
+            text-decoration: none;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            margin: 0.5rem 0;
+            transition: background-color 0.2s;
+          }
+          
+          .elementor-content .elementor-button:hover {
+            background-color: #b91c1c;
+          }
+          
+          .elementor-content .elementor-button-icon {
+            margin-right: 0.5rem;
+          }
+          
+          .elementor-content iframe {
+            width: 100%;
+            max-width: 640px;
+            height: 360px;
+            border-radius: 0.5rem;
+            margin: 1rem 0;
+          }
+          
+          .elementor-content .has-inline-color {
+            color: inherit;
+          }
+          
+          .elementor-content .has-woostify-heading-color {
+            color: #1f2937;
+          }
+        `}</style>
+      </div>
+
+
     </div>
   );
 };

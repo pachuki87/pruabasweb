@@ -399,6 +399,35 @@ exports.handler = async (event, context) => {
         if (data.type === 'quiz-responses' && data.studentInfo && data.responses) {
             console.log('✅ Payload ya está en formato correcto, usándolo directamente');
             webhookPayload = data;
+        } else if (data.source === 'resumen-cuestionario-page') {
+            console.log('✅ Payload viene de resumen-cuestionario.html, transformando al formato esperado...');
+            // Transformar el formato de resumen-cuestionario.html al formato esperado
+            webhookPayload = {
+                type: 'quiz-responses',
+                timestamp: data.timestamp,
+                source: 'instituto-lidera-elearning',
+                studentInfo: {
+                    name: data.studentInfo?.name || 'Estudiante',
+                    email: data.studentInfo?.email || '',
+                    userId: null,
+                    quizId: null,
+                    submittedAt: data.studentInfo?.completionDate || new Date().toISOString()
+                },
+                quizInfo: {
+                    title: data.quizInfo?.title || 'Cuestionario',
+                    lessonId: null,
+                    courseId: null,
+                    totalQuestions: data.quizInfo?.totalQuestions || 0,
+                    score: data.quizInfo?.score || 0,
+                    maxScore: data.quizInfo?.maxScore || 0,
+                    percentage: data.quizInfo?.percentage || 0,
+                    passed: data.quizInfo?.passed || false,
+                    timeSpent: data.quizInfo?.timeSpent || 0,
+                    attemptNumber: 1
+                },
+                responses: [],
+                questions: data.questions || []
+            };
         } else {
             console.log('🔄 Transformando payload al formato esperado...');
             // Preparar payload para n8n con información completa
@@ -430,8 +459,36 @@ exports.handler = async (event, context) => {
             };
         }
 
-        // SOLO procesar respuestas abiertas - detectar por el formato del payload anidado
-        if (data.type !== 'quiz-responses' && data.questions && Array.isArray(data.questions)) {
+        // SOLO procesar respuestas abiertas - detectar por el formato del payload
+        if (data.source === 'resumen-cuestionario-page' && data.questions && Array.isArray(data.questions)) {
+            console.log('📝 Procesando preguntas desde resumen-cuestionario.html...');
+
+            // Procesar preguntas directamente del formato de resumen-cuestionario.html
+            data.questions.forEach((question, index) => {
+                // En el nuevo formato, las preguntas abiertas deberían tener questionType: 'texto_libre'
+                const isOpenQuestion = question.questionType === 'texto_libre' ||
+                                    question.questionType === 'texto_libre_open';
+
+                if (isOpenQuestion && question.userAnswer) {
+                    console.log(`📝 Pregunta abierta encontrada: ${question.question}`);
+                    console.log(`📝 Respuesta del usuario: ${question.userAnswer}`);
+
+                    webhookPayload.responses.push({
+                        questionId: question.questionId || `pregunta_${index}`,
+                        questionText: question.question || question.questionText || `Pregunta ${index + 1}`,
+                        responseType: 'texto_libre',
+                        responseValue: question.userAnswer.content || question.userAnswer || '',
+                        isCorrect: question.isCorrect !== undefined ? question.isCorrect : true,
+                        timeSpent: question.timeSpent || 0,
+                        metadata: {
+                            questionNumber: question.questionNumber || index + 1,
+                            files: question.userAnswer.files || [],
+                            points: question.points || 0
+                        }
+                    });
+                }
+            });
+        } else if (data.type !== 'quiz-responses' && data.questions && Array.isArray(data.questions)) {
             console.log('📝 Procesando preguntas desde formato questions anidado...');
 
             // La estructura es questions[0] que contiene el array real de preguntas

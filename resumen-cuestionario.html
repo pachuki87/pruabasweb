@@ -213,9 +213,8 @@
         async function sendQuizDataToWebhook(results) {
             console.log('🚀 Enviando datos del cuestionario al webhook...');
             
-            // URLs de webhook (primario y fallback)
-            const primaryWebhookUrl = 'https://n8n.srv1024767.hstgr.cloud/webhook-test/fbdc5d15-3435-42f9-8047-891869aa9f7e';
-            const fallbackWebhookUrl = 'http://localhost:3001/webhook-test';
+            // Usar la función serverless de Netlify como proxy para evitar CORS
+            const serverlessFunctionUrl = '/.netlify/functions/send-corrections';
             
             // Preparar datos para el webhook
             const webhookData = {
@@ -265,26 +264,17 @@
                 }
             }
 
-            // Intentar enviar al webhook primario primero
-            console.log('📡 Intentando webhook primario...');
-            const primaryResult = await sendToWebhook(primaryWebhookUrl, webhookData);
-            
-            if (primaryResult.success) {
-                console.log('✅ Webhook primario exitoso');
-                return primaryResult;
+            // Enviar a través de la función serverless
+            console.log('📡 Enviando a través de la función serverless...');
+            const result = await sendToWebhook(serverlessFunctionUrl, webhookData);
+
+            if (result.success) {
+                console.log('✅ Webhook enviado exitosamente');
+                return result;
             }
 
-            // Si falla, intentar con el webhook de fallback
-            console.log('📡 Webhook primario falló, intentando fallback...');
-            const fallbackResult = await sendToWebhook(fallbackWebhookUrl, webhookData);
-            
-            if (fallbackResult.success) {
-                console.log('✅ Webhook de fallback exitoso');
-                return fallbackResult;
-            }
-
-            console.error('❌ Ambos webhooks fallaron');
-            return { success: false, error: 'Todos los webhooks fallaron' };
+            console.error('❌ Falló el envío del webhook');
+            return { success: false, error: 'Falló el envío del webhook' };
         }
 
         // Initialize the page

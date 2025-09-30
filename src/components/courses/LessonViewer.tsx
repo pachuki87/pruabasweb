@@ -289,7 +289,7 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
               user_id: user.id,
               curso_id: course.id,
               leccion_id: lesson.id,
-              progreso_porcentaje: 50, // 50% por ver la lección
+              progreso_porcentaje: 10, // 10% por iniciar la lección
               tiempo_estudiado: 1, // 1 minuto por defecto
               estado: 'en_progreso',
               ultima_actividad: new Date().toISOString(),

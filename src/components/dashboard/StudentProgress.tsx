@@ -116,39 +116,27 @@ const StudentProgress: React.FC = () => {
           let completedChapters = 0;
           let completedQuizzes = 0;
 
-          if (progressData && progressData.length > 0) {
-            // Use the most recent progress record
-            const latestProgress = progressData.reduce((latest, current) =>
-              new Date(current.ultima_actividad) > new Date(latest.ultima_actividad) ? current : latest
-            );
+          // Always calculate progress from user_test_results (approved tests)
+          const { data: testResults } = await supabase
+            .from('user_test_results')
+            .select('leccion_id, aprobado')
+            .eq('user_id', authUser.id)
+            .eq('curso_id', courseId)
+            .abortSignal(signal);
 
-            progressPercentage = latestProgress.progreso_porcentaje || 0;
+          if (signal.aborted) return null;
 
-            // Calculate completed chapters based on progress percentage
-            completedChapters = Math.floor((progressPercentage / 100) * totalChapters);
-          } else {
-            // Fallback: calculate from user_test_results if no progress data exists
-            const { data: testResults } = await supabase
-              .from('user_test_results')
-              .select('leccion_id, aprobado')
-              .eq('user_id', authUser.id)
-              .eq('curso_id', courseId)
-              .abortSignal(signal);
+          // Count completed lessons based on approved tests
+          const completedLessonIds = new Set(
+            testResults?.filter(result => result.aprobado).map(result => result.leccion_id) || []
+          );
+          completedChapters = completedLessonIds.size;
+          completedQuizzes = testResults?.length || 0;
 
-            if (signal.aborted) return null;
-
-            // Count completed lessons based on approved tests
-            const completedLessonIds = new Set(
-              testResults?.filter(result => result.aprobado).map(result => result.leccion_id) || []
-            );
-            completedChapters = completedLessonIds.size;
-            completedQuizzes = testResults?.length || 0;
-
-            // Calculate progress percentage
-            progressPercentage = totalChapters > 0
-              ? Math.round((completedChapters / totalChapters) * 100)
-              : 0;
-          }
+          // Calculate progress percentage
+          progressPercentage = totalChapters > 0
+            ? Math.round((completedChapters / totalChapters) * 100)
+            : 0;
 
           return {
             id: courseId,

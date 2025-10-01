@@ -136,6 +136,50 @@ function App() {
     return roleMapping[dbRole] || dbRole;
   };
 
+  // Verificar sesión activa al cargar la aplicación
+  useEffect(() => {
+    const checkActiveSession = async () => {
+      try {
+        console.log('🔍 Verificando sesión activa...');
+        const { data: { session }, error } = await supabase.auth.getSession();
+
+        if (error) {
+          console.error('❌ Error al verificar sesión:', error);
+          return;
+        }
+
+        if (session?.user) {
+          console.log('✅ Sesión activa encontrada:', { id: session.user.id, email: session.user.email });
+
+          // Buscar usuario en la base de datos
+          const userFromDb = await getUserById(session.user.id);
+          if (userFromDb) {
+            console.log('✅ Usuario encontrado en BD:', { id: userFromDb.id, email: userFromDb.email, rol: userFromDb.rol });
+            const newUser: User = {
+              id: userFromDb.id,
+              email: userFromDb.email,
+              role: userFromDb.rol,
+              accessToken: session.access_token,
+              refreshToken: session.refresh_token,
+            };
+            console.log('🔄 Estableciendo usuario con rol:', newUser.role);
+            setUser(newUser);
+            setCurrentRole(newUser.role);
+            console.log('✅ Rol establecido en currentRole:', newUser.role);
+          } else {
+            console.error('❌ Usuario no encontrado en la base de datos');
+          }
+        } else {
+          console.log('⏳ No hay sesión activa');
+        }
+      } catch (error) {
+        console.error('❌ Error al verificar sesión activa:', error);
+      }
+    };
+
+    checkActiveSession();
+  }, []);
+
   // Redirigir automáticamente al dashboard después del login
   useEffect(() => {
     console.log('🔄 useEffect de redirección ejecutado');

@@ -38,105 +38,262 @@ const DashboardPage: React.FC<DashboardProps> = ({ role }) => {
     setIsLoading(true);
     
     try {
-      const { data: { user } } = await supabase.auth.getUser();
+      // Add timeout for auth check
+      const authTimeout = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Auth timeout')), 10000)
+      );
+      
+      const authPromise = supabase.auth.getUser();
+      const { data: { user } } = await Promise.race([authPromise, authTimeout]);
       
       if (!user) {
+        console.warn('⚠️ No user found, setting default stats');
+        setStats({
+          courses: 0,
+          students: 0,
+          chapters: 0,
+          quizzes: 0,
+          materials: 0,
+          completedCourses: 0,
+        });
         setIsLoading(false);
         return;
       }
 
       if (role === 'teacher') {
-        // Fetch total courses for teacher
-        const { count: coursesCount, error: coursesError } = await supabase
+        // Add timeout for all queries
+        const queryTimeout = 15000; // 15 seconds
+        
+        // Fetch total courses for teacher with timeout
+        const coursesPromise = supabase
           .from('cursos')
           .select('*', { count: 'exact', head: true })
           .eq('teacher_id', user.id);
+        
+        const coursesTimeout = new Promise((_, reject) => 
+          setTimeout(() => reject(new Error('Courses query timeout')), queryTimeout)
+        );
+        
+        const { count: coursesCount, error: coursesError } = await Promise.race([
+          coursesPromise, 
+          coursesTimeout
+        ]);
 
-        if (coursesError) throw coursesError;
+        if (coursesError) {
+          console.error('❌ Error fetching courses:', coursesError);
+          throw coursesError;
+        }
 
-        // Fetch total students enrolled in teacher's courses
-        const { data: teacherCourses } = await supabase
+        // Fetch total students enrolled in teacher's courses with timeout
+        const teacherCoursesPromise = supabase
           .from('cursos')
           .select('id')
           .eq('teacher_id', user.id);
+        
+        const teacherCoursesTimeout = new Promise((_, reject) => 
+          setTimeout(() => reject(new Error('Teacher courses query timeout')), queryTimeout)
+        );
+
+        const { data: teacherCourses, error: teacherCoursesError } = await Promise.race([
+          teacherCoursesPromise,
+          teacherCoursesTimeout
+        ]);
+
+        if (teacherCoursesError) {
+          console.error('❌ Error fetching teacher courses:', teacherCoursesError);
+          throw teacherCoursesError;
+        }
 
         const courseIds = teacherCourses?.map(course => course.id) || [];
         
-        const { count: studentsCount, error: studentsError } = await supabase
-          .from('inscripciones')
-          .select('*', { count: 'exact', head: true })
-          .in('curso_id', courseIds);
+        if (courseIds.length > 0) {
+          // Fetch students count with timeout
+          const studentsPromise = supabase
+            .from('inscripciones')
+            .select('*', { count: 'exact', head: true })
+            .in('curso_id', courseIds);
+          
+          const studentsTimeout = new Promise((_, reject) => 
+            setTimeout(() => reject(new Error('Students query timeout')), queryTimeout)
+          );
 
-        if (studentsError) throw studentsError;
+          const { count: studentsCount, error: studentsError } = await Promise.race([
+            studentsPromise,
+            studentsTimeout
+          ]);
 
-        // Fetch total quizzes for teacher's courses
-        const { count: quizzesCount, error: quizzesError } = await supabase
-          .from('cuestionarios')
-          .select('*', { count: 'exact', head: true })
-          .in('curso_id', courseIds);
+          if (studentsError) {
+            console.error('❌ Error fetching students:', studentsError);
+            // Don't throw, continue with 0 count
+          }
 
-        if (quizzesError) throw quizzesError;
+          // Fetch total quizzes for teacher's courses with timeout
+          const quizzesPromise = supabase
+            .from('cuestionarios')
+            .select('*', { count: 'exact', head: true })
+            .in('curso_id', courseIds);
+          
+          const quizzesTimeout = new Promise((_, reject) => 
+            setTimeout(() => reject(new Error('Quizzes query timeout')), queryTimeout)
+          );
 
-        setStats({
-          courses: coursesCount || 0,
-          students: studentsCount || 0,
-          chapters: 0,
-          quizzes: quizzesCount || 0,
-          materials: 0,
-          completedCourses: 0,
-        });
+          const { count: quizzesCount, error: quizzesError } = await Promise.race([
+            quizzesPromise,
+            quizzesTimeout
+          ]);
+
+          if (quizzesError) {
+            console.error('❌ Error fetching quizzes:', quizzesError);
+            // Don't throw, continue with 0 count
+          }
+
+          setStats({
+            courses: coursesCount || 0,
+            students: studentsCount || 0,
+            chapters: 0,
+            quizzes: quizzesCount || 0,
+            materials: 0,
+            completedCourses: 0,
+          });
+        } else {
+          // No courses found for teacher
+          setStats({
+            courses: 0,
+            students: 0,
+            chapters: 0,
+            quizzes: 0,
+            materials: 0,
+            completedCourses: 0,
+          });
+        }
       } else {
-        // Student stats
-        // Fetch enrolled courses
-        const { count: enrolledCoursesCount, error: enrolledError } = await supabase
+        // Student stats with timeout
+        const queryTimeout = 15000; // 15 seconds
+        
+        // Fetch enrolled courses with timeout
+        const enrolledPromise = supabase
           .from('inscripciones')
           .select('*', { count: 'exact', head: true })
           .eq('user_id', user.id);
+        
+        const enrolledTimeout = new Promise((_, reject) => 
+          setTimeout(() => reject(new Error('Enrolled courses query timeout')), queryTimeout)
+        );
 
-        if (enrolledError) throw enrolledError;
+        const { count: enrolledCoursesCount, error: enrolledError } = await Promise.race([
+          enrolledPromise,
+          enrolledTimeout
+        ]);
 
-        // Fetch completed quizzes
-        const { count: completedQuizzesCount, error: quizzesError } = await supabase
+        if (enrolledError) {
+          console.error('❌ Error fetching enrolled courses:', enrolledError);
+          // Don't throw, continue with 0 count
+        }
+
+        // Fetch completed quizzes with timeout
+        const quizzesPromise = supabase
           .from('respuestas_texto_libre')
           .select('*', { count: 'exact', head: true })
           .or(`user_id.eq.${user.id},user_id.eq.anonymous`);
+        
+        const quizzesTimeout = new Promise((_, reject) => 
+          setTimeout(() => reject(new Error('Completed quizzes query timeout')), queryTimeout)
+        );
 
-        if (quizzesError) throw quizzesError;
+        const { count: completedQuizzesCount, error: quizzesError } = await Promise.race([
+          quizzesPromise,
+          quizzesTimeout
+        ]);
+
+        if (quizzesError) {
+          console.error('❌ Error fetching completed quizzes:', quizzesError);
+          // Don't throw, continue with 0 count
+        }
 
         // Calculate completed courses (simplified: courses with at least one quiz attempt)
-        const { data: enrollments } = await supabase
-        .from('inscripciones')
-          .select('curso_id')
-        .eq('user_id', user.id);
-
         let completedCoursesCount = 0;
-        if (enrollments) {
-          for (const enrollment of enrollments) {
-            // Get quizzes for this course
-            const { data: courseQuizzes } = await supabase
-              .from('cuestionarios')
-              .select('id')
-              .eq('curso_id', enrollment.curso_id);
-            
-            if (courseQuizzes && courseQuizzes.length > 0) {
-              // Check if user has attempted any quiz from this course
-              const quizIds = courseQuizzes.map(q => q.id);
-              const { data: quizAttempts } = await supabase
-                .from('respuestas_texto_libre')
-                .select('pregunta_id')
-                .or(`user_id.eq.${user.id},user_id.eq.anonymous`)
-                .in('pregunta_id', quizIds);
-              
-              if (quizAttempts && quizAttempts.length > 0) {
-                completedCoursesCount++;
+        
+        try {
+          const enrollmentsPromise = supabase
+            .from('inscripciones')
+            .select('curso_id')
+            .eq('user_id', user.id);
+          
+          const enrollmentsTimeout = new Promise((_, reject) => 
+            setTimeout(() => reject(new Error('Enrollments query timeout')), queryTimeout)
+          );
+
+          const { data: enrollments, error: enrollmentsError } = await Promise.race([
+            enrollmentsPromise,
+            enrollmentsTimeout
+          ]);
+
+          if (enrollmentsError) {
+            console.error('❌ Error fetching enrollments for completed courses:', enrollmentsError);
+          } else if (enrollments && enrollments.length > 0) {
+            // Process enrollments with timeout for each course
+            for (const enrollment of enrollments.slice(0, 10)) { // Limit to 10 courses to prevent timeout
+              try {
+                // Get quizzes for this course with timeout
+                const courseQuizzesPromise = supabase
+                  .from('cuestionarios')
+                  .select('id')
+                  .eq('curso_id', enrollment.curso_id);
+                
+                const courseQuizzesTimeout = new Promise((_, reject) => 
+                  setTimeout(() => reject(new Error('Course quizzes query timeout')), 5000)
+                );
+
+                const { data: courseQuizzes, error: courseQuizzesError } = await Promise.race([
+                  courseQuizzesPromise,
+                  courseQuizzesTimeout
+                ]);
+                
+                if (courseQuizzesError) {
+                  console.error(`❌ Error fetching quizzes for course ${enrollment.curso_id}:`, courseQuizzesError);
+                  continue;
+                }
+                
+                if (courseQuizzes && courseQuizzes.length > 0) {
+                  // Check if user has attempted any quiz from this course with timeout
+                  const quizIds = courseQuizzes.map(q => q.id);
+                  const quizAttemptsPromise = supabase
+                    .from('respuestas_texto_libre')
+                    .select('pregunta_id')
+                    .or(`user_id.eq.${user.id},user_id.eq.anonymous`)
+                    .in('pregunta_id', quizIds);
+                  
+                  const quizAttemptsTimeout = new Promise((_, reject) => 
+                    setTimeout(() => reject(new Error('Quiz attempts query timeout')), 5000)
+                  );
+
+                  const { data: quizAttempts, error: quizAttemptsError } = await Promise.race([
+                    quizAttemptsPromise,
+                    quizAttemptsTimeout
+                  ]);
+                  
+                  if (quizAttemptsError) {
+                    console.error(`❌ Error fetching quiz attempts for course ${enrollment.curso_id}:`, quizAttemptsError);
+                    continue;
+                  }
+                  
+                  if (quizAttempts && quizAttempts.length > 0) {
+                    completedCoursesCount++;
+                  }
+                }
+              } catch (courseError) {
+                console.error(`❌ Error processing course ${enrollment.curso_id}:`, courseError);
+                continue;
               }
             }
           }
+        } catch (completedCoursesError) {
+          console.error('❌ Error calculating completed courses:', completedCoursesError);
         }
 
-        // Usar el número real de cursos inscritos
+        // Set stats with fallback values
         setStats({
-          courses: enrolledCoursesCount || 0, // Usar el valor real de cursos inscritos
+          courses: enrolledCoursesCount || 0,
           students: 0,
           chapters: 0,
           quizzes: completedQuizzesCount || 0,
@@ -147,7 +304,9 @@ const DashboardPage: React.FC<DashboardProps> = ({ role }) => {
       
       setIsLoading(false);
     } catch (error: any) {
-      console.error('Error fetching stats:', error);
+      console.error('❌ Error fetching stats:', error);
+      
+      // Set default stats on error to prevent infinite loading
       setStats({
         courses: 0,
         students: 0,
@@ -157,6 +316,13 @@ const DashboardPage: React.FC<DashboardProps> = ({ role }) => {
         completedCourses: 0,
       });
       setIsLoading(false);
+      
+      // Show user-friendly error message
+      if (error.message?.includes('timeout')) {
+        console.warn('⚠️ Dashboard data loading timed out, showing default values');
+      } else {
+        console.warn('⚠️ Dashboard data loading failed, showing default values');
+      }
     }
   };
 
@@ -188,26 +354,30 @@ const DashboardPage: React.FC<DashboardProps> = ({ role }) => {
           <StatsCard
             title="Total de Cursos"
             value={`${stats.courses}`}
+            subtitle="Cursos que imparte como profesor"
             color="blue"
           />
-          
+
           {role === 'teacher' ? (
             <StatsCard
               title="Total de Estudiantes"
               value={`${stats.students}`}
+              subtitle="Estudiantes inscritos en sus cursos"
               color="gray"
             />
           ) : (
             <StatsCard
               title="Cursos Completados"
               value={`${stats.completedCourses}`}
+              subtitle="Cursos finalizados exitosamente"
               color="green"
             />
           )}
-          
+
           <StatsCard
             title="Total de Cuestionarios"
             value={`${stats.quizzes}`}
+            subtitle="Cuestionarios creados en sus cursos"
             color="green"
           />
         </div>

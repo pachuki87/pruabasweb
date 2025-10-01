@@ -3,10 +3,11 @@ import React from 'react';
 type StatsCardProps = {
   titulo: string;
   value: string | number;
+  subtitle?: string;
   color?: 'blue' | 'gray' | 'green' | 'red';
 };
 
-const StatsCard: React.FC<StatsCardProps> = ({ titulo, value, color = 'red' }) => {
+const StatsCard: React.FC<StatsCardProps> = ({ titulo, value, subtitle, color = 'red' }) => {
   const getColorClasses = () => {
     switch (color) {
       case 'blue':
@@ -26,7 +27,10 @@ const StatsCard: React.FC<StatsCardProps> = ({ titulo, value, color = 'red' }) =
     <div className={`rounded-lg shadow-md overflow-hidden ${getColorClasses()}`}>
       <div className="p-5 text-center">
         <h3 className="text-lg font-medium mb-2">{titulo}</h3>
-        <p className="text-3xl font-bold">{value}</p>
+        <p className="text-3xl font-bold mb-2">{value}</p>
+        {subtitle && (
+          <p className="text-sm opacity-90 italic">{subtitle}</p>
+        )}
       </div>
     </div>
   );

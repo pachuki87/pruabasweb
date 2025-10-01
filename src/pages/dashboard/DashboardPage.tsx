@@ -190,11 +190,13 @@ const DashboardPage: React.FC<DashboardProps> = ({ role }) => {
           // Don't throw, continue with 0 count
         }
 
-        // Fetch completed quizzes with timeout
+        // Fetch completed quizzes with timeout (FIXED: use user_test_results table for approved quizzes)
+        console.log('📊 Fetching completed quizzes for user:', user.id);
         const quizzesPromise = supabase
-          .from('respuestas_texto_libre')
+          .from('user_test_results')
           .select('*', { count: 'exact', head: true })
-          .or(`user_id.eq.${user.id},user_id.eq.anonymous`);
+          .eq('user_id', user.id)
+          .eq('aprobado', true);
         
         const quizzesTimeout = new Promise((_, reject) => 
           setTimeout(() => reject(new Error('Completed quizzes query timeout')), queryTimeout)
@@ -255,13 +257,15 @@ const DashboardPage: React.FC<DashboardProps> = ({ role }) => {
                 }
                 
                 if (courseQuizzes && courseQuizzes.length > 0) {
-                  // Check if user has attempted any quiz from this course with timeout
+                  // Check if user has completed any approved quiz from this course with timeout (FIXED: use user_test_results)
                   const quizIds = courseQuizzes.map(q => q.id);
+                  console.log(`🔍 Checking completed quizzes for course ${enrollment.curso_id}, quizIds:`, quizIds);
                   const quizAttemptsPromise = supabase
-                    .from('respuestas_texto_libre')
-                    .select('pregunta_id')
-                    .or(`user_id.eq.${user.id},user_id.eq.anonymous`)
-                    .in('pregunta_id', quizIds);
+                    .from('user_test_results')
+                    .select('cuestionario_id')
+                    .eq('user_id', user.id)
+                    .eq('aprobado', true)
+                    .in('cuestionario_id', quizIds);
                   
                   const quizAttemptsTimeout = new Promise((_, reject) => 
                     setTimeout(() => reject(new Error('Quiz attempts query timeout')), 5000)
@@ -279,6 +283,9 @@ const DashboardPage: React.FC<DashboardProps> = ({ role }) => {
                   
                   if (quizAttempts && quizAttempts.length > 0) {
                     completedCoursesCount++;
+                    console.log(`✅ Course ${enrollment.curso_id} marked as completed. Found ${quizAttempts.length} approved quiz attempts`);
+                  } else {
+                    console.log(`❌ Course ${enrollment.curso_id} not completed. No approved quiz attempts found`);
                   }
                 }
               } catch (courseError) {
@@ -290,6 +297,13 @@ const DashboardPage: React.FC<DashboardProps> = ({ role }) => {
         } catch (completedCoursesError) {
           console.error('❌ Error calculating completed courses:', completedCoursesError);
         }
+
+        console.log('📈 Final student stats calculation:', {
+          enrolledCoursesCount,
+          completedQuizzesCount,
+          completedCoursesCount,
+          userId: user.id
+        });
 
         // Set stats with fallback values
         setStats({

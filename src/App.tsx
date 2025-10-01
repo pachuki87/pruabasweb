@@ -141,6 +141,11 @@ function App() {
     const checkActiveSession = async () => {
       try {
         console.log('🔍 Verificando sesión activa...');
+
+        // Debug: Verificar localStorage
+        console.log('📱 localStorage (Supabase):', window.localStorage.getItem('supabase.auth.token'));
+        console.log('📱 localStorage (total keys):', Object.keys(window.localStorage));
+
         const { data: { session }, error } = await supabase.auth.getSession();
 
         if (error) {

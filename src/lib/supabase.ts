@@ -77,8 +77,15 @@ try {
   console.log(`🔑 Clave anónima: ${supabaseAnonKey ? 'Configurada' : 'Faltante'}`);
   console.log(`🔐 Clave de servicio (SUPABASE_SERVICE_ROLE_KEY): ${supabaseServiceKey ? 'Configurada' : 'Faltante'}`);
 
-  // Crear cliente principal
-  supabase = createSupabaseClient(supabaseUrl, supabaseAnonKey);
+  // Crear cliente principal con persistencia de sesión explícita
+  supabase = createSupabaseClient(supabaseUrl, supabaseAnonKey, {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true,
+      storage: window.localStorage,
+      storageKey: 'supabase.auth.token'
+    }
+  });
   
   // Crear cliente admin (para operaciones que requieren bypasear RLS)
   supabaseAdmin = supabaseServiceKey 

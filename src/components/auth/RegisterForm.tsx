@@ -105,11 +105,16 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ role, onRegister }) => {
     console.log('🚀 Iniciando proceso de registro...');
 
     try {
-      // Registrar usuario en Auth
+      // Registrar usuario en Auth usando Admin API para auto-confirmar
       console.log('📧 Registrando usuario en Auth con email:', formData.email);
-      const { data: authData, error: authError } = await supabase.auth.signUp({
+      const { data: authData, error: authError } = await supabaseAdmin.auth.admin.createUser({
         email: formData.email,
         password: formData.password,
+        email_confirm: true, // Auto-confirmar email
+        user_metadata: {
+          nombre: formData.nombre,
+          apellido: formData.apellido,
+        }
       });
 
       if (authError) {
@@ -126,26 +131,12 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ role, onRegister }) => {
         return;
       }
 
-      console.log('✅ Usuario creado en Auth:', authData.user.id);
-      toast.success('Usuario registrado en el sistema de autenticación');
+      console.log('✅ Usuario creado en Auth (auto-confirmado):', authData.user.id);
+      toast.success('Usuario registrado y confirmado en el sistema de autenticación');
 
-      // Iniciar sesión con el usuario recién creado para obtener una sesión autenticada
-      console.log('🔑 Iniciando sesión con el usuario recién creado...');
-      const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
-        email: formData.email,
-        password: formData.password,
-      });
-
-      if (signInError) {
-        console.error('❌ Error al iniciar sesión:', signInError);
-        setError(`Error al iniciar sesión: ${signInError.message}`);
-        toast.error(`Error al iniciar sesión: ${signInError.message}`);
-        return;
-      }
-
-      // Insertar usuario en la tabla usuarios usando el cliente autenticado
+      // Insertar usuario en la tabla usuarios usando el cliente admin
       console.log('👤 Insertando usuario en tabla usuarios...');
-      const { error: insertError } = await supabase
+      const { error: insertError } = await supabaseAdmin
         .from('usuarios')
         .insert([
           {
@@ -153,7 +144,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ role, onRegister }) => {
             email: formData.email,
             nombre: formData.nombre,
             apellido: formData.apellido,
-            rol: 'student',
+            rol: role, // Usar el rol dinámico en lugar de hardcodear 'student'
           },
         ]);
 
@@ -171,9 +162,43 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ role, onRegister }) => {
 
       console.log('✅ Usuario insertado correctamente en tabla usuarios');
       toast.success('Perfil de usuario creado exitosamente');
-      
-      setRegistrationSuccess(true);
-      toast.success('¡Registro completado exitosamente! Puedes iniciar sesión ahora.');
+
+      // Iniciar sesión automáticamente después del registro
+      console.log('🔑 Iniciando sesión automáticamente...');
+      const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
+        email: formData.email,
+        password: formData.password,
+      });
+
+      if (signInError) {
+        console.error('❌ Error al iniciar sesión automáticamente:', signInError);
+        toast.success('¡Registro completado! Por favor, inicia sesión manualmente.');
+        setRegistrationSuccess(true);
+      } else {
+        console.log('✅ Sesión iniciada automáticamente');
+        toast.success('¡Registro completado e iniciando sesión automáticamente!');
+
+        // Obtener rol del usuario recién creado
+        const { data: userRoleData } = await supabase
+          .from('usuarios')
+          .select('rol')
+          .eq('id', authData.user.id)
+          .single();
+
+        const userRole = userRoleData?.rol || role;
+
+        // Crear objeto de usuario para el callback
+        const user = {
+          id: authData.user.id,
+          email: formData.email,
+          role: userRole,
+          accessToken: signInData.session?.access_token,
+          refreshToken: signInData.session?.refresh_token,
+        };
+
+        // Llamar al callback de registro (que es handleLogin en App.tsx)
+        onRegister(user);
+      }
       
     } catch (error: any) {
       console.error('❌ Error inesperado:', error);
@@ -191,7 +216,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ role, onRegister }) => {
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: `${window.location.origin}/dashboard`,
+          redirectTo: `${window.location.origin}/`,
         },
       });
 

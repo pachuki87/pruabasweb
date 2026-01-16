@@ -34,6 +34,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ role, onRegister }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [registrationSuccess, setRegistrationSuccess] = useState(false);
+  const [resendLoading, setResendLoading] = useState(false);
   
   const navigate = useNavigate();
 
@@ -114,6 +115,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ role, onRegister }) => {
         user_metadata: {
           nombre: formData.nombre,
           apellido: formData.apellido,
+          rol: role,
         }
       });
 
@@ -144,7 +146,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ role, onRegister }) => {
             email: formData.email,
             nombre: formData.nombre,
             apellido: formData.apellido,
-            rol: role, // Usar el rol dinámico en lugar de hardcodear 'student'
+            rol: role,
           },
         ]);
 
@@ -178,20 +180,11 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ role, onRegister }) => {
         console.log('✅ Sesión iniciada automáticamente');
         toast.success('¡Registro completado e iniciando sesión automáticamente!');
 
-        // Obtener rol del usuario recién creado
-        const { data: userRoleData } = await supabase
-          .from('usuarios')
-          .select('rol')
-          .eq('id', authData.user.id)
-          .single();
-
-        const userRole = userRoleData?.rol || role;
-
         // Crear objeto de usuario para el callback
         const user = {
           id: authData.user.id,
           email: formData.email,
-          role: userRole,
+          role: role,
           accessToken: signInData.session?.access_token,
           refreshToken: signInData.session?.refresh_token,
         };
@@ -249,6 +242,33 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ role, onRegister }) => {
       }
     } catch (err: any) {
       setError(err.message || 'Error al registrarse con Google');
+    }
+  };
+
+  const handleResendConfirmation = async () => {
+    setResendLoading(true);
+    try {
+      const { error } = await supabase.auth.resend({
+        type: 'signup',
+        email: formData.email,
+        options: {
+          emailRedirectTo: `${window.location.origin}/login/${role}`,
+        }
+      });
+
+      if (error) {
+        console.error('Error al reenviar email:', error);
+        setError(`Error al reenviar email: ${error.message}`);
+        toast.error(`Error al reenviar email: ${error.message}`);
+      } else {
+        toast.success('Email de confirmación reenviado exitosamente');
+      }
+    } catch (err: any) {
+      console.error('Error inesperado:', err);
+      setError(`Error inesperado: ${err.message}`);
+      toast.error(`Error inesperado: ${err.message}`);
+    } finally {
+      setResendLoading(false);
     }
   };
 

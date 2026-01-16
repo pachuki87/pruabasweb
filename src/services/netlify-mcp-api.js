@@ -55,7 +55,7 @@ class NetlifyMcpApiService {
         }
     }
 
-    // Función para procesar respuestas con MCP (alternativa a XAI GLM)
+    // Función para procesar respuestas con MCP
     async processAnswersWithMCP(answers) {
         try {
             console.log('Procesando respuestas con Netlify MCP...');

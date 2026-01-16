@@ -3,7 +3,7 @@
  * Servicio para enviar resúmenes de cuestionarios a webhooks
  *
  * NOTA: Este servicio está temporalmente deshabilitado.
- * El chatbot ahora usa directamente GLM API en lugar de n8n webhooks.
+ * El chatbot ahora usa directamente n8n webhooks.
  */
 
 // import axios from 'axios';
@@ -107,8 +107,8 @@ class WebhookService {
   }
 
   sendQuizWebhook(payload, options = {}) {
-    // MÉTODO COMPLETO COMENTADO - EL CHATBOT USA DIRECTAMENTE GLM API
-    console.log('WebhookService está deshabilitado. El chatbot usa GLM API directamente.');
+    // MÉTODO COMPLETO COMENTADO - EL CHATBOT USA DIRECTAMENTE n8n webhooks
+    console.log('WebhookService está deshabilitado. El chatbot usa n8n webhooks directamente.');
     return Promise.resolve({
       success: false,
       error: 'WebhookService temporalmente deshabilitado',
@@ -118,7 +118,7 @@ class WebhookService {
 
   sendDirectWebhook(payload, options = {}) {
     // MÉTODO COMPLETO COMENTADO
-    console.log('WebhookService está deshabilitado. El chatbot usa GLM API directamente.');
+    console.log('WebhookService está deshabilitado. El chatbot usa n8n webhooks directamente.');
     return Promise.resolve({
       success: false,
       error: 'WebhookService temporalmente deshabilitado',
@@ -128,7 +128,7 @@ class WebhookService {
 
   sendProxyWebhook(payload, options = {}) {
     // MÉTODO COMPLETO COMENTADO
-    console.log('WebhookService está deshabilitado. El chatbot usa GLM API directamente.');
+    console.log('WebhookService está deshabilitado. El chatbot usa n8n webhooks directamente.');
     return Promise.resolve({
       success: false,
       error: 'WebhookService temporalmente deshabilitado',
@@ -138,7 +138,7 @@ class WebhookService {
 
   sendWithRetry(payload, retryOptions = {}) {
     // MÉTODO COMPLETO COMENTADO
-    console.log('WebhookService está deshabilitado. El chatbot usa GLM API directamente.');
+    console.log('WebhookService está deshabilitado. El chatbot usa n8n webhooks directamente.');
     return Promise.resolve({
       success: false,
       error: 'WebhookService temporalmente deshabilitado',
@@ -148,13 +148,13 @@ class WebhookService {
 
   sendToMultipleWebhooks(webhookUrls, payload) {
     // MÉTODO COMPLETO COMENTADO
-    console.log('WebhookService está deshabilitado. El chatbot usa GLM API directamente.');
+    console.log('WebhookService está deshabilitado. El chatbot usa n8n webhooks directamente.');
     return Promise.resolve([]);
   }
 
   sendTestWebhook(testUrl = null) {
     // MÉTODO COMPLETO COMENTADO
-    console.log('WebhookService está deshabilitado. El chatbot usa GLM API directamente.');
+    console.log('WebhookService está deshabilitado. El chatbot usa n8n webhooks directamente.');
     return Promise.resolve({
       success: false,
       error: 'WebhookService temporalmente deshabilitado',
@@ -213,7 +213,7 @@ class WebhookService {
 
   sendAsync(payload) {
     // MÉTODO COMPLETO COMENTADO
-    console.log('WebhookService está deshabilitado. El chatbot usa GLM API directamente.');
+    console.log('WebhookService está deshabilitado. El chatbot usa n8n webhooks directamente.');
   }
 
   validatePayload(payload) {
@@ -228,7 +228,7 @@ class WebhookService {
 
   sendChatbotMessage(message, context = {}) {
     // MÉTODO COMPLETO COMENTADO
-    console.log('WebhookService está deshabilitado. El chatbot usa GLM API directamente.');
+    console.log('WebhookService está deshabilitado. El chatbot usa n8n webhooks directamente.');
     return Promise.resolve({
       success: false,
       error: 'WebhookService temporalmente deshabilitado',
@@ -238,7 +238,7 @@ class WebhookService {
 
   sendChatbotEvent(eventType, eventData = {}) {
     // MÉTODO COMPLETO COMENTADO
-    console.log('WebhookService está deshabilitado. El chatbot usa GLM API directamente.');
+    console.log('WebhookService está deshabilitado. El chatbot usa n8n webhooks directamente.');
     return Promise.resolve({
       success: false,
       error: 'WebhookService temporalmente deshabilitado',
@@ -248,7 +248,7 @@ class WebhookService {
 
   sendChatbotStatus(status, statusData = {}) {
     // MÉTODO COMPLETO COMENTADO
-    console.log('WebhookService está deshabilitado. El chatbot usa GLM API directamente.');
+    console.log('WebhookService está deshabilitado. El chatbot usa n8n webhooks directamente.');
     return Promise.resolve({
       success: false,
       error: 'WebhookService temporalmente deshabilitado',
@@ -349,7 +349,7 @@ class WebhookService {
 
   tryHostnameStrategy(payload, options = {}) {
     // MÉTODO COMPLETO COMENTADO
-    console.log('WebhookService está deshabilitado. El chatbot usa GLM API directamente.');
+    console.log('WebhookService está deshabilitado. El chatbot usa n8n webhooks directamente.');
     return Promise.resolve({
       success: false,
       error: 'WebhookService temporalmente deshabilitado',
@@ -359,7 +359,7 @@ class WebhookService {
 
   tryDirectIPStrategy(payload, options = {}) {
     // MÉTODO COMPLETO COMENTADO
-    console.log('WebhookService está deshabilitado. El chatbot usa GLM API directamente.');
+    console.log('WebhookService está deshabilitado. El chatbot usa n8n webhooks directamente.');
     return Promise.resolve({
       success: false,
       error: 'WebhookService temporalmente deshabilitado',
@@ -369,7 +369,7 @@ class WebhookService {
 
   tryProxyStrategy(payload, options = {}) {
     // MÉTODO COMPLETO COMENTADO
-    console.log('WebhookService está deshabilitado. El chatbot usa GLM API directamente.');
+    console.log('WebhookService está deshabilitado. El chatbot usa n8n webhooks directamente.');
     return Promise.resolve({
       success: false,
       error: 'WebhookService temporalmente deshabilitado',
@@ -379,7 +379,7 @@ class WebhookService {
 
   tryTunnelStrategy(payload, options = {}) {
     // MÉTODO COMPLETO COMENTADO
-    console.log('WebhookService está deshabilitado. El chatbot usa GLM API directamente.');
+    console.log('WebhookService está deshabilitado. El chatbot usa n8n webhooks directamente.');
     return Promise.resolve({
       success: false,
       error: 'WebhookService temporalmente deshabilitado',
@@ -428,7 +428,7 @@ class WebhookService {
 
   diagnoseConnection() {
     // MÉTODO COMPLETO COMENTADO
-    console.log('WebhookService está deshabilitado. El chatbot usa GLM API directamente.');
+    console.log('WebhookService está deshabilitado. El chatbot usa n8n webhooks directamente.');
     return Promise.resolve({
       timestamp: new Date().toISOString(),
       webhookUrl: 'Deshabilitado',
@@ -439,14 +439,14 @@ class WebhookService {
       },
       results: {},
       successfulStrategies: [],
-      recommendation: 'WebhookService está deshabilitado. Use GLM API directamente.',
+      recommendation: 'WebhookService está deshabilitado. Use n8n webhooks directamente.',
       metrics: this.getMetrics()
     });
   }
 
   generateDiagnosisRecommendation(results, successfulStrategies) {
     // MÉTODO COMPLETO COMENTADO
-    return 'WebhookService está deshabilitado. Use GLM API directamente.';
+    return 'WebhookService está deshabilitado. Use n8n webhooks directamente.';
   }
 }
 */

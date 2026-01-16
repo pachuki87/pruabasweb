@@ -1,8 +1,25 @@
 const axios = require('axios');
 
+// Configuración de Supabase para guardar resultados
+const SUPABASE_URL = process.env.SUPABASE_URL || 'https://lyojcqiiixkqqtpoejdo.supabase.co';
+const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx5b2pjcWlpaXhrcXF0cG9lamRvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc0OTgwMzAsImV4cCI6MjA2MzA3NDAzMH0._7ODHgTZbdP_k3PjYNIcx1j42xKWBRa3lZ-P-0BBBPc';
+
 // Configuración mejorada con variables de entorno y fallback
-const WEBHOOK_URL = process.env.N8N_WEBHOOK_URL || 'https://n8n.srv1024767.hstgr.cloud/webhook-test/fbdc5d15-3435-42f9-8047-891869aa9f7e';
-const FALLBACK_WEBHOOK_URL = process.env.FALLBACK_WEBHOOK_URL || '/.netlify/functions/test-webhook';
+const WEBHOOK_URL = process.env.N8N_WEBHOOK_URL || 'https://n8n.srv1024767.hstgr.cloud/webhook/fbdc5d15-3435-42f9-8047-891869aa9f7e';
+
+// Construir URL absoluta para el webhook fallback
+const getFallbackWebhookUrl = () => {
+    // Si hay una URL fallback configurada como absoluta, usarla
+    if (process.env.FALLBACK_WEBHOOK_URL && process.env.FALLBACK_WEBHOOK_URL.startsWith('http')) {
+        return process.env.FALLBACK_WEBHOOK_URL;
+    }
+
+    // Construir URL absoluta usando la URL del sitio o el host de la solicitud
+    const baseUrl = process.env.URL || 'https://institutolidera.netlify.app';
+    return `${baseUrl}/.netlify/functions/test-webhook`;
+};
+
+const FALLBACK_WEBHOOK_URL = getFallbackWebhookUrl();
 const MAX_RETRIES = process.env.MAX_RETRIES || 3;
 const TIMEOUT = process.env.WEBHOOK_TIMEOUT || 30000;
 const DEBUG_MODE = process.env.DEBUG_MODE === 'true';
@@ -115,8 +132,15 @@ const sendToWebhookWithRetry = async (payload, options = {}) => {
     console.log(`📤 [${requestId}] Iniciando envío al webhook...`);
     console.log(`📤 [${requestId}] URL principal: ${WEBHOOK_URL}`);
     console.log(`📤 [${requestId}] URL fallback: ${FALLBACK_WEBHOOK_URL}`);
+    console.log(`📤 [${requestId}] URL fallback absoluta: ${getFallbackWebhookUrl()}`);
     console.log(`📤 [${requestId}] Usar fallback: ${useFallback}`);
-    
+    console.log(`📤 [${requestId}] Variables de entorno disponibles:`, {
+        N8N_WEBHOOK_URL: !!process.env.N8N_WEBHOOK_URL,
+        FALLBACK_WEBHOOK_URL: process.env.FALLBACK_WEBHOOK_URL,
+        URL: process.env.URL,
+        NODE_ENV: process.env.NODE_ENV
+    });
+
     if (DEBUG_MODE) {
         console.log(`📤 [${requestId}] Payload:`, JSON.stringify(payload, null, 2));
     }
@@ -165,7 +189,7 @@ const sendToWebhookWithRetry = async (payload, options = {}) => {
                 statusText: response.statusText,
                 responseTime: `${responseTime}ms`,
                 dataSize: JSON.stringify(response.data).length,
-                webhookUsed: webhookUrl === FALLBACK_WEBHOOK_URL ? 'fallback' : 'primary'
+                webhookUsed: webhookUrl === getFallbackWebhookUrl() ? 'fallback' : 'primary'
             });
 
             return {
@@ -176,38 +200,65 @@ const sendToWebhookWithRetry = async (payload, options = {}) => {
                 requestId,
                 data: response.data,
                 headers: response.headers,
-                webhookUsed: webhookUrl === FALLBACK_WEBHOOK_URL ? 'fallback' : 'primary'
+                webhookUsed: webhookUrl === getFallbackWebhookUrl() ? 'fallback' : 'primary'
             };
 
         } catch (error) {
             lastError = error;
 
-            console.error(`❌ [${attemptId}] Error en intento ${attempt}:`, {
+            const errorInfo = {
                 message: error.message,
                 code: error.code,
                 status: error.response?.status,
-                responseTime: error.response ? `${Date.now() - startTime}ms` : 'N/A',
-                webhookUsed: webhookUrl === FALLBACK_WEBHOOK_URL ? 'fallback' : 'primary'
+                responseTime: startTime ? `${Date.now() - startTime}ms` : 'N/A',
+                webhookUsed: webhookUrl === getFallbackWebhookUrl() ? 'fallback' : 'primary',
+                url: webhookUrl
+            };
+
+            console.error(`❌ [${attemptId}] Error en intento ${attempt}:`, errorInfo);
+
+            // Determinar el tipo de error para mejor manejo
+            const isNetworkError = !error.response && (
+                error.code === 'ECONNREFUSED' ||
+                error.code === 'ENOTFOUND' ||
+                error.code === 'ETIMEDOUT' ||
+                error.code === 'ECONNRESET'
+            );
+
+            const isServerError = error.response?.status >= 500;
+            const isClientError = error.response?.status >= 400 && error.response?.status < 500;
+            const isRetryableError = isNetworkError || isServerError;
+
+            console.log(`🔍 [${attemptId}] Análisis del error:`, {
+                isNetworkError,
+                isServerError,
+                isClientError,
+                isRetryableError,
+                shouldTryFallback: webhookUrl === WEBHOOK_URL && !triedFallback && !useFallback
             });
 
             // Si estamos usando el webhook principal y falla, intentar con el fallback
             if (webhookUrl === WEBHOOK_URL && !triedFallback && !useFallback) {
-                console.log(`🔄 [${attemptId}] Webhook principal falló, intentando con fallback...`);
-                webhookUrl = FALLBACK_WEBHOOK_URL;
+                console.log(`🔄 [${attemptId}] Webhook principal falló, cambiando al webhook fallback...`);
+                console.log(`🔄 [${attemptId}] Nueva URL: ${getFallbackWebhookUrl()}`);
+                webhookUrl = getFallbackWebhookUrl();
                 triedFallback = true;
                 // No incrementar el contador de intentos para el fallback
                 attempt--;
                 continue;
             }
 
-            // Si es el último intento, no esperamos más
-            if (attempt > maxRetries) {
+            // Si es el último intento o el error no es reintentable, terminar
+            if (attempt > maxRetries || !isRetryableError) {
+                if (!isRetryableError) {
+                    console.log(`⛔ [${attemptId}] Error no es reintentable, terminando intentos`);
+                }
                 break;
             }
 
             // Esperar antes de reintentar (exponential backoff)
             const waitTime = Math.min(1000 * Math.pow(2, attempt - 1), 10000); // Max 10 segundos
-            console.log(`⏳ [${attemptId}] Esperando ${waitTime}ms antes de reintentar...`);
+            console.log(`⏳ [${attemptId}] Error reintentable, esperando ${waitTime}ms antes de reintentar...`);
 
             await new Promise(resolve => setTimeout(resolve, waitTime));
         }
@@ -295,6 +346,53 @@ const analyzeError = (error) => {
         type: 'unknown',
         solution: 'Error no categorizado. Verifique los logs del servidor para más detalles.'
     };
+};
+
+// Función para guardar resultados en Supabase (CORREGIDO: usa user_test_results con español)
+const saveQuizResultsToSupabase = async (quizData) => {
+    try {
+        console.log('💾 Guardando resultados en Supabase (user_test_results)...');
+
+        // Payload con nombres de columnas en ESPAÑOL para user_test_results
+        const supabasePayload = {
+            user_id: quizData.studentId || null,
+            cuestionario_id: quizData.quizId || null,
+            curso_id: quizData.courseId || null,
+            leccion_id: quizData.lessonId || null,
+            puntuacion: quizData.score || 0,
+            puntuacion_maxima: quizData.maxScore || 100,
+            porcentaje: quizData.percentage || 0,
+            tiempo_completado: quizData.timeSpentSeconds || 0,
+            respuestas_detalle: quizData.questionsData || [],
+            aprobado: quizData.passed || false,
+            fecha_completado: quizData.completionDate || new Date().toISOString()
+        };
+
+        const response = await axios.post(
+            `${SUPABASE_URL}/rest/v1/user_test_results`,
+            supabasePayload,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'apikey': SUPABASE_ANON_KEY,
+                    'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+                    'Prefer': 'return=minimal'
+                },
+                timeout: 10000
+            }
+        );
+
+        console.log('✅ Resultados guardados exitosamente en user_test_results:', response.status);
+        return { success: true, status: response.status };
+
+    } catch (error) {
+        console.error('❌ Error guardando en Supabase:', error.response?.data || error.message);
+        return {
+            success: false,
+            error: error.message,
+            details: error.response?.data
+        };
+    }
 };
 
 // Función para validar el payload antes de enviarlo
@@ -467,7 +565,7 @@ exports.handler = async (event, context) => {
             data.questions.forEach((question, index) => {
                 // En el nuevo formato, las preguntas abiertas deberían tener questionType: 'texto_libre'
                 const isOpenQuestion = question.questionType === 'texto_libre' ||
-                                    question.questionType === 'texto_libre_open';
+                    question.questionType === 'texto_libre_open';
 
                 if (isOpenQuestion && question.userAnswer) {
                     console.log(`📝 Pregunta abierta encontrada: ${question.question}`);
@@ -498,9 +596,9 @@ exports.handler = async (event, context) => {
                 actualQuestions.forEach((question, index) => {
                     // Detectar si es una pregunta abierta: correctAnswer es "Respuesta abierta" y userAnswer no es Verdadero/Falso
                     const isOpenQuestion = question.correctAnswer === "Respuesta abierta" &&
-                                        question.userAnswer &&
-                                        question.userAnswer !== "Verdadero" &&
-                                        question.userAnswer !== "Falso";
+                        question.userAnswer &&
+                        question.userAnswer !== "Verdadero" &&
+                        question.userAnswer !== "Falso";
 
                     if (isOpenQuestion) {
                         console.log(`📝 Pregunta abierta encontrada: ${question.question}`);
@@ -549,6 +647,35 @@ exports.handler = async (event, context) => {
                     webhookStatus: 'validation_failed'
                 })
             };
+        }
+
+        // Guardar resultados en Supabase antes de enviar al webhook
+        const quizDataForSupabase = {
+            studentId: data.userId || null,
+            quizTitle: data.quizData?.titulo || data.titulo_cuestionario || webhookPayload.quizInfo?.title || 'Cuestionario',
+            score: data.puntuacion || webhookPayload.quizInfo?.score || 0,
+            maxScore: data.puntuacion_maxima || webhookPayload.quizInfo?.maxScore || 100,
+            percentage: data.porcentaje || webhookPayload.quizInfo?.percentage || 0,
+            passed: data.aprobado || webhookPayload.quizInfo?.passed || false,
+            completionDate: data.fechaEnvio || webhookPayload.studentInfo?.submittedAt || new Date().toISOString(),
+            timeSpentSeconds: data.tiempo_transcurrido || webhookPayload.quizInfo?.timeSpent || 0,
+            totalQuestions: data.quizData?.preguntas?.length || data.total_preguntas || webhookPayload.quizInfo?.totalQuestions || 0,
+            correctAnswers: webhookPayload.quizInfo?.correctAnswers || 0,
+            incorrectAnswers: webhookPayload.quizInfo?.incorrectAnswers || 0,
+            questionsData: data.questions || webhookPayload.questions || [],
+            studentName: data.nombre || data.nombre_completo || webhookPayload.studentInfo?.name || 'Estudiante',
+            studentEmail: data.email || data.correo || webhookPayload.studentInfo?.email || '',
+            courseId: data.quizData?.curso_id || data.curso_id || webhookPayload.quizInfo?.courseId || null,
+            lessonId: data.quizData?.leccion_id || data.leccion_id || webhookPayload.quizInfo?.lessonId || null
+        };
+
+        console.log('💾 Guardando resultados en Supabase...');
+        const supabaseResult = await saveQuizResultsToSupabase(quizDataForSupabase);
+
+        if (supabaseResult.success) {
+            console.log('✅ Resultados guardados exitosamente en Supabase');
+        } else {
+            console.warn('⚠️ No se pudieron guardar los resultados en Supabase:', supabaseResult.error);
         }
 
         console.log('📋 Enviando datos a n8n...');

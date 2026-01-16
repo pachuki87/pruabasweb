@@ -140,19 +140,16 @@ export interface Database {
           id: string
           user_id: string
           curso_id: string
-          created_at: string
         }
         Insert: {
           id?: string
           user_id: string
           curso_id: string
-          created_at?: string
         }
         Update: {
           id?: string
           user_id?: string
           curso_id?: string
-          created_at?: string
         }
       }
       materiales: {
@@ -329,18 +326,18 @@ export interface Database {
           cuestionario_id: string
           curso_id: string
           leccion_id: string | null
-          numero_intento: number
+          intento_numero: number
           puntuacion: number | null
           puntuacion_maxima: number | null
-          porcentaje: number | null
-          tiempo_completado: number | null
-          respuestas_detalle: Json | null
-          completado: boolean
-          fecha_inicio: string
+          tiempo_transcurrido: number | null
+          respuestas_guardadas: Json | null
+          estado: string
+          aprobado: boolean | null
+          fecha_inicio: string | null
           fecha_completado: string | null
           started_at: string | null
-          creado_en: string
-          actualizado_en: string
+          creado_en: string | null
+          actualizado_en: string | null
         }
         Insert: {
           id?: string
@@ -348,18 +345,18 @@ export interface Database {
           cuestionario_id: string
           curso_id: string
           leccion_id?: string | null
-          numero_intento?: number
+          intento_numero?: number
           puntuacion?: number | null
           puntuacion_maxima?: number | null
-          porcentaje?: number | null
-          tiempo_completado?: number | null
-          respuestas_detalle?: Json | null
-          completado?: boolean
-          fecha_inicio?: string
+          tiempo_transcurrido?: number | null
+          respuestas_guardadas?: Json | null
+          estado?: string
+          aprobado?: boolean | null
+          fecha_inicio?: string | null
           fecha_completado?: string | null
           started_at?: string | null
-          creado_en?: string
-          actualizado_en?: string
+          creado_en?: string | null
+          actualizado_en?: string | null
         }
         Update: {
           id?: string
@@ -367,18 +364,18 @@ export interface Database {
           cuestionario_id?: string
           curso_id?: string
           leccion_id?: string | null
-          numero_intento?: number
+          intento_numero?: number
           puntuacion?: number | null
           puntuacion_maxima?: number | null
-          porcentaje?: number | null
-          tiempo_completado?: number | null
-          respuestas_detalle?: Json | null
-          completado?: boolean
-          fecha_inicio?: string
+          tiempo_transcurrido?: number | null
+          respuestas_guardadas?: Json | null
+          estado?: string
+          aprobado?: boolean | null
+          fecha_inicio?: string | null
           fecha_completado?: string | null
           started_at?: string | null
-          creado_en?: string
-          actualizado_en?: string
+          creado_en?: string | null
+          actualizado_en?: string | null
         }
       }
       user_course_summary: {

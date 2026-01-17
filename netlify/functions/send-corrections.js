@@ -348,25 +348,43 @@ const analyzeError = (error) => {
     };
 };
 
-// Función para guardar resultados en Supabase (CORREGIDO: usa user_test_results con español)
+// Función para guardar resultados en Supabase
+// CORREGIDO: Recibe campos en español directamente, sin traducción
 const saveQuizResultsToSupabase = async (quizData) => {
     try {
         console.log('💾 Guardando resultados en Supabase (user_test_results)...');
+        console.log('📋 Datos recibidos:', JSON.stringify(quizData, null, 2));
 
-        // Payload con nombres de columnas en ESPAÑOL para user_test_results
+        // Validar campos requeridos (NOT NULL en la BD)
+        if (!quizData.user_id) {
+            console.error('❌ Falta user_id (requerido)');
+            return { success: false, error: 'Falta user_id' };
+        }
+        if (!quizData.cuestionario_id) {
+            console.error('❌ Falta cuestionario_id (requerido)');
+            return { success: false, error: 'Falta cuestionario_id' };
+        }
+        if (!quizData.curso_id) {
+            console.error('❌ Falta curso_id (requerido)');
+            return { success: false, error: 'Falta curso_id' };
+        }
+
+        // Payload directo en español - sin traducciones
         const supabasePayload = {
-            user_id: quizData.studentId || null,
-            cuestionario_id: quizData.quizId || null,
-            curso_id: quizData.courseId || null,
-            leccion_id: quizData.lessonId || null,
-            puntuacion: quizData.score || 0,
-            puntuacion_maxima: quizData.maxScore || 100,
-            porcentaje: quizData.percentage || 0,
-            tiempo_completado: quizData.timeSpentSeconds || 0,
-            respuestas_detalle: quizData.questionsData || [],
-            aprobado: quizData.passed || false,
-            fecha_completado: quizData.completionDate || new Date().toISOString()
+            user_id: quizData.user_id,
+            cuestionario_id: quizData.cuestionario_id,
+            curso_id: quizData.curso_id,
+            leccion_id: quizData.leccion_id || null,
+            puntuacion: quizData.puntuacion || 0,
+            puntuacion_maxima: quizData.puntuacion_maxima || 100,
+            porcentaje: quizData.porcentaje || 0,
+            tiempo_completado: quizData.tiempo_completado || 0,
+            respuestas_detalle: quizData.respuestas_detalle || {},
+            aprobado: quizData.aprobado || false,
+            fecha_completado: quizData.fecha_completado || new Date().toISOString()
         };
+
+        console.log('📤 Enviando a Supabase:', JSON.stringify(supabasePayload, null, 2));
 
         const response = await axios.post(
             `${SUPABASE_URL}/rest/v1/user_test_results`,
@@ -650,28 +668,27 @@ exports.handler = async (event, context) => {
         }
 
         // Guardar resultados en Supabase antes de enviar al webhook
-        // El frontend ahora envía: userId, quizId, cursoId, leccionId, puntuacion, etc.
+        // Campos en ESPAÑOL - deben coincidir con lo que espera saveQuizResultsToSupabase
         const quizDataForSupabase = {
-            studentId: data.userId || webhookPayload.studentInfo?.userId || null,
-            quizId: data.quizId || data.quizData?.id || data.cuestionario_id || null,
-            quizTitle: data.quizData?.titulo || data.titulo_cuestionario || webhookPayload.quizInfo?.title || 'Cuestionario',
-            score: data.puntuacion || webhookPayload.quizInfo?.score || 0,
-            maxScore: data.puntuacion_maxima || webhookPayload.quizInfo?.maxScore || 100,
-            percentage: data.porcentaje || webhookPayload.quizInfo?.percentage || 0,
-            passed: data.aprobado !== undefined ? data.aprobado : (webhookPayload.quizInfo?.passed || false),
-            completionDate: data.fechaEnvio || webhookPayload.studentInfo?.submittedAt || new Date().toISOString(),
-            timeSpentSeconds: data.tiempo_transcurrido || webhookPayload.quizInfo?.timeSpent || 0,
-            totalQuestions: data.puntuacion_maxima || data.quizData?.preguntas?.length || webhookPayload.quizInfo?.totalQuestions || 0,
-            correctAnswers: data.puntuacion || webhookPayload.quizInfo?.correctAnswers || 0,
-            incorrectAnswers: (data.puntuacion_maxima || 0) - (data.puntuacion || 0),
-            questionsData: data.userAnswers || data.questions || webhookPayload.questions || [],
-            studentName: data.nombre || data.nombre_completo || webhookPayload.studentInfo?.name || 'Estudiante',
-            studentEmail: data.email || data.correo || webhookPayload.studentInfo?.email || '',
-            courseId: data.cursoId || data.quizData?.curso_id || data.curso_id || null,
-            lessonId: data.leccionId || data.quizData?.leccion_id || data.leccion_id || null
+            // Campos requeridos (NOT NULL)
+            user_id: data.userId,
+            cuestionario_id: data.quizId || data.quizData?.id,
+            curso_id: data.cursoId || data.quizData?.curso_id,
+
+            // Campos opcionales
+            leccion_id: data.leccionId || data.quizData?.leccion_id || null,
+            puntuacion: data.puntuacion || 0,
+            puntuacion_maxima: data.puntuacion_maxima || 100,
+            porcentaje: data.porcentaje || 0,
+            tiempo_completado: data.tiempo_transcurrido || 0,
+            respuestas_detalle: data.userAnswers || {},
+            aprobado: data.aprobado || false,
+            fecha_completado: new Date().toISOString()
         };
 
-        console.log('💾 Guardando resultados en Supabase...');
+        console.log('💾 Preparando datos para Supabase...');
+        console.log('📋 quizDataForSupabase:', JSON.stringify(quizDataForSupabase, null, 2));
+
         const supabaseResult = await saveQuizResultsToSupabase(quizDataForSupabase);
 
         if (supabaseResult.success) {

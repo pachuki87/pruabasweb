@@ -650,8 +650,10 @@ exports.handler = async (event, context) => {
         }
 
         // Guardar resultados en Supabase antes de enviar al webhook
+        // NOTA: El frontend envía { nombre, email, quizData: quiz, userAnswers }
         const quizDataForSupabase = {
-            studentId: data.userId || null,
+            studentId: data.userId || webhookPayload.studentInfo?.userId || null,
+            quizId: data.quizData?.id || data.quizId || data.cuestionario_id || webhookPayload.quizInfo?.quizId || null,
             quizTitle: data.quizData?.titulo || data.titulo_cuestionario || webhookPayload.quizInfo?.title || 'Cuestionario',
             score: data.puntuacion || webhookPayload.quizInfo?.score || 0,
             maxScore: data.puntuacion_maxima || webhookPayload.quizInfo?.maxScore || 100,
@@ -662,7 +664,7 @@ exports.handler = async (event, context) => {
             totalQuestions: data.quizData?.preguntas?.length || data.total_preguntas || webhookPayload.quizInfo?.totalQuestions || 0,
             correctAnswers: webhookPayload.quizInfo?.correctAnswers || 0,
             incorrectAnswers: webhookPayload.quizInfo?.incorrectAnswers || 0,
-            questionsData: data.questions || webhookPayload.questions || [],
+            questionsData: data.questions || data.userAnswers || webhookPayload.questions || [],
             studentName: data.nombre || data.nombre_completo || webhookPayload.studentInfo?.name || 'Estudiante',
             studentEmail: data.email || data.correo || webhookPayload.studentInfo?.email || '',
             courseId: data.quizData?.curso_id || data.curso_id || webhookPayload.quizInfo?.courseId || null,

@@ -27,9 +27,14 @@ const StudentProgress: React.FC = () => {
   const abortControllerRef = useRef<AbortController | null>(null);
 
   const fetchStudentProgress = useCallback(async () => {
-    // Cancelar request anterior si existe
+    // Only cancel if there's a pending request and it's been running for more than 2 seconds
     if (abortControllerRef.current) {
-      abortControllerRef.current.abort();
+      // Don't abort immediately - give requests time to complete
+      setTimeout(() => {
+        if (abortControllerRef.current) {
+          abortControllerRef.current.abort();
+        }
+      }, 2000);
     }
 
     // Crear nuevo AbortController
@@ -40,7 +45,13 @@ const StudentProgress: React.FC = () => {
     setError(null);
 
     try {
-      const { data: { user: authUser } } = await supabase.auth.getUser();
+      // Add timeout for auth check
+      const authTimeout = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('Auth timeout')), 10000)
+      );
+
+      const authPromise = supabase.auth.getUser();
+      const { data: { user: authUser } } = await Promise.race([authPromise, authTimeout]);
 
       if (!authUser) {
         setIsLoading(false);
@@ -50,8 +61,12 @@ const StudentProgress: React.FC = () => {
       // Verificar si fue cancelado
       if (signal.aborted) return;
 
-      // Fetch enrolled courses con AbortSignal
-      const { data: enrollments, error: enrollmentsError } = await supabase
+      // Fetch enrolled courses con AbortSignal and timeout
+      const queryTimeout = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('Enrollments query timeout')), 15000)
+      );
+
+      const enrollmentsPromise = supabase
         .from('inscripciones')
         .select(`
           curso_id,
@@ -63,7 +78,15 @@ const StudentProgress: React.FC = () => {
         .eq('user_id', authUser.id)
         .abortSignal(signal);
 
-      if (enrollmentsError) throw enrollmentsError;
+      const { data: enrollments, error: enrollmentsError } = await Promise.race([
+        enrollmentsPromise,
+        queryTimeout
+      ]);
+
+      if (enrollmentsError) {
+        console.error('Error fetching enrollments:', enrollmentsError);
+        throw enrollmentsError;
+      }
 
       if (!enrollments || enrollments.length === 0) {
         setCourseProgress([]);
@@ -116,27 +139,91 @@ const StudentProgress: React.FC = () => {
           let completedChapters = 0;
           let completedQuizzes = 0;
 
-          // Always calculate progress from user_test_results (approved tests)
-          const { data: testResults } = await supabase
-            .from('user_test_results')
-            .select('leccion_id, aprobado')
-            .eq('user_id', authUser.id)
-            .eq('curso_id', courseId)
-            .abortSignal(signal);
+          // Check both tables for completed quizzes to ensure we get accurate data
+          const [quizAttemptsResponse, testResultsResponse] = await Promise.all([
+            supabase
+              .from('intentos_cuestionario')
+              .select('cuestionario_id, aprobado, leccion_id')
+              .eq('user_id', authUser.id)
+              .eq('curso_id', courseId)
+              .abortSignal(signal),
+            supabase
+              .from('user_test_results')
+              .select('cuestionario_id, aprobado, leccion_id')
+              .eq('user_id', authUser.id)
+              .eq('curso_id', courseId)
+              .abortSignal(signal)
+          ]);
 
           if (signal.aborted) return null;
 
-          // Count completed lessons based on approved tests
-          const completedLessonIds = new Set(
-            testResults?.filter(result => result.aprobado).map(result => result.leccion_id) || []
-          );
-          completedChapters = completedLessonIds.size;
-          completedQuizzes = testResults?.length || 0;
+          // Process intentos_cuestionario results
+          const quizAttempts = quizAttemptsResponse.data || [];
+          const quizError = quizAttemptsResponse.error;
 
-          // Calculate progress percentage
-          progressPercentage = totalChapters > 0
-            ? Math.round((completedChapters / totalChapters) * 100)
+          if (quizError) {
+            console.error(`Error fetching quiz attempts for course ${courseId}:`, quizError);
+          }
+
+          const approvedQuizzes = quizAttempts?.filter(attempt => attempt.aprobado) || [];
+          // Count unique quiz IDs, not multiple attempts of the same quiz
+          const uniqueQuizIds = new Set(approvedQuizzes.map(attempt => attempt.cuestionario_id));
+          const completedQuizzesFromIntentos = uniqueQuizIds.size;
+
+          // Process user_test_results results
+          const testResults = testResultsResponse.data || [];
+          const testError = testResultsResponse.error;
+
+          if (testError) {
+            console.error(`Error fetching test results for course ${courseId}:`, testError);
+          }
+
+          const approvedTests = testResults?.filter(result => result.aprobado) || [];
+          // Count unique quiz IDs, not multiple attempts of the same quiz
+          const uniqueTestIds = new Set(approvedTests.map(result => result.cuestionario_id));
+          const completedQuizzesFromTests = uniqueTestIds.size;
+
+          // Use the maximum count from both tables to ensure accuracy
+          completedQuizzes = Math.max(completedQuizzesFromIntentos, completedQuizzesFromTests);
+
+          // Use stored progress from user_course_progress for completed chapters
+          // This is more accurate than deriving from quizzes, as some lessons might not have quizzes
+          const completedChaptersFromProgress = progressData?.filter(p => p.estado === 'completado').length || 0;
+
+          // Fallback to quiz-derived chapters ONLY if user_course_progress is empty
+          const completedChaptersFromQuizzes = new Set(
+            completedQuizzesFromTests > completedQuizzesFromIntentos
+              ? approvedTests.map(result => result.leccion_id).filter(Boolean)
+              : approvedQuizzes.map(attempt => attempt.leccion_id).filter(Boolean)
+          ).size;
+
+          completedChapters = Math.max(completedChaptersFromProgress, completedChaptersFromQuizzes);
+
+          console.log(`📊 Progress data for course ${courseId}:`, {
+            completedQuizzesFromIntentos,
+            completedQuizzesFromTests,
+            totalCompletedQuizzes: completedQuizzes,
+            completedChapters
+          });
+
+          // Calculate progress percentage based on completed lessons out of total available content
+          // This includes both lessons (chapters) and quizzes as completion criteria
+          const totalContent = totalChapters + totalQuizzes;
+          const completedContent = completedChapters + completedQuizzes;
+
+          progressPercentage = totalContent > 0
+            ? Math.round((completedContent / totalContent) * 100)
             : 0;
+
+          console.log(`📊 Progress calculation for course ${courseId}:`, {
+            totalChapters,
+            completedChapters,
+            totalQuizzes,
+            completedQuizzes,
+            totalContent,
+            completedContent,
+            progressPercentage
+          });
 
           return {
             id: courseId,
@@ -164,13 +251,20 @@ const StudentProgress: React.FC = () => {
 
     } catch (error) {
       // Handle abort errors gracefully
-      if (error instanceof Error && error.name === 'AbortError') {
+      if (error instanceof Error && (error.name === 'AbortError' || error.message.includes('aborted'))) {
         console.log('Request cancelled - this is normal');
         return;
       }
 
-      console.error('Error fetching student progress:', error);
-      setError(error instanceof Error ? error.message : 'Error loading progress data');
+      // Handle timeout errors
+      if (error instanceof Error && error.message.includes('timeout')) {
+        console.warn('Request timed out, showing fallback data');
+        setError('La solicitud tardó demasiado tiempo. Por favor, intenta nuevamente.');
+      } else {
+        console.error('Error fetching student progress:', error);
+        setError(error instanceof Error ? error.message : 'Error loading progress data');
+      }
+
       setIsLoading(false);
     }
   }, [user]);
@@ -241,7 +335,7 @@ const StudentProgress: React.FC = () => {
     );
   }
 
-      return (
+  return (
     <ErrorBoundary>
       <div className="space-y-6">
         <p className="text-lg font-medium text-gray-700 mb-4">
@@ -278,17 +372,17 @@ const StudentProgress: React.FC = () => {
               navigate(`/student/courses/${course.id}`);
             }
           };
-        const handleKeyDown = (e: React.KeyboardEvent) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            handleClick();
-          }
-        };
+          const handleKeyDown = (e: React.KeyboardEvent) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              handleClick();
+            }
+          };
 
-        return (
-          <div
-            key={course.id}
-            className="
+          return (
+            <div
+              key={course.id}
+              className="
               group relative
               border border-gray-200 rounded-lg p-4 mb-4
               cursor-pointer select-none
@@ -299,47 +393,47 @@ const StudentProgress: React.FC = () => {
               focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50
               transform hover:scale-[1.01] active:scale-[0.99]
             "
-            onClick={handleClick}
-            onKeyDown={handleKeyDown}
-            role="button"
-            tabIndex={0}
-            aria-label={`Acceder al curso ${course.titulo}`}
-          >
-          <h3 className="text-md font-medium mb-3 text-gray-800 group-hover:text-blue-600 transition-colors duration-200">{course.titulo}</h3>
+              onClick={handleClick}
+              onKeyDown={handleKeyDown}
+              role="button"
+              tabIndex={0}
+              aria-label={`Acceder al curso ${course.titulo}`}
+            >
+              <h3 className="text-md font-medium mb-3 text-gray-800 group-hover:text-blue-600 transition-colors duration-200">{course.titulo}</h3>
 
-          <div className="w-full bg-gray-200 rounded-full h-2.5 mb-2 group-hover:bg-gray-300 transition-colors duration-200">
-            <div
-              className="bg-red-600 group-hover:bg-red-500 h-2.5 rounded-full transition-all duration-300"
-              style={{ width: `${course.progressPercentage}%` }}
-            ></div>
-          </div>
+              <div className="w-full bg-gray-200 rounded-full h-2.5 mb-2 group-hover:bg-gray-300 transition-colors duration-200">
+                <div
+                  className="bg-red-600 group-hover:bg-red-500 h-2.5 rounded-full transition-all duration-300"
+                  style={{ width: `${course.progressPercentage}%` }}
+                ></div>
+              </div>
 
-          <div className="flex justify-between text-sm text-gray-500 group-hover:text-gray-600 transition-colors duration-200">
-            <span>Progreso: {course.progressPercentage}%</span>
-            <span>
-              {course.completedChapters}/{course.totalChapters} lecciones • {' '}
-              {course.completedQuizzes}/{course.totalQuizzes} cuestionarios
-            </span>
-          </div>
+              <div className="flex justify-between text-sm text-gray-500 group-hover:text-gray-600 transition-colors duration-200">
+                <span>Progreso: {course.progressPercentage}%</span>
+                <span>
+                  {course.completedChapters}/{course.totalChapters} lecciones • {' '}
+                  {course.completedQuizzes}/{course.totalQuizzes} cuestionarios
+                </span>
+              </div>
 
-          {course.progressPercentage === 100 && (
-            <div className="mt-2">
-              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                ✓ Curso Completado
-              </span>
+              {course.progressPercentage === 100 && (
+                <div className="mt-2">
+                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                    ✓ Curso Completado
+                  </span>
+                </div>
+              )}
+
+              {/* Indicador visual de que es clickeable */}
+              <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                <svg className="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </div>
             </div>
-          )}
-
-          {/* Indicador visual de que es clickeable */}
-          <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-            <svg className="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
-          </div>
-        </div>
-        );
-      })}
-    </div>
+          );
+        })}
+      </div>
     </ErrorBoundary>
   );
 };

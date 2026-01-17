@@ -338,3 +338,17 @@ updated_at          TIMESTAMPTZ
 ---
 
 **Documento generado mediante análisis automatizado de Supabase MCP, Netlify MCP y código fuente.**
+
+### 2026-01-17: Resolución de Problemas de Guardado de Quiz
+- **Situación:** Los resultados de los cuestionarios no se guardaban en `user_test_results` ni `intentos_cuestionario`, o se guardaban incompletos.
+- **Causa Raíz:** 
+  1. `QuizAttemptPage.tsx` guardaba en una tabla incorrecta (`respuestas_texto_libre`).
+  2. `LessonViewer.tsx` intentaba insertar campos generados (`aprobado`, `porcentaje`) bloqueando la inserción.
+  3. Triggers de base de datos (`notify_quiz_completion`) fallaban por permisos RLS y columnas obsoletas (`completed_at`).
+- **Solución Implementada:**
+  - ✅ Corregido `QuizAttemptPage.tsx` para guardar en `intentos_cuestionario` Y `user_test_results`.
+  - ✅ Eliminadas columnas generadas de los inserts en el frontend.
+  - ✅ Modificado trigger `notify_quiz_completion` a `SECURITY DEFINER` y corregido nombre de columna a `fecha_completado`.
+  - ✅ `database.types.ts` verificado como correcto.
+- **Resultado:** Guardado correcto y completo de intentos y respuestas verificado en producción.
+

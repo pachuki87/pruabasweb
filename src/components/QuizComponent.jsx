@@ -1,10 +1,29 @@
 // @flow
 import React, { useState, useEffect, useRef } from 'react';
-import { supabase } from '../lib/supabase';
+import { supabase } from '../supabase';
+import { useAuth } from '../contexts/AuthContext';
+import ProgressService from '../lib/services/progressService';
 import QuizSummaryGenerator from '../services/QuizSummaryGenerator.js';
 import FileUploadComponent from './FileUploadComponent.jsx';
 import './QuizComponent.css';
-
+import {
+  CheckCircle,
+  XCircle,
+  RefreshCw,
+  Home,
+  BookOpen,
+  Award,
+  ArrowRight,
+  ChevronLeft,
+  ChevronRight,
+  Clock,
+  AlertCircle,
+  FileText,
+  HelpCircle,
+  Mail,
+  Send,
+  Loader2
+} from 'lucide-react'; e,
 const QuizComponent = ({
   leccionId,
   courseId,
@@ -534,6 +553,17 @@ const QuizComponent = ({
         console.error('❌ Error guardando resultados:', saveError);
       } else {
         console.log('✅ Resultados guardados exitosamente en intentos_cuestionario:', data);
+
+        // Si aprobó, marcar la lección como completada
+        if (results.aprobado && leccionId) {
+          try {
+            console.log('⭐ Marcando capítulo como completado...');
+            await ProgressService.markChapterCompleted(user.id, courseId, leccionId);
+            console.log('✅ Capítulo marcado como completado exitosamente');
+          } catch (progressErr) {
+            console.error('❌ Error al marcar capítulo como completado:', progressErr);
+          }
+        }
       }
     } catch (error) {
       console.error('❌ Error en guardado de resultados:', error);

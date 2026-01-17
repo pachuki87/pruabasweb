@@ -12,13 +12,13 @@ interface ProgressCardProps {
   progress?: number;
 }
 
-const ProgressCard: React.FC<ProgressCardProps> = ({ 
-  titulo, 
-  value, 
-  subtitle, 
-  icon, 
-  color, 
-  progress 
+const ProgressCard: React.FC<ProgressCardProps> = ({
+  titulo,
+  value,
+  subtitle,
+  icon,
+  color,
+  progress
 }) => {
   return (
     <div className="bg-white rounded-lg shadow-md p-6 border-l-4" style={{ borderLeftColor: color }}>
@@ -36,11 +36,11 @@ const ProgressCard: React.FC<ProgressCardProps> = ({
                 <span>{progress}%</span>
               </div>
               <div className="w-full bg-gray-200 rounded-full h-2">
-                <div 
+                <div
                   className="h-2 rounded-full transition-all duration-300"
-                  style={{ 
-                    width: `${progress}%`, 
-                    backgroundColor: color 
+                  style={{
+                    width: `${progress}%`,
+                    backgroundColor: color
                   }}
                 />
               </div>
@@ -65,9 +65,9 @@ interface CourseProgressItemProps {
 const CourseProgressItem: React.FC<CourseProgressItemProps> = ({ course, onClick }) => {
   const progress = course.overall_progress || 0;
   const isCompleted = progress === 100;
-  
+
   return (
-    <div 
+    <div
       className="bg-white rounded-lg shadow-sm border p-4 hover:shadow-md transition-shadow cursor-pointer"
       onClick={onClick}
     >
@@ -101,22 +101,21 @@ const CourseProgressItem: React.FC<CourseProgressItemProps> = ({ course, onClick
           )}
         </div>
       </div>
-      
+
       <div className="mb-2">
         <div className="flex justify-between text-xs text-gray-600 mb-1">
           <span>Progreso del curso</span>
           <span>{Math.round(progress)}%</span>
         </div>
         <div className="w-full bg-gray-200 rounded-full h-2">
-          <div 
-            className={`h-2 rounded-full transition-all duration-300 ${
-              isCompleted ? 'bg-green-500' : 'bg-blue-500'
-            }`}
+          <div
+            className={`h-2 rounded-full transition-all duration-300 ${isCompleted ? 'bg-green-500' : 'bg-blue-500'
+              }`}
             style={{ width: `${progress}%` }}
           />
         </div>
       </div>
-      
+
       {course.last_activity && (
         <p className="text-xs text-gray-500">
           Última actividad: {new Date(course.last_activity).toLocaleDateString('es-ES')}
@@ -133,7 +132,7 @@ interface RecentTestItemProps {
 const RecentTestItem: React.FC<RecentTestItemProps> = ({ test }) => {
   const passed = test.aprobado; // Usar la columna correcta de la base de datos
   const score = Math.round(test.porcentaje); // Usar porcentaje en lugar de score
-  
+
   return (
     <div className="bg-white rounded-lg shadow-sm border p-4">
       <div className="flex items-start justify-between mb-2">
@@ -142,9 +141,8 @@ const RecentTestItem: React.FC<RecentTestItemProps> = ({ test }) => {
           <p className="text-sm text-gray-600">{test.courses?.titulo}</p>
         </div>
         <div className="ml-4 text-right">
-          <div className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-            passed ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-          }`}>
+          <div className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${passed ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+            }`}>
             {passed ? (
               <CheckCircle className="w-3 h-3 mr-1" />
             ) : (
@@ -155,15 +153,15 @@ const RecentTestItem: React.FC<RecentTestItemProps> = ({ test }) => {
           <p className="text-lg font-bold text-gray-900 mt-1">{score}%</p>
         </div>
       </div>
-      
+
       <div className="flex justify-between text-sm text-gray-600">
         <span>{test.puntuacion}/{test.puntuacion_maxima} correctas</span>
         <span>Completado</span>
       </div>
-      
-      {test.completed_at && (
+
+      {test.fecha_completado && (
         <p className="text-xs text-gray-500 mt-2">
-          {new Date(test.completed_at).toLocaleDateString('es-ES', {
+          {new Date(test.fecha_completado).toLocaleDateString('es-ES', {
             year: 'numeric',
             month: 'short',
             day: 'numeric',
@@ -179,7 +177,7 @@ const RecentTestItem: React.FC<RecentTestItemProps> = ({ test }) => {
 const StudentDashboard: React.FC = () => {
   const { user } = useAuth();
   const { estadisticasUsuario, cargando, error, refreshProgress } = useProgress();
-  
+
   useEffect(() => {
     if (user?.id) {
       refreshProgress();
@@ -241,7 +239,7 @@ const StudentDashboard: React.FC = () => {
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <div 
+          <div
             className="cursor-pointer transform hover:scale-105 transition-transform"
             onClick={() => window.location.href = '/student/courses'}
           >
@@ -254,7 +252,7 @@ const StudentDashboard: React.FC = () => {
               progress={stats.totalCourses > 0 ? (stats.completedCourses / stats.totalCourses) * 100 : 0}
             />
           </div>
-          
+
           <ProgressCard
             titulo="Progreso Promedio"
             value={`${Math.round(stats.averageProgress || 0)}%`}
@@ -263,7 +261,7 @@ const StudentDashboard: React.FC = () => {
             color="#10B981"
             progress={stats.averageProgress || 0}
           />
-          
+
           <ProgressCard
             titulo="Tiempo de Estudio"
             value={`${Math.round((stats.totalTimeSpent || 0) / 60)}h`}
@@ -271,7 +269,7 @@ const StudentDashboard: React.FC = () => {
             icon={<Clock className="w-6 h-6" />}
             color="#F59E0B"
           />
-          
+
           <ProgressCard
             titulo="Promedio Exámenes"
             value={`${Math.round(stats.averageTestScore || 0)}%`}

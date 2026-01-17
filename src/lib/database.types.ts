@@ -280,7 +280,6 @@ export interface Database {
           respuestas_detalle: Json | null
           aprobado: boolean
           fecha_completado: string
-          completed_at: string | null
           creado_en: string
           actualizado_en: string
         }
@@ -297,7 +296,6 @@ export interface Database {
           respuestas_detalle?: Json | null
           aprobado?: boolean
           fecha_completado?: string
-          completed_at?: string | null
           creado_en?: string
           actualizado_en?: string
         }
@@ -314,7 +312,6 @@ export interface Database {
           respuestas_detalle?: Json | null
           aprobado?: boolean
           fecha_completado?: string
-          completed_at?: string | null
           creado_en?: string
           actualizado_en?: string
         }

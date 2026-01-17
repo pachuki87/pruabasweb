@@ -66,12 +66,12 @@ const QuizComponent = ({
           console.warn('⚠️ Error buscando cuestionario específico:', quizError);
           // No lanzar error aquí, intentar con cuestionarios generales
         }
-        
+
         const quizData = specificQuizzes && specificQuizzes.length > 0 ? specificQuizzes[0] : null;
 
         if (quizData) {
           console.log('✅ Cuestionario específico encontrado:', quizData.titulo);
-          
+
           // Cargar preguntas del cuestionario
           let preguntas = [];
           try {
@@ -79,9 +79,9 @@ const QuizComponent = ({
               .from('preguntas')
               .select('*')
               .eq('cuestionario_id', quizData.id);
-            
+
             preguntas = result.data || [];
-            
+
             if (result.error) {
               console.warn('⚠️ Error cargando preguntas desde la tabla "preguntas":', result.error);
             }
@@ -100,7 +100,7 @@ const QuizComponent = ({
                     .from('opciones_respuesta')
                     .select('*')
                     .eq('pregunta_id', pregunta.id);
-                  
+
                   return {
                     ...pregunta,
                     opciones_respuesta: opciones || []
@@ -122,11 +122,11 @@ const QuizComponent = ({
             preguntas: preguntasConOpciones
           });
           setSelectedQuiz(quizData.id);
-          
+
           console.log('✅ Cuestionario cargado completamente');
         } else {
           console.log('📋 Buscando cuestionarios generales del curso...');
-          
+
           // Si no hay cuestionario específico, cargar cuestionarios generales del curso
           if (courseId) {
             const { data: generalQuizzes, error: generalError } = await supabase
@@ -145,7 +145,7 @@ const QuizComponent = ({
               // Por simplicidad, tomar el primer cuestionario encontrado
               const selectedQuiz = generalQuizzes[0];
               console.log('✅ Cuestionario general encontrado:', selectedQuiz.titulo);
-              
+
               // Cargar preguntas del cuestionario
               let preguntas = [];
               try {
@@ -153,9 +153,9 @@ const QuizComponent = ({
                   .from('preguntas')
                   .select('*')
                   .eq('cuestionario_id', selectedQuiz.id);
-                
+
                 preguntas = result.data || [];
-                
+
                 if (result.error) {
                   console.warn('⚠️ Error cargando preguntas desde la tabla "preguntas" (general):', result.error);
                 }
@@ -174,12 +174,12 @@ const QuizComponent = ({
                         .from('opciones_respuesta')
                         .select('*')
                         .eq('pregunta_id', pregunta.id);
-                      
+
                       // Si no hay opciones en la tabla opciones_respuesta, 
                       // intentar cargarlas de las columnas de la tabla preguntas
                       if (!opciones || opciones.length === 0) {
                         const opcionesDesdeColumnas = [];
-                        
+
                         if (pregunta.opcion_a) {
                           opcionesDesdeColumnas.push({
                             id: `${pregunta.id}_a`,
@@ -216,13 +216,13 @@ const QuizComponent = ({
                             orden: 4
                           });
                         }
-                        
+
                         return {
                           ...pregunta,
                           opciones_respuesta: opcionesDesdeColumnas
                         };
                       }
-                      
+
                       return {
                         ...pregunta,
                         opciones_respuesta: opciones || []
@@ -243,7 +243,7 @@ const QuizComponent = ({
                 preguntas: preguntasConOpciones
               });
               setSelectedQuiz(selectedQuiz.id);
-              
+
               console.log('✅ Cuestionario general cargado completamente');
             } else {
               console.log('ℹ️ No se encontraron cuestionarios para este curso/lección');
@@ -257,7 +257,7 @@ const QuizComponent = ({
       } catch (err) {
         console.error('❌ Error loading quiz:', err);
         setError('No se pudo cargar el cuestionario. Por favor, intenta de nuevo más tarde.');
-        
+
         // Para debugging, mostrar más detalles del error
         console.error('Detalles del error:', {
           message: err.message,
@@ -322,7 +322,7 @@ const QuizComponent = ({
       ...prev,
       [questionId]: text
     }));
-    
+
     setUserAnswers(prev => ({
       ...prev,
       [questionId]: {
@@ -341,7 +341,7 @@ const QuizComponent = ({
       ...prev,
       [questionId]: [...(prev[questionId] || []), ...fileArray]
     }));
-    
+
     setUserAnswers(prev => ({
       ...prev,
       [questionId]: {
@@ -356,7 +356,7 @@ const QuizComponent = ({
       ...prev,
       [questionId]: prev[questionId]?.filter((_, index) => index !== fileIndex) || []
     }));
-    
+
     setUserAnswers(prev => ({
       ...prev,
       [questionId]: {
@@ -444,8 +444,8 @@ const QuizComponent = ({
             break;
         }
       }
-      
-      if(esCorrecta) {
+
+      if (esCorrecta) {
         puntuacionObtenida++;
         respuestasCorrectas++;
       }
@@ -473,7 +473,7 @@ const QuizComponent = ({
       totalPreguntas: puntuacionMaxima,
       questionsSummary,
     };
-    
+
     console.log('[calculateResults] Resultados finales:', finalResults);
     return finalResults;
   };
@@ -526,8 +526,8 @@ const QuizComponent = ({
               tiempo_total: results.tiempoTotal
             },
             fecha_completado: new Date().toISOString()
-          }),
-          fecha_respuesta: new Date().toISOString()
+          })
+          // Nota: creado_en se genera automáticamente por la BD
         })
         .select();
 
@@ -890,7 +890,7 @@ const QuizComponent = ({
           >
             Anterior
           </button>
-          
+
           <button
             className="btn-next"
             onClick={handleNextQuestion}
@@ -914,8 +914,8 @@ const QuizComponent = ({
             {quizResults.porcentajeAcierto}%
           </div>
           <p className="result-message">
-            {quizResults.aprobado 
-              ? '¡Felicidades! Has aprobado el cuestionario.' 
+            {quizResults.aprobado
+              ? '¡Felicidades! Has aprobado el cuestionario.'
               : 'No has alcanzado el porcentaje necesario para aprobar.'}
           </p>
         </div>
@@ -950,7 +950,7 @@ const QuizComponent = ({
         {/* Estado de envío de resumen */}
         <div className="summary-status">
           <h4>Envío de Resumen</h4>
-          
+
           <div className={`status-item ${emailStatus}`}>
             <span className="status-icon">
               {emailStatus === 'sending' && '⏳'}
@@ -999,7 +999,7 @@ const QuizComponent = ({
               Reintentar Cuestionario
             </button>
           )}
-          
+
           <button className="btn-next-quiz" onClick={onBackToLesson}>
             Volver a la Lección
           </button>
@@ -1046,8 +1046,8 @@ const QuizComponent = ({
             </div>
           </div>
 
-          <button 
-            className="btn-start" 
+          <button
+            className="btn-start"
             onClick={() => setStartTime(Date.now())}
             disabled={loading}
           >

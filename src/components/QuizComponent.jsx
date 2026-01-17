@@ -1,6 +1,6 @@
 // @flow
 import React, { useState, useEffect, useRef } from 'react';
-import { supabase } from '../supabase';
+import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
 import ProgressService from '../lib/services/progressService';
 import QuizSummaryGenerator from '../services/QuizSummaryGenerator.js';

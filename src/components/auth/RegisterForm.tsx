@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { User, Mail, Lock, Phone, Briefcase, Award } from 'lucide-react';
 import { supabase, supabaseAdmin } from '../../lib/supabase';
 import { toast } from 'sonner';
+import { useAuth } from '../../contexts/AuthContext';
 
 // Define GoogleIcon component
 const GoogleIcon = () => (
@@ -18,10 +19,10 @@ const GoogleIcon = () => (
 
 type RegisterFormProps = {
   role: string;
-  onRegister: (user: any) => void;
 };
 
-const RegisterForm: React.FC<RegisterFormProps> = ({ role, onRegister }) => {
+const RegisterForm: React.FC<RegisterFormProps> = ({ role }) => {
+  const { signUp } = useAuth();
   const [formData, setFormData] = useState({
     nombre: '',
     apellido: '',
@@ -43,15 +44,26 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ role, onRegister }) => {
     const handleAuthStateChange = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (session?.user) {
-        // User is authenticated via Google, create user object and call onRegister
-        const user = {
-          id: session.user.id,
-          email: session.user.email || '',
-          role: role,
-          accessToken: session.access_token,
-          refreshToken: session.refresh_token
-        };
-        onRegister(user);
+        // User is authenticated via Google, check if exists in database
+        const { data: existingUser } = await supabase
+          .from('usuarios')
+          .select('*')
+          .eq('id', session.user.id)
+          .single();
+
+        if (!existingUser) {
+          // Crear registro de usuario para usuarios de Google OAuth
+          console.log('🔍 Creando registro de usuario OAuth en base de datos...');
+          await supabase.from('usuarios').insert({
+            id: session.user.id,
+            email: session.user.email,
+            rol: role,
+            name: session.user.user_metadata?.full_name || session.user.email?.split('@')[0] || '',
+          });
+          console.log('✅ Usuario OAuth creado exitosamente');
+        } else {
+          console.log('✅ Usuario OAuth ya existe en la base de datos');
+        }
       }
     };
 
@@ -59,6 +71,8 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ role, onRegister }) => {
 
     // Listen for auth state changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      console.log('🔄 Auth state change in RegisterForm:', event);
+
       if (event === 'SIGNED_IN' && session?.user) {
         // Check if user already exists in database
         const { data: existingUser } = await supabase
@@ -68,28 +82,23 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ role, onRegister }) => {
           .single();
 
         if (!existingUser) {
-          // Crear registro de usuario para usuarios de Google OAuth usando supabaseAdmin
-          await supabaseAdmin.from('usuarios').insert({
+          // Crear registro de usuario para usuarios de Google OAuth
+          console.log('🔍 Creando registro de usuario OAuth en base de datos...');
+          await supabase.from('usuarios').insert({
             id: session.user.id,
             email: session.user.email,
             rol: role,
             name: session.user.user_metadata?.full_name || session.user.email?.split('@')[0] || '',
           });
+          console.log('✅ Usuario OAuth creado exitosamente');
+        } else {
+          console.log('✅ Usuario OAuth ya existe en la base de datos');
         }
-
-        const user = {
-          id: session.user.id,
-          email: session.user.email || '',
-          role: role,
-          accessToken: session.access_token,
-          refreshToken: session.refresh_token
-        };
-        onRegister(user);
       }
     });
 
     return () => subscription.unsubscribe();
-  }, [role, onRegister]);
+  }, [role]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -101,103 +110,21 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ role, onRegister }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    setError('');
-
-    console.log('🚀 Iniciando proceso de registro...');
+    setError(null);
 
     try {
-      // Registrar usuario en Auth usando Admin API para auto-confirmar
-      console.log('📧 Registrando usuario en Auth con email:', formData.email);
-      const { data: authData, error: authError } = await supabaseAdmin.auth.admin.createUser({
-        email: formData.email,
-        password: formData.password,
-        email_confirm: true, // Auto-confirmar email
-        user_metadata: {
-          nombre: formData.nombre,
-          apellido: formData.apellido,
-          rol: role,
-        }
-      });
+      const { error } = await signUp(formData.email, formData.password);
 
-      if (authError) {
-        console.error('❌ Error en Auth:', authError);
-        setError(`Error de autenticación: ${authError.message}`);
-        toast.error(`Error de autenticación: ${authError.message}`);
-        return;
+      if (error) {
+        throw new Error(error);
       }
 
-      if (!authData.user) {
-        console.error('❌ No se creó el usuario en Auth');
-        setError('No se pudo crear el usuario');
-        toast.error('No se pudo crear el usuario');
-        return;
-      }
+      toast.success('¡Registro exitoso! Serás redirigido en un momento.');
 
-      console.log('✅ Usuario creado en Auth (auto-confirmado):', authData.user.id);
-      toast.success('Usuario registrado y confirmado en el sistema de autenticación');
-
-      // Insertar usuario en la tabla usuarios usando el cliente admin
-      console.log('👤 Insertando usuario en tabla usuarios...');
-      const { error: insertError } = await supabaseAdmin
-        .from('usuarios')
-        .insert([
-          {
-            id: authData.user.id,
-            email: formData.email,
-            nombre: formData.nombre,
-            apellido: formData.apellido,
-            rol: role,
-          },
-        ]);
-
-      if (insertError) {
-        console.error('❌ Error al insertar en tabla usuarios:', insertError);
-
-        // Limpiar usuario de Auth si falla la inserción
-        console.log('🧹 Limpiando usuario de Auth...');
-        await supabaseAdmin.auth.admin.deleteUser(authData.user.id);
-
-        setError(`Error al crear perfil de usuario: ${insertError.message}`);
-        toast.error(`Error al crear perfil de usuario: ${insertError.message}`);
-        return;
-      }
-
-      console.log('✅ Usuario insertado correctamente en tabla usuarios');
-      toast.success('Perfil de usuario creado exitosamente');
-
-      // Iniciar sesión automáticamente después del registro
-      console.log('🔑 Iniciando sesión automáticamente...');
-      const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
-        email: formData.email,
-        password: formData.password,
-      });
-
-      if (signInError) {
-        console.error('❌ Error al iniciar sesión automáticamente:', signInError);
-        toast.success('¡Registro completado! Por favor, inicia sesión manualmente.');
-        setRegistrationSuccess(true);
-      } else {
-        console.log('✅ Sesión iniciada automáticamente');
-        toast.success('¡Registro completado e iniciando sesión automáticamente!');
-
-        // Crear objeto de usuario para el callback
-        const user = {
-          id: authData.user.id,
-          email: formData.email,
-          role: role,
-          accessToken: signInData.session?.access_token,
-          refreshToken: signInData.session?.refresh_token,
-        };
-
-        // Llamar al callback de registro (que es handleLogin en App.tsx)
-        onRegister(user);
-      }
-      
     } catch (error: any) {
-      console.error('❌ Error inesperado:', error);
-      setError(`Error inesperado: ${error.message}`);
-      toast.error(`Error inesperado: ${error.message}`);
-    } finally {
+      console.error('❌ Error en el registro:', error);
+      toast.error(`Error en el registro: ${error.message}`);
+      setError(error.message);
       setIsLoading(false);
     }
   };
@@ -275,13 +202,33 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ role, onRegister }) => {
   if (registrationSuccess) {
     return (
       <div className="max-w-md mx-auto bg-white p-8 rounded-lg shadow-md text-center">
-        <h2 className="text-2xl font-bold text-gray-700 mb-4">¡Registro Exitoso!</h2>
-        <p className="text-gray-600 mb-6">
-          Por favor, verifica tu correo electrónico para completar el registro.
+        <h2 className="text-2xl font-bold text-green-600 mb-4">¡Registro Exitoso! 🎉</h2>
+        <p className="text-gray-700 mb-4">
+          Tu cuenta ha sido creada exitosamente.
         </p>
-        <Link to="/login/student" className="text-red-500 hover:underline">
-          Ir a Iniciar Sesión
-        </Link>
+        <p className="text-gray-600 mb-6">
+          Ahora puedes iniciar sesión con tus credenciales.
+        </p>
+        <div className="space-y-3">
+          <Link
+            to={`/login/${role}`}
+            className="block w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors"
+          >
+            Iniciar Sesión Ahora
+          </Link>
+          <button
+            onClick={handleResendConfirmation}
+            disabled={resendLoading}
+            className="w-full bg-gray-200 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-300 transition-colors disabled:opacity-50"
+          >
+            {resendLoading ? 'Enviando...' : 'Reenviar Email de Confirmación'}
+          </button>
+        </div>
+        <div className="mt-6 p-4 bg-blue-50 rounded-md">
+          <p className="text-sm text-blue-700">
+            <strong>¿No recibiste el email?</strong> Revisa tu carpeta de spam o haz clic en "Reenviar Email".
+          </p>
+        </div>
       </div>
     );
   }

@@ -86,6 +86,13 @@ try {
       storageKey: 'supabase.auth.token'
     }
   });
+
+  console.log('🔐 Configuración de autenticación:', {
+    persistSession: true,
+    autoRefreshToken: true,
+    storageKey: 'supabase.auth.token',
+    localStorageAvailable: !!window.localStorage
+  });
   
   // Crear cliente admin (para operaciones que requieren bypasear RLS)
   supabaseAdmin = supabaseServiceKey 

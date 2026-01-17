@@ -1,6 +1,7 @@
 import React from 'react';
 import { auth } from '../../lib/supabase';
 import { User } from '@supabase/supabase-js';
+import QuizResultsHistory from '../../components/students/QuizResultsHistory';
 
 interface UserProfilePageProps {
   role: 'student' | 'teacher';
@@ -56,6 +57,13 @@ function UserProfilePage({ role }: UserProfilePageProps) {
             </p>
           </div>
         </div>
+
+        {/* Historial de resultados para estudiantes */}
+        {role === 'student' && (
+          <div className="mt-8">
+            <QuizResultsHistory user={user} />
+          </div>
+        )}
       </div>
     </div>
   );

@@ -4,11 +4,7 @@ import Header from '../../components/layout/Header';
 import Footer from '../../components/layout/Footer';
 import RegisterForm from '../../components/auth/RegisterForm';
 
-type RegisterPageProps = {
-  onRegister: (user: any) => void;
-};
-
-const RegisterPage: React.FC<RegisterPageProps> = ({ onRegister }) => {
+const RegisterPage: React.FC = () => {
   const { role } = useParams<{ role: string }>();
   
   // If role param is not valid, redirect to student registration
@@ -21,7 +17,7 @@ const RegisterPage: React.FC<RegisterPageProps> = ({ onRegister }) => {
       <Header />
       
       <main className="flex-grow flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-        <RegisterForm role={role} onRegister={onRegister} />
+        <RegisterForm role={role} />
       </main>
       
       <Footer />

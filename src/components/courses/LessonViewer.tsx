@@ -14,7 +14,7 @@ interface Lesson {
   pdfs?: string[];
   pdfUrls?: string[]; // URLs originales para construcción de enlaces
   videos?: string[];
-  enlaces_externos?: Array<{title: string; url: string; isExternal: boolean}>;
+  enlaces_externos?: Array<{ title: string; url: string; isExternal: boolean }>;
   tiene_cuestionario?: boolean;
 }
 
@@ -84,7 +84,7 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
     console.log('🔗 PDF URLs memoizadas:', uniqueUrls.length, 'únicas de', urlList.length, 'totales');
     return uniqueUrls;
   }, [lesson.pdfUrls]);
-  
+
   const externalLinks = lesson.enlaces_externos || [];
   const hasQuiz = lesson.tiene_cuestionario || false;
   const navigate = useNavigate();
@@ -170,8 +170,8 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
           puntuacion_maxima: results.puntuacionMaxima || 100,
           tiempo_completado: results.tiempoTotal || 0,
           respuestas_detalle: respuestasDetalle,
-          aprobado: results.aprobado || false,
-          completed_at: new Date().toISOString()
+          // aprobado es columna generada
+          fecha_completado: new Date().toISOString()
         })
         .select()
         .single();
@@ -322,11 +322,11 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
 
   useEffect(() => {
     console.log('🔄 LessonViewer useEffect triggered - lessonContent available:', !!lessonContent);
-    
+
     const loadContent = async () => {
       setLoading(true);
       setError(null);
-      
+
       try {
         // Prioridad 1: Usar archivo HTML migrado si está disponible y tiene contenido válido
         if (lessonFileUrl && lessonFileUrl.trim()) {
@@ -336,7 +336,7 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
             if (response.ok) {
               const htmlContent = await response.text();
               console.log('✅ Migrated file content loaded, length:', htmlContent.length);
-              
+
               // Verificar si el contenido es válido (no es placeholder)
               if (!htmlContent.includes('Contenido pendiente de asignar')) {
                 const processedContent = processHtmlContent(htmlContent, lessonSlug);
@@ -354,7 +354,7 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
             console.log('⚠️ Error loading migrated file:', fetchError, 'trying fallbacks...');
           }
         }
-        
+
         // Prioridad 2: Usar contenido de la base de datos (legacy)
         if (lessonContent && lessonContent.trim()) {
           console.log('📄 Using legacy database content, length:', lessonContent.length);
@@ -369,20 +369,20 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
             setError('No se proporcionó contenido para esta lección');
             return;
           }
-          
+
           // Determinar la ruta del contenido basado en el curso
           const isMasterCourse = course.id === 'b5ef8c64-fe26-4f20-8221-80a1bf475b05';
-          const contentUrl = isMasterCourse 
+          const contentUrl = isMasterCourse
             ? `/master-content/${lessonSlug}/contenido.html`
             : `/Experto en Conductas Adictivas/Módulo 1/${lessonSlug}/contenido.html`;
           console.log('🌐 Fetching content from:', contentUrl, 'isMasterCourse:', isMasterCourse);
           const response = await fetch(contentUrl);
           console.log('📡 Response status:', response.status, response.statusText);
-          
+
           if (!response.ok) {
             throw new Error(`Error ${response.status}: ${response.statusText}`);
           }
-          
+
           const htmlContent = await response.text();
           console.log('📄 HTML content loaded, length:', htmlContent.length);
           const processedContent = processHtmlContent(htmlContent, lessonSlug);
@@ -405,13 +405,13 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
     // Crear un parser DOM temporal
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, 'text/html');
-    
+
     // Extraer el contenido principal
     let mainContent = '';
-    
+
     // Primero, intentar encontrar el contenedor principal de Elementor
     let elementorContainer = doc.querySelector('.elementor[data-elementor-post-type="sfwd-lessons"]');
-    
+
     if (elementorContainer) {
       mainContent = elementorContainer.innerHTML;
     } else {
@@ -443,7 +443,7 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
           break;
         }
       }
-      
+
       // Si después de buscar los selectores no se encuentra contenido, usar el body
       if (!mainContent && doc.body) {
         console.log('⚠️ No specific content container found, falling back to body content.');
@@ -464,7 +464,7 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
         ''
       );
     }
-    
+
     // Ajustar rutas de imágenes
     mainContent = mainContent.replace(
       /src="([^"]*)"/g,
@@ -474,13 +474,13 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
         }
         // Determinar la ruta de imágenes basado en el curso
         const isMasterCourse = course.id === 'b5ef8c64-fe26-4f20-8221-80a1bf475b05';
-        const imagePath = isMasterCourse 
+        const imagePath = isMasterCourse
           ? `/master-content/${slug}/imagenes/${src}`
           : `/Experto en Conductas Adictivas/Módulo 1/${slug}/imagenes/${src}`;
         return `src="${imagePath}"`;
       }
     );
-    
+
     // Ajustar rutas de enlaces y interceptar navegación
     mainContent = mainContent.replace(
       /href="([^"]*)"/g,
@@ -490,39 +490,39 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
           // Detectar tipo de enlace por el contexto
           return 'href="#" data-navigation-link="true" data-href="' + href + '"';
         }
-        
+
         // Mantener enlaces PDF como enlaces normales
         if (href.includes('.pdf')) {
           return match;
         }
-        
+
         // Mantener enlaces internos y anclas
         if (href.startsWith('http') || href.startsWith('/') || href.startsWith('#')) {
           return match;
         }
-        
+
         // Ajustar rutas relativas
         // Determinar la ruta basado en el curso
         const isMasterCourse = course.id === 'b5ef8c64-fe26-4f20-8221-80a1bf475b05';
-        const linkPath = isMasterCourse 
+        const linkPath = isMasterCourse
           ? `/master-content/${slug}/${href}`
           : `/Experto en Conductas Adictivas/Módulo 1/${slug}/${href}`;
         return `href="${linkPath}"`;
       }
     );
-    
+
     // Mantener botones de navegación pero marcarlos para interceptación
     mainContent = mainContent.replace(
       /<div class="ld-content-action">\s*<a([^>]*href="[^"]*institutolidera\.com[^"]*"[^>]*)>([\s\S]*?)<\/a>\s*<\/div>/gi,
       '<div class="ld-content-action"><a$1 data-navigation-link="true">$2</a></div>'
     );
-    
+
     // Remover navegación de entradas que contiene enlaces externos
     mainContent = mainContent.replace(
       /<nav[^>]*class="[^"]*navigation[^"]*post-navigation[^"]*"[^>]*>[\s\S]*?<\/nav>/gi,
       ''
     );
-    
+
     return mainContent;
   };
 
@@ -553,13 +553,15 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
       {/* Header de la lección */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 mb-6 p-6">
         <h1 className="text-2xl font-bold text-gray-900 mb-4">{lessonTitle}</h1>
-        
+
         {/* Materiales y recursos */}
         {(pdfs.length > 0 || externalLinks.length > 0 || hasQuiz) && (
           <div className="space-y-4">
             {pdfs.length > 0 && (
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-3">📄 Materiales de la Lección</h3>
+                {/* Texto solicitado por el usuario */}
+                <p className="text-sm text-gray-600 mb-2">Cursos</p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   {pdfs.map((pdf, index) => {
                     // Usar la URL original de la base de datos si está disponible
@@ -587,28 +589,28 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
                       }
                       console.log(`📄 Fallback path for ${pdf}: ${pdfPath}`);
                     }
-                    
+
                     // Detectar tipo de archivo
                     const isVideo = pdf.match(/\.(mp4|avi|mov|wmv|flv|webm|mkv)$/i);
                     const isPdf = pdf.endsWith('.pdf');
-                    
+
                     // Configurar estilos y colores según el tipo de archivo
-                    const fileConfig = isVideo 
+                    const fileConfig = isVideo
                       ? {
-                          bgColor: 'bg-blue-50',
-                          borderColor: 'border-blue-200',
-                          icon: <Video className="w-5 h-5 mr-2 text-blue-600" />,
-                          buttonColor: 'bg-blue-600 hover:bg-blue-700',
-                          buttonText: 'Ver Video'
-                        }
+                        bgColor: 'bg-blue-50',
+                        borderColor: 'border-blue-200',
+                        icon: <Video className="w-5 h-5 mr-2 text-blue-600" />,
+                        buttonColor: 'bg-blue-600 hover:bg-blue-700',
+                        buttonText: 'Ver Video'
+                      }
                       : {
-                          bgColor: 'bg-red-50',
-                          borderColor: 'border-red-200',
-                          icon: <FileText className="w-5 h-5 mr-2 text-red-600" />,
-                          buttonColor: 'bg-red-600 hover:bg-red-700',
-                          buttonText: isPdf ? 'Ver PDF' : 'Ver Documento'
-                        };
-                    
+                        bgColor: 'bg-red-50',
+                        borderColor: 'border-red-200',
+                        icon: <FileText className="w-5 h-5 mr-2 text-red-600" />,
+                        buttonColor: 'bg-red-600 hover:bg-red-700',
+                        buttonText: isPdf ? 'Ver PDF' : 'Ver Documento'
+                      };
+
                     return (
                       <div key={index} className={`${fileConfig.bgColor} ${fileConfig.borderColor} rounded-lg p-4`}>
                         <div className="flex items-center mb-2">
@@ -663,7 +665,7 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-3">📝 Evaluación</h3>
                 {!showQuiz ? (
-                  <button 
+                  <button
                     onClick={handleQuizClick}
                     className="inline-flex items-center px-4 py-3 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition-colors cursor-pointer"
                   >
@@ -768,11 +770,11 @@ const LessonViewer: React.FC<LessonViewerProps> = ({
 
       {/* Contenido de la lección */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <div 
+        <div
           className="prose prose-lg max-w-none lesson-content elementor-content"
           dangerouslySetInnerHTML={{ __html: content }}
         />
-        
+
         <style>{`
           .elementor-content .elementor-section {
             margin-bottom: 2rem;

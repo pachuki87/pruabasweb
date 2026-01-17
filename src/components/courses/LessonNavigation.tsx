@@ -73,6 +73,14 @@ const LessonNavigation: React.FC<LessonNavigationProps> = ({
         <div className="space-y-3 max-h-[calc(100vh-20rem)] overflow-y-auto pr-2">
           {lessons.map((lesson) => {
             const isActive = lesson.id === currentLessonId;
+            // Contar solo archivos PDF válidos y únicos para evitar sobreconteo
+            const pdfCount = Array.from(
+              new Set(
+                (lesson.pdfs || []).filter(
+                  (f) => f && f.toLowerCase().endsWith('.pdf')
+                )
+              )
+            ).length;
             
             return (
               <button
@@ -113,10 +121,10 @@ const LessonNavigation: React.FC<LessonNavigationProps> = ({
                     
                     {/* Indicadores de recursos */}
                     <div className="flex items-center gap-2 mt-2">
-                      {lesson.pdfs && lesson.pdfs.length > 0 && (
+                      {pdfCount > 0 && (
                         <span className="inline-flex items-center px-2 py-1 bg-red-100 text-red-700 text-xs rounded-full">
                           <FileText className="w-3 h-3 mr-1" />
-                          {lesson.pdfs.length} PDF{lesson.pdfs.length > 1 ? 's' : ''}
+                          {pdfCount} PDF{pdfCount > 1 ? 's' : ''}
                         </span>
                       )}
                       

@@ -4,11 +4,7 @@ import Header from '../../components/layout/Header';
 import Footer from '../../components/layout/Footer';
 import LoginForm from '../../components/auth/LoginForm';
 
-type LoginPageProps = {
-  onLogin: (user: any) => void;
-};
-
-const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
+const LoginPage: React.FC = () => {
   const { role } = useParams<{ role: string }>();
   
   // If role param is not valid, redirect to student login
@@ -21,7 +17,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
       <Header />
       
       <main className="flex-grow flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-        <LoginForm role={role} onLogin={onLogin} />
+        <LoginForm role={role} />
       </main>
       
       <Footer />

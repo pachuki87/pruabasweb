@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import { Toaster } from 'sonner';
 import { ErrorBoundary } from 'react-error-boundary';
 import { CartProvider } from 'react-use-cart';
-import { supabase, getUserById, getUsers } from './lib/supabase'; // Import supabase, getUsers
-import { AuthProvider } from './contexts/AuthContext';
+import { supabase, getUserById, getUsers } from './lib/supabase';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
+import type { User } from '@supabase/supabase-js';
 import CookieConsent from './components/CookieConsent';
 import ChatBot from './components/ChatBot';
-
-// Layouts
 import DashboardLayout from './components/layout/DashboardLayout';
 
 function ErrorFallback({error, resetErrorBoundary}: { error: Error, resetErrorBoundary: () => void }) {
@@ -28,11 +27,11 @@ import RegisterPage from './pages/auth/RegisterPage';
 import AboutPage from './pages/AboutPage';
 import FaqsPage from './pages/FaqsPage';
 import CoursesPage from './pages/CoursesPage';
-import CoursePage from './pages/courses/CoursePage'; // Import the course page component
+import CoursePage from './pages/courses/CoursePage';
 import NotFoundPage from './pages/NotFoundPage';
-import MasterAdiccionesPage from './pages/MasterAdiccionesPage'; // Import the new page
-import ExpertoConductasPage from './pages/ExpertoConductasPage'; // Import the experto page
-import PaymentPage from './pages/PaymentPage'; // Import the payment page
+import MasterAdiccionesPage from './pages/MadiccionesPage';
+import ExpertoConductasPage from './pages/ExpertoConductasPage';
+import PaymentPage from './pages/PaymentPage';
 import Formacion from './components/Formacion';
 import TestimoniosPage from './pages/TestimoniosPage';
 import ViajesYTalleresPage from './pages/ViajesYTalleresPage';
@@ -51,81 +50,38 @@ import StudyMaterialsPage from './pages/dashboard/StudyMaterialsPage';
 import UserProfilePage from './pages/dashboard/UserProfilePage';
 import ChangePasswordPage from './pages/dashboard/ChangePasswordPage';
 import NewLessonPage from './pages/courses/NewLessonPage';
+
 // Components
 import StudentList from './components/students/StudentList';
-import AddStudentForm from './components/students/AddStudentForm'; // Import AddStudentForm
-import AssignCoursesToStudent from './components/students/AssignCoursesToStudent'; // Import AssignCoursesToStudent
-import QuizAttemptPage from './pages/dashboard/QuizAttemptPage'; // Import QuizAttemptPage
-import UpdateLesson1 from './components/UpdateLesson1'; // Temporary component for database update
-
-// Type definitions
-type User = {
-  id: string;
-  email: string;
-  role: string;
-  accessToken?: string; // Add accessToken
-  refreshToken?: string; // Add refreshToken
-};
+import AddStudentForm from './components/students/AddStudentForm';
+import AssignCoursesToStudent from './components/students/AssignCoursesToStudent';
+import QuizAttemptPage from './pages/dashboard/QuizAttemptPage';
+import UpdateLesson1 from './components/UpdateLesson1';
 
 function App() {
-  const [user, setUser] = useState<User | null>(null);
-  const [currentRole, setCurrentRole] = useState<string>('visitor');
+  return (
+    <ErrorBoundary FallbackComponent={ErrorFallback}>
+      <AuthProvider>
+        <CartProvider>
+          <Toaster position="top-right" />
+          <CookieConsent />
+          <AppRoutes />
+          <ChatBot />
+        </CartProvider>
+      </AuthProvider>
+    </ErrorBoundary>
+  );
+}
 
-  const handleLogin = async (userData: User) => {
-    // Set Supabase session after successful login
-    if (userData.accessToken && userData.refreshToken) { // Ensure tokens are not undefined
-      const { error } = await supabase.auth.setSession({
-        access_token: userData.accessToken,
-        refresh_token: userData.refreshToken,
-      });
-      if (error) {
-        console.error('Error al establecer la sesión de Supabase:', error);
-      }
-
-      // Get user data from Supabase
-      const supabaseUser = await supabase.auth.getUser();
-      const userId = supabaseUser.data?.user?.id;
-
-      if (userId) {
-        console.log('🔍 Buscando usuario en BD con ID:', userId);
-        const userFromDb = await getUserById(userId);
-        if (userFromDb) {
-          console.log('✅ Usuario encontrado en BD:', { id: userFromDb.id, email: userFromDb.email, rol: userFromDb.rol });
-          const newUser: User = {
-            id: userFromDb.id,
-            email: userFromDb.email,
-            role: userFromDb.rol,
-            accessToken: userData.accessToken,
-            refreshToken: userData.refreshToken,
-          };
-          console.log('🔄 Estableciendo usuario con rol:', newUser.role);
-          setUser(newUser);
-          setCurrentRole(newUser.role);
-          console.log('✅ Rol establecido en currentRole:', newUser.role);
-        } else {
-          console.error('❌ Usuario no encontrado en la base de datos');
-        }
-      } else {
-        console.error('ID de usuario no encontrado en la autenticación de Supabase');
-      }
-    } else {
-      console.warn('Falta el token de acceso o de actualización en los datos del usuario.');
-    }
-  };
+function AppRoutes() {
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
 
   const handleLogout = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (error) {
-      console.error('Error al cerrar sesión:', error);
-    }
-    setUser(null);
+    await signOut();
+    navigate('/');
   };
 
-  const handleRoleChange = (role: string) => {
-    setCurrentRole(role);
-  };
-
-  // Función para mapear roles de la BD a roles de rutas
   const mapRoleForRouting = (dbRole: string): string => {
     const roleMapping: { [key: string]: string } = {
       'profesor': 'teacher',
@@ -136,187 +92,152 @@ function App() {
     return roleMapping[dbRole] || dbRole;
   };
 
-  // Verificar sesión activa al cargar la aplicación
+  const [currentRole, setCurrentRole] = useState<string>('visitor');
+
+  const handleRoleChange = (role: string) => {
+    setCurrentRole(role);
+  };
+
   useEffect(() => {
-    const checkActiveSession = async () => {
-      try {
-        console.log('🔍 Verificando sesión activa...');
+    if (user) {
+      console.log('🔍 Usuario detectado en useEffect:', { id: user.id, email: user.email });
 
-        // Debug: Verificar localStorage
-        console.log('📱 localStorage (Supabase):', window.localStorage.getItem('supabase.auth.token'));
-        console.log('📱 localStorage (total keys):', Object.keys(window.localStorage));
+      const getUserRole = async () => {
+        try {
+          console.log('🔍 Buscando datos del usuario en la base de datos...');
+          const userData = await getUserById(user.id);
 
-        const { data: { session }, error } = await supabase.auth.getSession();
+          if (userData) {
+            console.log('✅ Datos del usuario encontrados:', { rol: userData.rol, nombre: userData.nombre });
+            const routeRole = mapRoleForRouting(userData.rol);
+            const currentPath = window.location.pathname;
 
-        if (error) {
-          console.error('❌ Error al verificar sesión:', error);
-          return;
-        }
+            console.log('🎯 Evaluando redirección:', { currentPath, routeRole, targetPath: `/${routeRole}/dashboard` });
 
-        if (session?.user) {
-          console.log('✅ Sesión activa encontrada:', { id: session.user.id, email: session.user.email });
+            // Rutas válidas para el rol
+            const validPaths = [
+              `/${routeRole}/dashboard`,
+              `/${routeRole}/courses`,
+              `/${routeRole}/courses/`,
+              `/${routeRole}/quizzes`,
+              `/${routeRole}/users`,
+              `/${routeRole}/users/`,
+              `/${routeRole}/profile`,
+              `/${routeRole}/change-password`
+            ];
 
-          // Buscar usuario en la base de datos
-          const userFromDb = await getUserById(session.user.id);
-          if (userFromDb) {
-            console.log('✅ Usuario encontrado en BD:', { id: userFromDb.id, email: userFromDb.email, rol: userFromDb.rol });
-            const newUser: User = {
-              id: userFromDb.id,
-              email: userFromDb.email,
-              role: userFromDb.rol,
-              accessToken: session.access_token,
-              refreshToken: session.refresh_token,
-            };
-            console.log('🔄 Estableciendo usuario con rol:', newUser.role);
-            setUser(newUser);
-            setCurrentRole(newUser.role);
-            console.log('✅ Rol establecido en currentRole:', newUser.role);
+            const isValidPath = validPaths.some(path => currentPath.startsWith(path));
+
+            if (!isValidPath) {
+              console.log('🚀 Redirigiendo a dashboard:', `/${routeRole}/dashboard`);
+              navigate(`/${routeRole}/dashboard`);
+            } else {
+              console.log('✅ Ruta válida, no se redirige');
+            }
           } else {
-            console.error('❌ Usuario no encontrado en la base de datos');
+            console.error('❌ No se encontraron datos del usuario en la tabla usuarios');
+            // Fallback: intentar redirigir a student dashboard por defecto
+            navigate('/student/dashboard');
           }
-        } else {
-          console.log('⏳ No hay sesión activa');
+        } catch (error) {
+          console.error('❌ Error al obtener rol del usuario:', error);
+          // Fallback: redirigir a student dashboard
+          navigate('/student/dashboard');
         }
-      } catch (error) {
-        console.error('❌ Error al verificar sesión activa:', error);
-      }
-    };
+      };
 
-    checkActiveSession();
-  }, []);
+      // Agregar timeout para evitar que se quede esperando indefinidamente
+      const timeoutId = setTimeout(() => {
+        console.warn('⏰ Timeout obteniendo rol del usuario, redirigiendo por defecto');
+        navigate('/student/dashboard');
+      }, 5000); // 5 segundos
 
-  // Redirigir automáticamente al dashboard después del login
-  useEffect(() => {
-    console.log('🔄 useEffect de redirección ejecutado');
-    console.log('👤 Usuario:', user ? { id: user.id, email: user.email, role: user.role } : 'null');
-    console.log('🎯 currentRole:', currentRole);
-
-    if (user && user.role) {
-      console.log('✅ Usuario y rol detectados, evaluando redirección...');
-      
-      // Mapear el rol de la BD al rol de las rutas
-      const routeRole = mapRoleForRouting(user.role);
-      console.log('🔄 Rol mapeado:', `${user.role} -> ${routeRole}`);
-      
-      // Evitar redirección si ya estamos en una ruta de dashboard
-      const currentPath = window.location.pathname;
-      console.log('📍 Ruta actual:', currentPath);
-
-      const isDashboardRoute = currentPath.includes(`/${routeRole}/dashboard`) ||
-                               currentPath.includes(`/${routeRole}/courses`) ||
-                               currentPath.includes(`/${routeRole}/profile`);
-
-      console.log('🚦 ¿Es ruta de dashboard?', isDashboardRoute);
-      console.log('🎯 Ruta esperada:', `/${routeRole}/dashboard`);
-
-      // Redirigir si no está en una ruta de dashboard
-      if (!isDashboardRoute) {
-        console.log('🚀 Redirigiendo a:', `/${routeRole}/dashboard`);
-        // Usar window.location.href para la redirección en lugar de navigate
-        window.location.href = `/${routeRole}/dashboard`;
-      } else {
-        console.log('⏭️  No se redirige (ya está en ruta adecuada)');
-      }
+      getUserRole().finally(() => {
+        clearTimeout(timeoutId);
+      });
     } else {
-      console.log('⏳ Esperando usuario y rol...');
+      console.log('⏳ Esperando usuario autenticado...');
     }
-  }, [user, currentRole]);
+  }, [user, navigate]);
 
   return (
-    <AuthProvider>
-      <CartProvider>
-        <Toaster position="top-right" />
-        <CookieConsent />
-        
-        <BrowserRouter
-          future={{
-            v7_startTransition: true,
-            v7_relativeSplatPath: true,
-          }}
-        >
-        <Routes>
-          {/* Public routes */}
-          <Route path="/" element={<HomePage currentRole={currentRole} onRoleChange={handleRoleChange} />} />
-          <Route path="/about" element={<AboutPage currentRole={currentRole} onRoleChange={handleRoleChange} />} />
-          <Route path="/contacto" element={<AboutPage currentRole={currentRole} onRoleChange={handleRoleChange} />} />
-          <Route path="/faqs" element={<FaqsPage currentRole={currentRole} onRoleChange={handleRoleChange} />} />
-          <Route path="/courses" element={<CoursesPage currentRole={currentRole} onRoleChange={handleRoleChange} />} />
-          <Route path="/courses/:courseId" element={<CoursePage />} />
-          <Route path="/visitor/courses/:courseId" element={<CoursePage />} />
-          <Route path="/formacion" element={<Formacion />} />
-          <Route path="/testimonios" element={<TestimoniosPage currentRole={currentRole} onRoleChange={handleRoleChange} />} />
-          <Route path="/viajes-talleres" element={<ViajesYTalleresPage currentRole={currentRole} onRoleChange={handleRoleChange} />} />
-          <Route path="/master-adicciones-intervencion" element={<CoursePage />} />
-          <Route path="/experto-conductas-adictivas" element={<ExpertoConductasPage />} />
-          <Route path="/payment" element={<PaymentPage />} />
-          <Route path="/stripe-test" element={<StripeTest />} />
-          <Route path="/update-lesson1" element={<UpdateLesson1 />} /> {/* Temporary route for database update */}
-          
-          {/* Auth routes */}
-          <Route path="/login/:role" element={<LoginPage onLogin={handleLogin} />} />
-          <Route path="/register/:role" element={<RegisterPage onRegister={handleLogin} />} />
-          
-          {/* Dashboard routes */}
-          <Route path="/student" element={<DashboardLayout role="student" onRoleChange={handleRoleChange} />}>
-            <Route path="dashboard" element={<DashboardPage role="student" />} />
-            <Route path="courses" element={<UserCoursesPage role="student" />} />
-            <Route path="courses/:courseId" element={<CourseDetailsPage role="student" />} />
-            <Route path="courses/:courseId/lessons/:lessonId" element={<NewLessonPage />} />
-            <Route path="quizzes" element={<QuizzesPage role="student" />} />
-            <Route path="quizzes/attempt/:quizId" element={<QuizAttemptPage />} />
-            <Route path="profile" element={<UserProfilePage role="student" />} />
-            <Route path="change-password" element={<ChangePasswordPage role="student" />} />
-          </Route>
-          
-          <Route path="/teacher" element={<DashboardLayout role="teacher" onRoleChange={handleRoleChange} />}>
-            <Route path="dashboard" element={<DashboardPage role="teacher" />} />
-            <Route path="courses" element={<UserCoursesPage role="teacher" />} />
-            <Route path="courses/add" element={<AddCoursePage />} />
-            <Route path="courses/edit/:courseId" element={<EditCoursePage />} />
-            <Route path="courses/:courseId" element={<CourseDetailsPage role="teacher" />} />
-            <Route path="courses/:courseId/lessons/:lessonId" element={<NewLessonPage />} />
-            <Route path="courses/:courseId/materials" element={<StudyMaterialsPage role="teacher" />} />
-            <Route path="quizzes" element={<QuizzesPage role="teacher" />} />
-            <Route path="quizzes/attempt/:quizId" element={<QuizAttemptPage />} />
-            <Route path="quizzes/add" element={<AddQuizPage />} />
-            <Route path="quizzes/assign/:id" element={<AssignQuizPage />} />
-            <Route path="users" element={<StudentList />} /> {/* Added route for StudentList */}
-            <Route path="users/add" element={<AddStudentForm />} /> {/* Added route for AddStudentForm */}
-            <Route path="users/:id/assign-courses" element={<AssignCoursesToStudent />} /> {/* Added route for AssignCoursesToStudent */}
-            <Route path="profile" element={<UserProfilePage role="teacher" />} />
-            <Route path="change-password" element={<ChangePasswordPage role="teacher" />} />
-          </Route>
-          
-          {/* Redirect /login to the appropriate role login page */}
-          <Route path="/login" element={<Navigate to={`/login/${currentRole}`} replace />} />
-          <Route path="/register" element={<Navigate to={`/register/${currentRole}`} replace />} />
-          
-          {/* Logout route */}
-          <Route 
-            path="/logout" 
-            element={<LogoutPage onLogout={handleLogout} />} // Create a LogoutPage component
-          />
-          
-          {/* 404 route */}
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
-        <CookieConsent />
-        <ChatBot />
-        <Toaster position="top-right" />
-        </BrowserRouter>
-      </CartProvider>
-    </AuthProvider>
+    <Routes>
+      {/* Public routes */}
+      <Route path="/" element={<HomePage currentRole={currentRole} onRoleChange={handleRoleChange} />} />
+      <Route path="/about" element={<AboutPage currentRole={currentRole} onRoleChange={handleRoleChange} />} />
+      <Route path="/contacto" element={<AboutPage currentRole={currentRole} onRoleChange={handleRoleChange} />} />
+      <Route path="/faqs" element={<FaqsPage currentRole={currentRole} onRoleChange={handleRoleChange} />} />
+      <Route path="/courses" element={<CoursesPage currentRole={currentRole} onRoleChange={handleRoleChange} />} />
+      <Route path="/courses/:courseId" element={<CoursePage />} />
+      <Route path="/visitor/courses/:courseId" element={<CoursePage />} />
+      <Route path="/formacion" element={<Formacion />} />
+      <Route path="/testimonios" element={<TestimoniosPage currentRole={currentRole} onRoleChange={handleRoleChange} />} />
+      <Route path="/viajes-talleres" element={<ViajesYTalleresPage currentRole={currentRole} onRoleChange={handleRoleChange} />} />
+      <Route path="/master-adicciones-intervencion" element={<CoursePage />} />
+      <Route path="/experto-conductas-adictivas" element={<ExpertoConductasPage />} />
+      <Route path="/payment" element={<PaymentPage />} />
+      <Route path="/stripe-test" element={<StripeTest />} />
+      <Route path="/update-lesson1" element={<UpdateLesson1 />} />
+
+      {/* Auth routes */}
+      <Route path="/login/:role" element={<LoginPage />} />
+      <Route path="/register/:role" element={<RegisterPage />} />
+
+      {/* Dashboard routes */}
+      <Route path="/student" element={<DashboardLayout role="student" onRoleChange={handleRoleChange} />}>
+        <Route path="dashboard" element={<DashboardPage role="student" />} />
+        <Route path="courses" element={<UserCoursesPage role="student" />} />
+        <Route path="courses/:courseId" element={<CourseDetailsPage role="student" />} />
+        <Route path="courses/:courseId/lessons/:lessonId" element={<NewLessonPage />} />
+        <Route path="quizzes" element={<QuizzesPage role="student" />} />
+        <Route path="quizzes/attempt/:quizId" element={<QuizAttemptPage />} />
+        <Route path="profile" element={<UserProfilePage role="student" />} />
+        <Route path="change-password" element={<ChangePasswordPage role="student" />} />
+      </Route>
+
+      <Route path="/teacher" element={<DashboardLayout role="teacher" onRoleChange={handleRoleChange} />}>
+        <Route path="dashboard" element={<DashboardPage role="teacher" />} />
+        <Route path="courses" element={<UserCoursesPage role="teacher" />} />
+        <Route path="courses/add" element={<AddCoursePage />} />
+        <Route path="courses/edit/:courseId" element={<EditCoursePage />} />
+        <Route path="courses/:courseId" element={<CourseDetailsPage role="teacher" />} />
+        <Route path="courses/:courseId/lessons/:lessonId" element={<NewLessonPage />} />
+        <Route path="courses/:courseId/materials" element={<StudyMaterialsPage role="teacher" />} />
+        <Route path="quizzes" element={<QuizzesPage role="teacher" />} />
+        <Route path="quizzes/attempt/:quizId" element={<QuizAttemptPage />} />
+        <Route path="quizzes/add" element={<AddQuizPage />} />
+        <Route path="quizzes/assign/:id" element={<AssignQuizPage />} />
+        <Route path="users" element={<StudentList />} />
+        <Route path="users/add" element={<AddStudentForm />} />
+        <Route path="users/:id/assign-courses" element={<AssignCoursesToStudent />} />
+        <Route path="profile" element={<UserProfilePage role="teacher" />} />
+        <Route path="change-password" element={<ChangePasswordPage role="teacher" />} />
+      </Route>
+
+      {/* Redirect /login to the appropriate role login page */}
+      <Route path="/login" element={<Navigate to={`/login/${currentRole}`} replace />} />
+      <Route path="/register" element={<Navigate to={`/register/${currentRole}`} replace />} />
+
+      {/* Logout route */}
+      <Route
+        path="/logout"
+        element={<LogoutPage onLogout={handleLogout} />}
+      />
+
+      {/* 404 route */}
+      <Route path="*" element={<NotFoundPage />} />
+    </Routes>
   );
 }
 
-// Create a simple LogoutPage component to handle the logout logic and redirection
+// Create a simple LogoutPage component
 const LogoutPage: React.FC<{ onLogout: () => Promise<void> }> = ({ onLogout }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
     const performLogout = async () => {
       await onLogout();
-      navigate('/'); // Redirect to home after logout
+      navigate('/');
     };
     performLogout();
   }, [onLogout, navigate]);

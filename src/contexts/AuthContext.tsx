@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
+import React, { createContext, useContext, useEffect, useState, useCallback, useRef } from 'react';
 import { supabase } from '../lib/supabase';
 import type { User } from '@supabase/supabase-js';
 
@@ -20,16 +20,30 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // Memoizar funciones para evitar re-renders innecesarios
   const signIn = useCallback(async (email: string, password: string) => {
+    console.log('🔐 Intentando signIn con email:', email);
+
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
-    
+
+    console.log('📊 Resultado signIn:', {
+      hasData: !!data,
+      hasUser: !!data?.user,
+      hasSession: !!data?.session,
+      userId: data?.user?.id,
+      userEmail: data?.user?.email,
+      accessToken: data?.session?.access_token ? 'Present' : 'Missing',
+      error: error?.message
+    });
+
     if (error) {
-      console.error('Sign in error:', error);
+      console.error('❌ Sign in error:', error);
       return { success: false, error: error.message };
     }
-    
+
+    console.log('✅ Sign in exitoso para:', email);
+    console.log('🔄 Esperando evento onAuthStateChange para actualizar usuario...');
     return { success: true, data };
   }, []);
 
@@ -81,97 +95,32 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   useEffect(() => {
-    let mounted = true;
-    let lastUserId: string | null = null;
-
     // Get initial session
     const getInitialSession = async () => {
-      try {
-        const { data: { session }, error } = await supabase.auth.getSession();
-        
-        if (error) {
-          console.error('Error getting initial session:', error);
-          if (mounted) {
-            setUser(null);
-            setLoading(false);
-          }
-          return;
-        }
+      const { data: { session }, error } = await supabase.auth.getSession();
 
-        if (mounted) {
-          const currentUser = session?.user ?? null;
-          const currentUserId = currentUser?.id ?? null;
-          
-          // Solo actualizar si el usuario realmente cambió
-          if (currentUserId !== lastUserId) {
-            console.log('🔐 Initial auth state - User ID changed:', lastUserId, '->', currentUserId);
-            setUser(currentUser);
-            lastUserId = currentUserId;
-          }
-          setLoading(false);
-        }
-      } catch (error) {
-        console.error('Unexpected error getting session:', error);
-        if (mounted) {
-          setUser(null);
-          setLoading(false);
-        }
+      if (error) {
+        console.error('Error getting session:', error);
+        setUser(null);
+        setLoading(false);
+        return;
       }
+
+      setUser(session?.user ?? null);
+      setLoading(false);
     };
 
-    getInitialSession();
-
-    // Listen for auth changes with improved error handling and deduplication
+    // Listen for auth state changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        if (!mounted) return;
-
-        const currentUser = session?.user ?? null;
-        const currentUserId = currentUser?.id ?? null;
-        
-        // Solo procesar si el usuario realmente cambió, pero siempre procesar SIGNED_IN y INITIAL_SESSION para actualizar datos
-        if (currentUserId === lastUserId && event !== 'SIGNED_OUT' && event !== 'SIGNED_IN' && event !== 'INITIAL_SESSION') {
-          console.log('🔐 Auth state change ignored - same user:', event, currentUserId);
-          return;
-        }
-
-        console.log('🔐 Auth state changed:', event, 'User ID:', lastUserId, '->', currentUserId);
-        
-        // Handle different auth events
-        switch (event) {
-          case 'SIGNED_IN':
-          case 'INITIAL_SESSION':
-            setUser(currentUser);
-            lastUserId = currentUserId;
-            break;
-          case 'SIGNED_OUT':
-            setUser(null);
-            lastUserId = null;
-            break;
-          case 'TOKEN_REFRESHED':
-            // Solo actualizar si el usuario cambió
-            if (currentUserId !== lastUserId) {
-              setUser(currentUser);
-              lastUserId = currentUserId;
-            }
-            break;
-          case 'USER_UPDATED':
-            setUser(currentUser);
-            lastUserId = currentUserId;
-            break;
-          default:
-            if (currentUserId !== lastUserId) {
-              setUser(currentUser);
-              lastUserId = currentUserId;
-            }
-        }
-        
+      (event, session) => {
+        setUser(session?.user ?? null);
         setLoading(false);
       }
     );
 
+    getInitialSession();
+
     return () => {
-      mounted = false;
       subscription.unsubscribe();
     };
   }, []);

@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
 import { supabase } from '../../lib/supabase';
 
 type LoginFormProps = {
   role: string;
-  onLogin: (user: any) => void;
 };
 
 // Define GoogleIcon component here
@@ -19,171 +19,75 @@ const GoogleIcon = () => (
   </svg>
 );
 
-const LoginForm: React.FC<LoginFormProps> = ({ role, onLogin }) => {
+const LoginForm: React.FC<LoginFormProps> = ({ role }) => {
+  const { signIn } = useAuth(); // <-- Usar el hook
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  
-  const navigate = useNavigate();
-
-  // Handle Google OAuth callback
-  useEffect(() => {
-    const handleAuthStateChange = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session?.user) {
-        // User is authenticated, create user object and call onLogin
-        const user = {
-          id: session.user.id,
-          email: session.user.email || '',
-          role: role,
-          accessToken: session.access_token,
-          refreshToken: session.refresh_token
-        };
-        onLogin(user);
-        // No redirigir aquí - dejar que App.tsx maneje la redirección con el rol correcto de la BD
-      }
-    };
-
-    handleAuthStateChange();
-
-    // Listen for auth state changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      if (event === 'SIGNED_IN' && session?.user) {
-        // Get user role from database for OAuth logins too
-        const { data: userData, error: userError } = await supabase
-          .from('usuarios')
-          .select('rol')
-          .eq('id', session.user.id)
-          .single();
-
-        if (userError) {
-          console.error('Error al obtener rol del usuario (OAuth):', userError);
-          // Fallback to role parameter if database query fails
-          const user = {
-            id: session.user.id,
-            email: session.user.email || '',
-            role: role, // Use role from URL as fallback
-            accessToken: session.access_token,
-            refreshToken: session.refresh_token
-          };
-          onLogin(user);
-        } else {
-          // Use role from database
-          const user = {
-            id: session.user.id,
-            email: session.user.email || '',
-            role: userData.rol, // Use role from database
-            accessToken: session.access_token,
-            refreshToken: session.refresh_token
-          };
-          console.log('🎯 Rol obtenido de la base de datos (OAuth):', userData.rol);
-          onLogin(user);
-        }
-      }
-    });
-
-    return () => subscription.unsubscribe();
-  }, [role, onLogin]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     setError(null);
-    
+
     try {
-      // In a real implementation, we would use Supabase auth
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-      
-      if (error) throw error;
-      
-      // For demo purposes (no login required)
-      // setTimeout(() => {
-      //   // Simulate a successful login
-      //   const user = {
-      //     id: '123',
-      //     email,
-      //     role
-      //   };
-        
-      //   onLogin(user);
-      //   navigate(`/${role}/dashboard`);
-        
-      //   setIsLoading(false);
-      // }, 800);
-
-      // Get user role from database instead of URL parameter
-      const { data: userData, error: userError } = await supabase
-        .from('usuarios')
-        .select('rol')
-        .eq('id', data.user?.id)
-        .single();
-
-      if (userError) {
-        console.error('Error al obtener rol del usuario:', userError);
-        // Fallback to role parameter if database query fails
-        const user = {
-          id: data.user?.id,
-          email: data.user?.email,
-          role, // Use role from URL as fallback
-          accessToken: data.session?.access_token,
-          refreshToken: data.session?.refresh_token,
-        };
-        onLogin(user);
-      } else {
-        // Use role from database
-        const user = {
-          id: data.user?.id,
-          email: data.user?.email,
-          role: userData.rol, // Use role from database
-          accessToken: data.session?.access_token,
-          refreshToken: data.session?.refresh_token,
-        };
-        console.log('🎯 Rol obtenido de la base de datos:', userData.rol);
-        onLogin(user);
+      const { error } = await signIn(email, password);
+      if (error) {
+        // El error se obtiene del objeto de retorno, no se lanza
+        let errorMessage = 'Error al iniciar sesión';
+        if (error.includes('Invalid login credentials')) {
+          errorMessage = 'Credenciales inválidas. Verifica tu email y contraseña.';
+        } else if (error.includes('Email not confirmed')) {
+          errorMessage = 'Por favor, confirma tu email antes de iniciar sesión.';
+        }
+        throw new Error(errorMessage);
       }
-      // No redirigir aquí - dejar que App.tsx maneje la redirección con el rol correcto de la BD
-      
-      setIsLoading(false);
-      
+
+      // Login exitoso - esperar un momento para la redirección
+      console.log('✅ Login exitoso, esperando redirección...');
+
+      // Timeout de seguridad por si la redirección falla
+      setTimeout(() => {
+        if (isLoading) {
+          console.warn('⏰ La redirección está tardando más de lo esperado');
+          setIsLoading(false);
+        }
+      }, 3000);
+
     } catch (err: any) {
-      setError(err.message || 'Error al iniciar sesión');
+      console.error('❌ Error en handleLogin:', err);
+      setError(err.message);
       setIsLoading(false);
     }
   };
 
   const handleSocialLogin = async (provider: string) => {
-    // For demo purposes only
-    // console.log(`Login with ${provider}`);
-
-    // In a real implementation, we would use Supabase auth
     if (provider === 'google') {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo: `${window.location.origin}/` // Dejar que App.tsx maneje la redirección con el rol correcto de la BD
+      setIsLoading(true);
+      setError(null);
+      
+      try {
+        console.log('🚀 Iniciando login con Google...');
+        const { error } = await supabase.auth.signInWithOAuth({
+          provider: 'google',
+          options: {
+            redirectTo: `${window.location.origin}/`
+          }
+        });
+        
+        if (error) {
+          console.error('❌ Error al iniciar sesión con Google:', error);
+          setError(`Error con Google: ${error.message}`);
+          setIsLoading(false);
         }
-      });
-      if (error) {
-        console.error('Error al iniciar sesión con Google:', error);
-        setError(error.message);
+        // Don't set loading to false here as the redirect will handle it
+      } catch (error: any) {
+        console.error('❌ Error inesperado con Google OAuth:', error);
+        setError('Error inesperado al iniciar sesión con Google');
+        setIsLoading(false);
       }
-    } else {
-       // For other providers or demo fallback
-       console.log(`Login with ${provider}`);
-       // You might want to add logic for other providers or remove this fallback
-       const user = {
-         id: '123',
-         email: 'user@example.com',
-         role
-       };
-
-       onLogin(user);
-      // No redirigir aquí - dejar que App.tsx maneje la redirección con el rol correcto de la BD
     }
   };
 
@@ -205,10 +109,13 @@ const LoginForm: React.FC<LoginFormProps> = ({ role, onLogin }) => {
         <div className="flex items-center justify-center mb-6">
           <button
             onClick={() => handleSocialLogin('google')}
-            className="flex items-center justify-center w-full py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            disabled={isLoading}
+            className="flex items-center justify-center w-full py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <GoogleIcon />
-            <span className="ml-2">Continuar con Google</span>
+            <span className="ml-2">
+              {isLoading ? 'Conectando...' : 'Continuar con Google'}
+            </span>
           </button>
         </div>
         
@@ -219,8 +126,13 @@ const LoginForm: React.FC<LoginFormProps> = ({ role, onLogin }) => {
         </div>
         
         {error && (
-          <div className="mb-4 bg-blue-50 text-blue-700 p-3 rounded-md text-sm">
-            {error}
+          <div className="mb-4 bg-red-50 text-red-700 p-3 rounded-md text-sm border border-red-200">
+            <div className="flex items-center">
+              <svg className="w-4 h-4 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+              </svg>
+              {error}
+            </div>
           </div>
         )}
         
@@ -235,6 +147,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ role, onLogin }) => {
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="your.email@example.com"
               required
+              disabled={isLoading}
             />
           </div>
           
@@ -248,6 +161,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ role, onLogin }) => {
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="••••••"
               required
+              disabled={isLoading}
             />
           </div>
           
@@ -259,6 +173,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ role, onLogin }) => {
                 checked={rememberMe}
                 onChange={(e) => setRememberMe(e.target.checked)}
                 className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                disabled={isLoading}
               />
               <label htmlFor="remember-me" className="block ml-2 text-sm text-gray-600">
                 Recordarme
@@ -272,10 +187,20 @@ const LoginForm: React.FC<LoginFormProps> = ({ role, onLogin }) => {
           
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+            className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={isLoading}
           >
-            {isLoading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
+            {isLoading ? (
+              <div className="flex items-center justify-center">
+                <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Iniciando sesión...
+              </div>
+            ) : (
+              'Iniciar Sesión'
+            )}
           </button>
         </form>
         

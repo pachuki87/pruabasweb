@@ -41,7 +41,14 @@ const AssignCoursesToStudent: React.FC = () => {
       // Ensure the user is authenticated for RLS to work
       const { data: { session } } = await supabase.auth.getSession();
 
+      console.log('🔍 [AssignCourses] Verificando sesión:', {
+        hasSession: !!session,
+        userId: session?.user?.id,
+        userEmail: session?.user?.email
+      });
+
       if (!session) {
+        console.error('❌ [AssignCourses] No hay sesión activa');
         setMessage('Error: Usuario no autenticado. Por favor, inicia sesión.');
         setLoading(false);
         return;

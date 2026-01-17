@@ -190,10 +190,10 @@ const DashboardPage: React.FC<DashboardProps> = ({ role }) => {
           // Don't throw, continue with 0 count
         }
 
-        // Fetch completed quizzes with timeout (FIXED: use user_test_results table for approved quizzes)
+        // Fetch completed quizzes with timeout (FIXED: use intentos_cuestionario table for approved quizzes)
         console.log('📊 Fetching completed quizzes for user:', user.id);
         const quizzesPromise = supabase
-          .from('user_test_results')
+          .from('intentos_cuestionario')
           .select('*', { count: 'exact', head: true })
           .eq('user_id', user.id)
           .eq('aprobado', true);
@@ -257,11 +257,11 @@ const DashboardPage: React.FC<DashboardProps> = ({ role }) => {
                 }
                 
                 if (courseQuizzes && courseQuizzes.length > 0) {
-                  // Check if user has completed any approved quiz from this course with timeout (FIXED: use user_test_results)
+                  // Check if user has completed any approved quiz from this course with timeout (FIXED: use intentos_cuestionario)
                   const quizIds = courseQuizzes.map(q => q.id);
                   console.log(`🔍 Checking completed quizzes for course ${enrollment.curso_id}, quizIds:`, quizIds);
                   const quizAttemptsPromise = supabase
-                    .from('user_test_results')
+                    .from('intentos_cuestionario')
                     .select('cuestionario_id')
                     .eq('user_id', user.id)
                     .eq('aprobado', true)
@@ -368,7 +368,7 @@ const DashboardPage: React.FC<DashboardProps> = ({ role }) => {
           <StatsCard
             title="Total de Cursos"
             value={`${stats.courses}`}
-            subtitle="Cursos que imparte como profesor"
+subtitle="Cursos"
             color="blue"
           />
 

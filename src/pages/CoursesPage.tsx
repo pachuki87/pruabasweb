@@ -45,13 +45,29 @@ function CoursesPage({ currentRole, onRoleChange }: CoursesPageProps) {
   const obtenerCursos = async () => {
     setIsLoading(true);
     try {
-      const { data, error } = await supabase
+      // Add timeout for Supabase query
+      const queryTimeout = 15000; // 15 seconds
+      
+      const coursesPromise = supabase
         .from('cursos')
         .select('id, titulo, imagen_url');
+      
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Courses query timeout')), queryTimeout)
+      );
+
+      const { data, error } = await Promise.race([coursesPromise, timeoutPromise]);
 
       if (error) {
-        console.error('Error al obtener cursos de Supabase:', error);
+        console.error('❌ Error al obtener cursos de Supabase:', error);
         throw error;
+      }
+
+      if (!data || data.length === 0) {
+        console.warn('⚠️ No courses found in database');
+        setCursos([]);
+        setCursosFiltrados([]);
+        return;
       }
 
       const cursosFormateados = data.map(curso => ({
@@ -75,10 +91,21 @@ function CoursesPage({ currentRole, onRoleChange }: CoursesPageProps) {
       } else {
         setCursosFiltrados(cursosFormateados);
       }
-    } catch (error) {
-      console.error('Error al obtener cursos:', error);
+    } catch (error: any) {
+      console.error('❌ Error al obtener cursos:', error);
+      
+      // Set empty arrays to prevent infinite loading
       setCursos([]);
       setCursosFiltrados([]);
+      
+      // Show user-friendly error message
+      if (error.message?.includes('timeout')) {
+        console.warn('⚠️ Courses loading timed out, showing empty list');
+      } else if (error.message?.includes('Failed to fetch') || error.message?.includes('ERR_ABORTED')) {
+        console.warn('⚠️ Network error loading courses, showing empty list');
+      } else {
+        console.warn('⚠️ Error loading courses, showing empty list');
+      }
     } finally {
       setIsLoading(false);
     }

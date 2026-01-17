@@ -42,7 +42,7 @@ export class ProgressService {
       }
 
       const now = new Date().toISOString();
-      
+
       if (existingProgress) {
         // Actualizar progreso existente
         const updateData = {
@@ -168,9 +168,9 @@ export class ProgressService {
         puntuacion_maxima: totalQuestions,
         tiempo_completado: timeTakenMinutes,
         respuestas_detalle: answersData,
-        aprobado: passed,
-        fecha_completado: completedAt || new Date().toISOString(),
-        completed_at: completedAt || new Date().toISOString()
+        // aprobado es columna generada
+        fecha_completado: completedAt || new Date().toISOString()
+        // Nota: completed_at fue eliminado - usar fecha_completado
       };
 
       const { data, error } = await supabase

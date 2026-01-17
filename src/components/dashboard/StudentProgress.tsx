@@ -187,8 +187,14 @@ const StudentProgress: React.FC = () => {
           completedQuizzes = Math.max(completedQuizzesFromIntentos, completedQuizzesFromTests);
 
           // Use stored progress from user_course_progress for completed chapters
-          // This is more accurate than deriving from quizzes, as some lessons might not have quizzes
-          const completedChaptersFromProgress = progressData?.filter(p => p.estado === 'completado').length || 0;
+          // Count UNIQUE lesson IDs to avoid duplicates
+          const uniqueCompletedLessons = new Set(
+            progressData
+              ?.filter(p => p.estado === 'completado')
+              .map(p => p.leccion_id)
+              .filter(Boolean) || []
+          );
+          const completedChaptersFromProgress = uniqueCompletedLessons.size;
 
           // Fallback to quiz-derived chapters ONLY if user_course_progress is empty
           const completedChaptersFromQuizzes = new Set(
@@ -197,7 +203,10 @@ const StudentProgress: React.FC = () => {
               : approvedQuizzes.map(attempt => attempt.leccion_id).filter(Boolean)
           ).size;
 
-          completedChapters = Math.max(completedChaptersFromProgress, completedChaptersFromQuizzes);
+          completedChapters = Math.min(
+            Math.max(completedChaptersFromProgress, completedChaptersFromQuizzes),
+            totalChapters // Never exceed total chapters
+          );
 
           console.log(`📊 Progress data for course ${courseId}:`, {
             completedQuizzesFromIntentos,
@@ -206,13 +215,13 @@ const StudentProgress: React.FC = () => {
             completedChapters
           });
 
-          // Calculate progress percentage based on completed lessons out of total available content
-          // This includes both lessons (chapters) and quizzes as completion criteria
+          // Calculate progress percentage based on completed lessons + quizzes (unique only)
+          // Progress = (completed lessons + completed quizzes) / (total lessons + total quizzes) * 100, capped at 100%
           const totalContent = totalChapters + totalQuizzes;
           const completedContent = completedChapters + completedQuizzes;
 
           progressPercentage = totalContent > 0
-            ? Math.round((completedContent / totalContent) * 100)
+            ? Math.min(Math.round((completedContent / totalContent) * 100), 100)
             : 0;
 
           console.log(`📊 Progress calculation for course ${courseId}:`, {
@@ -220,8 +229,6 @@ const StudentProgress: React.FC = () => {
             completedChapters,
             totalQuizzes,
             completedQuizzes,
-            totalContent,
-            completedContent,
             progressPercentage
           });
 

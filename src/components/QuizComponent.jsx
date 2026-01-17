@@ -23,7 +23,7 @@ import {
   Mail,
   Send,
   Loader2
-} from 'lucide-react'; e,
+} from 'lucide-react';
 const QuizComponent = ({
   leccionId,
   courseId,

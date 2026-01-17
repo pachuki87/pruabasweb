@@ -650,25 +650,25 @@ exports.handler = async (event, context) => {
         }
 
         // Guardar resultados en Supabase antes de enviar al webhook
-        // NOTA: El frontend envía { nombre, email, quizData: quiz, userAnswers }
+        // El frontend ahora envía: userId, quizId, cursoId, leccionId, puntuacion, etc.
         const quizDataForSupabase = {
             studentId: data.userId || webhookPayload.studentInfo?.userId || null,
-            quizId: data.quizData?.id || data.quizId || data.cuestionario_id || webhookPayload.quizInfo?.quizId || null,
+            quizId: data.quizId || data.quizData?.id || data.cuestionario_id || null,
             quizTitle: data.quizData?.titulo || data.titulo_cuestionario || webhookPayload.quizInfo?.title || 'Cuestionario',
             score: data.puntuacion || webhookPayload.quizInfo?.score || 0,
             maxScore: data.puntuacion_maxima || webhookPayload.quizInfo?.maxScore || 100,
             percentage: data.porcentaje || webhookPayload.quizInfo?.percentage || 0,
-            passed: data.aprobado || webhookPayload.quizInfo?.passed || false,
+            passed: data.aprobado !== undefined ? data.aprobado : (webhookPayload.quizInfo?.passed || false),
             completionDate: data.fechaEnvio || webhookPayload.studentInfo?.submittedAt || new Date().toISOString(),
             timeSpentSeconds: data.tiempo_transcurrido || webhookPayload.quizInfo?.timeSpent || 0,
-            totalQuestions: data.quizData?.preguntas?.length || data.total_preguntas || webhookPayload.quizInfo?.totalQuestions || 0,
-            correctAnswers: webhookPayload.quizInfo?.correctAnswers || 0,
-            incorrectAnswers: webhookPayload.quizInfo?.incorrectAnswers || 0,
-            questionsData: data.questions || data.userAnswers || webhookPayload.questions || [],
+            totalQuestions: data.puntuacion_maxima || data.quizData?.preguntas?.length || webhookPayload.quizInfo?.totalQuestions || 0,
+            correctAnswers: data.puntuacion || webhookPayload.quizInfo?.correctAnswers || 0,
+            incorrectAnswers: (data.puntuacion_maxima || 0) - (data.puntuacion || 0),
+            questionsData: data.userAnswers || data.questions || webhookPayload.questions || [],
             studentName: data.nombre || data.nombre_completo || webhookPayload.studentInfo?.name || 'Estudiante',
             studentEmail: data.email || data.correo || webhookPayload.studentInfo?.email || '',
-            courseId: data.quizData?.curso_id || data.curso_id || webhookPayload.quizInfo?.courseId || null,
-            lessonId: data.quizData?.leccion_id || data.leccion_id || webhookPayload.quizInfo?.lessonId || null
+            courseId: data.cursoId || data.quizData?.curso_id || data.curso_id || null,
+            lessonId: data.leccionId || data.quizData?.leccion_id || data.leccion_id || null
         };
 
         console.log('💾 Guardando resultados en Supabase...');

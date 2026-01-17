@@ -619,15 +619,32 @@ const QuizComponent = ({
       console.log('📋 Enviando formulario completo para procesamiento...');
 
       // Enviar a la función de procesamiento directa
+      // IMPORTANTE: Enviar todos los campos que el backend necesita para user_test_results
       const response = await fetch('/.netlify/functions/send-corrections', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+          // Datos del estudiante
           nombre: user.user_metadata?.nombre || user.user_metadata?.full_name || user.email.split('@')[0],
           email: user.email,
+          userId: user.id,  // UUID del usuario para user_test_results
+
+          // Datos del quiz
           quizData: quiz,
+          quizId: quiz?.id,
+          cursoId: courseId || quiz?.curso_id,
+          leccionId: leccionId || quiz?.leccion_id,
+
+          // Resultados calculados
+          puntuacion: results.respuestasCorrectas,
+          puntuacion_maxima: results.totalPreguntas,
+          porcentaje: results.porcentajeAcierto,
+          aprobado: results.aprobado,
+          tiempo_transcurrido: results.tiempoTotal,
+
+          // Respuestas del usuario
           userAnswers: userAnswers
         })
       });

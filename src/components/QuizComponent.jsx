@@ -504,7 +504,7 @@ const QuizComponent = ({
         return;
       }
 
-      console.log('💾 Guardando resultados del test en la base de datos...');
+      console.log('💾 Guardando resultados del test en intentos_cuestionario...');
       console.log('📊 Datos a guardar:', {
         userId: user.id,
         quizId: quiz.id,
@@ -513,32 +513,27 @@ const QuizComponent = ({
       });
 
       const { data, error: saveError } = await supabase
-        .from('respuestas_texto_libre')
+        .from('intentos_cuestionario')
         .insert({
           user_id: user.id,
-          pregunta_id: quiz.id,
-          respuesta: JSON.stringify({
-            puntuacion: results.respuestasCorrectas,
-            puntuacion_maxima: results.totalPreguntas,
-            tiempo_completado: Math.round((Date.now() - startTime) / 1000 / 60), // minutos
-            respuestas_detalle: {
-              respuestas: userAnswers,
-              tiempo_total: results.tiempoTotal
-            },
-            fecha_completado: new Date().toISOString()
-          })
-          // Nota: creado_en se genera automáticamente por la BD
+          cuestionario_id: quiz.id,
+          curso_id: courseId,
+          leccion_id: leccionId || null,
+          intento_numero: 1, // TODO: Calcular el número de intento real
+          puntuacion: results.respuestasCorrectas,
+          puntuacion_maxima: results.totalPreguntas,
+          tiempo_transcurrido: Math.round((Date.now() - startTime) / 1000 / 60), // minutos
+          respuestas_guardadas: userAnswers,
+          estado: 'completado',
+          aprobado: results.aprobado,
+          fecha_completado: new Date().toISOString()
         })
         .select();
 
       if (saveError) {
         console.error('❌ Error guardando resultados:', saveError);
       } else {
-        console.log('✅ Resultados guardados exitosamente:', data);
-
-        // Nota: No podemos actualizar el progreso de la lección específica sin leccionId
-        // El progreso general se calculará en el componente StudentProgress
-        console.log('ℹ️ Progreso de lección no actualizado: se requiere leccionId');
+        console.log('✅ Resultados guardados exitosamente en intentos_cuestionario:', data);
       }
     } catch (error) {
       console.error('❌ Error en guardado de resultados:', error);

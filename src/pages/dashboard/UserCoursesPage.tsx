@@ -40,9 +40,9 @@ const UserCoursesPage: React.FC<UserCoursesPageProps> = ({ role }) => {
       if (role === 'student') {
         // Fetch enrolled courses for student
         const { data: enrollmentsData, error: enrollmentsError } = await supabase
-      .from('inscripciones')
-      .select('curso_id')
-      .eq('user_id', user.id);
+          .from('inscripciones')
+          .select('curso_id')
+          .eq('user_id', user.id);
 
         if (enrollmentsError) {
           throw enrollmentsError;
@@ -59,7 +59,7 @@ const UserCoursesPage: React.FC<UserCoursesPageProps> = ({ role }) => {
         ({ data: coursesData, error: coursesError } = await supabase
           .from('cursos')
           .select('id, titulo, teacher_id')
-        .eq('teacher_id', user.id));
+          .eq('teacher_id', user.id));
       } else {
         // Rol desconocido, no cargar cursos
         setCourses([]);
@@ -116,7 +116,7 @@ const UserCoursesPage: React.FC<UserCoursesPageProps> = ({ role }) => {
       // Check if already enrolled
       const { data: existingEnrollment, error: checkError } = await supabase
         .from('inscripciones')
-        .select('usuario_id')
+        .select('id')
         .eq('user_id', user.id)
         .eq('curso_id', courseId)
         .single();
@@ -154,7 +154,7 @@ const UserCoursesPage: React.FC<UserCoursesPageProps> = ({ role }) => {
   return (
     <div>
       <h1 className="text-2xl font-bold mb-6">Mis Cursos</h1>
-      
+
       {isLoading ? (
         <div className="animate-pulse">
           <div className="h-10 bg-gray-200 rounded mb-4"></div>
@@ -223,7 +223,7 @@ const UserCoursesPage: React.FC<UserCoursesPageProps> = ({ role }) => {
                   <td className="px-6 py-4 whitespace-nowrap text-center">
                     <button
                       className="text-blue-600 hover:text-blue-800"
-                      onClick={() => {/* Handle chat */}}
+                      onClick={() => {/* Handle chat */ }}
                     >
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                         <path fillRule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clipRule="evenodd" />
